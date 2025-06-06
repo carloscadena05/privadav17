@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, CanDeactivate, Router, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 import { AuthService } from './_shared/services/auth.service';
 import { SessionService } from './_shared/services/session.service';
 import { MentorReportSummaryUpdatesComponent } from './admins/admins-mr/mr-summary-updates/mr-summary-updates.component';
@@ -10,7 +10,7 @@ import { MonthlyReports2ENAddComponent } from './mentors/monthly-reports2-EN-add
 import { MonthlyReports2ESAddComponent } from './mentors/monthly-reports2-ES-add/monthly-reports2-ES-add.component';
 
 @Injectable({ providedIn: 'root' })
-export class CanActivateViaAdminAuthGuard implements CanActivate {
+export class CanActivateViaAdminAuthGuard  {
   constructor(private auth: AuthService, private router: Router, private session: SessionService) {}
 
   canActivate(next: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot) {
@@ -33,7 +33,7 @@ export class CanActivateViaAdminAuthGuard implements CanActivate {
   }
 }
 @Injectable({ providedIn: 'root' })
-export class CanActivateViaMentorAuthGuard implements CanActivate {
+export class CanActivateViaMentorAuthGuard  {
   constructor(private auth: AuthService, private router: Router, private session: SessionService) {}
 
   canActivate(next: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot) {
@@ -57,7 +57,7 @@ export class CanActivateViaMentorAuthGuard implements CanActivate {
 }
 
 @Injectable({ providedIn: 'root' })
-export class CanActivateViaSponsorAuthGuard implements CanActivate {
+export class CanActivateViaSponsorAuthGuard  {
   constructor(private auth: AuthService, private router: Router, private session: SessionService) {}
 
   canActivate(next: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot) {
@@ -81,7 +81,7 @@ export class CanActivateViaSponsorAuthGuard implements CanActivate {
 }
 
 @Injectable({ providedIn: 'root' })
-export class CanActivateViaStudentAuthGuard implements CanActivate {
+export class CanActivateViaStudentAuthGuard  {
   constructor(private auth: AuthService, private router: Router, private session: SessionService) {}
 
   canActivate(next: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot) {
@@ -106,7 +106,7 @@ export class CanActivateViaStudentAuthGuard implements CanActivate {
 }
 
 @Injectable({ providedIn: 'root' })
-export class ConfirmDeactivateMonthlyReportAddGuard implements CanDeactivate<MonthlyReports2ESAddComponent> {
+export class ConfirmDeactivateMonthlyReportAddGuard  {
   canDeactivate(component: MonthlyReports2ESAddComponent): boolean {
     if (component.hasChanges()) {
       console.log('CanDeactivate');
@@ -119,7 +119,7 @@ export class ConfirmDeactivateMonthlyReportAddGuard implements CanDeactivate<Mon
   }
 }
 @Injectable({ providedIn: 'root' })
-export class ConfirmDeactivateMonthlyReportENAddGuard implements CanDeactivate<MonthlyReports2ENAddComponent> {
+export class ConfirmDeactivateMonthlyReportENAddGuard  {
   canDeactivate(component: MonthlyReports2ENAddComponent): boolean {
     if (component.hasChanges()) {
       console.log('CanDeactivate');
@@ -134,7 +134,7 @@ export class ConfirmDeactivateMonthlyReportENAddGuard implements CanDeactivate<M
 
 
 @Injectable({ providedIn: 'root' })
-export class ConfirmDeactivateMRSummaryUpdatesGuard implements CanDeactivate<MentorReportSummaryUpdatesComponent> {
+export class ConfirmDeactivateMRSummaryUpdatesGuard  {
   canDeactivate(component: MentorReportSummaryUpdatesComponent): boolean {
     if (component.hasChanges()) {
       console.log('CanDeactivate');
@@ -151,7 +151,7 @@ export class ConfirmDeactivateMRSummaryUpdatesGuard implements CanDeactivate<Men
 
 // see https://stackoverflow.com/questions/68299992/how-to-use-can-deactivate-without-routing
 @Injectable({ providedIn: 'root' })
-export class ConfirmDeactivateStudentProfileUpdatesGuard implements CanDeactivate<AdminsStudentProfileComponent> {
+export class ConfirmDeactivateStudentProfileUpdatesGuard  {
   canDeactivate(component: AdminsStudentProfileComponent): boolean {
     console.log('XXXXXXXXXXXCanDeactivate');
     if (component.hasChanges instanceof Function) {
@@ -171,7 +171,7 @@ export class ConfirmDeactivateStudentProfileUpdatesGuard implements CanDeactivat
 }
 
 @Injectable({ providedIn: 'root' })
-export class ConfirmDeactivateGradesEditGuard implements CanDeactivate<GradesEditComponent> {
+export class ConfirmDeactivateGradesEditGuard  {
   canDeactivate(component: GradesEditComponent): boolean {
     if (component.hasChanges()) {
       console.log('CanDeactivate');
@@ -186,7 +186,7 @@ export class ConfirmDeactivateGradesEditGuard implements CanDeactivate<GradesEdi
   }
 }
 @Injectable({ providedIn: 'root' })
-  export class ConfirmDeactivateInscriptionsEditGuard implements CanDeactivate<InscriptionsEditComponent> {
+  export class ConfirmDeactivateInscriptionsEditGuard  {
     canDeactivate(component: InscriptionsEditComponent): boolean {
       if (component.hasChanges()) {
         console.log('CanDeactivate');
@@ -202,7 +202,7 @@ export class ConfirmDeactivateGradesEditGuard implements CanDeactivate<GradesEdi
 }
 
 @Injectable({ providedIn: 'root' })
- export class InitialNavigationGuard implements CanActivate {
+ export class InitialNavigationGuard  {
    private initialNavigation = true;
 
    constructor(private auth: AuthService, private session: SessionService, private router: Router) {}
