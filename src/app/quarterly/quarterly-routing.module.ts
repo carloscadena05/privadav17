@@ -19,10 +19,12 @@ const quarterlyRoutes: Routes = [
       },
       {
         path: 'edit',
+        title: 'Edit',
         component: QuarterlyContainerComponent
       },
       {
         path: 'quarterly-container',
+        title: 'Quarterly Container',
         component: QuarterlyListComponent
       }
 

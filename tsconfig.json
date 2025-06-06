@@ -10,14 +10,12 @@
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
-
-    // "strictNullChecks": true,
     "plugins": [
       {
         "name": "typescript-tslint-plugin"
       }
     ],
-    "target": "es2020",
+    "target": "ES2022",
     "paths": {
       "auth0-js": [
         "node_modules/auth0-js/build/auth0.js"
@@ -35,7 +33,8 @@
     "lib": [
       "es2017",
       "dom"
-    ]
+    ],
+    "useDefineForClassFields": false
   },
   "files": [
     "src/main.ts",

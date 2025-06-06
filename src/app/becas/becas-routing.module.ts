@@ -26,32 +26,39 @@ const gradesRoutes: Routes = [
       },
       {
         path: 'payments-list',
+        title: 'Payments List',
         component: PaymentsListComponent
       },
       {
         path: 'payments-edit',
+        title: 'Payments Edit',
         component: PaymentsEditComponent
       },
       {
         path: 'grades-list',
+        title: 'Grades List',
         component: GradesListComponent
       },
       {
         path: 'grades-edit',
+        title: 'Grades Edit',
         component: GradesEditComponent,
         canDeactivate: [ConfirmDeactivateGradesEditGuard]
       },
       {
         path: 'inscriptions-list',
+        title: 'Inscriptions List',
         component: InscriptionsListComponent
       },
       {
         path: 'inscriptions-edit',
+        title: 'Inscriptions Edit',
         component: InscriptionsEditComponent,
         canDeactivate: [ConfirmDeactivateInscriptionsEditGuard]
       },
       {
         path: 'ssr-list',
+        title: 'SSR List',
         component: InscriptionsEditComponent,
         canDeactivate: [ConfirmDeactivateInscriptionsEditGuard]
       },

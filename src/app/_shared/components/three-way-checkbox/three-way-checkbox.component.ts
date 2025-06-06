@@ -21,6 +21,7 @@ export class ThreeWayCheckboxComponent {
 
   private onChange: (value: number | null) => void;
   private onTouched: () => void;
+  disabled = false;
 
   toggleValue(): void {
     if (this.value === null) {
@@ -59,5 +60,6 @@ export class ThreeWayCheckboxComponent {
 
   setDisabledState?(isDisabled: boolean): void {
     // Handle the disabled state if needed
+    this.disabled = isDisabled;
   }
 }

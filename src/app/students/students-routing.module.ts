@@ -25,26 +25,32 @@ const routes: Routes = [
       },
       {
         path: 'self-reports',
+        title: 'Self Reports',
         component: StudentsSelfReportsComponent
       },
       {
         path: 'self-reports-add', // use params not path // /:sponsorGroupId/:studentGUId',
+        title: 'Self Reports Add', // Use Params Not Path // /:Sponsorgroupid/:Studentguid',
         component: SelfReportsAddComponent
       },
       {
         path: 'self-reports-edit/:selfReportId',
+        title: 'Self Reports Edit',
         component: SelfReportsEditComponent
       },
       {
         path: 'grade-entry',
+        title: 'Grade Entry',
         component: GradeEntryComponent
       },
       {
         path: 'inscriptions-entry',
+        title: 'Inscriptions Entry',
         component: InscriptionsEntryComponent
       },
       {
         path: 'students-profile',
+        title: 'Students Profile',
         component: StudentProfileComponent
       }
     ]

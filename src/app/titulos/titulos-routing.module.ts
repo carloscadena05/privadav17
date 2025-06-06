@@ -18,10 +18,12 @@ const titulosRoutes: Routes = [
       },
       {
         path: 'titulos-list',
+        title: 'Titulos List',
         component: TitulosListComponent
       },
       {
         path: 'titulos-entry',
+        title: 'Titulos Entry',
         component: TitulosEntryComponent
       },
     ]

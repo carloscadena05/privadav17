@@ -17,6 +17,7 @@ const sponsorRoutes: Routes = [
       },
       {
         path: 'becas-home',
+        title: 'Becas',
         component: SponsorsContainerComponent
       },
 
