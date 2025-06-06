@@ -11,7 +11,8 @@ import { SessionService } from 'src/app/_shared/services/session.service';
 import { StudentState } from 'src/app/_store/student/student.state';
 
 @Component({
-  templateUrl: './ssr-summary-updates.component.html'
+    templateUrl: './ssr-summary-updates.component.html',
+    standalone: false
 })
 export class StudentSelfReportsSummaryUpdatesComponent implements OnInit {
   myForm: UntypedFormGroup;

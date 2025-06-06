@@ -4,8 +4,9 @@ import { WHSE_DataService } from '../../data/whse-data.service';
 import { WHSE_GSCount } from '../../models/WHSE_GSCount';
 
 @Component({
-  selector: 'whse-gs',
-  templateUrl: 'whse-gs.component.html'
+    selector: 'whse-gs',
+    templateUrl: 'whse-gs.component.html',
+    standalone: false
 })
 
 export class WHSE_GS_Component implements OnInit {

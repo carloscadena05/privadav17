@@ -7,8 +7,9 @@ import { WHSE_SUCount } from '../../models/WHSE_SUCount';
 
 
 @Component({
-  selector: 'whse-su',
-  templateUrl: 'whse-su.component.html'
+    selector: 'whse-su',
+    templateUrl: 'whse-su.component.html',
+    standalone: false
 })
 
 export class WHSE_SU_Component implements OnInit {

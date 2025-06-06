@@ -9,8 +9,9 @@ import { SORTCRITERIA } from '../../_shared/interfaces/SORTCRITERIA';
 import { University } from '../../_shared/models/university';
 
 @Component({
-  selector: 'app-university',
-  templateUrl: './university-edit.component.html'
+    selector: 'app-university',
+    templateUrl: './university-edit.component.html',
+    standalone: false
 })
 export class UniversityEditComponent implements OnInit {
   myForm: UntypedFormGroup;

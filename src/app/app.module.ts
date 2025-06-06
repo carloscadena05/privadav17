@@ -1,6 +1,6 @@
 import { APP_BASE_HREF, Location } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { NgModule, inject, provideAppInitializer } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
@@ -47,12 +47,10 @@ export function appInit(constantsService: ConstantsService) {
       provide: APP_BASE_HREF,
       useValue: '/'
     },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: appInit,
-      deps: [ConstantsService],
-      multi: true // required because it reference ApplicationStatusService which is multi and "can't mix"
-    },
+    provideAppInitializer(() => {
+        const initializerFn = (appInit)(inject(ConstantsService));
+        return initializerFn();
+      }),
     Location
   ],
   bootstrap: [AppComponent]

@@ -4,8 +4,9 @@ import { Subscription } from 'rxjs';
 import { MemberState } from 'src/app/_store/member/member.state';
 
 @Component({
-  selector: 'app-member-header',
-  templateUrl: './member-header.component.html'
+    selector: 'app-member-header',
+    templateUrl: './member-header.component.html',
+    standalone: false
 })
 export class MemberHeaderComponent implements OnInit {
   private subscription: Subscription;

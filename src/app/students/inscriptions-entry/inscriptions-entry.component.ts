@@ -19,8 +19,9 @@ import { SessionService } from "../../_shared/services/session.service";
 registerLocaleData(localePy, "es");
 
 @Component({
-  templateUrl: "./inscriptions-entry.component.html",
-  styleUrls: ["./inscriptions-entry.component.css", "../students.component.css"],
+    templateUrl: "./inscriptions-entry.component.html",
+    styleUrls: ["./inscriptions-entry.component.css", "../students.component.css"],
+    standalone: false
 })
 export class InscriptionsEntryComponent implements OnInit {
   myForm: UntypedFormGroup;

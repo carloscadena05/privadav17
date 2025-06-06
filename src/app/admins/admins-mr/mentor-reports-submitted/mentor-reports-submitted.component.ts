@@ -7,9 +7,10 @@ import { MentorReportSubmittedCount } from 'src/app/_shared/models/mentor-report
 import { ColumnSortService } from 'src/app/_shared/services/column-sort.service';
 
 @Component({
-  selector: 'app-mr-submitted-count',
-  templateUrl: './mentor-reports-submitted.component.html',
-  styleUrls: [ './mentor-reports-submitted.component.css' ]
+    selector: 'app-mr-submitted-count',
+    templateUrl: './mentor-reports-submitted.component.html',
+    styleUrls: ['./mentor-reports-submitted.component.css'],
+    standalone: false
 })
 export class MentorReportsSubmittedComponent implements OnInit {
   reportTypes: SELECTITEM[];

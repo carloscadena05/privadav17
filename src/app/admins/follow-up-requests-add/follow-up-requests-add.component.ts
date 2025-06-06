@@ -14,8 +14,9 @@ import { SessionService } from '../../_shared/services/session.service';
 import { TranslationService } from '../../_shared/services/translation.service';
 
 @Component({
-  selector: 'app-follow-up-requests-add',
-  templateUrl: './follow-up-requests-add.component.html'
+    selector: 'app-follow-up-requests-add',
+    templateUrl: './follow-up-requests-add.component.html',
+    standalone: false
 })
 export class FollowUpRequestsAddComponent implements OnInit {
   myForm: UntypedFormGroup;

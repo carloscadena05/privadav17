@@ -7,8 +7,9 @@ import { SponsorGroup } from 'src/app/_shared/models/sponsor-group';
 import { SORTCRITERIA } from '../../_shared/interfaces/SORTCRITERIA';
 
 @Component({
-  selector: 'app-sponsor-group',
-  templateUrl: './sponsor-group.component.html'
+    selector: 'app-sponsor-group',
+    templateUrl: './sponsor-group.component.html',
+    standalone: false
 })
 export class SponsorGroupComponent implements OnInit {
   myForm: UntypedFormGroup;

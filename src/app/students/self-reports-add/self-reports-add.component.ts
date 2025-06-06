@@ -14,8 +14,9 @@ import { SELECTITEM } from '../../_shared/interfaces/SELECTITEM';
 
 
 @Component({
-  templateUrl: './self-reports-add.component.html',
-  styleUrls: ['./self-reports-add.component.css', '../../../assets/css/forms.css', '../students.component.css']
+    templateUrl: './self-reports-add.component.html',
+    styleUrls: ['./self-reports-add.component.css', '../../../assets/css/forms.css', '../students.component.css'],
+    standalone: false
 })
 export class SelfReportsAddComponent implements OnInit {
   myForm: UntypedFormGroup;

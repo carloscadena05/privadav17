@@ -11,8 +11,9 @@ import { QuarterlyDataService } from '../../_shared/data/quarterly-data.service'
 import { SELECTITEM } from '../../_shared/interfaces/SELECTITEM';
 
 @Component({
-  selector: 'app-quarterly-container',
-  templateUrl: './quarterly-container.component.html'
+    selector: 'app-quarterly-container',
+    templateUrl: './quarterly-container.component.html',
+    standalone: false
 })
 export class QuarterlyContainerComponent implements OnInit {
   isLoading = false;

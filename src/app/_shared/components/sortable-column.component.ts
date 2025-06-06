@@ -4,10 +4,10 @@ import { SORTCRITERIA } from '../interfaces/SORTCRITERIA';
 import { ColumnSortService } from '../services/column-sort.service';
 
 @Component({
-  // tslint:disable-next-line: component-selector
-  selector: '[app-sortable-column]',
-  styles: [
-    `
+    // tslint:disable-next-line: component-selector
+    selector: '[app-sortable-column]',
+    styles: [
+        `
       .up-arrow:after {
         content: '^';
       }
@@ -16,10 +16,11 @@ import { ColumnSortService } from '../services/column-sort.service';
         content: 'v';
       }
     `
-  ],
-  template: `<span class="up-arrow" *ngIf="sortDirection === 'asc'"></span>
+    ],
+    template: `<span class="up-arrow" *ngIf="sortDirection === 'asc'"></span>
     <span class="down-arrow" *ngIf="sortDirection === 'desc'"></span>
-    <ng-content></ng-content>`
+    <ng-content></ng-content>`,
+    standalone: false
 })
 export class SortableColumnComponent implements OnInit, OnDestroy {
   // eslint-disable-next-line @angular-eslint/no-input-rename

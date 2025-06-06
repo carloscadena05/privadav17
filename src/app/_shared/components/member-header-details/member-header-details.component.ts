@@ -8,8 +8,9 @@ import { MemberDataService } from '../../data/member-data.service';
 import { MemberHeaderDTO } from '../../models/memberHeaderDTO';
 
 @Component({
-  selector: 'app-member-header-details',
-  templateUrl: './member-header-details.component.html'
+    selector: 'app-member-header-details',
+    templateUrl: './member-header-details.component.html',
+    standalone: false
 })
 export class MemberHeaderDetailsComponent implements OnInit {
   data: Object;

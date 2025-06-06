@@ -7,8 +7,9 @@ import { SponsorGroupMemberDTO } from '../../models/sponsor-group-memberDTO';
 import { SessionService } from '../../services/session.service';
 
 @Component({
-  selector: 'app-sponsors-for-student-grid',
-  templateUrl: './sponsors-for-student-grid.component.html'
+    selector: 'app-sponsors-for-student-grid',
+    templateUrl: './sponsors-for-student-grid.component.html',
+    standalone: false
 })
 export class SponsorsForStudentGridComponent implements OnInit, OnChanges {
   sponsors: Array<SponsorGroupMemberDTO>;

@@ -7,7 +7,8 @@ http://www.carbonatethis.com/sort-table-columns-with-angular-and-typescript/
 */
 
 @Directive({
-  selector: '[appSortableTable]'
+    selector: '[appSortableTable]',
+    standalone: false
 })
 export class SortableTableDirective implements OnInit, OnDestroy {
   @Output() sorted = new EventEmitter();

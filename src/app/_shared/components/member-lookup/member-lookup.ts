@@ -27,8 +27,9 @@ export class MemberNameService {
 }
 
 @Component({
-  selector: 'app-member-lookup',
-  templateUrl: './member-lookup.html'
+    selector: 'app-member-lookup',
+    templateUrl: './member-lookup.html',
+    standalone: false
 })
 export class MemberLookupComponent implements OnInit {
   memberMiniDTO: MemberMiniDTO;

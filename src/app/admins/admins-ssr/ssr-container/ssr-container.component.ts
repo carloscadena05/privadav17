@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  templateUrl: 'ssr-container.component.html'
+    templateUrl: 'ssr-container.component.html',
+    standalone: false
 })
 export class StudentSelfReportsContainerComponent {
   constructor() {

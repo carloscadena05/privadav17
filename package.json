@@ -12,15 +12,15 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^18.2.13",
-    "@angular/common": "^18.2.13",
-    "@angular/compiler": "^18.2.13",
-    "@angular/core": "^18.2.13",
-    "@angular/forms": "^18.2.13",
-    "@angular/localize": "^18.2.13",
-    "@angular/platform-browser": "^18.2.13",
-    "@angular/platform-browser-dynamic": "^18.2.13",
-    "@angular/router": "^18.2.13",
+    "@angular/animations": "^19.2.14",
+    "@angular/common": "^19.2.14",
+    "@angular/compiler": "^19.2.14",
+    "@angular/core": "^19.2.14",
+    "@angular/forms": "^19.2.14",
+    "@angular/localize": "^19.2.14",
+    "@angular/platform-browser": "^19.2.14",
+    "@angular/platform-browser-dynamic": "^19.2.14",
+    "@angular/router": "^19.2.14",
     "@auth0/auth0-spa-js": "^1.11.0",
     "@ng-bootstrap/ng-bootstrap": "^16.0.0",
     "@ngxs/devtools-plugin": "^3.7.4",
@@ -41,14 +41,14 @@
     "sweetalert2": "^11.5.2",
     "tslib": "^2.0.0",
     "typescript-eslint": "0.0.1-alpha.0",
-    "zone.js": "~0.14.10"
+    "zone.js": "~0.15.1"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^18.2.19",
+    "@angular-devkit/build-angular": "^19.2.14",
     "@angular-eslint/eslint-plugin": "^0.2.0-beta.1",
-    "@angular/cli": "^18.2.19",
-    "@angular/compiler-cli": "^18.2.13",
-    "@angular/language-service": "^18.2.13",
+    "@angular/cli": "^19.2.14",
+    "@angular/compiler-cli": "^19.2.14",
+    "@angular/language-service": "^19.2.14",
     "@types/jasmine": "~3.6.0",
     "@types/jasminewd2": "^2.0.8",
     "@types/node": "^14.0.6",
@@ -61,6 +61,6 @@
     "ngx-file-drop": "^15.0.0",
     "prettier": "^2.1.1",
     "ts-node": "^8.10.2",
-    "typescript": "~5.4.5"
+    "typescript": "~5.8.3"
   }
 }

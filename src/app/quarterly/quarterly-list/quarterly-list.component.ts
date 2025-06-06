@@ -14,8 +14,9 @@ import { QRMini } from '../../_shared/models/quarterly-reportRPT';
 import { SessionService } from '../../_shared/services/session.service';
 
 @Component({
-  templateUrl: './quarterly-list.html',
-  styleUrls: ['./quarterly-list.component.css']
+    templateUrl: './quarterly-list.html',
+    styleUrls: ['./quarterly-list.component.css'],
+    standalone: false
 })
 export class QuarterlyListComponent implements OnInit {
   isLoading = false;

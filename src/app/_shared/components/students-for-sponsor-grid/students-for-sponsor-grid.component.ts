@@ -9,9 +9,10 @@ import { StudentSponsorXRef } from '../../models/student-sponsor-xref';
 import { SessionService } from '../../services/session.service';
 
 @Component({
-  // tslint:disable-next-line: component-selector
-  selector: 'students-for-sponsor-grid',
-  templateUrl: './students-for-sponsor-grid.component.html'
+    // tslint:disable-next-line: component-selector
+    selector: 'students-for-sponsor-grid',
+    templateUrl: './students-for-sponsor-grid.component.html',
+    standalone: false
 })
 export class StudentsForSponsorGridComponent implements OnInit {
   students: Array<StudentSponsorXRef>;

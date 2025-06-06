@@ -17,9 +17,9 @@ import { SetSelectedInscriptionsPeriodId } from '../../_store/ui/ui.action';
 import { UIState } from '../../_store/ui/ui.state';
 
 @Component({
-  templateUrl: './inscriptions-list.component.html',
-  styleUrls: ['./inscriptions-list.component.css']
-
+    templateUrl: './inscriptions-list.component.html',
+    styleUrls: ['./inscriptions-list.component.css'],
+    standalone: false
 })
 export class InscriptionsListComponent implements OnInit {
   studentDTO: StudentDTO;

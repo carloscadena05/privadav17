@@ -1,7 +1,8 @@
 import { PipeTransform, Pipe } from '@angular/core';
 
 @Pipe({
-  name: 'alphaLanguage'
+    name: 'alphaLanguage',
+    standalone: false
 })
 
 export class AlphaLanguagePipe implements PipeTransform {

@@ -19,8 +19,9 @@ import { SessionService } from '../../_shared/services/session.service';
 import { UrlService } from '../../_shared/services/url.service';
 
 @Component({
-  templateUrl: './inscriptions-edit.component.html',
-  styleUrls: ['./inscriptions-edit.component.css']
+    templateUrl: './inscriptions-edit.component.html',
+    styleUrls: ['./inscriptions-edit.component.css'],
+    standalone: false
 })
 export class InscriptionsEditComponent implements OnInit {
   myForm: UntypedFormGroup;

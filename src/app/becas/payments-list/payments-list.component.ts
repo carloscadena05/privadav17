@@ -17,8 +17,9 @@ import { SessionService } from '../../_shared/services/session.service';
 
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './payments-list.component.html'
+    selector: 'app-home',
+    templateUrl: './payments-list.component.html',
+    standalone: false
 })
 export class PaymentsListComponent implements OnInit {
   isLoading = false;

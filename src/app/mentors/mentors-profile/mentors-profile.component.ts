@@ -8,7 +8,8 @@ import { SELECTITEM } from '../../_shared/interfaces/SELECTITEM';
 import { Member } from '../../_shared/models/member';
 
 @Component({
-  templateUrl: './mentors-profile.component.html'
+    templateUrl: './mentors-profile.component.html',
+    standalone: false
 })
 export class MentorsProfileComponent implements OnInit {
   myForm: UntypedFormGroup;

@@ -6,9 +6,10 @@ import { SELECTITEM } from '../../_shared/interfaces/SELECTITEM';
 import { FollowUpRequestDTO } from '../../_shared/models/follow-up-requestDTO';
 import { SessionService } from '../../_shared/services/session.service';
 @Component({
-  selector: 'app-follow-up-requests',
-  styleUrls: ['./follow-up-requests.component.css'],
-  templateUrl: 'follow-up-requests.component.html'
+    selector: 'app-follow-up-requests',
+    styleUrls: ['./follow-up-requests.component.css'],
+    templateUrl: 'follow-up-requests.component.html',
+    standalone: false
 })
 export class FollowUpRequestsComponent implements OnInit {
   followUpRequests: FollowUpRequestDTO[];

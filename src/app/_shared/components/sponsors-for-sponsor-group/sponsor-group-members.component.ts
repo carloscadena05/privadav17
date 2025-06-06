@@ -4,8 +4,9 @@ import { SponsorGroupMemberDTO } from '../../models/sponsor-group-memberDTO';
 import { SessionService } from '../../services/session.service';
 
 @Component({
-  selector: 'app-sponsor-group-members',
-  templateUrl: './sponsor-group-members.component.html'
+    selector: 'app-sponsor-group-members',
+    templateUrl: './sponsor-group-members.component.html',
+    standalone: false
 })
 export class SponsorGroupMembersComponent implements OnInit, OnChanges {
   sponsorGroupMembers: SponsorGroupMemberDTO[];

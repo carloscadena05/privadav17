@@ -32,9 +32,10 @@ export class StudentNameService {
 }
 
 @Component({
-  selector: 'app-student-lookup',
-  templateUrl: './student-lookup.html',
-  styles: ['.form-control { width: 300px; display: inline; }']
+    selector: 'app-student-lookup',
+    templateUrl: './student-lookup.html',
+    styles: ['.form-control { width: 300px; display: inline; }'],
+    standalone: false
 })
 export class StudentLookupComponent implements OnInit {
   studentMiniDTO: StudentMiniDTO;

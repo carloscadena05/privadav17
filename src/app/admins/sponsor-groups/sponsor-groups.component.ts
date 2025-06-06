@@ -9,9 +9,10 @@ import { SORTCRITERIA } from '../../_shared/interfaces/SORTCRITERIA';
 import { ColumnSortService } from '../../_shared/services/column-sort.service';
 
 @Component({
-  selector: 'app-sponsor-groups',
-  templateUrl: './sponsor-groups.component.html',
-  styleUrls: [ './sponsor-groups.component.css' ]
+    selector: 'app-sponsor-groups',
+    templateUrl: './sponsor-groups.component.html',
+    styleUrls: ['./sponsor-groups.component.css'],
+    standalone: false
 })
 export class SponsorGroupsComponent implements OnInit {
   sponsorGroups: SponsorGroupMemberDTO[];

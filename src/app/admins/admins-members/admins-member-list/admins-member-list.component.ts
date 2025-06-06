@@ -11,8 +11,9 @@ import { SessionService } from 'src/app/_shared/services/session.service';
 import { UIState } from 'src/app/_store/ui/ui.state';
 
 @Component({
-  templateUrl: './admins-member-list.component.html',
-  styleUrls: ['./admins-member-list.component.css']
+    templateUrl: './admins-member-list.component.html',
+    styleUrls: ['./admins-member-list.component.css'],
+    standalone: false
 })
 export class AdminsMemberListComponent implements OnInit {
   memberTypes: SELECTITEM[];

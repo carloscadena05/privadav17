@@ -5,8 +5,9 @@ import { WHSE_DataService } from '../../data/whse-data.service';
 import { WHSE_DailyMRCount } from '../../models/WHSE_DailyMRCount';
 
 @Component({
-  selector: 'whse-daily-mr',
-  templateUrl: 'whse-daily-mr.component.html'
+    selector: 'whse-daily-mr',
+    templateUrl: 'whse-daily-mr.component.html',
+    standalone: false
 })
 
 

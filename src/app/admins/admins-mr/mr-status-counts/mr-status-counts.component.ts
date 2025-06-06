@@ -3,8 +3,9 @@ import { MentorReport2DataService } from 'src/app/_shared/data/mentor-report2-da
 import { MentorReportsStatusCount } from 'src/app/_shared/models/mentor-reports-status-count';
 
 @Component({
-  selector: 'app-mr-status-counts',
-  templateUrl: './mr-status-counts.component.html'
+    selector: 'app-mr-status-counts',
+    templateUrl: './mr-status-counts.component.html',
+    standalone: false
 })
 export class MentorReportsStatusCountsComponent implements OnChanges {
   @Input() year: string;

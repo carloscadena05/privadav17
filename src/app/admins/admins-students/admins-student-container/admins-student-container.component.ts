@@ -6,8 +6,9 @@ import { constants } from 'src/app/_shared/constants/constants';
 import { SELECTITEM } from 'src/app/_shared/interfaces/SELECTITEM';
 
 @Component({
-  selector: 'app-admins_student-container',
-  templateUrl: '../admins-student-container/admins-student-container.component.html'
+    selector: 'app-admins_student-container',
+    templateUrl: '../admins-student-container/admins-student-container.component.html',
+    standalone: false
 })
 export class AdminsStudentContainerComponent implements OnInit {
   selectedQRPeriod = '';

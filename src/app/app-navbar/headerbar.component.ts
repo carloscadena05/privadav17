@@ -6,9 +6,10 @@ import { SessionService } from '../_shared/services/session.service';
  * This class represents the app-navbar component.
  */
 @Component({
-  selector: 'app-headerbar',
-  templateUrl: 'headerbar.component.html',
-  styleUrls: [ 'headerbar.component.css' ]
+    selector: 'app-headerbar',
+    templateUrl: 'headerbar.component.html',
+    styleUrls: ['headerbar.component.css'],
+    standalone: false
 })
 export class HeaderbarComponent implements OnInit {
   private initialNavigation = true;

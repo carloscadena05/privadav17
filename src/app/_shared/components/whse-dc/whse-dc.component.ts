@@ -5,8 +5,9 @@ import { WHSE_DCCount } from '../../models/WHSE_DCCount';
 
 
 @Component({
-  selector: 'whse-dc',
-  templateUrl: 'whse-dc.component.html'
+    selector: 'whse-dc',
+    templateUrl: 'whse-dc.component.html',
+    standalone: false
 })
 
 export class WHSE_DC_Component implements OnInit {

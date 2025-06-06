@@ -5,8 +5,9 @@ import { MemberState } from 'src/app/_store/member/member.state';
 import { UrlService } from '../../services/url.service';
 
 @Component({
-  selector: 'app-member-photo',
-  templateUrl: './member-photo.component.html'
+    selector: 'app-member-photo',
+    templateUrl: './member-photo.component.html',
+    standalone: false
 })
 export class MemberPhotoComponent implements OnInit {
   fullPhotoPathname: string;

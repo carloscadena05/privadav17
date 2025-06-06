@@ -8,8 +8,9 @@ import { SponsorGroup } from 'src/app/_shared/models/sponsor-group';
 import { SessionService } from '../../_shared/services/session.service';
 import { StudentState } from '../../_store/student/student.state';
 @Component({
-  selector: 'app-admins-student-ssr',
-  templateUrl: './admins-student-ssr.component.html'
+    selector: 'app-admins-student-ssr',
+    templateUrl: './admins-student-ssr.component.html',
+    standalone: false
 })
 export class AdminsStudentSSRComponent implements OnInit {
   isLoading: boolean;

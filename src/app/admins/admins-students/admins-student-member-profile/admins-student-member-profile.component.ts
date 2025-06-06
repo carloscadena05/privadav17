@@ -13,9 +13,10 @@ import { UrlService } from 'src/app/_shared/services/url.service';
 import { StudentState } from 'src/app/_store/student/student.state';
 
 @Component({
-  selector: 'app-admins-student-member-profile',
-  templateUrl: './admins-student-member-profile.component.html',
-  styleUrls: ['./admins-student-member-profile.component.css']
+    selector: 'app-admins-student-member-profile',
+    templateUrl: './admins-student-member-profile.component.html',
+    styleUrls: ['./admins-student-member-profile.component.css'],
+    standalone: false
 })
 export class AdminsStudentMemberDataComponent implements OnInit {
   myForm: UntypedFormGroup;

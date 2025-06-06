@@ -5,8 +5,9 @@ import { WHSE_QRCount } from '../../models/WHSE_QR.Count';
 
 
 @Component({
-  selector: 'whse-qr',
-  templateUrl: 'whse-qr.component.html'
+    selector: 'whse-qr',
+    templateUrl: 'whse-qr.component.html',
+    standalone: false
 })
 
 export class WHSE_QR_Component implements OnInit {

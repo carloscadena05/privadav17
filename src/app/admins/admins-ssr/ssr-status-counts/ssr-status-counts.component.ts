@@ -3,8 +3,9 @@ import { StudentSelfReportDataService } from 'src/app/_shared/data/student-self-
 import { StudentReportsStatusCount } from 'src/app/_shared/models/student-reports-status-count';
 
 @Component({
-  selector: 'app-ssr-status-counts',
-  templateUrl: './ssr-status-counts.component.html'
+    selector: 'app-ssr-status-counts',
+    templateUrl: './ssr-status-counts.component.html',
+    standalone: false
 })
 export class SSRStatusCountsComponent implements OnChanges {
   @Input() yearPeriod: string;

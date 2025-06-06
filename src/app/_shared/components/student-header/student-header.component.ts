@@ -5,8 +5,9 @@ import { Subscription } from 'rxjs';
 import { StudentState } from 'src/app/_store/student/student.state';
 
 @Component({
-  selector: 'app-student-header',
-  templateUrl: './student-header.component.html'
+    selector: 'app-student-header',
+    templateUrl: './student-header.component.html',
+    standalone: false
 })
 export class StudentHeaderComponent implements OnInit {
   private subscription: Subscription;

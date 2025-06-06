@@ -17,9 +17,10 @@ import { SetPhotoPathname, SetSelectedStudentGUId, SetSelectedStudentMentorGUId 
 import { StudentState } from 'src/app/_store/student/student.state';
 
 @Component({
-  selector: 'app-admins-student-student-profile',
-  templateUrl: './admins-student-student-profile.component.html',
-  styleUrls: ['./admins-student-student-profile.component.css']
+    selector: 'app-admins-student-student-profile',
+    templateUrl: './admins-student-student-profile.component.html',
+    styleUrls: ['./admins-student-student-profile.component.css'],
+    standalone: false
 })
 export class AdminsStudentProfileComponent implements OnInit {
   myForm: UntypedFormGroup;

@@ -15,7 +15,8 @@ interface IValidationType {
 }
 
 @Component({
-  templateUrl: '../monthly-reports2-edit/monthly-reports2-edit.component.html'
+    templateUrl: '../monthly-reports2-edit/monthly-reports2-edit.component.html',
+    standalone: false
 })
 export class MonthlyReports2EditComponent implements OnInit {
   myForm: UntypedFormGroup;

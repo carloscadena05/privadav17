@@ -5,8 +5,9 @@ import { WHSE_MRCount } from '../../models/WHSE_MR.Count';
 
 
 @Component({
-  selector: 'whse-mr',
-  templateUrl: 'whse-mr.component.html'
+    selector: 'whse-mr',
+    templateUrl: 'whse-mr.component.html',
+    standalone: false
 })
 
 export class WHSE_MR_Component implements OnInit {

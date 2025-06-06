@@ -7,7 +7,8 @@ import { SetQRComponentsEditable, SetSelectedQRPeriod } from 'src/app/_store/ui/
 import { UIState } from 'src/app/_store/ui/ui.state';
 
 @Component({
-  templateUrl: './sponsors-container.component.html'
+    templateUrl: './sponsors-container.component.html',
+    standalone: false
 })
 export class SponsorsContainerComponent implements OnInit {
   isLoading = false;

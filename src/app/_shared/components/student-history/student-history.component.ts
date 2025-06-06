@@ -7,8 +7,9 @@ import { Student } from 'src/app/_shared/models/student';
 import { StudentState } from 'src/app/_store/student/student.state';
 
 @Component({
-  selector: 'app-student-history',
-  templateUrl: './student-history.component.html'
+    selector: 'app-student-history',
+    templateUrl: './student-history.component.html',
+    standalone: false
 })
 export class StudentHistoryComponent implements OnInit {
   myForm: UntypedFormGroup;

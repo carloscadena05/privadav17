@@ -11,9 +11,10 @@ import { QuarterlyReport } from '../../_shared/models/quarterly-report';
 import { SessionService } from '../../_shared/services/session.service';
 
 @Component({
-  selector: 'app-mr-consolidated',
-  templateUrl: './mr-consolidated.component.html',
-  styleUrls: ['./mr-consolidated.component.css']
+    selector: 'app-mr-consolidated',
+    templateUrl: './mr-consolidated.component.html',
+    styleUrls: ['./mr-consolidated.component.css'],
+    standalone: false
 })
 export class MrConsolidatedComponent implements OnInit {
   isLoading: boolean;

@@ -10,9 +10,10 @@ import { StudentDTO } from '../../models/studentDTO';
 import { SessionService } from '../../services/session.service';
 
 @Component({
-  // tslint:disable-next-line: component-selector
-  selector: 'students-for-mentor-grid',
-  templateUrl: './students-for-mentor-grid.component.html'
+    // tslint:disable-next-line: component-selector
+    selector: 'students-for-mentor-grid',
+    templateUrl: './students-for-mentor-grid.component.html',
+    standalone: false
 })
 export class StudentsForMentorGridComponent implements OnInit {
   students: Array<StudentDTO>;

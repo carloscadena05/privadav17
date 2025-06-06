@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  templateUrl: './sponsors.component.html'
+    templateUrl: './sponsors.component.html',
+    standalone: false
 })
 export class SponsorsComponent {
 

@@ -3,9 +3,10 @@ import { MemberDataService } from '../../data/member-data.service';
 import { SELECTITEM } from '../../interfaces/SELECTITEM';
 import { MemberMiniDTO } from '../../models/memberMiniDTO';
 @Component({
-  selector: 'app-member-selector',
-  templateUrl: './member-selector.component.html',
-  styleUrls: [ './member-selector.component.css' ]
+    selector: 'app-member-selector',
+    templateUrl: './member-selector.component.html',
+    styleUrls: ['./member-selector.component.css'],
+    standalone: false
 })
 export class MemberSelectorComponent implements OnInit {
   members: Array<MemberMiniDTO>;

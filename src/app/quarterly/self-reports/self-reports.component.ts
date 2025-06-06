@@ -11,9 +11,10 @@ import { QuarterlyReport } from '../../_shared/models/quarterly-report';
 import { SessionService } from '../../_shared/services/session.service';
 
 @Component({
-  selector: 'app-self-reports',
-  templateUrl: './self-reports.component.html',
-  styleUrls: ['./self-reports.component.css', '../../../assets/css/forms.css']
+    selector: 'app-self-reports',
+    templateUrl: './self-reports.component.html',
+    styleUrls: ['./self-reports.component.css', '../../../assets/css/forms.css'],
+    standalone: false
 })
 export class SelfReportsComponent implements OnInit {
   isLoading: boolean;

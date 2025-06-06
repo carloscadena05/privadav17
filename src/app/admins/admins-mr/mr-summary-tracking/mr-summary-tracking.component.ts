@@ -9,9 +9,10 @@ import { SetSelectedStudentIdentifiers } from 'src/app/_store/student/student.ac
 import { UIState } from 'src/app/_store/ui/ui.state';
 
 @Component({
-  selector: 'app-mr-summary-tracking',
-  templateUrl: 'mr-summary-tracking.component.html',
-  styleUrls: ['mr-summary-tracking.component.css']
+    selector: 'app-mr-summary-tracking',
+    templateUrl: 'mr-summary-tracking.component.html',
+    styleUrls: ['mr-summary-tracking.component.css'],
+    standalone: false
 })
 export class MentorReportsSummaryTrackingComponent implements OnInit
 {

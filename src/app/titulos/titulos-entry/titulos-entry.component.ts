@@ -9,7 +9,8 @@ import { TitulosIssuedDTO } from '../../_shared/models/titulos-issuedDTO';
 import { SessionService } from '../../_shared/services/session.service';
 
 @Component({
-  templateUrl: './titulos-entry.component.html'
+    templateUrl: './titulos-entry.component.html',
+    standalone: false
 })
 export class TitulosEntryComponent implements OnInit {
   myForm: UntypedFormGroup;

@@ -8,8 +8,9 @@ import { StudentState } from 'src/app/_store/student/student.state';
 import { MentorReport2RPT } from '../../_shared/models/mentor-report2';
 import { SessionService } from '../../_shared/services/session.service';
 @Component({
-  selector: 'app-admins-student-mrs',
-  templateUrl: './admins-student-mrs.component.html'
+    selector: 'app-admins-student-mrs',
+    templateUrl: './admins-student-mrs.component.html',
+    standalone: false
 })
 export class AdminsStudentMRsComponent implements OnInit {
   isLoading: boolean;

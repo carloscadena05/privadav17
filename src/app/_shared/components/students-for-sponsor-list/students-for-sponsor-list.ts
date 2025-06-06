@@ -7,9 +7,10 @@ import { StudentSponsorXRef } from '../../models/student-sponsor-xref';
 import { SessionService } from '../../services/session.service';
 
 @Component({
-  // tslint:disable-next-line: component-selector
-  selector: 'students-for-sponsor-list',
-  templateUrl: './students-for-sponsor-list.html'
+    // tslint:disable-next-line: component-selector
+    selector: 'students-for-sponsor-list',
+    templateUrl: './students-for-sponsor-list.html',
+    standalone: false
 })
 export class StudentsForSponsorComponent implements OnInit {
   studentsForSponsor: Array<StudentSponsorXRef>;

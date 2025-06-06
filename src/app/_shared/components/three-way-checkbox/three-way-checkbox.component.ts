@@ -4,16 +4,17 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
 // Courtesty of CoPilot
 
 @Component({
-  selector: 'app-three-way-checkbox',
-  templateUrl: './three-way-checkbox.component.html',
-  styleUrls: ['./three-way-checkbox.component.css'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => ThreeWayCheckboxComponent),
-      multi: true
-    }
-  ]
+    selector: 'app-three-way-checkbox',
+    templateUrl: './three-way-checkbox.component.html',
+    styleUrls: ['./three-way-checkbox.component.css'],
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => ThreeWayCheckboxComponent),
+            multi: true
+        }
+    ],
+    standalone: false
 })
 export class ThreeWayCheckboxComponent {
   @Input() value: number | null = null;

@@ -5,8 +5,9 @@ import { StudentState } from 'src/app/_store/student/student.state';
 import { UrlService } from '../../services/url.service';
 
 @Component({
-  selector: 'app-student-photo',
-  templateUrl: './student-photo.component.html'
+    selector: 'app-student-photo',
+    templateUrl: './student-photo.component.html',
+    standalone: false
 })
 export class StudentPhotoComponent implements OnInit {
   fullPhotoPathname: string;

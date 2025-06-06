@@ -11,8 +11,9 @@ import { QuarterlyReport } from '../../_shared/models/quarterly-report';
 import { SessionService } from '../../_shared/services/session.service';
 
 @Component({
-  selector: 'app-private-notes',
-  templateUrl: './private-notes.component.html'
+    selector: 'app-private-notes',
+    templateUrl: './private-notes.component.html',
+    standalone: false
 })
 export class PrivateNotesComponent implements OnInit {
   isLoading: boolean;

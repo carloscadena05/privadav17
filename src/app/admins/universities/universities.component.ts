@@ -7,9 +7,10 @@ import { University } from '../../_shared/models/university';
 import { ColumnSortService } from '../../_shared/services/column-sort.service';
 
 @Component({
-  selector: 'app-universities',
-  templateUrl: './universities.component.html',
-  styleUrls: [ './universities.component.css' ]
+    selector: 'app-universities',
+    templateUrl: './universities.component.html',
+    styleUrls: ['./universities.component.css'],
+    standalone: false
 })
 export class UniversitiesComponent implements OnInit {
   universities: University[];

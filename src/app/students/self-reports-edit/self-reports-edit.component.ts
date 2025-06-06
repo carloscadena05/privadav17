@@ -11,8 +11,9 @@ import { constants } from '../../_shared/constants/constants';
 import { SELECTITEM } from '../../_shared/interfaces/SELECTITEM';
 
 @Component({
-  templateUrl: './self-reports-edit.component.html',
-  styleUrls: ['./self-reports-edit.component.css', '../../../assets/css/forms.css', '../students.component.css']
+    templateUrl: './self-reports-edit.component.html',
+    styleUrls: ['./self-reports-edit.component.css', '../../../assets/css/forms.css', '../students.component.css'],
+    standalone: false
 })
 export class SelfReportsEditComponent implements OnInit {
   myForm: UntypedFormGroup;

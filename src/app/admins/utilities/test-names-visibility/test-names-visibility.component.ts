@@ -4,8 +4,9 @@ import { SetTestNamesVisibility } from 'src/app/_store/ui/ui.action';
 import { UIState } from 'src/app/_store/ui/ui.state';
 
 @Component({
-  selector: 'app-test-names-visibility',
-  templateUrl: './test-names-visibility.component.html'
+    selector: 'app-test-names-visibility',
+    templateUrl: './test-names-visibility.component.html',
+    standalone: false
 })
 export class TestNamesVisibilityComponent implements OnInit {
   displayTestNames: boolean;

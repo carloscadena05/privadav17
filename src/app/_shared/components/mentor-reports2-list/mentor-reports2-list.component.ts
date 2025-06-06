@@ -4,8 +4,9 @@ import { constants } from '../../constants/constants';
 import { MentorReport2RPT } from '../../models/mentor-report2';
 
 @Component({
-  selector: 'app-mentor-reports2-list',
-  templateUrl: './mentor-reports2-list.component.html'
+    selector: 'app-mentor-reports2-list',
+    templateUrl: './mentor-reports2-list.component.html',
+    standalone: false
 })
 export class MentorReports2ListComponent {
   @Input() mentorReports2: MentorReport2RPT[];

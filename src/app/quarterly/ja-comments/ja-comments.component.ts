@@ -11,9 +11,10 @@ import { QuarterlyReport } from '../../_shared/models/quarterly-report';
 import { SessionService } from '../../_shared/services/session.service';
 
 @Component({
-  selector: 'app-ja-comments',
-  templateUrl: './ja-comments.component.html',
-  styleUrls: ['./ja-comments.component.css']
+    selector: 'app-ja-comments',
+    templateUrl: './ja-comments.component.html',
+    styleUrls: ['./ja-comments.component.css'],
+    standalone: false
 })
 export class JaCommentsComponent implements OnInit {
   isLoading: boolean;

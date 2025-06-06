@@ -11,9 +11,10 @@ import { SetSelectedQRPeriod } from 'src/app/_store/ui/ui.action';
 import { UIState } from 'src/app/_store/ui/ui.state';
 
 @Component({
-  selector: 'app-ssr-missing',
-  templateUrl: 'ssr-missing.component.html',
-  styleUrls: ['ssr-missing.component.css']
+    selector: 'app-ssr-missing',
+    templateUrl: 'ssr-missing.component.html',
+    styleUrls: ['ssr-missing.component.css'],
+    standalone: false
 })
 export class SSRMissingComponent implements OnInit {
   isLoading = false;

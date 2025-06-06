@@ -10,9 +10,10 @@ import { SELECTITEM } from '../../interfaces/SELECTITEM';
 import { SessionService } from '../../services/session.service';
 
 @Component({
-  selector: 'app-qr-status-selector',
-  templateUrl: './qr-status-selector.component.html',
-  styleUrls: ['./qr-status-selector.component.css']
+    selector: 'app-qr-status-selector',
+    templateUrl: './qr-status-selector.component.html',
+    styleUrls: ['./qr-status-selector.component.css'],
+    standalone: false
 })
 export class QrStatusSelectorComponent implements OnInit {
   isLoading = false;

@@ -38,8 +38,9 @@ import { SessionService } from '../../_shared/services/session.service';
 **/
 
 @Component({
-  selector: 'app-mentor-reports',
-  templateUrl: './monthly-reports2.component.html'
+    selector: 'app-mentor-reports',
+    templateUrl: './monthly-reports2.component.html',
+    standalone: false
 })
 export class MonthlyReports2Component implements OnInit {
   isLoading: boolean;

@@ -5,8 +5,9 @@ import { WHSE_SSRCount } from '../../models/WHSE_SSRCount';
 
 
 @Component({
-  selector: 'whse-ssr',
-  templateUrl: 'whse-ssr.component.html'
+    selector: 'whse-ssr',
+    templateUrl: 'whse-ssr.component.html',
+    standalone: false
 })
 
 export class WHSE_SSR_Component implements OnInit {

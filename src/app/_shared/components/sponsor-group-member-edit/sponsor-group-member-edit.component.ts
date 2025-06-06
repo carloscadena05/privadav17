@@ -6,8 +6,9 @@ import { MemberMiniDTO } from '../../models/memberMiniDTO';
 import { SponsorGroupMember } from '../../models/sponsor-group-member';
 
 @Component({
-  selector: 'app-sponsor-group-member-edit',
-  templateUrl: './sponsor-group-member-edit.component.html'
+    selector: 'app-sponsor-group-member-edit',
+    templateUrl: './sponsor-group-member-edit.component.html',
+    standalone: false
 })
 export class SponsorGroupMemberEditComponent implements OnInit {
   myForm: UntypedFormGroup;

@@ -18,8 +18,9 @@ import { SessionService } from '../../_shared/services/session.service';
 import { UrlService } from '../../_shared/services/url.service';
 
 @Component({
-  templateUrl: './grades-edit.component.html',
-  styleUrls: ['./grades-edit.component.css']
+    templateUrl: './grades-edit.component.html',
+    styleUrls: ['./grades-edit.component.css'],
+    standalone: false
 })
 export class GradesEditComponent implements OnInit {
   myForm: UntypedFormGroup;

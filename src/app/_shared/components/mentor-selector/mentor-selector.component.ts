@@ -3,8 +3,9 @@ import { MemberDataService } from '../../data/member-data.service';
 import { MemberMiniDTO } from '../../models/memberMiniDTO';
 
 @Component({
-  selector: 'app-mentor-selector',
-  templateUrl: './mentor-selector.component.html'
+    selector: 'app-mentor-selector',
+    templateUrl: './mentor-selector.component.html',
+    standalone: false
 })
 export class MentorSelectorComponent implements OnInit {
   members: Array<MemberMiniDTO>;

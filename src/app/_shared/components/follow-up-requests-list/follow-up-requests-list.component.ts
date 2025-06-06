@@ -3,8 +3,9 @@ import { Router } from '@angular/router';
 import { FollowUpRequestDTO } from '../../models/follow-up-requestDTO';
 
 @Component({
-  selector: 'app-follow-up-requests-list',
-  templateUrl: './follow-up-requests-list.component.html'
+    selector: 'app-follow-up-requests-list',
+    templateUrl: './follow-up-requests-list.component.html',
+    standalone: false
 })
 export class FollowUpRequestsListComponent {
   @Input() followUpRequests: FollowUpRequestDTO[];

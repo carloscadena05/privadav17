@@ -6,9 +6,9 @@ import { SessionService } from "../../services/session.service";
 import { UrlService } from "../../services/url.service";
 
 @Component({
-  selector: "app-inscription-uploader",
-  templateUrl: "./inscription-uploader.component.html", // ,
-  // styleUrls: ['./app.component.scss']
+    selector: "app-inscription-uploader",
+    templateUrl: "./inscription-uploader.component.html",
+    standalone: false
 })
 export class InscriptionUploaderComponent implements OnInit {
   public files: NgxFileDropEntry[] = [];

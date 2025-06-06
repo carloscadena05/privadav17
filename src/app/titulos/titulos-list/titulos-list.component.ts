@@ -16,7 +16,8 @@ import { SetSelectedStudentIdentifiers } from '../../_store/student/student.acti
 import { UIState } from '../../_store/ui/ui.state';
 
 @Component({
-  templateUrl: './titulos-list.component.html'
+    templateUrl: './titulos-list.component.html',
+    standalone: false
 })
 export class TitulosListComponent implements OnInit {
   studentDTO: StudentDTO;

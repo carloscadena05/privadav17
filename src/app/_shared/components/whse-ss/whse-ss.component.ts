@@ -5,8 +5,9 @@ import { WHSE_SSCount } from '../../models/WHSE_SSCount';
 
 
 @Component({
-  selector: 'whse-ss',
-  templateUrl: 'whse-ss.component.html'
+    selector: 'whse-ss',
+    templateUrl: 'whse-ss.component.html',
+    standalone: false
 })
 
 export class WHSE_SS_Component implements OnInit {

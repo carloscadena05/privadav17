@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
-  selector: 'app-alert',
-  template: `
+    selector: 'app-alert',
+    template: `
     <swal
       title="{{
         type === 'success' ? 'Guardado correctamente' : 'Ha ocurrido un error'
@@ -19,6 +19,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
     >
     </swal>
   `,
+    standalone: false
 })
 export class AlertComponent {
   @Input() type: 'success' | 'error' = 'success';

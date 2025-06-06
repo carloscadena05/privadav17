@@ -10,8 +10,9 @@ import { StudentDataService } from '../../data/student-data.service';
 import { StudentFlexiDTO } from '../../models/studentFlexiDTO';
 
 @Component({
-  selector: 'app-student-header-details',
-  templateUrl: './student-header-details.component.html'
+    selector: 'app-student-header-details',
+    templateUrl: './student-header-details.component.html',
+    standalone: false
 })
 export class StudentHeaderDetailsComponent implements OnInit {
   data: Object;

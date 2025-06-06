@@ -7,9 +7,10 @@ import { StudentDTO } from '../../models/studentDTO';
 import { SessionService } from '../../services/session.service';
 
 @Component({
-  // tslint:disable-next-line: component-selector
-  selector: 'students-for-mentor-list',
-  templateUrl: './students-for-mentor-list.component.html'
+    // tslint:disable-next-line: component-selector
+    selector: 'students-for-mentor-list',
+    templateUrl: './students-for-mentor-list.component.html',
+    standalone: false
 })
 export class StudentsForMentorListComponent implements OnInit {
   students: Array<StudentDTO>;

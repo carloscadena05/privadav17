@@ -8,8 +8,9 @@ import { SELECTITEM } from '../../_shared/interfaces/SELECTITEM';
 import { Member } from '../../_shared/models/member';
 
 @Component({
-  templateUrl: './students-profile.component.html',
-  styleUrls: ['./students-profile.component.css', '../students.component.css']
+    templateUrl: './students-profile.component.html',
+    styleUrls: ['./students-profile.component.css', '../students.component.css'],
+    standalone: false
 })
 export class StudentProfileComponent implements OnInit {
   myForm: UntypedFormGroup;

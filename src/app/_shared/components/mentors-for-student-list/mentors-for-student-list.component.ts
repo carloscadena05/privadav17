@@ -4,8 +4,9 @@ import { Member } from '../../models/member';
 import { SessionService } from '../../services/session.service';
 
 @Component({
-  selector: 'app-mentors-for-student-list',
-  templateUrl: './mentors-for-student-list.component.html'
+    selector: 'app-mentors-for-student-list',
+    templateUrl: './mentors-for-student-list.component.html',
+    standalone: false
 })
 export class MentorsForStudentListComponent implements OnInit {
   mentors: Array<Member>;

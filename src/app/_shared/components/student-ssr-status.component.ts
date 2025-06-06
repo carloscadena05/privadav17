@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
-  template: `<div>
+    template: `<div>
   <label>SSR Status</label>
   <table><tr>
   <td>Timely Self Report&nbsp;</td>
@@ -11,7 +11,8 @@ import { Component, Input, OnInit } from '@angular/core';
     <img src="/assets/images/{{reportStatus}}.jpg" height="22">
   </td>
 </tr></table></div>`,
-  selector: 'app-student-ssr-status'
+    selector: 'app-student-ssr-status',
+    standalone: false
 })
 export class StudentSSRStatusComponent implements OnInit {
   @Input() reportStatus: string;

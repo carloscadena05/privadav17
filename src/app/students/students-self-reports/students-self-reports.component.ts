@@ -15,9 +15,10 @@ import { SessionService } from "../../_shared/services/session.service";
 //import { StudentSelfReportDataService } from 'src/app/_shared/data/student-self-report-data.service';
 
 @Component({
-  templateUrl: "./students-self-reports.component.html",
-  styleUrls: ["./students-self-reports.component.css", "../students.component.css"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    templateUrl: "./students-self-reports.component.html",
+    styleUrls: ["./students-self-reports.component.css", "../students.component.css"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class StudentsSelfReportsComponent implements OnInit {
   isLoading: boolean;

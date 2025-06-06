@@ -7,8 +7,9 @@ import { SessionService } from './_shared/services/session.service';
  * applications routes, configuring the paths for the lazy loaded components (BecasHomeComponent, AboutComponent).
  */
 @Component({
-  selector: 'app-ja',
-  templateUrl: 'app.component.html'
+    selector: 'app-ja',
+    templateUrl: 'app.component.html',
+    standalone: false
 })
 export class AppComponent {
 

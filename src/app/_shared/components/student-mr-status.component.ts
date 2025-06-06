@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
-  template: `<div>
+    template: `<div>
   <label>Mentor Reports Status</label>
   <table><tr>
   <td>Timely Mentor Report&nbsp;</td><td>Latest Emoji</td>
@@ -13,7 +13,8 @@ import { Component, Input, OnInit } from '@angular/core';
   <img src="{{emojiPathname}}" width="24" />
 </td>
 </tr></table></div>`,
-  selector: 'app-student-mr-status'
+    selector: 'app-student-mr-status',
+    standalone: false
 })
 export class StudentMRStatusComponent implements OnInit {
   @Input() reportStatus: string;

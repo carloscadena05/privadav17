@@ -6,9 +6,11 @@ import { SessionService } from '../../services/session.service';
 import { UrlService } from '../../services/url.service';
 
 @Component({
-  selector: 'app-titulo-uploader',
-  templateUrl: './titulo-uploader.component.html' // ,
-  // styleUrls: ['./app.component.scss']
+    selector: 'app-titulo-uploader',
+    templateUrl: './titulo-uploader.component.html' // ,
+    // styleUrls: ['./app.component.scss']
+    ,
+    standalone: false
 })
 export class TituloUploaderComponent {
 

@@ -4,8 +4,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-loading-container',
-  template: ` <div>
+    selector: 'app-loading-container',
+    template: ` <div>
     <style type="text/css">
       width: 100%;
       @-webkit-keyframes uilsquare {
@@ -275,7 +275,8 @@ import { Component } from '@angular/core';
       </div>
       <div><div></div></div>
     </div>
-  </div>`
+  </div>`,
+    standalone: false
 })
 export class LoadingContainerComponent {
   constructor() {}

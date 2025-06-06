@@ -6,8 +6,9 @@ import { WHSE_DailySSRCount } from '../../models/WHSE_DailySSRCount';
 
 
 @Component({
-  selector: 'whse-daily-ssr',
-  templateUrl: 'whse-daily-ssr.component.html'
+    selector: 'whse-daily-ssr',
+    templateUrl: 'whse-daily-ssr.component.html',
+    standalone: false
 })
 
 export class WHSE_Daily_SSR_Component implements OnInit {

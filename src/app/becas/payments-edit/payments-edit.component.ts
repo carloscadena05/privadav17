@@ -18,8 +18,9 @@ import { SessionService } from '../../_shared/services/session.service';
 import { UrlService } from '../../_shared/services/url.service';
 
 @Component({
-  templateUrl: './payments-edit.component.html',
-  styleUrls: ['./payments-edit.component.css']
+    templateUrl: './payments-edit.component.html',
+    styleUrls: ['./payments-edit.component.css'],
+    standalone: false
 })
 export class PaymentsEditComponent implements OnInit {
   myForm: UntypedFormGroup;

@@ -17,8 +17,9 @@ import { ColumnSortService } from '../../_shared/services/column-sort.service';
 import { SessionService } from '../../_shared/services/session.service';
 
 @Component({
-  templateUrl: './grades-list.component.html',
-  styleUrls: ['./grades-list.component.css']
+    templateUrl: './grades-list.component.html',
+    styleUrls: ['./grades-list.component.css'],
+    standalone: false
 })
 export class GradesListComponent implements OnInit {
   studentDTO: StudentDTO;

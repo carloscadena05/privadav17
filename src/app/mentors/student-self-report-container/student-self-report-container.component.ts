@@ -7,8 +7,9 @@ import { SetSelectedQRPeriod } from 'src/app/_store/ui/ui.action';
 import { UIState } from 'src/app/_store/ui/ui.state';
 
 @Component({
-  selector: 'student-self-report-container',
-  templateUrl: './student-self-report-container.component.html'
+    selector: 'student-self-report-container',
+    templateUrl: './student-self-report-container.component.html',
+    standalone: false
 })
 export class StudentSelfReportContainerComponent implements OnInit {
   isLoading = false;

@@ -19,8 +19,9 @@ import { ColumnSortService } from "../../_shared/services/column-sort.service";
 import { SessionService } from "../../_shared/services/session.service";
 registerLocaleData(localePy, "es");
 @Component({
-  templateUrl: "./grade-entry.component.html",
-  styleUrls: ["./grade-entry.component.css", "../students.component.css"],
+    templateUrl: "./grade-entry.component.html",
+    styleUrls: ["./grade-entry.component.css", "../students.component.css"],
+    standalone: false
 })
 export class GradeEntryComponent implements OnInit {
   myForm: UntypedFormGroup;

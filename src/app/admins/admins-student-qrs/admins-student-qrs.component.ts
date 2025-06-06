@@ -7,8 +7,9 @@ import { MentorReport2DataService } from 'src/app/_shared/data/mentor-report2-da
 import { StudentState } from 'src/app/_store/student/student.state';
 import { SessionService } from '../../_shared/services/session.service';
 @Component({
-  selector: 'app-admins-student-qrs',
-  templateUrl: './admins-student-qrs.component.html'
+    selector: 'app-admins-student-qrs',
+    templateUrl: './admins-student-qrs.component.html',
+    standalone: false
 })
 export class AdminsStudentQRsComponent implements OnInit {
   isLoading: boolean;

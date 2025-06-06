@@ -9,8 +9,9 @@ import { Member } from 'src/app/_shared/models/member';
 import { UrlService } from 'src/app/_shared/services/url.service';
 
 @Component({
-  templateUrl: './admins-member.component.html',
-  styleUrls: ['./admins-member.component.css']
+    templateUrl: './admins-member.component.html',
+    styleUrls: ['./admins-member.component.css'],
+    standalone: false
 })
 export class AdminsMemberComponent implements OnInit {
   myForm: UntypedFormGroup;

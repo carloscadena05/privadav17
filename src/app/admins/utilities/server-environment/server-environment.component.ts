@@ -3,8 +3,9 @@ import { UtilitiesDataService } from 'src/app/_shared/data/utilities-data.servic
 import { ServerEnvironment } from 'src/app/_shared/models/server-environment';
 
 @Component({
-  selector: 'app-server-environment',
-  templateUrl: './server-environment.component.html'
+    selector: 'app-server-environment',
+    templateUrl: './server-environment.component.html',
+    standalone: false
 })
 export class ServerEnvironmentComponent implements OnInit {
   env: ServerEnvironment;

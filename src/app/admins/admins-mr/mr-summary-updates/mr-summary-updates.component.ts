@@ -11,8 +11,9 @@ import { SessionService } from 'src/app/_shared/services/session.service';
 import { StudentState } from 'src/app/_store/student/student.state';
 
 @Component({
-  templateUrl: './mr-summary-updates.component.html',
-  styleUrls: ['../../../../assets/css/forms.css']
+    templateUrl: './mr-summary-updates.component.html',
+    styleUrls: ['../../../../assets/css/forms.css'],
+    standalone: false
 })
 export class MentorReportSummaryUpdatesComponent implements OnInit {
   myForm: UntypedFormGroup;

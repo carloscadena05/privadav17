@@ -11,9 +11,10 @@ import { StudentSelfReport } from '../../../_shared/models/student-self-report';
 import { UIState } from '../../../_store/ui/ui.state';
 
 @Component({
-  selector: 'app-ssr-summary-tracking',
-  templateUrl: 'ssr-summary-tracking.component.html',
-  styleUrls: ['ssr-summary-tracking.component.css']
+    selector: 'app-ssr-summary-tracking',
+    templateUrl: 'ssr-summary-tracking.component.html',
+    styleUrls: ['ssr-summary-tracking.component.css'],
+    standalone: false
 })
 export class StudentSelfReportsTrackingComponent implements OnInit
 {

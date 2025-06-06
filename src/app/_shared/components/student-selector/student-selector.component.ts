@@ -2,8 +2,9 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { StudentDataService } from '../../data/student-data.service';
 import { StudentMiniDTO } from '../../models/studentMiniDTO';
 @Component({
-  selector: 'app-student-selector',
-  templateUrl: './student-selector.component.html'
+    selector: 'app-student-selector',
+    templateUrl: './student-selector.component.html',
+    standalone: false
 })
 export class StudentSelectorComponent implements OnInit {
   students: Array<StudentMiniDTO>;
