@@ -1,78 +1,95 @@
 <div class="card bg-primary">
   <div class="card-header text-white" style="font-size:large">
     <span>Browse Members</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="btn btn-secondary link "
-          (click)="gotoMemberSearch()">Member Search</span>
+  (click)="gotoMemberSearch()">Member Search</span>
+</div>
+<div class="card-body bg-white">
+  @if (errorMessage) {
+    <span class="alert alert-danger">{{errorMessage}}</span>
+  }
+  @if (successMessage) {
+    <span class="alert alert-success">{{successMessage}}</span>
+  }
+
+  <div>
+    <label for="TypeSelector">Type:</label>
+    <select name="TypeSelector" [(ngModel)]="selectedType">
+      @for (type of memberTypes; track type) {
+        <option [ngValue]="type">{{type.label}}</option>
+      }
+    </select>
+    &nbsp;
+    <label for="StatusSelector">Member Status:</label>
+    <select name="StatusSelector" [(ngModel)]="selectedStatus">
+      @for (status of roleStatuses; track status) {
+        <option [ngValue]="status">{{status.label}}</option>
+      }
+    </select>
+    &nbsp;
+    <label for="StudentStatusSelector">Student Status:</label>
+    <select name="StudentStatusSelector" [(ngModel)]="selectedStudentStatus">
+      @for (status of studentStatuses; track status) {
+        <option [ngValue]="status">{{status.label}}</option>
+      }
+    </select>
+
   </div>
-  <div class="card-body bg-white">
-    <span *ngIf="errorMessage" class="alert alert-danger">{{errorMessage}}</span>
-    <span *ngIf="successMessage" class="alert alert-success">{{successMessage}}</span>
-
-    <div>
-      <label for="TypeSelector">Type:</label>
-      <select name="TypeSelector" [(ngModel)]="selectedType">
-        <option *ngFor="let type of memberTypes" [ngValue]="type">{{type.label}}</option>
-      </select>
-      &nbsp;
-      <label for="StatusSelector">Member Status:</label>
-      <select name="StatusSelector" [(ngModel)]="selectedStatus">
-        <option *ngFor="let status of roleStatuses" [ngValue]="status">{{status.label}}</option>
-      </select>
-      &nbsp;
-      <label for="StudentStatusSelector">Student Status:</label>
-      <select name="StudentStatusSelector" [(ngModel)]="selectedStudentStatus">
-        <option *ngFor="let status of studentStatuses" [ngValue]="status">{{status.label}}</option>
-      </select>
-
-    </div>
-    <div [ngSwitch]="isLoading">
-      <div *ngSwitchCase="true" class="text-center col-md-4 col-md-offset-4">
-        <app-loading-container>
-        </app-loading-container>
-      </div>
-      <div *ngSwitchCase="false">
-        <table appSortableTable class="table-sm table-striped">
-
-          <thead>
-            <tr>
-              <th></th>
-              <th></th>
-              <th app-sortable-column="memberName" (onSortColumn)="onSortColumn($event)">Member</th>
-              <th app-sortable-column="memberStatus" (onSortColumn)="onSortColumn($event)">Member Status</th>
-              <th app-sortable-column="email" (onSortColumn)="onSortColumn($event)">Email</th>
-              <th app-sortable-column="relatedStudentName" (onSortColumn)="onSortColumn($event)">Related Student</th>
-              <th app-sortable-column="relatedStudentStatus" (onSortColumn)="onSortColumn($event)">Student Status</th>
-              <!-- <th app-sortable-column="mentorName" (onSortColumn)="onSortColumn($event)">Communication History</th> -->
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let member of members, let i = index">
-              <td>
-                {{ i+1 }}
-              </td>
-              <td>
-                <img [src]="member.photoUrl" height="30" class="thumbnail" />
-              </td>
-              <td (click)='gotoMember(member.memberGUId)' class='link'>
-                {{ member.lastNames }}, {{ member.firstNames }}
-              </td>
-              <td>
-                {{member.memberStatus}}
-              </td>
-              <td>
-                <a href='mailto:{{ member.email }}'>{{ member.email }}</a>
-              </td>
-              <td (click)='gotoStudent(member.relatedStudentGUId, member.relatedStudentName)' class='link'>
-                {{ member.relatedStudentName }}
-              </td>
-              <td>
-                {{member.relatedStudentStatus}}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+  <div>
+    @switch (isLoading) {
+      @case (true) {
+        <div class="text-center col-md-4 col-md-offset-4">
+          <app-loading-container>
+          </app-loading-container>
+        </div>
+      }
+      @case (false) {
+        <div>
+          <table appSortableTable class="table-sm table-striped">
+            <thead>
+              <tr>
+                <th></th>
+                <th></th>
+                <th app-sortable-column="memberName" (onSortColumn)="onSortColumn($event)">Member</th>
+                <th app-sortable-column="memberStatus" (onSortColumn)="onSortColumn($event)">Member Status</th>
+                <th app-sortable-column="email" (onSortColumn)="onSortColumn($event)">Email</th>
+                <th app-sortable-column="relatedStudentName" (onSortColumn)="onSortColumn($event)">Related Student</th>
+                <th app-sortable-column="relatedStudentStatus" (onSortColumn)="onSortColumn($event)">Student Status</th>
+                <!-- <th app-sortable-column="mentorName" (onSortColumn)="onSortColumn($event)">Communication History</th> -->
+              </tr>
+            </thead>
+            <tbody>
+              @for (member of members; track member; let i = $index) {
+                <tr>
+                  <td>
+                    {{ i+1 }}
+                  </td>
+                  <td>
+                    <img [src]="member.photoUrl" height="30" class="thumbnail" />
+                  </td>
+                  <td (click)='gotoMember(member.memberGUId)' class='link'>
+                    {{ member.lastNames }}, {{ member.firstNames }}
+                  </td>
+                  <td>
+                    {{member.memberStatus}}
+                  </td>
+                  <td>
+                    <a href='mailto:{{ member.email }}'>{{ member.email }}</a>
+                  </td>
+                  <td (click)='gotoStudent(member.relatedStudentGUId, member.relatedStudentName)' class='link'>
+                    {{ member.relatedStudentName }}
+                  </td>
+                  <td>
+                    {{member.relatedStudentStatus}}
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    }
   </div>
+</div>
 
 
-  l
+l

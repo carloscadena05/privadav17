@@ -1,47 +1,57 @@
 <label for='search-string'>Student Search:
-  &nbsp;</label>
-  <input *ngIf="showSearchActiveOnly"
-  id="ckEditMode"
-  [(ngModel)]='searchActiveOnly'
-  type="checkbox"
-  (change)="toggleSearchActiveOnly($event)"
-  style="margin: 0 0 0 1px"
-/>
-  <span *ngIf="showSearchActiveOnly">Active Only</span>
+&nbsp;</label>
+@if (showSearchActiveOnly) {
+  <input
+    id="ckEditMode"
+    [(ngModel)]='searchActiveOnly'
+    type="checkbox"
+    (change)="toggleSearchActiveOnly($event)"
+    style="margin: 0 0 0 1px"
+    />
+}
+@if (showSearchActiveOnly) {
+  <span>Active Only</span>
+}
 
 <span style="margin-bottom: 2px; margin-left: 1rem;">
-  <span *ngIf="showSearchButton">
-    Or:
-  </span>
-  <span *ngIf="showSearchButton"
-        (click)="gotoStudentList()" style="margin-bottom: 2px; margin-left: 1px;"
-        class="btn btn-sm btn-primary">Browse Students
-  </span>
+  @if (showSearchButton) {
+    <span>
+      Or:
+    </span>
+  }
+  @if (showSearchButton) {
+    <span
+      (click)="gotoStudentList()" style="margin-bottom: 2px; margin-left: 1px;"
+      class="btn btn-sm btn-primary">Browse Students
+    </span>
+  }
 </span>
 <div class="d-flex justify-content-between">
   <input id='search-string'
-         type='text'
-         class='form-control'
-         [editable]='false'
-         [class.is-invalid]="searchFailed"
-         [(ngModel)]='studentMiniDTO'
-         [ngbTypeahead]='search'
-         [inputFormatter]="formatter"
-         [resultFormatter]="formatter"
-         (input)="onInput()"
-         (focus)="onFocus()"
-         (selectItem)="onSelect($event)"
-         placeholder="Last Name or First Name or Email" />
-  <span>
-    <button class="btn" style="margin-left:-25px" (click)="onClear()"><b>[✖]</b></button>
-  </span>
-</div>
-<div class="row" *ngIf="showNonEssential">
-  <span [hidden]="currentGUId=='0000'" style="margin-top: .4rem;margin-left: 1rem;" (click)="gotoStudent( studentName )"
+    type='text'
+    class='form-control'
+    [editable]='false'
+    [class.is-invalid]="searchFailed"
+    [(ngModel)]='studentMiniDTO'
+    [ngbTypeahead]='search'
+    [inputFormatter]="formatter"
+    [resultFormatter]="formatter"
+    (input)="onInput()"
+    (focus)="onFocus()"
+    (selectItem)="onSelect($event)"
+    placeholder="Last Name or First Name or Email" />
+    <span>
+      <button class="btn" style="margin-left:-25px" (click)="onClear()"><b>[✖]</b></button>
+    </span>
+  </div>
+  @if (showNonEssential) {
+    <div class="row">
+      <span [hidden]="currentGUId=='0000'" style="margin-top: .4rem;margin-left: 1rem;" (click)="gotoStudent( studentName )"
         class="link">Student Profile: {{ studentName }}
-  </span>
-  <br />
-  <span [hidden]="currentGUId=='0000'" style="margin-left:1rem;margin-top: .2rem;">
-    Email: {{ email }}
-  </span>
-</div>
+      </span>
+      <br />
+      <span [hidden]="currentGUId=='0000'" style="margin-left:1rem;margin-top: .2rem;">
+        Email: {{ email }}
+      </span>
+    </div>
+  }

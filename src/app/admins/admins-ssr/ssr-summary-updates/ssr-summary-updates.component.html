@@ -1,107 +1,115 @@
 <div class="card bg-primary">
   <div class="card-header text-white" style="font-size: large">Student Self Report Review for {{ studentName }}</div>
   <div class="card-body bg-white">
-    <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
-    <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
-    <div [ngSwitch]="isLoading">
-      <div *ngSwitchCase="true" class="text-center col-md-4 col-md-offset-4">
-        <app-loading-container> </app-loading-container>
-      </div>
-      <div *ngSwitchCase="false">
-        <form [formGroup]="myForm">
-          <div class="form-group"></div>
-
-          <div class="controls">
-            <label for="reviewedStatusSelector">Reviewed Status:</label>
-            <select formControlName="reviewedStatusSelector" class="form-control input-sm">
-              <option *ngFor="let status of reviewedStatuses" [value]="status.value">{{ status.label }}</option>
-            </select>
-            <app-display-errors
-              control="reviewedStatusSelector"
-              class="red"
+    @if (errorMessage) {
+      <div class="alert alert-danger">{{ errorMessage }}</div>
+    }
+    @if (successMessage) {
+      <div class="alert alert-success">{{ successMessage }}</div>
+    }
+    <div>
+      @switch (isLoading) {
+        @case (true) {
+          <div class="text-center col-md-4 col-md-offset-4">
+            <app-loading-container> </app-loading-container>
+          </div>
+        }
+        @case (false) {
+          <div>
+            <form [formGroup]="myForm">
+              <div class="form-group"></div>
+              <div class="controls">
+                <label for="reviewedStatusSelector">Reviewed Status:</label>
+                <select formControlName="reviewedStatusSelector" class="form-control input-sm">
+                  @for (status of reviewedStatuses; track status) {
+                    <option [value]="status.value">{{ status.label }}</option>
+                  }
+                </select>
+                <app-display-errors
+                  control="reviewedStatusSelector"
+                  class="red"
               [errors]="{
                 required: 'Reviewed Status is required'
               }"
-            ></app-display-errors>
-          </div>
-          <div>&nbsp;</div>
-          <div class="form-group">
-
-            <div class="controls">
-              <label for="narrative_Spanish">Si edita la versión en español, edite la versión en inglés al mismo tiempo. <b>
-                &gt;&gt;<a href = "https://translate.google.com/?sl=es&tl=en&op=translate" class="link" target="_blank">Google Translate</a>
-              </b></label>
-              <textarea
-                id="narrative_Spanish"
-                #success
-                formControlName="narrative_Spanish"
-                type="text"
-                class="form-control input-sm narrative"
-                placeholder=""
-              >
-              </textarea>
-              <app-display-errors
-                control="narrative_Spanish"
-                class="red"
+                ></app-display-errors>
+              </div>
+              <div>&nbsp;</div>
+              <div class="form-group">
+                <div class="controls">
+                  <label for="narrative_Spanish">Si edita la versión en español, edite la versión en inglés al mismo tiempo. <b>
+                    &gt;&gt;<a href = "https://translate.google.com/?sl=es&tl=en&op=translate" class="link" target="_blank">Google Translate</a>
+                  </b></label>
+                  <textarea
+                    id="narrative_Spanish"
+                    #success
+                    formControlName="narrative_Spanish"
+                    type="text"
+                    class="form-control input-sm narrative"
+                    placeholder=""
+                    >
+                  </textarea>
+                  <app-display-errors
+                    control="narrative_Spanish"
+                    class="red"
                 [errors]="{
                   required: 'Se requiere una entrada, aun si es sólo N/A.',
                   maxlength: 'La entrada no puede exceder 4000 caracteres del largo.'
                 }"
-              ></app-display-errors>
-            </div>
-          </div>
-
-          <div class="controls">
-            <label for="narrative_English">If you edit the English version please edit the Spanish one at the same time. <b>
-              &gt;&gt;<a href = "https://translate.google.com/?sl=es&tl=en&op=translate" class="link" target="_blank">Google Translate</a>
-            </b></label>
-            <textarea
-              id="narrative_English"
-              #success
-              formControlName="narrative_English"
-              type="text"
-              class="form-control input-sm narrative"
-              placeholder=""
-            >
-            </textarea>
-            <app-display-errors
-              control="narrative_English"
-              class="red"
+                  ></app-display-errors>
+                </div>
+              </div>
+              <div class="controls">
+                <label for="narrative_English">If you edit the English version please edit the Spanish one at the same time. <b>
+                  &gt;&gt;<a href = "https://translate.google.com/?sl=es&tl=en&op=translate" class="link" target="_blank">Google Translate</a>
+                </b></label>
+                <textarea
+                  id="narrative_English"
+                  #success
+                  formControlName="narrative_English"
+                  type="text"
+                  class="form-control input-sm narrative"
+                  placeholder=""
+                  >
+                </textarea>
+                <app-display-errors
+                  control="narrative_English"
+                  class="red"
               [errors]="{
                 required: 'An entry is required, even if it is just N/A.',
                 maxlength: 'Entry cannot exceed 4000 characters in length.'
               }"
-            ></app-display-errors>
-          </div>
-
-            <div class="col-md-6 col-md-offset-1">
-              <span>
-                <button
-                  class="btn btn-primary"
-                  data-cy="submit"
-                  style="width: 80px; margin-right: 10px"
-                  (click)="onSubmit()"
-                >
-                  Save
-                </button> </span
-              >&nbsp;
-              <span>
-                <button
-                type="button" class="btn btn-default" style="width: 75px"
-                (click)="onCancel()">
-                Cancel
-              </button>
-              </span>
-              <span>
-                <button
-                  type="button" class="btn btn-danger" style="width: 75px; margin-left: 5rem"
-                  (click)="onDelete()">
-                  Delete
-                </button>
-              </span>
+                ></app-display-errors>
+              </div>
+              <div class="col-md-6 col-md-offset-1">
+                <span>
+                  <button
+                    class="btn btn-primary"
+                    data-cy="submit"
+                    style="width: 80px; margin-right: 10px"
+                    (click)="onSubmit()"
+                    >
+                    Save
+                  </button> </span
+                  >&nbsp;
+                  <span>
+                    <button
+                      type="button" class="btn btn-default" style="width: 75px"
+                      (click)="onCancel()">
+                      Cancel
+                    </button>
+                  </span>
+                  <span>
+                    <button
+                      type="button" class="btn btn-danger" style="width: 75px; margin-left: 5rem"
+                      (click)="onDelete()">
+                      Delete
+                    </button>
+                  </span>
+                </div>
+              </form>
             </div>
-        </form>
+          }
+        }
       </div>
     </div>
   </div>
-</div>

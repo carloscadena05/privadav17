@@ -1,9 +1,13 @@
 <div class="py-4 px-3 px-md-5">
   <h1 class="title text-center text-sm-left">Agregar Reporte</h1>
 
-  <app-alert (didClose)="closeAlert($event)" [isShown]="successAlert" [type]="'success'"
-      *ngIf="successAlert"></app-alert>
-  <app-alert (didClose)="closeAlert($event)" [isShown]="errorAlert" [type]="'error'" *ngIf="errorAlert"></app-alert>
+  @if (successAlert) {
+    <app-alert (didClose)="closeAlert($event)" [isShown]="successAlert" [type]="'success'"
+    ></app-alert>
+  }
+  @if (errorAlert) {
+    <app-alert (didClose)="closeAlert($event)" [isShown]="errorAlert" [type]="'error'"></app-alert>
+  }
 
   <form [formGroup]="myForm">
 
@@ -19,20 +23,20 @@
           <!-- use <ol> instead of pre tag to avoid horizontal scroll -->
 
 
-            <p>Querido estudiante,</p>
-            <p>Siempre es un placer leerte y saber de ti. Nos ha fascinado cómo, desde tu último reporte,
-              nos has permitido conocer más sobre tu historia, tus experiencias y anécdotas.
-              Ha sido un verdadero disfrute acompañarte en este recorrido.</p>
-            <p>En este nuevo reporte, nos encantaría que continuaras guiándonos a través de tu viaje,
-              compartiendo cómo se va moldeando tu vida, los desafíos que enfrentas y los aprendizajes que cosechas.
-              Queremos seguir emocionándonos contigo, ser testigos de tu evolución y estar a tu lado en cada paso de este camino.</p>p>
-            <p>¡Esperamos con gran entusiasmo tu historia!</p>
-            <p>Si tuviste oportunidad de estar presente en la plática de "Story Telling" con Youth Academy,
-              en la reunión de diciembre, por  favor aplica algo que hayas aprendido en tu reporte y compartenos
-              que te ha parecido la charla.</p>
-            <p>La única petición es que tu reporte tenga al menos una cuartilla de extensión.</p>
-            <p>Con cariño y admiración,</p>
-            <p>Sary</p>
+          <p>Querido estudiante,</p>
+          <p>Siempre es un placer leerte y saber de ti. Nos ha fascinado cómo, desde tu último reporte,
+            nos has permitido conocer más sobre tu historia, tus experiencias y anécdotas.
+          Ha sido un verdadero disfrute acompañarte en este recorrido.</p>
+          <p>En este nuevo reporte, nos encantaría que continuaras guiándonos a través de tu viaje,
+            compartiendo cómo se va moldeando tu vida, los desafíos que enfrentas y los aprendizajes que cosechas.
+          Queremos seguir emocionándonos contigo, ser testigos de tu evolución y estar a tu lado en cada paso de este camino.</p>p>
+          <p>¡Esperamos con gran entusiasmo tu historia!</p>
+          <p>Si tuviste oportunidad de estar presente en la plática de "Story Telling" con Youth Academy,
+            en la reunión de diciembre, por  favor aplica algo que hayas aprendido en tu reporte y compartenos
+          que te ha parecido la charla.</p>
+          <p>La única petición es que tu reporte tenga al menos una cuartilla de extensión.</p>
+          <p>Con cariño y admiración,</p>
+          <p>Sary</p>
 
           <!-- <ol class="px-4 my-3" style="list-style-type: none;">-->
         </div>
@@ -44,47 +48,53 @@
             class="custom-textarea p-sm-4 p-2 pb-0" maxlength="4500"
             placeholder="Escribe tu reporte a forma de ensayo con un máximo de 4500 caracteres">
           </textarea>
-          <div class="characters-left bold text-right m-4"
-            *ngIf="!myForm.controls['narrative_Spanish'].errors?.required">
-            {{ 4500 - myForm.controls['narrative_Spanish'].value.length }} caracteres disponibles
-          </div>
+          @if (!myForm.controls['narrative_Spanish'].errors?.required) {
+            <div class="characters-left bold text-right m-4"
+              >
+              {{ 4500 - myForm.controls['narrative_Spanish'].value.length }} caracteres disponibles
+            </div>
+          }
         </div>
 
         <div style="color:mediumblue" class="mt-2 mt-sm-3 mt-md-4"><b>
-            Si desea que el texto en inglés se traduzca de nuevo, elimínelo antes de introducir un nuevo texto en
-            español.</b>
-        </div>
-        <p>Tu reporte en inglés </p>
+          Si desea que el texto en inglés se traduzca de nuevo, elimínelo antes de introducir un nuevo texto en
+        español.</b>
+      </div>
+      <p>Tu reporte en inglés </p>
         <div class="rounded-lg textarea-container mt-2  mt-sm-3 mt-md-4" [ngClass]="myForm.controls['narrative_English'].valid && myForm.controls['narrative_English'].value.length > 0 ?
           'green-border' : 'blue-border'">
-          <textarea id="narrative_English" #success formControlName="narrative_English" type="text"
-            class="custom-textarea p-sm-4 p-2 pb-0" maxlength="4500"
-            placeholder="Dejar en blanco para traducción automática">
-          </textarea>
+        <textarea id="narrative_English" #success formControlName="narrative_English" type="text"
+          class="custom-textarea p-sm-4 p-2 pb-0" maxlength="4500"
+          placeholder="Dejar en blanco para traducción automática">
+        </textarea>
 
+        @if (!myForm.controls['narrative_English'].errors?.required) {
           <div class="characters-left bold text-right m-4"
-            *ngIf="!myForm.controls['narrative_English'].errors?.required">
+            >
             {{ 4500 - myForm.controls['narrative_English'].value.length }} characters left
           </div>
-        </div>
-
+        }
       </div>
 
+    </div>
+
+    @if (myForm.controls['narrative_Spanish'].errors?.required && myForm.controls['narrative_Spanish'].touched) {
       <div class="p-4 text-error"
-        *ngIf="myForm.controls['narrative_Spanish'].errors?.required && myForm.controls['narrative_Spanish'].touched">
+        >
         No se puede registrar un reporte vacío
       </div>
+    }
 
 
-      <div class="text-center">
-        <button class="btn save mr-4" (click)="onSubmit()"
-          [disabled]="myForm.controls['narrative_Spanish'].errors?.required || myForm.controls['narrative_Spanish'].value == null ">
-          Guardar
-        </button>
-        <button class="btn cancel ml-4 mr-0" (click)="onCancel()">
-          Cancelar
-        </button>
-      </div>
-    </fieldset>
-  </form>
+    <div class="text-center">
+      <button class="btn save mr-4" (click)="onSubmit()"
+        [disabled]="myForm.controls['narrative_Spanish'].errors?.required || myForm.controls['narrative_Spanish'].value == null ">
+        Guardar
+      </button>
+      <button class="btn cancel ml-4 mr-0" (click)="onCancel()">
+        Cancelar
+      </button>
+    </div>
+  </fieldset>
+</form>
 </div>

@@ -1,45 +1,53 @@
-<span *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</span>
-<span *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</span>
-<div [ngSwitch]="isLoading">
-  <div *ngSwitchCase="true" class="text-center col-md-4 col-md-offset-4">
-    <app-loading-container> </app-loading-container>
-  </div>
-  <div *ngSwitchCase="false">
-    <div *ngIf="!errorMessage">
-      <div class="card-header bg-warning text-for-warning" style="font-size: large">
-        <span>Requests / Corrientes </span>
-        <span>
-          <span>
-            <span
-              class="btn btn-default active"
-              data-cy="add-follow-up"
-              (click)="followUpRequestAdd()"
-              style="margin-left: 10px"
-            >
-              Add New FollowUpRequest
-            </span>
-          </span>
-        </span>
+@if (errorMessage) {
+  <span class="alert alert-danger">{{ errorMessage }}</span>
+}
+@if (successMessage) {
+  <span class="alert alert-success">{{ successMessage }}</span>
+}
+<div>
+  @switch (isLoading) {
+    @case (true) {
+      <div class="text-center col-md-4 col-md-offset-4">
+        <app-loading-container> </app-loading-container>
       </div>
-
+    }
+    @case (false) {
       <div>
-        <label for="ActiveStatusSelector">Request Status:</label>
-        <select
-          name="ActiveStatusSelector"
-          [(ngModel)]="selectedActiveStatusId "
-          (change)="setActiveStatus($event.target.value)"
-        >
-
-        <option value="2092">Open</option>
-        <option value="2104">Closed</option>
-
-       </select>
-
+        @if (!errorMessage) {
+          <div>
+            <div class="card-header bg-warning text-for-warning" style="font-size: large">
+              <span>Requests / Corrientes </span>
+              <span>
+                <span>
+                  <span
+                    class="btn btn-default active"
+                    data-cy="add-follow-up"
+                    (click)="followUpRequestAdd()"
+                    style="margin-left: 10px"
+                    >
+                    Add New FollowUpRequest
+                  </span>
+                </span>
+              </span>
+            </div>
+            <div>
+              <label for="ActiveStatusSelector">Request Status:</label>
+              <select
+                name="ActiveStatusSelector"
+                [(ngModel)]="selectedActiveStatusId "
+                (change)="setActiveStatus($event.target.value)"
+                >
+                <option value="2092">Open</option>
+                <option value="2104">Closed</option>
+              </select>
+            </div>
+            <app-follow-up-requests-list
+              [followUpRequests]="followUpRequests"
+              [selectedRequestStatusId]="2104"
+            ></app-follow-up-requests-list>
+          </div>
+        }
       </div>
-      <app-follow-up-requests-list
-        [followUpRequests]="followUpRequests"
-        [selectedRequestStatusId]="2104"
-      ></app-follow-up-requests-list>
-    </div>
-  </div>
+    }
+  }
 </div>

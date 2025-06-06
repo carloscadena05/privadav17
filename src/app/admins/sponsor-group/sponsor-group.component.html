@@ -1,56 +1,62 @@
-<div *ngIf="errorMessage" class="alert alert-danger">{{errorMessage}}</div>
-<div *ngIf="successMessage" class="alert alert-success">{{successMessage}}</div>
+@if (errorMessage) {
+  <div class="alert alert-danger">{{errorMessage}}</div>
+}
+@if (successMessage) {
+  <div class="alert alert-success">{{successMessage}}</div>
+}
 <div style="max-width:900px">
 
-  <div [ngSwitch]="isLoading">
-    <div *ngSwitchCase="true" class="text-center col-md-4 col-md-offset-4">
-      <app-loading-container>
-      </app-loading-container>
-    </div>
-    <div *ngSwitchCase="false">
-      <form [formGroup]="myForm" class="form-horizontal">
-        <div class="row">
-          <div class="col">
-            <div class="form-group">
-              <span class="btn btn-primary btn-sm" (click)="location.back()">
-                &lt;&lt;&nbsp; Back
-              </span>
-              &nbsp;
-            </div>
-            <div class="form-group">
-              <input id="sponsorGroupId" formControlName="sponsorGroupId"
-                     class="form-control form-control-sm"
-                     type="text" readonly />
-
-
-              <label for="sponsorGroupName">SponsorGroup Name</label>
-              <input id="sponsorGroupName" formControlName="sponsorGroupName"
-                     class="form-control form-control-sm" type="text" placeholder="SponsorGroup Name" />
-            </div>
-
-            <div class="form-group">
-              <button class="btn btn-primary" (click)="saveSponsorGroup()">
-                Save Name Change
-              </button>
-            </div>
-          </div>
-
-          <div class="col">
-            <div class="form-group">
-              <app-sponsor-group-members
-                                         [sponsorGroupId]="sponsorGroupId"
-                                         [newMemberNotification]="newMemberMessage">
-              </app-sponsor-group-members>
-            </div>
-            <div class="form-group">
-              <app-sponsor-group-member-edit
-                                             [sponsorGroupId]="sponsorGroupId"
-                                             (onSelectedMember)="receiveSelectedMemberEvent($event)">>
-              </app-sponsor-group-member-edit>
-            </div>
-          </div>
+  <div>
+    @switch (isLoading) {
+      @case (true) {
+        <div class="text-center col-md-4 col-md-offset-4">
+          <app-loading-container>
+          </app-loading-container>
         </div>
-      </form>
+      }
+      @case (false) {
+        <div>
+          <form [formGroup]="myForm" class="form-horizontal">
+            <div class="row">
+              <div class="col">
+                <div class="form-group">
+                  <span class="btn btn-primary btn-sm" (click)="location.back()">
+                    &lt;&lt;&nbsp; Back
+                  </span>
+                  &nbsp;
+                </div>
+                <div class="form-group">
+                  <input id="sponsorGroupId" formControlName="sponsorGroupId"
+                    class="form-control form-control-sm"
+                    type="text" readonly />
+                    <label for="sponsorGroupName">SponsorGroup Name</label>
+                    <input id="sponsorGroupName" formControlName="sponsorGroupName"
+                      class="form-control form-control-sm" type="text" placeholder="SponsorGroup Name" />
+                    </div>
+                    <div class="form-group">
+                      <button class="btn btn-primary" (click)="saveSponsorGroup()">
+                        Save Name Change
+                      </button>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-group">
+                      <app-sponsor-group-members
+                        [sponsorGroupId]="sponsorGroupId"
+                        [newMemberNotification]="newMemberMessage">
+                      </app-sponsor-group-members>
+                    </div>
+                    <div class="form-group">
+                      <app-sponsor-group-member-edit
+                        [sponsorGroupId]="sponsorGroupId"
+                        (onSelectedMember)="receiveSelectedMemberEvent($event)">>
+                      </app-sponsor-group-member-edit>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          }
+        }
+      </div>
     </div>
-  </div>
-</div>

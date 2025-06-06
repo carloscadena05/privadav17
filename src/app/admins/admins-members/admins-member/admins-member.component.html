@@ -1,266 +1,271 @@
-<div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
-<div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
+@if (errorMessage) {
+  <div class="alert alert-danger">{{ errorMessage }}</div>
+}
+@if (successMessage) {
+  <div class="alert alert-success">{{ successMessage }}</div>
+}
 <div style="max-width: 900px">
-  <div [ngSwitch]="isLoading">
-    <div *ngSwitchCase="true" class="text-center col-md-4 col-md-offset-4">
-      <app-loading-container> </app-loading-container>
-    </div>
-    <div *ngSwitchCase="false">
-      <form [formGroup]="myForm" class="form-horizontal">
-        <div class="row">
-          <div class="col">
-            <div class="form-group">
-              <span class="btn btn-primary btn-sm" data-cy="btn-back" (click)="location.back()">
-                &lt;&lt;&nbsp; Back
-              </span>
-              &nbsp;
-
-              <label for="ckEditMode">
-                <input
-                  id="ckEditMode"
-                  type="checkbox"
-                  name="toggleReadOnly"
-                  (click)="setReadOnly()"
-                  style="margin: 0 0 0 4px"
-                />
-                Editable</label
-              >
-            </div>
-            <div class="form-group">
-              <label for="firstNames">First Name(s)</label>
-              <input
-                id="firstNames"
-                formControlName="firstNames"
-                class="form-control form-control-sm"
-                type="text"
-                placeholder="First Name"
-              />
-              <app-display-errors
-                control="firstNames"
-                class="red"
+  <div>
+    @switch (isLoading) {
+      @case (true) {
+        <div class="text-center col-md-4 col-md-offset-4">
+          <app-loading-container> </app-loading-container>
+        </div>
+      }
+      @case (false) {
+        <div>
+          <form [formGroup]="myForm" class="form-horizontal">
+            <div class="row">
+              <div class="col">
+                <div class="form-group">
+                  <span class="btn btn-primary btn-sm" data-cy="btn-back" (click)="location.back()">
+                    &lt;&lt;&nbsp; Back
+                  </span>
+                  &nbsp;
+                  <label for="ckEditMode">
+                    <input
+                      id="ckEditMode"
+                      type="checkbox"
+                      name="toggleReadOnly"
+                      (click)="setReadOnly()"
+                      style="margin: 0 0 0 4px"
+                      />
+                      Editable</label
+                      >
+                    </div>
+                    <div class="form-group">
+                      <label for="firstNames">First Name(s)</label>
+                      <input
+                        id="firstNames"
+                        formControlName="firstNames"
+                        class="form-control form-control-sm"
+                        type="text"
+                        placeholder="First Name"
+                        />
+                        <app-display-errors
+                          control="firstNames"
+                          class="red"
                 [errors]="{
                   required: 'First name is required',
                   maxlength: 'First name cannot exceed 30 characters in length.'
                 }"
-              ></app-display-errors>
-
-              <label for="lastNames">Last Name(s)</label>
-              <input
-                id="lastNames"
-                formControlName="lastNames"
-                data-cy="last-names"
-                type="text"
-                class="form-control form-control-sm"
-                placeholder="Last Name"
-              />
-              <app-display-errors
-                control="lastNames"
-                class="red"
+                        ></app-display-errors>
+                        <label for="lastNames">Last Name(s)</label>
+                        <input
+                          id="lastNames"
+                          formControlName="lastNames"
+                          data-cy="last-names"
+                          type="text"
+                          class="form-control form-control-sm"
+                          placeholder="Last Name"
+                          />
+                          <app-display-errors
+                            control="lastNames"
+                            class="red"
                 [errors]="{
                   required: 'Last name is required',
                   maxlength: 'Last name cannot exceed 30 characters in length.'
                 }"
-              ></app-display-errors>
-
-              <label for="email">Email</label>
-              <input
-                id="email"
-                formControlName="email"
-                type="text"
-                class="form-control form-control-sm"
-                placeholder="Email Name"
-              />
-              <app-display-errors
-                control="email"
-                class="red"
+                          ></app-display-errors>
+                          <label for="email">Email</label>
+                          <input
+                            id="email"
+                            formControlName="email"
+                            type="text"
+                            class="form-control form-control-sm"
+                            placeholder="Email Name"
+                            />
+                            <app-display-errors
+                              control="email"
+                              class="red"
                 [errors]="{
                   required: 'Email is required',
                   maxlength: 'Email cannot exceed 50 characters in length.'
                 }"
-              ></app-display-errors>
-
-              <label for="smA_Phone">SMA Phone</label>
-              <input
-                id="smA_Phone"
-                formControlName="smA_Phone"
-                type="text"
-                class="form-control form-control-sm"
-                placeholder="Best Phone Number when in SMA"
-              />
-
-              <label for="nonSMA_Phone">Non-SMA Phone</label>
-              <input
-                id="nonSMA_Phone"
-                formControlName="nonSMA_Phone"
-                type="text"
-                class="form-control form-control-sm"
-                placeholder="Best Phone Number when not in SMA"
-              />
-
-              <label for="countryOfResidenceId">Country of Residence</label>
-              <select formControlName="countryOfResidenceId" class="form-control form-control-sm">
-                <option *ngFor="let country of countryList" [value]="country.value">{{ country.label }}</option>
-              </select>
-
-              <label for="englishSkillLevelId">English Level:</label>
-              <select formControlName="englishSkillLevelId" class="form-control form-control-sm">
-                <option *ngFor="let status of languageStatuses" [value]="status.value">{{ status.label }}</option>
-              </select>
-
-              <label for="spanishSkillLevelId">Spanish Level:</label>
-              <select formControlName="spanishSkillLevelId" class="form-control form-control-sm">
-                <option *ngFor="let status of languageStatuses" [value]="status.value">{{ status.label }}</option>
-              </select>
-            </div>
-          </div>
-          <div class="col">
-            <div class="row">
-              <div style="width: 100%">
-                <img [src]="photoPathname" />
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-6" style="padding: 0 2px 0 4px">
-                <label for="mentorStatusId">Mentor Status:</label>
-                <select formControlName="mentorStatusId" class="form-control form-control-sm">
-                  <option [ngValue]="null"></option>
-                  <option *ngFor="let status of roleStatuses" [value]="status.value">{{ status.label }}</option>
-                </select>
-
-                <label for="adminStatusId">Admin Status:</label>
-                <select formControlName="adminStatusId" class="form-control form-control-sm">
-                  <option [ngValue]="null"></option>
-                  <option *ngFor="let status of roleStatuses" [value]="status.value">{{ status.label }}</option>
-                </select>
-
-                <label for="volunteerStatusId">Volunteer Status:</label>
-                <select formControlName="volunteerStatusId" class="form-control form-control-sm">
-                  <option [ngValue]="null"></option>
-                  <option *ngFor="let status of roleStatuses" [value]="status.value">{{ status.label }}</option>
-                </select>
-
-                <label for="presidentStatusId">President Status:</label>
-                <select formControlName="presidentStatusId" class="form-control form-control-sm">
-                  <option [ngValue]="null"></option>
-                  <option *ngFor="let status of roleStatuses" [value]="status.value">{{ status.label }}</option>
-                </select>
-              </div>
-
-              <div class="col-6" style="padding: 0 2px 0 4px">
-                <label for="sponsorStatusId">Sponsor Status:</label>
-                <select formControlName="sponsorStatusId" class="form-control form-control-sm">
-                  <option [ngValue]="null"></option>
-                  <option *ngFor="let status of roleStatuses" [value]="status.value">{{ status.label }}</option>
-                </select>
-
-                <label for="donorStatusId">Donor Status:</label>
-                <select formControlName="donorStatusId" class="form-control form-control-sm">
-                  <option [ngValue]="null"></option>
-                  <option *ngFor="let status of roleStatuses" [value]="status.value">{{ status.label }}</option>
-                </select>
-
-                <label for="employeeStatusId">Employee Status:</label>
-                <select formControlName="employeeStatusId" class="form-control form-control-sm">
-                  <option [ngValue]="null"></option>
-                  <option *ngFor="let status of roleStatuses" [value]="status.value">{{ status.label }}</option>
-                </select>
-
-                <label for="boardMemberStatusId">Board Status:</label>
-                <select formControlName="boardMemberStatusId" class="form-control form-control-sm">
-                  <option [ngValue]="null"></option>
-                  <option *ngFor="let status of roleStatuses" [value]="status.value">{{ status.label }}</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="row">
-              <label for="memberId">Member ID</label>
-              <input
-                id="memberId"
-                formControlName="memberId"
-                readonly
-                class="form-control form-control-sm"
-                type="text"
-              />
-
-              <label for="memberGUId">Member GUID</label>
-              <input
-                id="memberGUId"
-                formControlName="memberGUId"
-                readonly
-                class="form-control form-control-sm"
-                type="text"
-              />
-
-              <label for="studentRecordGUId">Related Student Record GUID</label>
-              <input
-                id="studentRecordGUId"
-                formControlName="studentRecordGUId"
-                readonly
-                class="form-control form-control-sm"
-                type="text"
-              />
-            </div>
-          </div>
-
-          <div class="col">
-            <label for="careerBackground">Career Background</label>
-            <input
-              id="careerBackground"
-              formControlName="careerBackground"
-              class="form-control form-control-sm"
-              type="text"
-            />
-
-            <label for="otherRelevantExperience">Other Relevant Experience</label>
-            <input
-              id="otherRelevantExperience"
-              formControlName="otherRelevantExperience"
-              class="form-control form-control-sm"
-              type="text"
-            />
-
-            <label for="comments">Comments (Private -- for Admins only)</label>
-            <textarea
-              id="comments"
-              #success
-              formControlName="comments"
-              type="text"
-              class="form-control input-sm"
-              placeholder=""
-            >
-            </textarea>
-            <app-display-errors
-              control="comments"
-              class="red"
-              [errors]="{ maxlength: 'Entry cannot exceed 2000 characters in length.' }"
-            ></app-display-errors>
-
-            <label for="photoUrl">PhotoUrl</label>
-            <input id="photoUrl" formControlName="photoUrl" class="form-control form-control-sm" type="text" />
-
-            <label for="lastMentorMeeting">Last Mentor Meeting</label>
-            <input
-              id="lastMentorMeeting"
-              formControlName="lastMentorMeeting"
-              class="form-control form-control-sm"
-              type="text"
-            />
-
-            <students-for-sponsor-list></students-for-sponsor-list>
-
-            <students-for-mentor-list></students-for-mentor-list>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="form-group">
-            <button class="btn btn-primary" (click)="saveMyForm()" [disabled]="!myForm.valid">Save</button>
-            <span class="red" [hidden]="myForm.valid">All required fields must be filled in before saving.</span>
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
+                            ></app-display-errors>
+                            <label for="smA_Phone">SMA Phone</label>
+                            <input
+                              id="smA_Phone"
+                              formControlName="smA_Phone"
+                              type="text"
+                              class="form-control form-control-sm"
+                              placeholder="Best Phone Number when in SMA"
+                              />
+                              <label for="nonSMA_Phone">Non-SMA Phone</label>
+                              <input
+                                id="nonSMA_Phone"
+                                formControlName="nonSMA_Phone"
+                                type="text"
+                                class="form-control form-control-sm"
+                                placeholder="Best Phone Number when not in SMA"
+                                />
+                                <label for="countryOfResidenceId">Country of Residence</label>
+                                <select formControlName="countryOfResidenceId" class="form-control form-control-sm">
+                                  @for (country of countryList; track country) {
+                                    <option [value]="country.value">{{ country.label }}</option>
+                                  }
+                                </select>
+                                <label for="englishSkillLevelId">English Level:</label>
+                                <select formControlName="englishSkillLevelId" class="form-control form-control-sm">
+                                  @for (status of languageStatuses; track status) {
+                                    <option [value]="status.value">{{ status.label }}</option>
+                                  }
+                                </select>
+                                <label for="spanishSkillLevelId">Spanish Level:</label>
+                                <select formControlName="spanishSkillLevelId" class="form-control form-control-sm">
+                                  @for (status of languageStatuses; track status) {
+                                    <option [value]="status.value">{{ status.label }}</option>
+                                  }
+                                </select>
+                              </div>
+                            </div>
+                            <div class="col">
+                              <div class="row">
+                                <div style="width: 100%">
+                                  <img [src]="photoPathname" />
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-6" style="padding: 0 2px 0 4px">
+                                  <label for="mentorStatusId">Mentor Status:</label>
+                                  <select formControlName="mentorStatusId" class="form-control form-control-sm">
+                                    <option [ngValue]="null"></option>
+                                    @for (status of roleStatuses; track status) {
+                                      <option [value]="status.value">{{ status.label }}</option>
+                                    }
+                                  </select>
+                                  <label for="adminStatusId">Admin Status:</label>
+                                  <select formControlName="adminStatusId" class="form-control form-control-sm">
+                                    <option [ngValue]="null"></option>
+                                    @for (status of roleStatuses; track status) {
+                                      <option [value]="status.value">{{ status.label }}</option>
+                                    }
+                                  </select>
+                                  <label for="volunteerStatusId">Volunteer Status:</label>
+                                  <select formControlName="volunteerStatusId" class="form-control form-control-sm">
+                                    <option [ngValue]="null"></option>
+                                    @for (status of roleStatuses; track status) {
+                                      <option [value]="status.value">{{ status.label }}</option>
+                                    }
+                                  </select>
+                                  <label for="presidentStatusId">President Status:</label>
+                                  <select formControlName="presidentStatusId" class="form-control form-control-sm">
+                                    <option [ngValue]="null"></option>
+                                    @for (status of roleStatuses; track status) {
+                                      <option [value]="status.value">{{ status.label }}</option>
+                                    }
+                                  </select>
+                                </div>
+                                <div class="col-6" style="padding: 0 2px 0 4px">
+                                  <label for="sponsorStatusId">Sponsor Status:</label>
+                                  <select formControlName="sponsorStatusId" class="form-control form-control-sm">
+                                    <option [ngValue]="null"></option>
+                                    @for (status of roleStatuses; track status) {
+                                      <option [value]="status.value">{{ status.label }}</option>
+                                    }
+                                  </select>
+                                  <label for="donorStatusId">Donor Status:</label>
+                                  <select formControlName="donorStatusId" class="form-control form-control-sm">
+                                    <option [ngValue]="null"></option>
+                                    @for (status of roleStatuses; track status) {
+                                      <option [value]="status.value">{{ status.label }}</option>
+                                    }
+                                  </select>
+                                  <label for="employeeStatusId">Employee Status:</label>
+                                  <select formControlName="employeeStatusId" class="form-control form-control-sm">
+                                    <option [ngValue]="null"></option>
+                                    @for (status of roleStatuses; track status) {
+                                      <option [value]="status.value">{{ status.label }}</option>
+                                    }
+                                  </select>
+                                  <label for="boardMemberStatusId">Board Status:</label>
+                                  <select formControlName="boardMemberStatusId" class="form-control form-control-sm">
+                                    <option [ngValue]="null"></option>
+                                    @for (status of roleStatuses; track status) {
+                                      <option [value]="status.value">{{ status.label }}</option>
+                                    }
+                                  </select>
+                                </div>
+                              </div>
+                              <div class="row">
+                                <label for="memberId">Member ID</label>
+                                <input
+                                  id="memberId"
+                                  formControlName="memberId"
+                                  readonly
+                                  class="form-control form-control-sm"
+                                  type="text"
+                                  />
+                                  <label for="memberGUId">Member GUID</label>
+                                  <input
+                                    id="memberGUId"
+                                    formControlName="memberGUId"
+                                    readonly
+                                    class="form-control form-control-sm"
+                                    type="text"
+                                    />
+                                    <label for="studentRecordGUId">Related Student Record GUID</label>
+                                    <input
+                                      id="studentRecordGUId"
+                                      formControlName="studentRecordGUId"
+                                      readonly
+                                      class="form-control form-control-sm"
+                                      type="text"
+                                      />
+                                    </div>
+                                  </div>
+                                  <div class="col">
+                                    <label for="careerBackground">Career Background</label>
+                                    <input
+                                      id="careerBackground"
+                                      formControlName="careerBackground"
+                                      class="form-control form-control-sm"
+                                      type="text"
+                                      />
+                                      <label for="otherRelevantExperience">Other Relevant Experience</label>
+                                      <input
+                                        id="otherRelevantExperience"
+                                        formControlName="otherRelevantExperience"
+                                        class="form-control form-control-sm"
+                                        type="text"
+                                        />
+                                        <label for="comments">Comments (Private -- for Admins only)</label>
+                                        <textarea
+                                          id="comments"
+                                          #success
+                                          formControlName="comments"
+                                          type="text"
+                                          class="form-control input-sm"
+                                          placeholder=""
+                                          >
+                                        </textarea>
+                                        <app-display-errors
+                                          control="comments"
+                                          class="red"
+                                          [errors]="{ maxlength: 'Entry cannot exceed 2000 characters in length.' }"
+                                        ></app-display-errors>
+                                        <label for="photoUrl">PhotoUrl</label>
+                                        <input id="photoUrl" formControlName="photoUrl" class="form-control form-control-sm" type="text" />
+                                        <label for="lastMentorMeeting">Last Mentor Meeting</label>
+                                        <input
+                                          id="lastMentorMeeting"
+                                          formControlName="lastMentorMeeting"
+                                          class="form-control form-control-sm"
+                                          type="text"
+                                          />
+                                          <students-for-sponsor-list></students-for-sponsor-list>
+                                          <students-for-mentor-list></students-for-mentor-list>
+                                        </div>
+                                      </div>
+                                      <div class="row">
+                                        <div class="form-group">
+                                          <button class="btn btn-primary" (click)="saveMyForm()" [disabled]="!myForm.valid">Save</button>
+                                          <span class="red" [hidden]="myForm.valid">All required fields must be filled in before saving.</span>
+                                        </div>
+                                      </div>
+                                    </form>
+                                  </div>
+                                }
+                              }
+                            </div>
+                          </div>

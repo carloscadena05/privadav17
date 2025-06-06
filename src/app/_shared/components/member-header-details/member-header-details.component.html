@@ -1,39 +1,52 @@
-<div [ngSwitch]="loadingState">
-  <div *ngSwitchCase="0" class="text-center col-md-12 ">
-
-  </div>
-  <div *ngSwitchCase="1" class="text-center col-md-4 col-md-offset-4">
-    <app-loading-container>
-    </app-loading-container>
-  </div>
-  <div *ngSwitchCase="2">
-    <div class="row">
-      <div class="col-12">
-
-        <!-- <label>Name</label>
-        {{ member.memberName }}
-        <br /> -->
-        <label>Year Joined JA:</label>
-        {{member.yearJoinedJa}}
+<div>
+  @switch (loadingState) {
+    @case (0) {
+      <div class="text-center col-md-12 ">
       </div>
-    </div>
-    <div class="row">
-      <div class="col-12">
-        <label>Categories:</label>
-        <span *ngIf="member.adminStatusId==1015">
-          Admin
-        </span>
-        <span *ngIf="member.mentorStatusId==1015">
-          Mentor
-        </span>
-        <span *ngIf="member.sponsorStatusId==1015">
-          Sponsor
-        </span>
-        <span *ngIf="member.studentId>0">
-          Student
-        </span>
-
+    }
+    @case (1) {
+      <div class="text-center col-md-4 col-md-offset-4">
+        <app-loading-container>
+        </app-loading-container>
       </div>
-    </div>
-  </div>
+    }
+    @case (2) {
+      <div>
+        <div class="row">
+          <div class="col-12">
+            <!-- <label>Name</label>
+            {{ member.memberName }}
+            <br /> -->
+            <label>Year Joined JA:</label>
+            {{member.yearJoinedJa}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <label>Categories:</label>
+            @if (member.adminStatusId==1015) {
+              <span>
+                Admin
+              </span>
+            }
+            @if (member.mentorStatusId==1015) {
+              <span>
+                Mentor
+              </span>
+            }
+            @if (member.sponsorStatusId==1015) {
+              <span>
+                Sponsor
+              </span>
+            }
+            @if (member.studentId>0) {
+              <span>
+                Student
+              </span>
+            }
+          </div>
+        </div>
+      </div>
+    }
+  }
 </div>

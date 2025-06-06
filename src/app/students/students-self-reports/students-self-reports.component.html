@@ -1,73 +1,86 @@
 <div class="py-4 px-3 px-md-5">
   <h1 class="title text-center text-sm-left ">Reportes</h1>
 
-  <span *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
-    {{errorMessage}}
-    <button type="button" class="close m-0  h-100" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </span>
+  @if (errorMessage) {
+    <span class="alert alert-danger alert-dismissible fade show" role="alert">
+      {{errorMessage}}
+      <button type="button" class="close m-0  h-100" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </span>
+  }
 
   <!-- se evalua sisigue cargando la página, si sí se muestra el componente loading que contiene la animación de cargando en vez de este componente-->
-  <div [ngSwitch]="isLoading">
-    <ng-container *ngSwitchCase="true" class="text-center col-md-4 col-md-offset-4">
-      <app-loading-container> </app-loading-container>
-    </ng-container>
-
-    <ng-container *ngSwitchCase="false">
-      <div *ngIf="!errorMessage">
-        <!-- if we are NOT in a processing period block content-->
-        <div *ngIf="!inProcessingPeriod else inProcessingPeriodTemplate" class="add-report-container">
-          <h4 class="mt-2">El próximo período para presentar tu nuevo informe trimestral comenzará el 1 de julio.</h4>
-        </div>
-        <ng-template #inProcessingPeriodTemplate>
-          <!-- if we are in a processing period and no report for that period, Show Add button-->
-          <div *ngIf="!haveCurrentReport" class="add-report-container">
-            <button class="save btn mr-0 mt-3 mt-md-1" (click)="studentSelfReportAdd()">
-              Agregar nuevo reporte
-            </button>
-          </div>
-          <p class="subtitle text-center mt-4 mb-3">Reportes anteriores</p>
-
-          <div class="table-scroll">
-            <table>
-              <tbody>
-                <tr *ngFor="let i of studentSelfReports; index as position; trackBy: trackById">
-                  <td class="report-table-cell">
-                    <div class="d-flex flex-column">
-                      <div class="d-block m-0">
-                        <div class="report-date">
-                          <span class="mr-4 mr-md-5">Fecha: <p class="d-inline-block m-0 data">{{ i.reportDateTime |
-                              date:'yyyy-dd-MM'}}</p></span>
-                          <span>Periodo: <p class="d-inline-block m-0 data">{{ i.reportYear }} - {{ i.reportPeriod }}
-                            </p>
-                          </span>
-                        </div>
-                        <div class="report-text" id="report-container">
-                          <div class="d-inline">{{ i.reportShown }}</div>
-                          <div class="d-inline-block">{{ i.ellipsis }}</div>
-                        </div>
-                      </div>
-                      <div class="d-flex flex-column justify-content-end">
-                        <div class="d-flex justify-content-center">
-                          <!-- if latest record and its date is within current processingperiod -->
-                          <button type="button" *ngIf="position == 0 && thisReportDateIsInDateRange(i.reportDateTime)"
+  <div>
+    @switch (isLoading) {
+      @case (true) {
+        <ng-container class="text-center col-md-4 col-md-offset-4">
+          <app-loading-container> </app-loading-container>
+        </ng-container>
+      }
+      @case (false) {
+        @if (!errorMessage) {
+          <div>
+            <!-- if we are NOT in a processing period block content-->
+            @if (!inProcessingPeriod) {
+              <div class="add-report-container">
+                <h4 class="mt-2">El próximo período para presentar tu nuevo informe trimestral comenzará el 1 de julio.</h4>
+              </div>
+            } @else {
+              <!-- if we are in a processing period and no report for that period, Show Add button-->
+              @if (!haveCurrentReport) {
+                <div class="add-report-container">
+                  <button class="save btn mr-0 mt-3 mt-md-1" (click)="studentSelfReportAdd()">
+                    Agregar nuevo reporte
+                  </button>
+                </div>
+              }
+              <p class="subtitle text-center mt-4 mb-3">Reportes anteriores</p>
+              <div class="table-scroll">
+                <table>
+                  <tbody>
+                    @for (i of studentSelfReports; track trackById(position, i); let position = $index) {
+                      <tr>
+                        <td class="report-table-cell">
+                          <div class="d-flex flex-column">
+                            <div class="d-block m-0">
+                              <div class="report-date">
+                                <span class="mr-4 mr-md-5">Fecha: <p class="d-inline-block m-0 data">{{ i.reportDateTime |
+                                date:'yyyy-dd-MM'}}</p></span>
+                                <span>Periodo: <p class="d-inline-block m-0 data">{{ i.reportYear }} - {{ i.reportPeriod }}
+                                </p>
+                              </span>
+                            </div>
+                            <div class="report-text" id="report-container">
+                              <div class="d-inline">{{ i.reportShown }}</div>
+                              <div class="d-inline-block">{{ i.ellipsis }}</div>
+                            </div>
+                          </div>
+                          <div class="d-flex flex-column justify-content-end">
+                            <div class="d-flex justify-content-center">
+                              <!-- if latest record and its date is within current processingperiod -->
+                              @if (position == 0 && thisReportDateIsInDateRange(i.reportDateTime)) {
+                                <button type="button"
                                   (click)="selfReportEdit(i.studentSelfReportId, i.studentGUId, i.studentName)"
                                   class="btn edit mt-2 mt-md-3 mr-0">
-                            Editar
-                          </button>
+                                  Editar
+                                </button>
+                              }
+                            </div>
+                            <a (click)="readMore(position)" id="read-more-link" [innerHTML]="i.link"
+                            class="read-more d-flex align-self-end  mt-1  mt-md-2"></a>
+                          </div>
                         </div>
-                        <a (click)="readMore(position)" id="read-more-link" [innerHTML]="i.link"
-                           class="read-more d-flex align-self-end  mt-1  mt-md-2"></a>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </ng-template>
-      </div>
-      </ng-container>
-  </div>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
+        </div>
+      }
+    }
+  }
+</div>
 </div>

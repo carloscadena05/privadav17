@@ -1,31 +1,42 @@
-<div *ngIf="errorMessage" class="alert alert-danger">
+@if (errorMessage) {
+  <div class="alert alert-danger">
   {{errorMessage}}</div>
+}
 <h4>&nbsp;</h4>
-<div [ngSwitch]="isLoading">
-  <div *ngSwitchCase="true" class="text-center col-md-4 col-md-offset-4">
-    <app-loading-container>
-    </app-loading-container>
-  </div>
-  <div *ngSwitchCase="false">
-    <div *ngIf="!errorMessage" class="card bg-primary">
-      <div class="card-header text-white" style="font-size:large">
-        <span>Past Reports / Informes Anteriores -- </span>
-        <span>
-
-          <!--
-          * Only  show Add buttons here in (parent component)
-          * if latest report row is NOT current month (reviewed status doesn't matter)-->
-          <span *ngIf="!latestReportIsCurrentMonth">
-            <span class="btn btn-default active" (click)="monthlyReportENAdd()" style="margin: 4px 0 0 10px">
-              Add New Report</span>
-            <span class="btn btn-default active" (click)="monthlyReportESAdd()" style="margin: 4px 0 0 10px">
-              Añadir un Nuevo Informe</span>
-          </span>
-        </span>
+<div>
+  @switch (isLoading) {
+    @case (true) {
+      <div class="text-center col-md-4 col-md-offset-4">
+        <app-loading-container>
+        </app-loading-container>
       </div>
-      <!-- also pass the value to child, who will pay attention to reviewed status-->
-      <app-mentor-reports2-list [mentorReports2]="mentorReports2" [latestReportIsCurrentMonth]="latestReportIsCurrentMonth">
-      </app-mentor-reports2-list>
-    </div>
-  </div>
+    }
+    @case (false) {
+      <div>
+        @if (!errorMessage) {
+          <div class="card bg-primary">
+            <div class="card-header text-white" style="font-size:large">
+              <span>Past Reports / Informes Anteriores -- </span>
+              <span>
+                <!--
+                * Only  show Add buttons here in (parent component)
+                * if latest report row is NOT current month (reviewed status doesn't matter)-->
+                @if (!latestReportIsCurrentMonth) {
+                  <span>
+                    <span class="btn btn-default active" (click)="monthlyReportENAdd()" style="margin: 4px 0 0 10px">
+                    Add New Report</span>
+                    <span class="btn btn-default active" (click)="monthlyReportESAdd()" style="margin: 4px 0 0 10px">
+                    Añadir un Nuevo Informe</span>
+                  </span>
+                }
+              </span>
+            </div>
+            <!-- also pass the value to child, who will pay attention to reviewed status-->
+            <app-mentor-reports2-list [mentorReports2]="mentorReports2" [latestReportIsCurrentMonth]="latestReportIsCurrentMonth">
+            </app-mentor-reports2-list>
+          </div>
+        }
+      </div>
+    }
+  }
 </div>

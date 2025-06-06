@@ -3,8 +3,12 @@
     Monthly Mentor Report for {{ studentName }}
   </div>
   <div class="card-body bg-white">
-    <div *ngIf="errorMessage" class="alert alert-danger">{{errorMessage}}</div>
-    <div *ngIf="successMessage" class="alert alert-success">{{successMessage}}</div>
+    @if (errorMessage) {
+      <div class="alert alert-danger">{{errorMessage}}</div>
+    }
+    @if (successMessage) {
+      <div class="alert alert-success">{{successMessage}}</div>
+    }
     <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
       <fieldset [disabled]="isSubmitted">
 
@@ -12,13 +16,19 @@
           <div class="controls">
             <label for="lastContactYearSelector">Report Year/Month&nbsp;</label>
             <select formControlName="lastContactYearSelector">
-              <option *ngFor="let year of contactYears" [value]="year.value">{{year.label}}</option>
+              @for (year of contactYears; track year) {
+                <option [value]="year.value">{{year.label}}</option>
+              }
             </select>
-            <span *ngIf="!lastYearCtl.valid &amp;&amp; lastYearCtl.touched" class="red"> Select Year</span>
+            @if (!lastYearCtl.valid && lastYearCtl.touched) {
+              <span class="red"> Select Year</span>
+            }
 
             <select formControlName="lastContactMonthSelector">
               <option [value]="0">Select Month</option>
-              <option *ngFor="let month of contactMonths" [value]="month.value">{{month.label}}</option>
+              @for (month of contactMonths; track month) {
+                <option [value]="month.value">{{month.label}}</option>
+              }
             </select>
             <span [ngClass]="{ 'red': monthValidationMessage }">{{ monthValidationMessage }}</span>
           </div>
@@ -30,97 +40,101 @@
             <span><b> Overall Situation:</b><br /></span>
             <label>&nbsp;&nbsp;
               <input type="radio" id="inputEmoji" formControlName="inputEmoji"
-                     [checked]="emojiCtl.value==1" value=1>
-              <img src="/assets/images/celebrate.jpg" width="32px" />
-              Celebrate
-            </label>
-            <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <input type="radio" id="inputEmoji" formControlName="inputEmoji"
-                     [checked]="emojiCtl.value==0" value=0>
-              <img src="/assets/images/thumbsUp.jpg" width="30px" />
-              All Good
-            </label>
-            <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <input type="radio" id="inputEmoji" formControlName="inputEmoji"
-                     [checked]="emojiCtl.value==2" value=2>
-              <img src="/assets/images/concerned.jpg" width="30px" />
-              Concerned
-            </label>
-            <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <input type="radio" id="inputEmoji" formControlName="inputEmoji"
-                     [checked]="emojiCtl.value==-1" value=-1>
-              <img src="/assets/images/needsAttention.jpg" width="30px" />
-              Problems
-              <span *ngIf="emojiCtl.hasError('required')" class="red">Please select a status value.</span>
-            </label>
-          </div>
+                [checked]="emojiCtl.value==1" value=1>
+                <img src="/assets/images/celebrate.jpg" width="32px" />
+                Celebrate
+              </label>
+              <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" id="inputEmoji" formControlName="inputEmoji"
+                  [checked]="emojiCtl.value==0" value=0>
+                  <img src="/assets/images/thumbsUp.jpg" width="30px" />
+                  All Good
+                </label>
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <input type="radio" id="inputEmoji" formControlName="inputEmoji"
+                    [checked]="emojiCtl.value==2" value=2>
+                    <img src="/assets/images/concerned.jpg" width="30px" />
+                    Concerned
+                  </label>
+                  <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" id="inputEmoji" formControlName="inputEmoji"
+                      [checked]="emojiCtl.value==-1" value=-1>
+                      <img src="/assets/images/needsAttention.jpg" width="30px" />
+                      Problems
+                      @if (emojiCtl.hasError('required')) {
+                        <span class="red">Please select a status value.</span>
+                      }
+                    </label>
+                  </div>
 
-          <div class="controls mt-4">
-            <div><b> Communication:</b> were you able to connect with your student and gather enough info to provide a comprehensive report?<br /></div>
-            <label>&nbsp;&nbsp;
-              <input type="radio" id="communicationEmoji" formControlName="communicationEmoji"
-                     [checked]="communicationCtl.value==0" value=0>
-                     <img src="/assets/images/thumbsUp.jpg" width="30px" />
-              Yes
-            </label>
-            <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <input type="radio" id="communicationEmoji" formControlName="communicationEmoji"
-                     [checked]="communicationCtl.value==2" value=2>
-                     <img src="/assets/images/concerned.jpg" width="30px" />
-              No
-            </label>
-          </div>
-          <div *ngIf="communicationCtl.value == 2" class="alert alert-warning">
-            Please be sure to elaborate on this situation in the text box below.
-          </div>
-        </div>
-        <div hidden class="controls">
-          <label for="mentorReportId">Id</label>
-          <textarea id="mentorReportId" formControlName="mentorReportId" type="text" class="form-control input-sm">
-          </textarea>
-        </div>
+                  <div class="controls mt-4">
+                    <div><b> Communication:</b> were you able to connect with your student and gather enough info to provide a comprehensive report?<br /></div>
+                    <label>&nbsp;&nbsp;
+                      <input type="radio" id="communicationEmoji" formControlName="communicationEmoji"
+                        [checked]="communicationCtl.value==0" value=0>
+                        <img src="/assets/images/thumbsUp.jpg" width="30px" />
+                        Yes
+                      </label>
+                      <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" id="communicationEmoji" formControlName="communicationEmoji"
+                          [checked]="communicationCtl.value==2" value=2>
+                          <img src="/assets/images/concerned.jpg" width="30px" />
+                          No
+                        </label>
+                      </div>
+                      @if (communicationCtl.value == 2) {
+                        <div class="alert alert-warning">
+                          Please be sure to elaborate on this situation in the text box below.
+                        </div>
+                      }
+                    </div>
+                    <div hidden class="controls">
+                      <label for="mentorReportId">Id</label>
+                      <textarea id="mentorReportId" formControlName="mentorReportId" type="text" class="form-control input-sm">
+                      </textarea>
+                    </div>
 
-        <div class="controls">
-          <label for="narrative_English">Please describe the development and challenges of your student in these three areas:</label>
-          <br />&nbsp;1. Academic
-          <br />&nbsp;2. Personal
-          <br />&nbsp;3. Financial
-          <textarea id="narrative_English" #success formControlName="narrative_English" type="text"
-                    class="form-control input-sm" placeholder="">
-          </textarea>
+                    <div class="controls">
+                      <label for="narrative_English">Please describe the development and challenges of your student in these three areas:</label>
+                      <br />&nbsp;1. Academic
+                      <br />&nbsp;2. Personal
+                      <br />&nbsp;3. Financial
+                      <textarea id="narrative_English" #success formControlName="narrative_English" type="text"
+                        class="form-control input-sm" placeholder="">
+                      </textarea>
           <app-display-errors control="narrative_English" class="red" [errors]="{'required': 'An entry is required, even if it is just N/A.',
           'maxlength': 'Entry cannot exceed 4000 characters in length.'
                 }"></app-display-errors>
-        </div>
+                    </div>
 
-        <div class="col-md-6 col-md-offset-1">
-          <span>
-            <button type="submit"
-                    class="btn btn-primary"
-                    style="width:80px;margin-right:10px"
-                    (click)="onSubmit()"
-                    [disabled]="myForm.invalid">
-              Submit
-            </button>
-          </span>&nbsp;
-          <span>
-            <button type="button" class="btn btn-default" style="width:75px" (click)="onCancel()">
-              Cancel
-            </button>
-            <div class="red" [hidden]="myForm.valid">Student Status, Communication Status, and description must be
-              filled in before saving.</div>
-          </span>
-        </div>
-      </fieldset>
-    </form>
-  <!-- <p>Form value</p>
-    <pre><code>{{myForm.value | json}}</code></pre>
+                    <div class="col-md-6 col-md-offset-1">
+                      <span>
+                        <button type="submit"
+                          class="btn btn-primary"
+                          style="width:80px;margin-right:10px"
+                          (click)="onSubmit()"
+                          [disabled]="myForm.invalid">
+                          Submit
+                        </button>
+                      </span>&nbsp;
+                      <span>
+                        <button type="button" class="btn btn-default" style="width:75px" (click)="onCancel()">
+                          Cancel
+                        </button>
+                        <div class="red" [hidden]="myForm.valid">Student Status, Communication Status, and description must be
+                        filled in before saving.</div>
+                      </span>
+                    </div>
+                  </fieldset>
+                </form>
+                <!-- <p>Form value</p>
+                <pre><code>{{myForm.value | json}}</code></pre>
 
 
-    <p>Form status</p>
-    <pre><code>"{{myForm.status}}"</code></pre>
+                <p>Form status</p>
+                <pre><code>"{{myForm.status}}"</code></pre>
 
-    <p>Submitted?</p>
-      {{isSubmitted ? 'Yes' : 'No'}}
-  </div> -->
-</div>
+                <p>Submitted?</p>
+                {{isSubmitted ? 'Yes' : 'No'}}
+              </div> -->
+            </div>

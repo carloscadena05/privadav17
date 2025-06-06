@@ -17,9 +17,13 @@ import { ColumnSortService } from '../services/column-sort.service';
       }
     `
     ],
-    template: `<span class="up-arrow" *ngIf="sortDirection === 'asc'"></span>
-    <span class="down-arrow" *ngIf="sortDirection === 'desc'"></span>
-    <ng-content></ng-content>`,
+    template: `@if (sortDirection === 'asc') {
+  <span class="up-arrow"></span>
+}
+@if (sortDirection === 'desc') {
+  <span class="down-arrow"></span>
+}
+<ng-content></ng-content>`,
     standalone: false
 })
 export class SortableColumnComponent implements OnInit, OnDestroy {

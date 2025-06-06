@@ -4,285 +4,280 @@
   </div>
 
   <div class="card-body bg-white">
-    <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
-    <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
+    @if (errorMessage) {
+      <div class="alert alert-danger">{{ errorMessage }}</div>
+    }
+    @if (successMessage) {
+      <div class="alert alert-success">{{ successMessage }}</div>
+    }
 
     <div style="max-width: 900px">
-      <div [ngSwitch]="isLoading">
-        <div *ngSwitchCase="true" class="text-center col-md-4 col-md-offset-4">
-          <app-loading-container> </app-loading-container>
-        </div>
-        <div *ngSwitchCase="false">
-          <form [formGroup]="myForm" class="form-horizontal">
-            <div class="row">
-              <div class="col">
-                <div class="form-group">
-                  <span class="btn btn-primary btn-sm" (click)="location.back()"> &lt;&lt;&nbsp; Back </span>
-                  &nbsp;
-
-                  <!-- <span class="btn btn-primary btn-sm" (click)="mentorReportsReview()"> Mentor Reports </span> -->
-
-                  <label for="ckEditMode">
-                    <input
-                      id="ckEditMode"
-                      type="checkbox"
-                      name="toggleReadOnly"
-                      (click)="setReadOnly()"
-                      style="margin: 0 0 0 4px"
-                    />
-                    Editable</label
-                  >
-                </div>
-
-                <label for="firstNames">First Name(s)</label>
-                <input
-                  id="firstNames"
-                  formControlName="firstNames"
-                  class="form-control form-control-sm"
-                  type="text"
-                  placeholder="First Name"
-                  required
-                  maxlength="30"
-                />
-                <app-display-errors
-                  control="firstNames"
-                  class="red"
+      <div>
+        @switch (isLoading) {
+          @case (true) {
+            <div class="text-center col-md-4 col-md-offset-4">
+              <app-loading-container> </app-loading-container>
+            </div>
+          }
+          @case (false) {
+            <div>
+              <form [formGroup]="myForm" class="form-horizontal">
+                <div class="row">
+                  <div class="col">
+                    <div class="form-group">
+                      <span class="btn btn-primary btn-sm" (click)="location.back()"> &lt;&lt;&nbsp; Back </span>
+                      &nbsp;
+                      <!-- <span class="btn btn-primary btn-sm" (click)="mentorReportsReview()"> Mentor Reports </span> -->
+                      <label for="ckEditMode">
+                        <input
+                          id="ckEditMode"
+                          type="checkbox"
+                          name="toggleReadOnly"
+                          (click)="setReadOnly()"
+                          style="margin: 0 0 0 4px"
+                          />
+                          Editable</label
+                          >
+                        </div>
+                        <label for="firstNames">First Name(s)</label>
+                        <input
+                          id="firstNames"
+                          formControlName="firstNames"
+                          class="form-control form-control-sm"
+                          type="text"
+                          placeholder="First Name"
+                          required
+                          maxlength="30"
+                          />
+                          <app-display-errors
+                            control="firstNames"
+                            class="red"
                   [errors]="{
                     required: 'First name is required',
                     maxlength: 'Student First name cannot exceed 30 characters in length.'
                   }"
-                ></app-display-errors>
-
-                <label for="lastNames">Last Name(s)</label>
-                <input
-                  id="lastNames"
-                  formControlName="lastNames"
-                  type="text"
-                  class="form-control form-control-sm"
-                  placeholder="Last Name"
-                  required
-                  maxlength="30"
-                />
-                <app-display-errors
-                  control="lastNames"
-                  class="red"
+                          ></app-display-errors>
+                          <label for="lastNames">Last Name(s)</label>
+                          <input
+                            id="lastNames"
+                            formControlName="lastNames"
+                            type="text"
+                            class="form-control form-control-sm"
+                            placeholder="Last Name"
+                            required
+                            maxlength="30"
+                            />
+                            <app-display-errors
+                              control="lastNames"
+                              class="red"
                   [errors]="{
                     required: 'Last name is required',
                     maxlength: 'Student Last name cannot exceed 30 characters in length.'
                   }"
-                ></app-display-errors>
-
-                <label for="email">Email</label>
-                <input
-                  id="email"
-                  formControlName="email"
-                  type="text"
-                  class="form-control form-control-sm"
-                  placeholder="Email Name"
-                  required
-                  maxlength="50"
-                />
-                <app-display-errors
-                  control="email"
-                  class="red"
+                            ></app-display-errors>
+                            <label for="email">Email</label>
+                            <input
+                              id="email"
+                              formControlName="email"
+                              type="text"
+                              class="form-control form-control-sm"
+                              placeholder="Email Name"
+                              required
+                              maxlength="50"
+                              />
+                              <app-display-errors
+                                control="email"
+                                class="red"
                   [errors]="{
                     required: 'Email is required',
                     maxlength: 'Email cannot exceed 50 characters in length.'
                   }"
-                ></app-display-errors>
-
-                <div class="form-group">
-                  <label for="nickName">Nick Name</label>
-                  <input
-                    id="nickName"
-                    formControlName="nickName"
-                    type="text"
-                    class="form-control form-control-sm"
-                    placeholder="Nickname"
-                    maxlength="20"
-                  />
-                  <app-display-errors
-                    control="nickName"
-                    class="red"
+                              ></app-display-errors>
+                              <div class="form-group">
+                                <label for="nickName">Nick Name</label>
+                                <input
+                                  id="nickName"
+                                  formControlName="nickName"
+                                  type="text"
+                                  class="form-control form-control-sm"
+                                  placeholder="Nickname"
+                                  maxlength="20"
+                                  />
+                                  <app-display-errors
+                                    control="nickName"
+                                    class="red"
                     [errors]="{
                       maxlength: 'Nickname cannot exceed 20 characters in length.'
                     }"
-                  ></app-display-errors>
-
-                  <label for="photoUrl">Photo Filename</label>
-                  <input
-                    id="photoUrl"
-                    formControlName="photoUrl"
-                    type="text"
-                    class="form-control form-control-sm"
-                    placeholder="Photo Filename"
-                    maxlength="255"
-                  />
-                  <app-display-errors
-                    control="photoUrl"
-                    class="red"
+                                  ></app-display-errors>
+                                  <label for="photoUrl">Photo Filename</label>
+                                  <input
+                                    id="photoUrl"
+                                    formControlName="photoUrl"
+                                    type="text"
+                                    class="form-control form-control-sm"
+                                    placeholder="Photo Filename"
+                                    maxlength="255"
+                                    />
+                                    <app-display-errors
+                                      control="photoUrl"
+                                      class="red"
                     [errors]="{
                       maxlength: 'Photo Filename cannot exceed 225 characters in length.'
                     }"
-                  ></app-display-errors>
-
-                  <label for="cellPhone">Cell Phone</label>
-                  <input
-                    id="cellPhone"
-                    formControlName="cellPhone"
-                    type="text"
-                    class="form-control form-control-sm"
-                    placeholder="Cell Phone Number: ###-###-####"
-                    maxlength="13"
-                  />
-                  <app-display-errors
-                    control="cellPhone"
-                    class="red"
+                                    ></app-display-errors>
+                                    <label for="cellPhone">Cell Phone</label>
+                                    <input
+                                      id="cellPhone"
+                                      formControlName="cellPhone"
+                                      type="text"
+                                      class="form-control form-control-sm"
+                                      placeholder="Cell Phone Number: ###-###-####"
+                                      maxlength="13"
+                                      />
+                                      <app-display-errors
+                                        control="cellPhone"
+                                        class="red"
                     [errors]="{
                       maxlength: 'Cell Phone cannot exceed 13 characters in length.'
                     }"
-                  ></app-display-errors>
-
-                  <label for="englishSkillLevelId">English Level:</label>
-                  <select formControlName="englishSkillLevelId" class="form-control form-control-sm">
-                    <option *ngFor="let status of languageStatuses" [value]="status.value">{{ status.label }}</option>
-                  </select>
-                </div>
-
-                <label
-                  ><mark style="color: #05579e; background-color: white"
-                    >Address where the student lives in San Miguel</mark
-                  ></label
-                >
-                <br />
-
-                <label for="smA_Address">Dirección</label>
-                <input
-                  id="smA_Address"
-                  formControlName="smA_Address"
-                  type="text"
-                  class="form-control form-control-sm"
-                  placeholder="Dirección y número"
-                  maxlength="50"
-                />
-                <app-display-errors
-                  control="smA_Address"
-                  class="red"
+                                      ></app-display-errors>
+                                      <label for="englishSkillLevelId">English Level:</label>
+                                      <select formControlName="englishSkillLevelId" class="form-control form-control-sm">
+                                        @for (status of languageStatuses; track status) {
+                                          <option [value]="status.value">{{ status.label }}</option>
+                                        }
+                                      </select>
+                                    </div>
+                                    <label
+                                      ><mark style="color: #05579e; background-color: white"
+                                      >Address where the student lives in San Miguel</mark
+                                      ></label
+                                      >
+                                      <br />
+                                      <label for="smA_Address">Dirección</label>
+                                      <input
+                                        id="smA_Address"
+                                        formControlName="smA_Address"
+                                        type="text"
+                                        class="form-control form-control-sm"
+                                        placeholder="Dirección y número"
+                                        maxlength="50"
+                                        />
+                                        <app-display-errors
+                                          control="smA_Address"
+                                          class="red"
                   [errors]="{
                     maxlength: 'La dirección no puede exceder de 50 caracteres de longitud.'
                   }"
-                ></app-display-errors>
-
-                <label for="colonia">Colonia/Comunidad</label>
-                <input
-                  id="colonia"
-                  formControlName="colonia"
-                  type="text"
-                  class="form-control form-control-sm"
-                  placeholder="Colonia"
-                  maxlength="50"
-                />
-
-                <app-display-errors
-                  control="colonia"
-                  class="red"
+                                        ></app-display-errors>
+                                        <label for="colonia">Colonia/Comunidad</label>
+                                        <input
+                                          id="colonia"
+                                          formControlName="colonia"
+                                          type="text"
+                                          class="form-control form-control-sm"
+                                          placeholder="Colonia"
+                                          maxlength="50"
+                                          />
+                                          <app-display-errors
+                                            control="colonia"
+                                            class="red"
                   [errors]="{
                     maxlength: 'La colonia no puede exceder de 50 caracteres de longitud.'
                   }"
-                ></app-display-errors>
-                <br />
-                <label
-                  ><mark style="color: #05579e; background-color: white"
-                    >Address where the student lives in the place where is studying</mark
-                  ></label
-                >
-                <br />
-
-                <label for="nonSMA_Address">Dirección</label>
-                <input
-                  id="nonSMA_Address"
-                  formControlName="nonSMA_Address"
-                  type="text"
-                  class="form-control form-control-sm"
-                  placeholder="Dirección y número"
-                  maxlength="50"
-                />
-                <app-display-errors
-                  control="nonSMA_Address"
-                  class="red"
+                                          ></app-display-errors>
+                                          <br />
+                                          <label
+                                            ><mark style="color: #05579e; background-color: white"
+                                            >Address where the student lives in the place where is studying</mark
+                                            ></label
+                                            >
+                                            <br />
+                                            <label for="nonSMA_Address">Dirección</label>
+                                            <input
+                                              id="nonSMA_Address"
+                                              formControlName="nonSMA_Address"
+                                              type="text"
+                                              class="form-control form-control-sm"
+                                              placeholder="Dirección y número"
+                                              maxlength="50"
+                                              />
+                                              <app-display-errors
+                                                control="nonSMA_Address"
+                                                class="red"
                   [errors]="{
                     maxlength: 'La dirección no puede exceder de 50 caracteres de longitud.'
                   }"
-                ></app-display-errors>
-
-                <label for="nonSMA_City">Ciudad</label>
-                <input
-                  id="nonSMA_City"
-                  formControlName="nonSMA_City"
-                  type="text"
-                  class="form-control form-control-sm"
-                  placeholder="Ciudad donde estudia"
-                  maxlength="50"
-                />
-                <app-display-errors
-                  control="nonSMA_City"
-                  class="red"
+                                              ></app-display-errors>
+                                              <label for="nonSMA_City">Ciudad</label>
+                                              <input
+                                                id="nonSMA_City"
+                                                formControlName="nonSMA_City"
+                                                type="text"
+                                                class="form-control form-control-sm"
+                                                placeholder="Ciudad donde estudia"
+                                                maxlength="50"
+                                                />
+                                                <app-display-errors
+                                                  control="nonSMA_City"
+                                                  class="red"
                   [errors]="{
                     maxlength: 'La ciudad no puede exceder de 50 caracteres de longitud.'
                   }"
-                ></app-display-errors>
-
-                <label for="nonSMA_StateProvince">Estado</label>
-                <input
-                  id="nonSMA_StateProvince"
-                  formControlName="nonSMA_StateProvince"
-                  type="text"
-                  class="form-control form-control-sm"
-                  placeholder="Estado donde estudia"
-                  maxlength="50"
-                />
-                <app-display-errors
-                  control="nonSMA_StateProvince"
-                  class="red"
+                                                ></app-display-errors>
+                                                <label for="nonSMA_StateProvince">Estado</label>
+                                                <input
+                                                  id="nonSMA_StateProvince"
+                                                  formControlName="nonSMA_StateProvince"
+                                                  type="text"
+                                                  class="form-control form-control-sm"
+                                                  placeholder="Estado donde estudia"
+                                                  maxlength="50"
+                                                  />
+                                                  <app-display-errors
+                                                    control="nonSMA_StateProvince"
+                                                    class="red"
                   [errors]="{
                     maxlength: 'El estado no puede exceder de 50 caracteres de longitud.'
                   }"
-                ></app-display-errors>
-
-                <label for="nonSMA_PostalCode">Código Postal</label>
-                <input
-                  id="nonSMA_PostalCode"
-                  formControlName="nonSMA_PostalCode"
-                  type="text"
-                  class="form-control form-control-sm"
-                  placeholder="Código Postal"
-                  maxlength="7"
-                />
-                <app-display-errors
-                  control="nonSMA_PostalCode"
-                  class="red"
+                                                  ></app-display-errors>
+                                                  <label for="nonSMA_PostalCode">Código Postal</label>
+                                                  <input
+                                                    id="nonSMA_PostalCode"
+                                                    formControlName="nonSMA_PostalCode"
+                                                    type="text"
+                                                    class="form-control form-control-sm"
+                                                    placeholder="Código Postal"
+                                                    maxlength="7"
+                                                    />
+                                                    <app-display-errors
+                                                      control="nonSMA_PostalCode"
+                                                      class="red"
                   [errors]="{
                     maxlength: 'El código postal no puede exceder de 7 caracteres de longitud.'
                   }"
-                ></app-display-errors>
-              </div>
-            </div>
-            <div class="row">
-              <div class="form-group">
-                <button class="btn btn-primary" data-cy="btn-save" (click)="saveMyForm()" [disabled]="!myForm.valid">
-                  Save
-                </button>
-                <span class="red" [hidden]="myForm.valid">All required fields must be filled in before saving.</span>
-              </div>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- <div>
-  Valid: {{ myForm.valid }}
-  Value: {{ myForm.value | json }}
-  Errors: {{ myForm.errors | json }}
-</div> -->
+                                                    ></app-display-errors>
+                                                  </div>
+                                                </div>
+                                                <div class="row">
+                                                  <div class="form-group">
+                                                    <button class="btn btn-primary" data-cy="btn-save" (click)="saveMyForm()" [disabled]="!myForm.valid">
+                                                      Save
+                                                    </button>
+                                                    <span class="red" [hidden]="myForm.valid">All required fields must be filled in before saving.</span>
+                                                  </div>
+                                                </div>
+                                              </form>
+                                            </div>
+                                          }
+                                        }
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <!-- <div>
+                                Valid: {{ myForm.valid }}
+                                Value: {{ myForm.value | json }}
+                                Errors: {{ myForm.errors | json }}
+                              </div> -->

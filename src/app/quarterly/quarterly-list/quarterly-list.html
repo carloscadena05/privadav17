@@ -8,97 +8,114 @@
         data-cy="period-selector"
         [(ngModel)]="selectedQRPeriod"
         (change)="setSelectedQRPeriod($event.target.value)"
-      >
-        <option *ngFor="let yearPeriod of qrPeriods" [value]="yearPeriod.value">{{yearPeriod.label}}</option>
+        >
+        @for (yearPeriod of qrPeriods; track yearPeriod) {
+          <option [value]="yearPeriod.value">{{yearPeriod.label}}</option>
+        }
       </select>
     </span>
   </div>
   <div class="card-body bg-white">
-    <span *ngIf="errorMessage" class="alert alert-danger">{{errorMessage}}</span>
-    <span *ngIf="successMessage" class="alert alert-success">{{successMessage}}</span>
+    @if (errorMessage) {
+      <span class="alert alert-danger">{{errorMessage}}</span>
+    }
+    @if (successMessage) {
+      <span class="alert alert-success">{{successMessage}}</span>
+    }
     <div></div>
 
-    <div [ngSwitch]="isLoading">
-      <div *ngSwitchCase="true" class="text-center col-md-4 col-md-offset-4">
-        <app-loading-container> </app-loading-container>
-      </div>
-      <div *ngSwitchCase="false">
-        <table class="table-sm table-striped">
-          <thead>
-            <tr>
-              <!-- <td>Id</td> -->
-              <th></th>
-              <th></th>
-              <th></th>
-              <th app-sortable-column="studentName" sort-direction="asc" (onSortColumn)="onSortColumn($event)">
-                Student
-              </th>
-              <th app-sortable-column="studentStatus" (onSortColumn)="onSortColumn($event)">Status</th>
-              <th app-sortable-column="hasMR" (onSortColumn)="onSortColumn($event)">MR</th>
-              <th app-sortable-column="hasSR" (onSortColumn)="onSortColumn($event)">SSR</th>
-              <th app-sortable-column="reviewedStatusId" (onSortColumn)="onSortColumn($event)">QR Status</th>
-              <th app-sortable-column="sponsorGroupName" (onSortColumn)="onSortColumn($event)">Sponsor Group</th>
-              <th app-sortable-column="highlightStatusId" (onSortColumn)="onSortColumn($event)">Highlight Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let qr of qrMinis, let i = index">
-              <!-- <td>
-                {{ qr.studentGUId}}
-              </td> -->
-              <td>{{ i+1 }}</td>
-              <td (click)="gotoStudent(qr.studentGUId, qr.studentName)" class="link">
-                Profile
-              </td>
-              <td (click)="gotoFollowUp(qr.studentGUId, qr.studentName)" class="link">
-                Follow&nbsp;Up
-              </td>
-              <td
-                class="link"
-                (click)="editQRDetails(qr.studentGUId, qr.studentName)"
-                [class.link]="true"
-                [class.red]="qr.reviewedStatusId==2087"
-                [class.alert-success]="qr.highlightStatusId==2106"
-                [class.alert-danger]="qr.highlightStatusId==2105"
-              >
-                {{ qr.studentName }}
-              </td>
-              <td>{{ qr.studentStatus }}</td>
-              <td>
-                <span style="text-align: center; white-space: nowrap">
-                  <img src="/assets/images/{{ qr.hasMR }}.jpg" width="20" />
-                </span>
-              </td>
-              <td>
-                <span style="text-align: center; white-space: nowrap">
-                  <img src="/assets/images/{{ qr.hasSR }}.jpg" width="20" />
-                </span>
-              </td>
-
-              <td class="centered">
-                <select
-                  name="StatusSelector"
-                  [(ngModel)]="qr.reviewedStatusId"
-                  (change)="setStatusForQR(i, $event.target.value)"
-                >
-                  <option *ngFor="let status of reviewedStatuses" [value]="status.value">{{status.label}}</option>
-                </select>
-              </td>
-              <td>{{ qr.sponsorGroupName }}</td>
-              <td class="centered">
-                <select
-                  name="HighlightSelector"
-                  [(ngModel)]="qr.highlightStatusId"
-                  (change)="setHighlightStatusForQR(i, $event.target.value)"
-                >
-                  <option  value="0"> </option>
-                  <option *ngFor="let status of highlightStatuses" [value]="status.value">{{status.label}}</option>
-                </select>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <div>
+      @switch (isLoading) {
+        @case (true) {
+          <div class="text-center col-md-4 col-md-offset-4">
+            <app-loading-container> </app-loading-container>
+          </div>
+        }
+        @case (false) {
+          <div>
+            <table class="table-sm table-striped">
+              <thead>
+                <tr>
+                  <!-- <td>Id</td> -->
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th app-sortable-column="studentName" sort-direction="asc" (onSortColumn)="onSortColumn($event)">
+                    Student
+                  </th>
+                  <th app-sortable-column="studentStatus" (onSortColumn)="onSortColumn($event)">Status</th>
+                  <th app-sortable-column="hasMR" (onSortColumn)="onSortColumn($event)">MR</th>
+                  <th app-sortable-column="hasSR" (onSortColumn)="onSortColumn($event)">SSR</th>
+                  <th app-sortable-column="reviewedStatusId" (onSortColumn)="onSortColumn($event)">QR Status</th>
+                  <th app-sortable-column="sponsorGroupName" (onSortColumn)="onSortColumn($event)">Sponsor Group</th>
+                  <th app-sortable-column="highlightStatusId" (onSortColumn)="onSortColumn($event)">Highlight Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (qr of qrMinis; track qr; let i = $index) {
+                  <tr>
+                    <!-- <td>
+                    {{ qr.studentGUId}}
+                  </td> -->
+                  <td>{{ i+1 }}</td>
+                  <td (click)="gotoStudent(qr.studentGUId, qr.studentName)" class="link">
+                    Profile
+                  </td>
+                  <td (click)="gotoFollowUp(qr.studentGUId, qr.studentName)" class="link">
+                    Follow&nbsp;Up
+                  </td>
+                  <td
+                    class="link"
+                    (click)="editQRDetails(qr.studentGUId, qr.studentName)"
+                    [class.link]="true"
+                    [class.red]="qr.reviewedStatusId==2087"
+                    [class.alert-success]="qr.highlightStatusId==2106"
+                    [class.alert-danger]="qr.highlightStatusId==2105"
+                    >
+                    {{ qr.studentName }}
+                  </td>
+                  <td>{{ qr.studentStatus }}</td>
+                  <td>
+                    <span style="text-align: center; white-space: nowrap">
+                      <img src="/assets/images/{{ qr.hasMR }}.jpg" width="20" />
+                    </span>
+                  </td>
+                  <td>
+                    <span style="text-align: center; white-space: nowrap">
+                      <img src="/assets/images/{{ qr.hasSR }}.jpg" width="20" />
+                    </span>
+                  </td>
+                  <td class="centered">
+                    <select
+                      name="StatusSelector"
+                      [(ngModel)]="qr.reviewedStatusId"
+                      (change)="setStatusForQR(i, $event.target.value)"
+                      >
+                      @for (status of reviewedStatuses; track status) {
+                        <option [value]="status.value">{{status.label}}</option>
+                      }
+                    </select>
+                  </td>
+                  <td>{{ qr.sponsorGroupName }}</td>
+                  <td class="centered">
+                    <select
+                      name="HighlightSelector"
+                      [(ngModel)]="qr.highlightStatusId"
+                      (change)="setHighlightStatusForQR(i, $event.target.value)"
+                      >
+                      <option  value="0"> </option>
+                      @for (status of highlightStatuses; track status) {
+                        <option [value]="status.value">{{status.label}}</option>
+                      }
+                    </select>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    }
   </div>
+</div>
 </div>

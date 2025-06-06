@@ -8,8 +8,10 @@
         data-cy="period-selector"
         [(ngModel)]="selectedInscriptionsPeriodId"
         (change)="setSelectedInscriptionsPeriodId($event.target.value)"
-      >
-        <option *ngFor="let inscriptionsProcessingPeriod of inscriptionsProcessingPeriods" [value]="inscriptionsProcessingPeriod.id">{{inscriptionsProcessingPeriod.descriptor}}</option>
+        >
+        @for (inscriptionsProcessingPeriod of inscriptionsProcessingPeriods; track inscriptionsProcessingPeriod) {
+          <option [value]="inscriptionsProcessingPeriod.id">{{inscriptionsProcessingPeriod.descriptor}}</option>
+        }
       </select>
     </span>
 
@@ -19,75 +21,91 @@
     <input type="text" id="endDateIndicator" [value]="entryEndDate" readonly />
   </div>
   <div class="card-body bg-white">
-    <span *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</span>
-    <span *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</span>
+    @if (errorMessage) {
+      <span class="alert alert-danger">{{ errorMessage }}</span>
+    }
+    @if (successMessage) {
+      <span class="alert alert-success">{{ successMessage }}</span>
+    }
 
-    <div [ngSwitch]="isLoading">
-      <div *ngSwitchCase="true" class="text-center col-md-4 col-md-offset-4">
-        <app-loading-container> </app-loading-container>
-      </div>
-      <div *ngSwitchCase="false">
-        <div *ngIf="inscriptionEntryDTOs.length === 0" class="text-center">
-          [No Inscriptions data found for this period. Please select another period.]
+    <div>
+      @switch (isLoading) {
+        @case (true) {
+          <div class="text-center col-md-4 col-md-offset-4">
+            <app-loading-container> </app-loading-container>
+          </div>
+        }
+        @case (false) {
+          <div>
+            @if (inscriptionEntryDTOs.length === 0) {
+              <div class="text-center">
+                [No Inscriptions data found for this period. Please select another period.]
+              </div>
+            }
+            @if (inscriptionEntryDTOs.length > 0) {
+              <table  class="table-sm table-striped">
+                <thead>
+                  <tr>
+                    <!-- <td>Id</td> -->
+                    <th></th>
+                    <th>Profile</th>
+                    <th app-sortable-column="studentName" sort-direction="asc" (onSortColumn)="onSortColumn($event)">
+                      Student
+                    </th>
+                    <!-- <th app-sortable-column="inscriptionsEntryEndDate" (onSortColumn)="onSortColumn($event)">Inscriptions<br />Due Date</th> -->
+                    <th app-sortable-column="registrationFormSubmittedDate" (onSortColumn)="onSortColumn($event)">Registration Form<br />Submitted</th>
+                    <th app-sortable-column="paymentReceiptSubmittedDate" (onSortColumn)="onSortColumn($event)">Payment Receipt<br />Submitted</th>
+                    <th>View<br />Registration Form</th>
+                    <th>View<br />Payment Receipt</th>
+                    <th app-sortable-column="confirmedDate" (onSortColumn)="onSortColumn($event)">Confirmed <br />Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (entry of inscriptionEntryDTOs; track entry; let i = $index) {
+                    <tr>
+                      <td>
+                        {{ i + 1 }}
+                      </td>
+                      <td (click)="gotoStudent(entry.studentGUId, entry.studentName)" class="link">
+                        Profile
+                      </td>
+                      <td (click)="confirmInscription(entry.studentGUId, entry.studentName)" class="link">
+                        {{ entry.studentName }}
+                      </td>
+                      <!-- <td>
+                      {{ entry.inscriptionsEntryEndDate | truncateDate }}
+                    </td> -->
+                    <td>
+                      {{ entry.registrationFormSubmittedDate | truncateDate }}
+                    </td>
+                    <td>
+                      {{ entry.paymentReceiptSubmittedDate | truncateDate }}
+                    </td>
+                    <td class="link">
+                      <div [hidden]="isViewLinkHidden(entry.registrationFormSubmittedDate)">
+                        <a href="{{staticUrlPrefix}}InscriptionRegistrations/{{entry.academicTermId}}/{{entry.studentGUId | uppercase }}.png" target="_blank">
+                          {{entry.studentGUId | trimGuid | uppercase }}
+                        </a>
+                      </div>
+                    </td>
+                    <td class="link">
+                      <div [hidden]="isViewLinkHidden(entry.paymentReceiptSubmittedDate)">
+                        <a href="{{staticUrlPrefix}}InscriptionPayments/{{entry.academicTermId}}/{{entry.studentGUId | uppercase }}.png" target="_blank">
+                          {{entry.studentGUId | trimGuid | uppercase }}
+                        </a>
+                      </div>
+                    </td>
+                    <td>
+                      {{ entry.confirmedDate | truncateDate }}
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          }
         </div>
-        <table *ngIf="inscriptionEntryDTOs.length > 0"  class="table-sm table-striped">
-          <thead>
-            <tr>
-              <!-- <td>Id</td> -->
-              <th></th>
-              <th>Profile</th>
-              <th app-sortable-column="studentName" sort-direction="asc" (onSortColumn)="onSortColumn($event)">
-                Student
-              </th>
-              <!-- <th app-sortable-column="inscriptionsEntryEndDate" (onSortColumn)="onSortColumn($event)">Inscriptions<br />Due Date</th> -->
-              <th app-sortable-column="registrationFormSubmittedDate" (onSortColumn)="onSortColumn($event)">Registration Form<br />Submitted</th>
-              <th app-sortable-column="paymentReceiptSubmittedDate" (onSortColumn)="onSortColumn($event)">Payment Receipt<br />Submitted</th>
-              <th>View<br />Registration Form</th>
-              <th>View<br />Payment Receipt</th>
-              <th app-sortable-column="confirmedDate" (onSortColumn)="onSortColumn($event)">Confirmed <br />Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let entry of inscriptionEntryDTOs; let i = index">
-              <td>
-                {{ i + 1 }}
-              </td>
-              <td (click)="gotoStudent(entry.studentGUId, entry.studentName)" class="link">
-                Profile
-              </td>
-              <td (click)="confirmInscription(entry.studentGUId, entry.studentName)" class="link">
-                {{ entry.studentName }}
-              </td>
-              <!-- <td>
-                {{ entry.inscriptionsEntryEndDate | truncateDate }}
-              </td> -->
-              <td>
-                {{ entry.registrationFormSubmittedDate | truncateDate }}
-              </td>
-              <td>
-                {{ entry.paymentReceiptSubmittedDate | truncateDate }}
-              </td>
-              <td class="link">
-                <div [hidden]="isViewLinkHidden(entry.registrationFormSubmittedDate)">
-                  <a href="{{staticUrlPrefix}}InscriptionRegistrations/{{entry.academicTermId}}/{{entry.studentGUId | uppercase }}.png" target="_blank">
-                    {{entry.studentGUId | trimGuid | uppercase }}
-                  </a>
-                </div>
-              </td>
-              <td class="link">
-                <div [hidden]="isViewLinkHidden(entry.paymentReceiptSubmittedDate)">
-                  <a href="{{staticUrlPrefix}}InscriptionPayments/{{entry.academicTermId}}/{{entry.studentGUId | uppercase }}.png" target="_blank">
-                    {{entry.studentGUId | trimGuid | uppercase }}
-                  </a>
-                </div>
-              </td>
-              <td>
-                {{ entry.confirmedDate | truncateDate }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+      }
+    }
   </div>
+</div>
 </div>

@@ -5,8 +5,12 @@
   </div>
 
   <div class="card-body bg-white">
-    <span *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</span>
-    <span *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</span>
+    @if (errorMessage) {
+      <span class="alert alert-danger">{{ errorMessage }}</span>
+    }
+    @if (successMessage) {
+      <span class="alert alert-success">{{ successMessage }}</span>
+    }
 
     <div>
       <label for="FilterModeSelector"></label>
@@ -14,7 +18,7 @@
         name="FilterModeSelector"
         [(ngModel)]="selectedFilterMode"
         (change)="setSelectedFilterMode($event.target.value)"
-      >
+        >
         <option value="998">All Active Students (Current, Practicum and Sabbatical)</option>
         <option value="999">Choose Specific Filters</option>
       </select>
@@ -24,9 +28,11 @@
           name="StatusSelector"
           [(ngModel)]="selectedStudentStatus"
           (change)="setSelectedStudentStatus($event.target.value)"
-        >
+          >
           <option value="0">All</option>
-          <option *ngFor="let status of studentStatuses" [value]="status.value">{{ status.label }}</option>
+          @for (status of studentStatuses; track status) {
+            <option [value]="status.value">{{ status.label }}</option>
+          }
         </select>
 
         <label for="YearJoinedSelector">First Student Year:</label>
@@ -34,9 +40,11 @@
           name="YearJoinedSelector"
           [(ngModel)]="selectedYearJoined"
           (change)="setSelectedYearJoined($event.target.value)"
-        >
+          >
           <option value="0">All</option>
-          <option *ngFor="let year of joinedYears" [value]="year.value">{{ year.label }}</option>
+          @for (year of joinedYears; track year) {
+            <option [value]="year.value">{{ year.label }}</option>
+          }
         </select>
 
         <label for="GradYearSelector">Graduation Year:</label>
@@ -44,120 +52,112 @@
           name="GradYearSelector"
           [(ngModel)]="selectedGradYear"
           (change)="setSelectedGradYear($event.target.value)"
-        >
+          >
           <option value="0">All</option>
-          <option *ngFor="let year of gradYears" [value]="year.value">{{ year.label }}</option>
+          @for (year of gradYears; track year) {
+            <option [value]="year.value">{{ year.label }}</option>
+          }
         </select>
       </span>
     </div>
-    <div [ngSwitch]="isLoading">
-      <div *ngSwitchCase="true" class="text-center col-md-4 col-md-offset-4">
-        <app-loading-container> </app-loading-container>
-      </div>
-      <div *ngSwitchCase="false">
-        <table class="table-sm table-striped">
-          <thead>
-            <tr>
-              <!--<td>Id</td>-->
-              <th></th>
-              <th></th>
-
-              <th app-sortable-column="studentName" sort-direction="asc" (onSortColumn)="onSortColumn($event)">
-                Student
-              </th>
-
-              <!-- <th app-sortable-column="joinedFrom" (onSortColumn)="onSortColumn($event)">
-                Joined<br />
-                From
-              </th> -->
-              <th app-sortable-column="educationalLevel" (onSortColumn)="onSortColumn($event)">Ed Level</th>
-              <th app-sortable-column="status" (onSortColumn)="onSortColumn($event)">Status</th>
-
-              <th app-sortable-column="startYear" (onSortColumn)="onSortColumn($event)">
-                Start<br />
-                Year/Mo
-              </th>
-
-              <th app-sortable-column="gradYear" (onSortColumn)="onSortColumn($event)">
-                Grad<br />
-                Year/Mo
-              </th>
-
-              <th app-sortable-column="mentorName" (onSortColumn)="onSortColumn($event)">Mentor</th>
-
-              <th app-sortable-column="studentSnapshotStatus" (onSortColumn)="onSortColumn($event)">Emoji</th>
-              <th app-sortable-column="sponsorGroupName" (onSortColumn)="onSortColumn($event)">Sponsor</th>
-              <th app-sortable-column="universityAbbrev" (onSortColumn)="onSortColumn($event)">Univ</th>
-              <th app-sortable-column="major" (onSortColumn)="onSortColumn($event)">Major</th>
-
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let student of studentDTOs; let i = index">
-              <td>
-                {{ i + 1 }}
-              </td>
-              <td>
-                <img [src]="student.photoUrl" height="30" class="thumbnail" />
-              </td>
-              <td (click)="gotoStudent(student.studentGUId, student.studentName, student.photoUrl, student.mentorGUId)" class="link">
-                <span style="text-align: center; white-space: nowrap">
-                  <img src="/assets/images/{{ student.timelySSRStatus }}.jpg" width="20"
-                  title= "{{ getSSRTimelinessByColor(student.timelySSRStatus) }}"
-                  />
-                </span>
-                {{ student.studentName }}
-              </td>
-
-
-              <!-- <td class="centered">
-                {{ student.joinedFrom }}
-              </td> -->
-              <td class="centered">
-                {{ student.educationalLevel }}
-              </td>
-
-
-              <td class="centered">
-                {{ student.status }}
-              </td>
-
-              <td class="centered">{{ student.startYear }}/{{ student.startMonth }}</td>
-
-              <td class="centered">{{ student.gradYear }}/{{ student.gradMonth }}</td>
-
-
-              <td (click)="gotoMentor(student.mentorGUId)" class="link">
-
-                <span style="text-align: center; white-space: nowrap">
-                  <img src="/assets/images/{{ student.timelyMentorReportStatus }}.jpg" width="20"
-                    title= "{{ getMRTimelinessByColor(student.timelyMentorReportStatus) }}"
-                  />
-                </span>
-                {{ student.mentorName }}
-              </td>
-
-              <td style="text-align: center; white-space: nowrap">
-                <img src="{{ emojis[student.studentSnapshotStatus + 1] }}" width="24"
-                  title="{{ emojiMsgs[student.studentSnapshotStatus + 1] ?? 'N/A' }}"
-                   />
-              </td>
-
-              <td>
-                {{ student.sponsorGroupName }}
-              </td>
-              <td>
-                {{ student.universityAbbrev }}
-              </td>
-              <td>
-                {{ student.major }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+    <div>
+      @switch (isLoading) {
+        @case (true) {
+          <div class="text-center col-md-4 col-md-offset-4">
+            <app-loading-container> </app-loading-container>
+          </div>
+        }
+        @case (false) {
+          <div>
+            <table class="table-sm table-striped">
+              <thead>
+                <tr>
+                  <!--<td>Id</td>-->
+                  <th></th>
+                  <th></th>
+                  <th app-sortable-column="studentName" sort-direction="asc" (onSortColumn)="onSortColumn($event)">
+                    Student
+                  </th>
+                  <!-- <th app-sortable-column="joinedFrom" (onSortColumn)="onSortColumn($event)">
+                  Joined<br />
+                  From
+                </th> -->
+                <th app-sortable-column="educationalLevel" (onSortColumn)="onSortColumn($event)">Ed Level</th>
+                <th app-sortable-column="status" (onSortColumn)="onSortColumn($event)">Status</th>
+                <th app-sortable-column="startYear" (onSortColumn)="onSortColumn($event)">
+                  Start<br />
+                  Year/Mo
+                </th>
+                <th app-sortable-column="gradYear" (onSortColumn)="onSortColumn($event)">
+                  Grad<br />
+                  Year/Mo
+                </th>
+                <th app-sortable-column="mentorName" (onSortColumn)="onSortColumn($event)">Mentor</th>
+                <th app-sortable-column="studentSnapshotStatus" (onSortColumn)="onSortColumn($event)">Emoji</th>
+                <th app-sortable-column="sponsorGroupName" (onSortColumn)="onSortColumn($event)">Sponsor</th>
+                <th app-sortable-column="universityAbbrev" (onSortColumn)="onSortColumn($event)">Univ</th>
+                <th app-sortable-column="major" (onSortColumn)="onSortColumn($event)">Major</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (student of studentDTOs; track student; let i = $index) {
+                <tr>
+                  <td>
+                    {{ i + 1 }}
+                  </td>
+                  <td>
+                    <img [src]="student.photoUrl" height="30" class="thumbnail" />
+                  </td>
+                  <td (click)="gotoStudent(student.studentGUId, student.studentName, student.photoUrl, student.mentorGUId)" class="link">
+                    <span style="text-align: center; white-space: nowrap">
+                      <img src="/assets/images/{{ student.timelySSRStatus }}.jpg" width="20"
+                        title= "{{ getSSRTimelinessByColor(student.timelySSRStatus) }}"
+                        />
+                      </span>
+                      {{ student.studentName }}
+                    </td>
+                    <!-- <td class="centered">
+                    {{ student.joinedFrom }}
+                  </td> -->
+                  <td class="centered">
+                    {{ student.educationalLevel }}
+                  </td>
+                  <td class="centered">
+                    {{ student.status }}
+                  </td>
+                  <td class="centered">{{ student.startYear }}/{{ student.startMonth }}</td>
+                  <td class="centered">{{ student.gradYear }}/{{ student.gradMonth }}</td>
+                  <td (click)="gotoMentor(student.mentorGUId)" class="link">
+                    <span style="text-align: center; white-space: nowrap">
+                      <img src="/assets/images/{{ student.timelyMentorReportStatus }}.jpg" width="20"
+                        title= "{{ getMRTimelinessByColor(student.timelyMentorReportStatus) }}"
+                        />
+                      </span>
+                      {{ student.mentorName }}
+                    </td>
+                    <td style="text-align: center; white-space: nowrap">
+                      <img src="{{ emojis[student.studentSnapshotStatus + 1] }}" width="24"
+                        title="{{ emojiMsgs[student.studentSnapshotStatus + 1] ?? 'N/A' }}"
+                        />
+                      </td>
+                      <td>
+                        {{ student.sponsorGroupName }}
+                      </td>
+                      <td>
+                        {{ student.universityAbbrev }}
+                      </td>
+                      <td>
+                        {{ student.major }}
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
+        }
       </div>
     </div>
-  </div>
 
-  l
-</div>
+    l
+  </div>

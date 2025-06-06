@@ -1,5 +1,9 @@
-<div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
-<div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
+@if (errorMessage) {
+  <div class="alert alert-danger">{{ errorMessage }}</div>
+}
+@if (successMessage) {
+  <div class="alert alert-success">{{ successMessage }}</div>
+}
 <form [formGroup]="myForm">
   <fieldset>
     <div class="form-group">
@@ -18,7 +22,7 @@
           type="text"
           class="form-control input-sm narrative"
           placeholder=""
-        >
+          >
         </textarea>
         <app-display-errors
           control="narrative"
@@ -29,8 +33,12 @@
           }"
         ></app-display-errors>
       </div>
-      <div *ngIf="errorMessage" class="alert alert-danger">{{errorMessage}}</div>
-      <div *ngIf="successMessage" class="alert alert-success">{{successMessage}}</div>
+      @if (errorMessage) {
+        <div class="alert alert-danger">{{errorMessage}}</div>
+      }
+      @if (successMessage) {
+        <div class="alert alert-success">{{successMessage}}</div>
+      }
       <div class="col-md-6 col-md-offset-1">
         <span>
           <button
@@ -38,23 +46,23 @@
             style="width: 140px; margin-right: 10px"
             [hidden]="!qrComponentsEditable"
             (click)="onSubmit()"
-          >
+            >
             Guardar/Save
           </button> </span
-        >&nbsp;
-        <span>
-          <button
-            type="button"
-            class="btn btn-default"
-            style="width: 95px"
-            [hidden]="!qrComponentsEditable"
-            (click)="onCancel()"
-          >
-            Cancelar
-          </button>
-          <div class="red" [hidden]="myForm.valid || !qrComponentsEditable"></div>
-        </span>
+          >&nbsp;
+          <span>
+            <button
+              type="button"
+              class="btn btn-default"
+              style="width: 95px"
+              [hidden]="!qrComponentsEditable"
+              (click)="onCancel()"
+              >
+              Cancelar
+            </button>
+            <div class="red" [hidden]="myForm.valid || !qrComponentsEditable"></div>
+          </span>
+        </div>
       </div>
-    </div>
-  </fieldset>
-</form>
+    </fieldset>
+  </form>

@@ -1,20 +1,22 @@
 <style>
   ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: #DDDDDD;
-  }
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #DDDDDD;
+}
 
-  li {
-    float: left;
-    padding-right: 10px;
-    padding-bottom: 2px;
-  }
+li {
+float: left;
+padding-right: 10px;
+padding-bottom: 2px;
+}
 </style>
 
 <ul>
   <li>Totals per category: </li>
-  <li *ngFor="let statusCount of statusCounts">{{statusCount.reviewedStatus}}: {{statusCount.statusCount}}</li>
+  @for (statusCount of statusCounts; track statusCount) {
+    <li>{{statusCount.reviewedStatus}}: {{statusCount.statusCount}}</li>
+  }
 </ul>

@@ -2,18 +2,20 @@
   <div class="card bg-primary">
     <div class="card-header text-white">
       <!-- <span style="font-size:large">
-        Student Quarterly Reports Available Soon
-      </span> -->
-      <span style="margin-left:10rem">
-        Report for Quarter:
-        <select name="activePeriodSelector" [(ngModel)]="selectedQRPeriod"
-                (change)="setSelectedQRPeriod($event.target.value)">>
-          <option *ngFor="let yearPeriod of qrPeriods" [value]="yearPeriod.value">{{yearPeriod.label}}</option>
-        </select>
-      </span>
-    </div>
-    <div class="card-body bg-white">
-      <app-self-reports showOnlyIfStatusIsSent="true">
-      </app-self-reports>
-    </div>
+      Student Quarterly Reports Available Soon
+    </span> -->
+    <span style="margin-left:10rem">
+      Report for Quarter:
+      <select name="activePeriodSelector" [(ngModel)]="selectedQRPeriod"
+        (change)="setSelectedQRPeriod($event.target.value)">>
+        @for (yearPeriod of qrPeriods; track yearPeriod) {
+          <option [value]="yearPeriod.value">{{yearPeriod.label}}</option>
+        }
+      </select>
+    </span>
   </div>
+  <div class="card-body bg-white">
+    <app-self-reports showOnlyIfStatusIsSent="true">
+    </app-self-reports>
+  </div>
+</div>

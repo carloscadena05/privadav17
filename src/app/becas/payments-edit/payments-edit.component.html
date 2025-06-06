@@ -4,135 +4,151 @@
   </div>
 
   <div class="card-body bg-white">
-    <span *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</span>
-    <span *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</span>
+    @if (errorMessage) {
+      <span class="alert alert-danger">{{ errorMessage }}</span>
+    }
+    @if (successMessage) {
+      <span class="alert alert-success">{{ successMessage }}</span>
+    }
 
     <div>
-      <div [ngSwitch]="isLoading">
-        <div *ngSwitchCase="true" class="text-center col-md-4 col-md-offset-4">
-          <app-loading-container> </app-loading-container>
-        </div>
-        <div *ngSwitchCase="false">
-          <form [formGroup]="myForm">
-            <p>
-              <button
-                [disabled]="myForm.pristine"
-                type="button"
-                class="btn btn-primary"
-                (click)="saveAllChangedEntries()">
-                Save
-              </button>
-              <button
-              type="button"
-                class="btn btn-primary"
-                (click)="location.back()">
-                Back
-              </button>
-                <span *ngIf="selectedPCSMonthNum !== '0' && !isEditableMonth" class="text-danger" style="font-weight: bold;">
-                  Data is Locked for this month
-                </span>
-            </p>
-            <table class="table-sm table-striped">
-              <thead>
-                <tr>
-                  <td></td>
-                  <th>PCSID</th>
-                  <th>Year</th>
-                  <th>Month</th>
-                  <th>MR</th>
-                  <th>SSR</th>
-                  <th>IR</th>
-                  <th>GR</th>
-                  <th>Payment Status</th>
-                  <th>Amount</th>
-                  <th>Approved By</th>
-                  <th>Comment</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr formArrayName="becaPaymentFormRows" *ngFor="let bp of becaPaymentsData; let i = index">
-                  <ng-container [formGroupName]="i">
-                    <td>
-                      {{ i+1 }}
-                    </td>
-                    <td>{{ bp.pcsCode }}</td>
-                    <td>
-                      {{ bp.pcsYear }}
-                    </td>
-                    <td>
-                      {{ bp.pcsMonthNum }}
-                    </td>
-                    <td>
-                      <span style="text-align: center; white-space: nowrap">
-                        <app-three-way-checkbox formControlName="mentorReportStatusId"></app-three-way-checkbox>
-                      </span>
-                    </td>
-                    <td>
-                      <span style="text-align: center; white-space: nowrap">
-                        <app-three-way-checkbox formControlName="studentReportStatusId"></app-three-way-checkbox>
-                      </span>
-                    </td>
-
-                    <td>
-                      <span style="text-align: center; white-space: nowrap">
-                        <app-three-way-checkbox formControlName="inscriptionReportStatusId"></app-three-way-checkbox>
-                      </span>
-                    </td>
-
-                    <td>
-                      <span style="text-align: center; white-space: nowrap">
-                        <app-three-way-checkbox formControlName="gradeReportStatusId"></app-three-way-checkbox>
-                      </span>
-                    </td>
-                    <td>
-                      <select
+      <div>
+        @switch (isLoading) {
+          @case (true) {
+            <div class="text-center col-md-4 col-md-offset-4">
+              <app-loading-container> </app-loading-container>
+            </div>
+          }
+          @case (false) {
+            <div>
+              <form [formGroup]="myForm">
+                <p>
+                  <button
+                    [disabled]="myForm.pristine"
+                    type="button"
+                    class="btn btn-primary"
+                    (click)="saveAllChangedEntries()">
+                    Save
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    (click)="location.back()">
+                    Back
+                  </button>
+                  @if (selectedPCSMonthNum !== '0' && !isEditableMonth) {
+                    <span class="text-danger" style="font-weight: bold;">
+                      Data is Locked for this month
+                    </span>
+                  }
+                </p>
+                <table class="table-sm table-striped">
+                  <thead>
+                    <tr>
+                      <td></td>
+                      <th>PCSID</th>
+                      <th>Year</th>
+                      <th>Month</th>
+                      <th>MR</th>
+                      <th>SSR</th>
+                      <th>IR</th>
+                      <th>GR</th>
+                      <th>Payment Status</th>
+                      <th>Amount</th>
+                      <th>Approved By</th>
+                      <th>Comment</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (bp of becaPaymentsData; track bp; let i = $index) {
+                      <tr formArrayName="becaPaymentFormRows">
+                        <ng-container [formGroupName]="i">
+                          <td>
+                            {{ i+1 }}
+                          </td>
+                          <td>{{ bp.pcsCode }}</td>
+                          <td>
+                            {{ bp.pcsYear }}
+                          </td>
+                          <td>
+                            {{ bp.pcsMonthNum }}
+                          </td>
+                          <td>
+                            <span style="text-align: center; white-space: nowrap">
+                              <app-three-way-checkbox formControlName="mentorReportStatusId"></app-three-way-checkbox>
+                            </span>
+                          </td>
+                          <td>
+                            <span style="text-align: center; white-space: nowrap">
+                              <app-three-way-checkbox formControlName="studentReportStatusId"></app-three-way-checkbox>
+                            </span>
+                          </td>
+                          <td>
+                            <span style="text-align: center; white-space: nowrap">
+                              <app-three-way-checkbox formControlName="inscriptionReportStatusId"></app-three-way-checkbox>
+                            </span>
+                          </td>
+                          <td>
+                            <span style="text-align: center; white-space: nowrap">
+                              <app-three-way-checkbox formControlName="gradeReportStatusId"></app-three-way-checkbox>
+                            </span>
+                          </td>
+                          <td>
+                            <select
                               id="paymentStatusId"
                               formControlName="paymentStatusId"
                               class="form-control form-control-sm"
                               style="width: 120px;">
-                        <option *ngFor="let status of becaPaymentStatuses" [value]="status.value">{{ status.label }}</option>
-                      </select>
-                    </td>
-
-                    <td>
-                    <label style="display: inline-block; margin-right: 3px;">$</label>
-                     <input formControlName="requestedBeca"
-                      class="form-control form-control-sm" type="text"
-                      style ="width: 50px; display: inline-block;"
-                       />
-                    </td>
-                    <td>
-                      <div *ngIf="admins$ | async as admins">
-                        <select
-                                id="approvedById"
-                                formControlName="approvedById"
-                                class="form-control form-control-sm"
-                                style="width: 75px;"
-                                (change)="setApprovedBy(i, $event.target.value)">
-                          <option [value]="null">[Not Approved]</option>
-                          <option *ngFor="let admin of admins" [value]="admin.value">{{ admin.label }}</option>
-                        </select>
-                      </div>
-                    </td>
-                    <td>
-                      <input formControlName="comment" class="form-control form-control-sm" type="text" />
-                    </td>
-                    <!-- <td>
-                      <button (click)="saveEntry(i)">Save</button>
-                    </td> -->
-                    <!-- <td *ngIf="isRowDirty(i)">+-+</td>
-                    <td *ngIf="!isRowDirty(i)"></td> -->
-                  </ng-container>
-                </tr>
-              </tbody>
-            </table>
-          </form>
-
-          <!-- <br />Dirty: {{ myForm.dirty }}
-          <br />Pristine: {{ myForm.pristine }}
-          <br />Touched: {{ myForm.touched }}
-          <br />Valid: {{ myForm.valid }} -->
-        </div>
+                              @for (status of becaPaymentStatuses; track status) {
+                                <option [value]="status.value">{{ status.label }}</option>
+                              }
+                            </select>
+                          </td>
+                          <td>
+                            <label style="display: inline-block; margin-right: 3px;">$</label>
+                            <input formControlName="requestedBeca"
+                              class="form-control form-control-sm" type="text"
+                              style ="width: 50px; display: inline-block;"
+                              />
+                            </td>
+                            <td>
+                              @if (admins$ | async; as admins) {
+                                <div>
+                                  <select
+                                    id="approvedById"
+                                    formControlName="approvedById"
+                                    class="form-control form-control-sm"
+                                    style="width: 75px;"
+                                    (change)="setApprovedBy(i, $event.target.value)">
+                                    <option [value]="null">[Not Approved]</option>
+                                    @for (admin of admins; track admin) {
+                                      <option [value]="admin.value">{{ admin.label }}</option>
+                                    }
+                                  </select>
+                                </div>
+                              }
+                            </td>
+                            <td>
+                              <input formControlName="comment" class="form-control form-control-sm" type="text" />
+                            </td>
+                            <!-- <td>
+                            <button (click)="saveEntry(i)">Save</button>
+                          </td> -->
+                          <!-- <td *ngIf="isRowDirty(i)">+-+</td>
+                          <td *ngIf="!isRowDirty(i)"></td> -->
+                        </ng-container>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </form>
+              <!-- <br />Dirty: {{ myForm.dirty }}
+              <br />Pristine: {{ myForm.pristine }}
+              <br />Touched: {{ myForm.touched }}
+              <br />Valid: {{ myForm.valid }} -->
+            </div>
+          }
+        }
       </div>
     </div>
   </div>

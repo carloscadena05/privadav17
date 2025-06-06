@@ -3,66 +3,77 @@
     Universities
   </div>
   <div class="card-body bg-white">
-    <span *ngIf="errorMessage" class="alert alert-danger">{{errorMessage}}</span>
-    <span *ngIf="successMessage" class="alert alert-success">{{successMessage}}</span>
+    @if (errorMessage) {
+      <span class="alert alert-danger">{{errorMessage}}</span>
+    }
+    @if (successMessage) {
+      <span class="alert alert-success">{{successMessage}}</span>
+    }
 
 
-    <div [ngSwitch]="isLoading">
-      <div *ngSwitchCase="true" class="text-center col-md-4 col-md-offset-4">
-        <app-loading-container>
-        </app-loading-container>
-      </div>
-      <div *ngSwitchCase="false">
-        <table appSortableTable class="table-sm table-striped">
-
-          <thead>
-            <tr>
-              <th></th>
-              <th>&nbsp;</th>
-
-              <th app-sortable-column="universityAbbrev" sort-direction="asc" (onSortColumn)="onSortColumn($event)">
+    <div>
+      @switch (isLoading) {
+        @case (true) {
+          <div class="text-center col-md-4 col-md-offset-4">
+            <app-loading-container>
+            </app-loading-container>
+          </div>
+        }
+        @case (false) {
+          <div>
+            <table appSortableTable class="table-sm table-striped">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>&nbsp;</th>
+                  <th app-sortable-column="universityAbbrev" sort-direction="asc" (onSortColumn)="onSortColumn($event)">
                   Abbrev</th>
-              <th app-sortable-column="universityName"  (onSortColumn)="onSortColumn($event)">
+                  <th app-sortable-column="universityName"  (onSortColumn)="onSortColumn($event)">
                   Name</th>
-              <th app-sortable-column="academicYearType" (onSortColumn)="onSortColumn($event)">
-                    Term</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let uni of universities, let i = index">
-              <td>
-                {{ i+1 }}
-              </td>
-              <td>
-                <span (click)="editUniversity(uni.universityId)" class="link">
-                  Edit</span>
-              </td>
-
-              <td>
-                {{ uni.universityAbbrev }}
-              </td>
-              <td>
-                {{ uni.universityName }}
-              </td>
-              <td>
-                {{ uni.academicYearType }}
-               </td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="form-group">
-          <label for="universityAbbrev">Add new University</label>
-          <input id="universityAbbrev" type="text"
-                 #UniversityAbbrev
-                 class="form-control form-control-sm" placeholder="Abbreviation (2 - 10 characters)" />
-          <button class="btn btn-primary" (click)="addNewUniversity(UniversityAbbrev.value)">
-            Submit
-          </button>
-        </div>
-        <span *ngIf="successMessage" class="alert alert-success">{{successMessage}}</span>
+                  <th app-sortable-column="academicYearType" (onSortColumn)="onSortColumn($event)">
+                  Term</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (uni of universities; track uni; let i = $index) {
+                  <tr>
+                    <td>
+                      {{ i+1 }}
+                    </td>
+                    <td>
+                      <span (click)="editUniversity(uni.universityId)" class="link">
+                      Edit</span>
+                    </td>
+                    <td>
+                      {{ uni.universityAbbrev }}
+                    </td>
+                    <td>
+                      {{ uni.universityName }}
+                    </td>
+                    <td>
+                      {{ uni.academicYearType }}
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+            <div class="form-group">
+              <label for="universityAbbrev">Add new University</label>
+              <input id="universityAbbrev" type="text"
+                #UniversityAbbrev
+                class="form-control form-control-sm" placeholder="Abbreviation (2 - 10 characters)" />
+                <button class="btn btn-primary" (click)="addNewUniversity(UniversityAbbrev.value)">
+                  Submit
+                </button>
+              </div>
+              @if (successMessage) {
+                <span class="alert alert-success">{{successMessage}}</span>
+              }
+            </div>
+          }
+        }
       </div>
     </div>
-  </div>
 
 
-  l
+    l

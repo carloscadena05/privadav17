@@ -1,15 +1,19 @@
 
-<div *ngIf="errorMessage" class="alert alert-danger">{{errorMessage}}</div>
-<div *ngIf="successMessage" class="alert alert-success">{{successMessage}}</div>
+@if (errorMessage) {
+  <div class="alert alert-danger">{{errorMessage}}</div>
+}
+@if (successMessage) {
+  <div class="alert alert-success">{{successMessage}}</div>
+}
 
 <div class="center">
   <ngx-file-drop dropZoneLabel="Drop files here" (onFileDrop)="dropped($event)"
-  (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)"
-  accept=".jpg">
-      <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
-        Drag and Drop the titulo file (.JPG) here. Or browse to and select the file.
-        <button style='margin-left: 2rem;' type="button" (click)="openFileSelector()">Browse files</button>
-      </ng-template>
+    (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)"
+    accept=".jpg">
+    <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
+      Drag and Drop the titulo file (.JPG) here. Or browse to and select the file.
+      <button style='margin-left: 2rem;' type="button" (click)="openFileSelector()">Browse files</button>
+    </ng-template>
   </ngx-file-drop>
 
 

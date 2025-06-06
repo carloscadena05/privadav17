@@ -1,5 +1,11 @@
 <div class="custom-control custom-checkbox" (click)="disabled ? null : toggleValue()" [class.disabled]="disabled">
-  <img *ngIf="value === null" src="/assets/images/gray.jpg" class="custom-checkbox-image">
-  <img *ngIf="value === 0" src="/assets/images/red.jpg" class="custom-checkbox-image">
-  <img *ngIf="value === 1" src="/assets/images/green.jpg" class="custom-checkbox-image">
+  @if (value === null) {
+    <img src="/assets/images/gray.jpg" class="custom-checkbox-image">
+  }
+  @if (value === 0) {
+    <img src="/assets/images/red.jpg" class="custom-checkbox-image">
+  }
+  @if (value === 1) {
+    <img src="/assets/images/green.jpg" class="custom-checkbox-image">
+  }
 </div>

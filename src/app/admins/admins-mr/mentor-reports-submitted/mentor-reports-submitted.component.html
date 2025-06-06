@@ -3,56 +3,69 @@
     Mentor&nbsp;Reports&nbsp;Submitted
   </div>
   <div class="card-body bg-white">
-    <span *ngIf="errorMessage" class="alert alert-danger">{{errorMessage}}</span>
-    <span *ngIf="successMessage" class="alert alert-success">{{successMessage}}</span>
-    <div [ngSwitch]="isLoading">
-      <div *ngSwitchCase="true" class="text-center col-md-4 col-md-offset-4">
-        <app-loading-container>
-        </app-loading-container>
-      </div>
-      <div *ngSwitchCase="false">
-
-        <table appSortableTable class="table-sm table-striped">
-
-          <thead>
-            <tr>
-              <th app-sortable-column="mentorName" (onSortColumn)="onSortColumn($event)">Mentor</th>
-              <th app-sortable-column="studentName" (onSortColumn)="onSortColumn($event)">Student</th>
-              <th app-sortable-column="mentorAssignedDate" (onSortColumn)="onSortColumn($event)">Mentor Start</th>
-              <th app-sortable-column="submittedCount" sort-direction="asc" (onSortColumn)="onSortColumn($event)">Total
-                Submitted</th>
-              <th app-sortable-column="latestDate" (onSortColumn)="onSortColumn($event)">Latest Month</th>
-              <th (onSortColumn)="onSortColumn($event)">Comment</th>
-
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let row of mentorReportSubmittedCounts">
-              <td *ngIf="row.mentorGUId" (click)='gotoMember(row.mentorGUId, row.mentorName)' class="report-row link">
-                {{ row.mentorName }}
-              </td>
-              <td *ngIf="!row.mentorGUId" class="report-row">
-                {{ row.mentorName }}
-              </td>
-              <td class="report-row" (click)='gotoStudent(row.studentGUId)' class="report-row link">
-                {{ row.studentName }}
-              </td>
-              <td class="report-row">
-                {{ row.mentorAssignedDate | truncateDate }}
-              </td>
-              <td class="report-row">
-                {{ row.submittedCount }}
-              </td>
-              <td class="report-row">
-                {{ row.latestDate | truncateDate }}
-              </td>
-              <td class="report-row">
-                {{ row.mentoringComment }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+    @if (errorMessage) {
+      <span class="alert alert-danger">{{errorMessage}}</span>
+    }
+    @if (successMessage) {
+      <span class="alert alert-success">{{successMessage}}</span>
+    }
+    <div>
+      @switch (isLoading) {
+        @case (true) {
+          <div class="text-center col-md-4 col-md-offset-4">
+            <app-loading-container>
+            </app-loading-container>
+          </div>
+        }
+        @case (false) {
+          <div>
+            <table appSortableTable class="table-sm table-striped">
+              <thead>
+                <tr>
+                  <th app-sortable-column="mentorName" (onSortColumn)="onSortColumn($event)">Mentor</th>
+                  <th app-sortable-column="studentName" (onSortColumn)="onSortColumn($event)">Student</th>
+                  <th app-sortable-column="mentorAssignedDate" (onSortColumn)="onSortColumn($event)">Mentor Start</th>
+                  <th app-sortable-column="submittedCount" sort-direction="asc" (onSortColumn)="onSortColumn($event)">Total
+                  Submitted</th>
+                  <th app-sortable-column="latestDate" (onSortColumn)="onSortColumn($event)">Latest Month</th>
+                  <th (onSortColumn)="onSortColumn($event)">Comment</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (row of mentorReportSubmittedCounts; track row) {
+                  <tr>
+                    @if (row.mentorGUId) {
+                      <td (click)='gotoMember(row.mentorGUId, row.mentorName)' class="report-row link">
+                        {{ row.mentorName }}
+                      </td>
+                    }
+                    @if (!row.mentorGUId) {
+                      <td class="report-row">
+                        {{ row.mentorName }}
+                      </td>
+                    }
+                    <td class="report-row" (click)='gotoStudent(row.studentGUId)' class="report-row link">
+                      {{ row.studentName }}
+                    </td>
+                    <td class="report-row">
+                      {{ row.mentorAssignedDate | truncateDate }}
+                    </td>
+                    <td class="report-row">
+                      {{ row.submittedCount }}
+                    </td>
+                    <td class="report-row">
+                      {{ row.latestDate | truncateDate }}
+                    </td>
+                    <td class="report-row">
+                      {{ row.mentoringComment }}
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      }
     </div>
   </div>
 </div>

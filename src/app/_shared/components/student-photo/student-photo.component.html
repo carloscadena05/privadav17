@@ -1,9 +1,11 @@
 <!-- <div class="row"> -->
-  <div class="col">
-    <div *ngIf="fullPhotoPathname">
+<div class="col">
+  @if (fullPhotoPathname) {
+    <div>
       <div style="width: 100%">
         <img [src]="fullPhotoPathname" height="160">
       </div>
     </div>
-  </div>
+  }
+</div>
 <!-- </div> -->

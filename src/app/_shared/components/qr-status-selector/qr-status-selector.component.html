@@ -1,11 +1,15 @@
-<div *ngIf="qrMini.reviewedStatusId">
-  <label>Student:</label> {{ qrMini.studentName }}
-  <br />
-  <label>Quarterly Report Status: </label>
-  <select name="StatusSelector" [(ngModel)]="qrMini.reviewedStatusId"
-          (change)="setStatusForQR($event.target.value)">
-    <option *ngFor="let status of reviewedStatuses" [value]="status.value">
-      {{status.label}}
-    </option>
-  </select>
-</div>
+@if (qrMini.reviewedStatusId) {
+  <div>
+    <label>Student:</label> {{ qrMini.studentName }}
+    <br />
+    <label>Quarterly Report Status: </label>
+    <select name="StatusSelector" [(ngModel)]="qrMini.reviewedStatusId"
+      (change)="setStatusForQR($event.target.value)">
+      @for (status of reviewedStatuses; track status) {
+        <option [value]="status.value">
+          {{status.label}}
+        </option>
+      }
+    </select>
+  </div>
+}

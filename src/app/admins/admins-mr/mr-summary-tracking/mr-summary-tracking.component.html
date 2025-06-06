@@ -1,18 +1,26 @@
 <div class="card bg-primary">
   <div class="card-header text-white" style="font-size: large">Mentor Report Review</div>
   <div class="card-body bg-white">
-    <span *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</span>
-    <span *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</span>
+    @if (errorMessage) {
+      <span class="alert alert-danger">{{ errorMessage }}</span>
+    }
+    @if (successMessage) {
+      <span class="alert alert-success">{{ successMessage }}</span>
+    }
 
     <div>
       <div class="controls">
         <label for="yearSelector">&nbsp;Report Month:</label>
         <select name="yearSelector" [(ngModel)]="selectedYear" (change)="setSelectedYear($event.target.value)">
-          <option *ngFor="let year of years" [value]="year.value">{{ year.label }}</option>
+          @for (year of years; track year) {
+            <option [value]="year.value">{{ year.label }}</option>
+          }
         </select>
         <select name="monthSelector" [(ngModel)]="selectedMonth" (change)="setSelectedMonth($event.target.value)">
           <option value="0">[Select]</option>
-          <option *ngFor="let month of months" [value]="month.value">{{ month.label }}</option>
+          @for (month of months; track month) {
+            <option [value]="month.value">{{ month.label }}</option>
+          }
         </select>
 
         <label for="MRReviewedStatusSelector">Overall Situation:</label>
@@ -20,9 +28,11 @@
           name="MRReviewedStatusSelector"
           [(ngModel)]="selectedMRReviewedStatus"
           (change)="setSelectedMRReviewedStatus($event.target.value)"
-        >
+          >
           <option value="0">[All]</option>
-          <option *ngFor="let status of mrReviewedStatuses" [value]="status.value">{{ status.label }}</option>
+          @for (status of mrReviewedStatuses; track status) {
+            <option [value]="status.value">{{ status.label }}</option>
+          }
         </select>
 
         <label for="CommunicationStatusSelector">Communication:</label>
@@ -30,97 +40,99 @@
           name="CommunicationStatusSelector"
           [(ngModel)]="selectedCommunicationStatus"
           (change)="setSelectedCommunicationStatus($event.target.value)"
-        >
+          >
           <option value="0">[All]</option>
-          <option *ngFor="let status of communicationStatuses" [value]="status.value">{{ status.label }}</option>
+          @for (status of communicationStatuses; track status) {
+            <option [value]="status.value">{{ status.label }}</option>
+          }
         </select>
 
 
         <!-- <span class="checkboxes">
-          &nbsp;&nbsp;<label
-            ><input type="checkbox" [(ngModel)]="displayOriginalFields" />&nbsp;<span
-              >Display Original Content</span
-            ></label
-          >
-        </span>
-      </div> -->
-      <app-mr-status-counts [year]="selectedYear" [month]="selectedMonth"> </app-mr-status-counts>
-    </div>
-
-    <div [ngSwitch]="isLoading">
-      <div *ngSwitchCase="true" class="text-center col-md-4 col-md-offset-4">
-        <app-loading-container> </app-loading-container>
-      </div>
-      <div *ngSwitchCase="false">
-        <div
-          class="row"
-          style="border-bottom: 3px solid #ccc; margin-top: 2px"
-          *ngFor="let lmr of mentorReportByMonth; let i = index"
+        &nbsp;&nbsp;<label
+        ><input type="checkbox" [(ngModel)]="displayOriginalFields" />&nbsp;<span
+        >Display Original Content</span
+        ></label
         >
-          <div class="col-md-12">
-            <div class="row" id="{{ 'id' + lmr.mentorReportId }}">
-              &nbsp;
-              <button
-                class="btn default-btn btn-primary btn-sm"
-                (click)="updateSummaryTracking(lmr.mentorReportId, lmr.studentGUId, lmr.studentName)"
-              >
-                Review
-              </button>
-              &nbsp;
-
-              <span (click)="gotoStudent(lmr.studentGUId, lmr.studentName)" class="padded link">
-                [Student:
-                {{ lmr.studentName }} ]
-              </span>
-              <span (click)="gotoMentor(lmr.mentorGUId)" class="padded link">
-                [Mentor:
-                {{ lmr.mentorName }} ]
-              </span>
-              <span class="padded">
-                [Sponsor:
-                {{ lmr.sponsorGroupName }} ]
-              </span>
-            </div>
-
-            <div class="row">
-               <span class="padded">
-                &nbsp;Report Month:
-                {{ lmr.lastContactYear }}-{{ lmr.lastContactMonth | alphaMonth }}
-              </span>
-
-              <span class="padded">
-                &nbsp;Submitted Date:
-                {{ lmr.reportDateTime | truncateDate }}
-              </span>
-            </div>
-            <div class="row">
-
-              <span class="padded"> &nbsp;Reviewed Status: {{ lmr.reviewedStatus }} </span>
-
-              <span class="padded">
-                &nbsp;Overall Situation:
-                <img src="{{ emojis[lmr.emoji + 1] }}" width="24px" />
-              </span>
-              <span class="padded">
-                &nbsp;Communication:
-                <img src="{{ emojis[lmr.communication + 1] }}" width="24px" />
-              </span>
-            </div>
-
-            <div class="row" [hidden]="!displayOriginalFields">
-              <div class="col-md2 padded">&nbsp;Description (English)</div>
-              <div class="col-md-10" [innerHTML]="lmr.narrative_English | unsafeHtml"></div>
-            </div>
-            <div class="row" [hidden]="!displayOriginalFields">
-              <div class="col-md2 padded">&nbsp;Description (Spanish)</div>
-              <div class="col-md-10" [innerHTML]="lmr.narrative_Spanish | unsafeHtml"></div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </div>
+      </span>
+    </div> -->
+    <app-mr-status-counts [year]="selectedYear" [month]="selectedMonth"> </app-mr-status-counts>
   </div>
+
+  <div>
+    @switch (isLoading) {
+      @case (true) {
+        <div class="text-center col-md-4 col-md-offset-4">
+          <app-loading-container> </app-loading-container>
+        </div>
+      }
+      @case (false) {
+        <div>
+          @for (lmr of mentorReportByMonth; track lmr; let i = $index) {
+            <div
+              class="row"
+              style="border-bottom: 3px solid #ccc; margin-top: 2px"
+              >
+              <div class="col-md-12">
+                <div class="row" id="{{ 'id' + lmr.mentorReportId }}">
+                  &nbsp;
+                  <button
+                    class="btn default-btn btn-primary btn-sm"
+                    (click)="updateSummaryTracking(lmr.mentorReportId, lmr.studentGUId, lmr.studentName)"
+                    >
+                    Review
+                  </button>
+                  &nbsp;
+                  <span (click)="gotoStudent(lmr.studentGUId, lmr.studentName)" class="padded link">
+                    [Student:
+                    {{ lmr.studentName }} ]
+                  </span>
+                  <span (click)="gotoMentor(lmr.mentorGUId)" class="padded link">
+                    [Mentor:
+                    {{ lmr.mentorName }} ]
+                  </span>
+                  <span class="padded">
+                    [Sponsor:
+                    {{ lmr.sponsorGroupName }} ]
+                  </span>
+                </div>
+                <div class="row">
+                  <span class="padded">
+                    &nbsp;Report Month:
+                    {{ lmr.lastContactYear }}-{{ lmr.lastContactMonth | alphaMonth }}
+                  </span>
+                  <span class="padded">
+                    &nbsp;Submitted Date:
+                    {{ lmr.reportDateTime | truncateDate }}
+                  </span>
+                </div>
+                <div class="row">
+                  <span class="padded"> &nbsp;Reviewed Status: {{ lmr.reviewedStatus }} </span>
+                  <span class="padded">
+                    &nbsp;Overall Situation:
+                    <img src="{{ emojis[lmr.emoji + 1] }}" width="24px" />
+                  </span>
+                  <span class="padded">
+                    &nbsp;Communication:
+                    <img src="{{ emojis[lmr.communication + 1] }}" width="24px" />
+                  </span>
+                </div>
+                <div class="row" [hidden]="!displayOriginalFields">
+                  <div class="col-md2 padded">&nbsp;Description (English)</div>
+                  <div class="col-md-10" [innerHTML]="lmr.narrative_English | unsafeHtml"></div>
+                </div>
+                <div class="row" [hidden]="!displayOriginalFields">
+                  <div class="col-md2 padded">&nbsp;Description (Spanish)</div>
+                  <div class="col-md-10" [innerHTML]="lmr.narrative_Spanish | unsafeHtml"></div>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    }
+  </div>
+</div>
 </div>
 
 l

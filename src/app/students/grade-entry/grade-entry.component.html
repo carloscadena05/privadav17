@@ -1,370 +1,384 @@
-<div class="py-4 px-3 px-md-5"  *ngIf="inGradesProcessingPeriod; else outOfRange">
-  <h1 class="title text-center text-sm-left ">Tu promedio para este periodo</h1>
-
-  <ng-container>
-    <app-alert (didClose)="closeAlert($event)" [isShown]="successAlert" [type]="'success'"
-               *ngIf="successAlert"></app-alert>
-    <app-alert (didClose)="closeAlert($event)" [isShown]="errorAlert" [type]="'error'" *ngIf="errorAlert"></app-alert>
-
-
-
-    <div>
-
-      <div [ngSwitch]="isLoading">
-        <!-- loader -->
-        <ng-container *ngSwitchCase="true" class="text-center col-md-4 col-md-offset-4">
-          <app-loading-container>
-          </app-loading-container>
-        </ng-container>
-        <!-- end loader -->
-        <!-- content -->
-        <ng-container *ngSwitchCase="false">
-          <!-- promedio status section -->
-          <div class=" d-flex flex-column text-center pt-4">
-            <!-- <p class="subtitle">Estado de entrega</p> -->
-
-            <div class="stepper-wrapper d-flex flex-row justify-content-center">
-
-              <div class="stepper-item first d-flex flex-row align-items-center justify-content-around"
-                   [class.completed-first]="studentGradesData[0].gradesEntryStartDate">
-                <div class="d-flex flex-column align-items-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                       *ngIf="!studentGradesData[0]?.gradesEntryStartDate; else solicitado" viewBox="0,0,256,256"
-                       heigth="256px" width="256px" fill-rule="nonzero">
-                    <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt"
-                       stroke-linejoin="none" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0"
-                       font-family="none" font-weight="none" font-size="none" text-anchor="none"
-                       style="mix-blend-mode: normal">
-                      <path transform="scale(5.33333,5.33333)"
-                            d="M44,24c0,11.045 -8.955,20 -20,20c-11.045,0 -20,-8.955 -20,-20c0,-11.045 8.955,-20 20,-20c11.045,0 20,8.955 20,20z"
-                            id="strokeMainSVG" fill="#d9d9d9" stroke="#d9d9d9" stroke-linejoin="round" />
-                      <g transform="scale(5.33333,5.33333)" fill="#ffffff" stroke="none" stroke-linejoin="miter">
-                        <!-- circle -->
-                        <path
-                              d="M44,24c0,11.045 -8.955,20 -20,20c-11.045,0 -20,-8.955 -20,-20c0,-11.045 8.955,-20 20,-20c11.045,0 20,8.955 20,20z" />
-                        <!-- checkmark -->
-                        <path
-                              d="M34.586,14.586l-13.57,13.586l-5.602,-5.586l-2.828,2.828l8.434,8.414l16.395,-16.414z" />
-                      </g>
-                    </g>
-                    <g fill="#d9d9d9" fill-rule="nonzero" stroke="none" stroke-width="none" stroke-linecap="butt"
-                       stroke-linejoin="none" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0"
-                       font-family="none" font-weight="none" font-size="none" text-anchor="none"
-                       style="mix-blend-mode: normal">
-                      <path
-                            d="M114.48,158.375v-6.31h11.94v-41.3l0.86,-5.04l-3.42,4.01l-9.38,6.74l-3.25,-4.35l18.78,-14.5h3.07v54.44h11.69v6.31z"
-                            id="strokeMainSVG" stroke="#d9d9d9" stroke-width="5.33333" stroke-linejoin="round" />
-                      <g stroke="none" stroke-width="1" stroke-linejoin="miter">
-                        <path
-                              d="M114.48,158.375v-6.31h11.94v-41.3l0.86,-5.04l-3.42,4.01l-9.38,6.74l-3.25,-4.35l18.78,-14.5h3.07v54.44h11.69v6.31z" />
-                      </g>
-                    </g>
-                  </svg>
-                  <ng-template #solicitado>
-                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                         viewBox="0,0,256,256" width="256px" height="256px" fill-rule="nonzero">
-                      <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt"
-                         stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0"
-                         font-family="none" font-weight="none" font-size="none" text-anchor="none"
-                         style="mix-blend-mode: normal">
-                        <g transform="scale(5.33333,5.33333)">
-                          <!-- checkmark -->
-                          <path
-                                d="M44,24c0,11.045 -8.955,20 -20,20c-11.045,0 -20,-8.955 -20,-20c0,-11.045 8.955,-20 20,-20c11.045,0 20,8.955 20,20z"
-                                fill="#147c12" />
-                          <!-- checkmark -->
-                          <path
-                                d="M34.602,14.602l-13.602,13.597l-5.602,-5.598l-2.797,2.797l8.399,8.403l16.398,-16.402z"
-                                fill="#ffffff" />
-                        </g>
-                      </g>
-                    </svg>
-                  </ng-template>
-                  <p class="step">Solicitado</p>
-                  <p class="step" *ngIf="studentGradesData[0].gradesTurnedInDate">
-                    {{studentGradesData[0].gradesEntryStartDate | date:'yyyy-MM-dd'}}</p>
-                </div>
-              </div>
-
-              <!-- Entregado_A  --->
-              <div class="stepper-item second-A d-flex flex-row align-items-center justify-content-around"
-                   [class.completed-second-A]="studentGradesData[0].gradesTurnedInDate">
-                <div class="d-flex flex-column align-items-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                       *ngIf="!studentGradesData[0].gradesTurnedInDate; else Entregado_A" viewBox="0,0,256,256"
-                       heigth="256px" width="256px" fill-rule="nonzero">
-                    <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt"
-                       stroke-linejoin="none" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0"
-                       font-family="none" font-weight="none" font-size="none" text-anchor="none"
-                       style="mix-blend-mode: normal">
-                      <path transform="scale(5.33333,5.33333)"
-                            d="M44,24c0,11.045 -8.955,20 -20,20c-11.045,0 -20,-8.955 -20,-20c0,-11.045 8.955,-20 20,-20c11.045,0 20,8.955 20,20z"
-                            id="strokeMainSVG" fill="#d9d9d9" stroke="#d9d9d9" stroke-linejoin="round" />
-                      <g transform="scale(5.33333,5.33333)" fill="#ffffff" stroke="none" stroke-linejoin="miter">
-                        <!-- circle -->
-                        <path
-                              d="M44,24c0,11.045 -8.955,20 -20,20c-11.045,0 -20,-8.955 -20,-20c0,-11.045 8.955,-20 20,-20c11.045,0 20,8.955 20,20z" />
-                        <!-- checkmark -->
-                        <path
-                              d="M34.586,14.586l-13.57,13.586l-5.602,-5.586l-2.828,2.828l8.434,8.414l16.395,-16.414z" />
-                      </g>
-                    </g>
-
-                    <g fill="#d9d9d9">
-                      <!-- outline of "2" -->
-                      <path
-                            d="M143.79,112.215c0,3.01333 -0.55667,6.1 -1.67,9.26c-1.10667,3.15333 -2.55667,6.32333 -4.35,9.51c-1.79333,3.18667 -3.79667,6.30333 -6.01,9.35c-2.22,3.04 -4.44,5.92667 -6.66,8.66l-4.18,3.67v0.34l5.46,-0.94h18.6v6.31h-33.96v-2.47c1.25333,-1.30667 2.76,-2.93 4.52,-4.87c1.76667,-1.93333 3.60333,-4.08 5.51,-6.44c1.90667,-2.36 3.78333,-4.86333 5.63,-7.51c1.84667,-2.64667 3.52333,-5.33333 5.03,-8.06c1.51333,-2.73333 2.72333,-5.43667 3.63,-8.11c0.91333,-2.67333 1.37,-5.20333 1.37,-7.59c0,-2.78667 -0.79667,-5.10667 -2.39,-6.96c-1.59333,-1.84667 -4.01333,-2.77 -7.26,-2.77c-2.16,0 -4.26333,0.44 -6.31,1.32c-2.04667,0.88 -3.81,1.89 -5.29,3.03l-2.82,-4.86c1.99333,-1.70667 4.35333,-3.04333 7.08,-4.01c2.73333,-0.96667 5.66333,-1.45 8.79,-1.45c2.44667,0 4.61,0.35333 6.49,1.06c1.88,0.71333 3.47333,1.72333 4.78,3.03c1.30667,1.30667 2.3,2.85667 2.98,4.65c0.68667,1.79333 1.03,3.74333 1.03,5.85z"
-                            id="strokeMainSVG" stroke="#d9d9d9" stroke-width="5.33333" stroke-linejoin="round" />
-                      <!-- <g stroke="none" stroke-width="1" stroke-linejoin="miter">
-                        <path
-                              d="M143.79,112.215v0c0,3.01333 -0.55667,6.1 -1.67,9.26c-1.10667,3.15333 -2.55667,6.32333 -4.35,9.51c-1.79333,3.18667 -3.79667,6.30333 -6.01,9.35c-2.22,3.04 -4.44,5.92667 -6.66,8.66v0l-4.18,3.67v0.34l5.46,-0.94h18.6v6.31h-33.96v-2.47c1.25333,-1.30667 2.76,-2.93 4.52,-4.87c1.76667,-1.93333 3.60333,-4.08 5.51,-6.44c1.90667,-2.36 3.78333,-4.86333 5.63,-7.51c1.84667,-2.64667 3.52333,-5.33333 5.03,-8.06c1.51333,-2.73333 2.72333,-5.43667 3.63,-8.11c0.91333,-2.67333 1.37,-5.20333 1.37,-7.59v0c0,-2.78667 -0.79667,-5.10667 -2.39,-6.96c-1.59333,-1.84667 -4.01333,-2.77 -7.26,-2.77v0c-2.16,0 -4.26333,0.44 -6.31,1.32c-2.04667,0.88 -3.81,1.89 -5.29,3.03v0l-2.82,-4.86c1.99333,-1.70667 4.35333,-3.04333 7.08,-4.01c2.73333,-0.96667 5.66333,-1.45 8.79,-1.45v0c2.44667,0 4.61,0.35333 6.49,1.06c1.88,0.71333 3.47333,1.72333 4.78,3.03c1.30667,1.30667 2.3,2.85667 2.98,4.65c0.68667,1.79333 1.03,3.74333 1.03,5.85z" />
-                      </g> -->
-                    </g>
-                  </svg>
-                  <ng-template #Entregado_A>
-                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                         viewBox="0,0,256,256" width="256px" height="256px" fill-rule="nonzero">
-                      <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt"
-                         stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0"
-                         font-family="none" font-weight="none" font-size="none" text-anchor="none"
-                         style="mix-blend-mode: normal">
-                        <g transform="scale(5.33333,5.33333)">
-                              <!-- Entregado_A green circle-->
-                          <path
-                                d="M44,24c0,11.045 -8.955,20 -20,20c-11.045,0 -20,-8.955 -20,-20c0,-11.045 8.955,-20 20,-20c11.045,0 20,8.955 20,20z"
-                                fill="#147c12" />
-                              <!-- checkmark -->
-                          <path
-                                d="M34.602,14.602l-13.602,13.597l-5.602,-5.598l-2.797,2.797l8.399,8.403l16.398,-16.402z"
-                                fill="#ffffff" />
-                        </g>
-                      </g>
-                    </svg>
-                  </ng-template>
-                  <p class="step">Entregado</p>
-                  <p class="step" *ngIf="studentGradesData[0].gradesTurnedInDate">
-                    {{studentGradesData[0].gradesTurnedInDate | date:'yyyy-MM-dd'}}</p>
-                </div>
-              </div>
-
-              <!-- Entregado_B  --->
-              <div class="stepper-item second-B d-flex flex-row align-items-center justify-content-around"
-                   [class.completed-second-B]="studentGradesData[0].imageSubmittedDate">
-                <div class="d-flex flex-column align-items-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                       *ngIf="!studentGradesData[0].imageSubmittedDate; else Entregado_A" viewBox="0,0,256,256"
-                       heigth="256px" width="256px" fill-rule="nonzero">
-                    <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt"
-                       stroke-linejoin="none" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0"
-                       font-family="none" font-weight="none" font-size="none" text-anchor="none"
-                       style="mix-blend-mode: normal">
-                      <!-- circle outline -->
-                      <path transform="scale(5.33333,5.33333)"
-                            d="M44,24c0,11.045 -8.955,20 -20,20c-11.045,0 -20,-8.955 -20,-20c0,-11.045 8.955,-20 20,-20c11.045,0 20,8.955 20,20z"
-                            id="strokeMainSVG" fill="#d9d9d9" stroke="#d9d9d9" stroke-linejoin="round" />
-                      <g transform="scale(5.33333,5.33333)" fill="#ffffff" stroke="none" stroke-linejoin="miter">
-                        <!-- circle -->
-                        <path
-                              d="M44,24c0,11.045 -8.955,20 -20,20c-11.045,0 -20,-8.955 -20,-20c0,-11.045 8.955,-20 20,-20c11.045,0 20,8.955 20,20z" />
-                        <!-- checkmark -->
-                        <path
-                              d="M34.586,14.586l-13.57,13.586l-5.602,-5.586l-2.828,2.828l8.434,8.414l16.395,-16.414z" />
-                      </g>
-                    </g>
-
-                    <g fill="#d9d9d9" fill-rule="nonzero" stroke="none" stroke-width="none" stroke-linecap="butt"
-                       stroke-linejoin="none" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0"
-                       font-family="none" font-weight="none" font-size="none" text-anchor="none"
-                       style="mix-blend-mode: normal">
-                      <path
-                            d="M143.79,112.215c0,3.01333 -0.55667,6.1 -1.67,9.26c-1.10667,3.15333 -2.55667,6.32333 -4.35,9.51c-1.79333,3.18667 -3.79667,6.30333 -6.01,9.35c-2.22,3.04 -4.44,5.92667 -6.66,8.66l-4.18,3.67v0.34l5.46,-0.94h18.6v6.31h-33.96v-2.47c1.25333,-1.30667 2.76,-2.93 4.52,-4.87c1.76667,-1.93333 3.60333,-4.08 5.51,-6.44c1.90667,-2.36 3.78333,-4.86333 5.63,-7.51c1.84667,-2.64667 3.52333,-5.33333 5.03,-8.06c1.51333,-2.73333 2.72333,-5.43667 3.63,-8.11c0.91333,-2.67333 1.37,-5.20333 1.37,-7.59c0,-2.78667 -0.79667,-5.10667 -2.39,-6.96c-1.59333,-1.84667 -4.01333,-2.77 -7.26,-2.77c-2.16,0 -4.26333,0.44 -6.31,1.32c-2.04667,0.88 -3.81,1.89 -5.29,3.03l-2.82,-4.86c1.99333,-1.70667 4.35333,-3.04333 7.08,-4.01c2.73333,-0.96667 5.66333,-1.45 8.79,-1.45c2.44667,0 4.61,0.35333 6.49,1.06c1.88,0.71333 3.47333,1.72333 4.78,3.03c1.30667,1.30667 2.3,2.85667 2.98,4.65c0.68667,1.79333 1.03,3.74333 1.03,5.85z"
-                            id="strokeMainSVG" stroke="#d9d9d9" stroke-width="5.33333" stroke-linejoin="round" />
-                      <g stroke="none" stroke-width="1" stroke-linejoin="miter">
-                        <path
-                              d="M143.79,112.215v0c0,3.01333 -0.55667,6.1 -1.67,9.26c-1.10667,3.15333 -2.55667,6.32333 -4.35,9.51c-1.79333,3.18667 -3.79667,6.30333 -6.01,9.35c-2.22,3.04 -4.44,5.92667 -6.66,8.66v0l-4.18,3.67v0.34l5.46,-0.94h18.6v6.31h-33.96v-2.47c1.25333,-1.30667 2.76,-2.93 4.52,-4.87c1.76667,-1.93333 3.60333,-4.08 5.51,-6.44c1.90667,-2.36 3.78333,-4.86333 5.63,-7.51c1.84667,-2.64667 3.52333,-5.33333 5.03,-8.06c1.51333,-2.73333 2.72333,-5.43667 3.63,-8.11c0.91333,-2.67333 1.37,-5.20333 1.37,-7.59v0c0,-2.78667 -0.79667,-5.10667 -2.39,-6.96c-1.59333,-1.84667 -4.01333,-2.77 -7.26,-2.77v0c-2.16,0 -4.26333,0.44 -6.31,1.32c-2.04667,0.88 -3.81,1.89 -5.29,3.03v0l-2.82,-4.86c1.99333,-1.70667 4.35333,-3.04333 7.08,-4.01c2.73333,-0.96667 5.66333,-1.45 8.79,-1.45v0c2.44667,0 4.61,0.35333 6.49,1.06c1.88,0.71333 3.47333,1.72333 4.78,3.03c1.30667,1.30667 2.3,2.85667 2.98,4.65c0.68667,1.79333 1.03,3.74333 1.03,5.85z" />
-                      </g>
-                    </g>
-                  </svg>
-                  <ng-template #Entregado_B>
-                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                         viewBox="0,0,256,256" width="256px" height="256px" fill-rule="nonzero">
-                      <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt"
-                         stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0"
-                         font-family="none" font-weight="none" font-size="none" text-anchor="none"
-                         style="mix-blend-mode: normal">
-                        <g transform="scale(5.33333,5.33333)">
-                          <!-- Entregado_B green circle-->
-                          <path
-                                d="M44,24c0,11.045 -8.955,20 -20,20c-11.045,0 -20,-8.955 -20,-20c0,-11.045 8.955,-20 20,-20c11.045,0 20,8.955 20,20z"
-                                fill="#147c12" />
-                          <!-- checkmark -->
-                          <path
-                                d="M34.602,14.602l-13.602,13.597l-5.602,-5.598l-2.797,2.797l8.399,8.403l16.398,-16.402z"
-                                fill="#ffffff" />
-                        </g>
-                      </g>
-                    </svg>
-                  </ng-template>
-                  <p class="step">Carga de imágenes</p>
-                  <p class="step" *ngIf="studentGradesData[0].imageSubmittedDate">
-                    {{studentGradesData[0].imageSubmittedDate | date:'yyyy-MM-dd'}}</p>
-                </div>
-              </div>
-
-
-              <div class="stepper-item third d-flex flex-row  justify-content-around"
-                   [class.completed-third]="studentGradesData[0].confirmedDate">
-                <div class="d-flex flex-column align-items-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                       *ngIf="!studentGradesData[0].confirmedDate; else confirmado" viewBox="0,0,256,256" heigth="256px"
-                       width="256px" fill-rule="nonzero">
-                    <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt"
-                       stroke-linejoin="none" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0"
-                       font-family="none" font-weight="none" font-size="none" text-anchor="none"
-                       style="mix-blend-mode: normal">
-                      <path transform="scale(5.33333,5.33333)"
-                            d="M44,24c0,11.045 -8.955,20 -20,20c-11.045,0 -20,-8.955 -20,-20c0,-11.045 8.955,-20 20,-20c11.045,0 20,8.955 20,20z"
-                            id="strokeMainSVG" fill="#d9d9d9" stroke="#d9d9d9" stroke-linejoin="round" />
-                      <g transform="scale(5.33333,5.33333)" fill="#ffffff" stroke="none" stroke-linejoin="miter">
-                         <!-- circle -->
-                         <path
-                         d="M44,24c0,11.045 -8.955,20 -20,20c-11.045,0 -20,-8.955 -20,-20c0,-11.045 8.955,-20 20,-20c11.045,0 20,8.955 20,20z" />
-                   <!-- checkmark -->
-                        <path
-                         d="M34.586,14.586l-13.57,13.586l-5.602,-5.586l-2.828,2.828l8.434,8.414l16.395,-16.414z" />
-                      </g>
-                    </g>
-                    <g fill="#d9d9d9" fill-rule="nonzero" stroke="none" stroke-width="none" stroke-linecap="butt"
-                       stroke-linejoin="none" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0"
-                       font-family="none" font-weight="none" font-size="none" text-anchor="none"
-                       style="mix-blend-mode: normal">
-                      <path
-                            d="M124.075,152.4c1.93333,0 3.72333,-0.28333 5.37,-0.85c1.65333,-0.56667 3.07667,-1.40667 4.27,-2.52c1.19333,-1.10667 2.13333,-2.42667 2.82,-3.96c0.68,-1.54 1.02,-3.22 1.02,-5.04c0,-3.98 -1.18,-6.93667 -3.54,-8.87c-2.36,-1.94 -5.61667,-2.91 -9.77,-2.91h-6.32v-2.47l12.29,-18.94l3.93,-3.76l-5.55,0.85h-16.9v-6.31h30.47v2.47l-13.57,20.4l-2.99,2.47v0.17l2.91,-0.59c2.27333,0.05333 4.37667,0.46333 6.31,1.23c1.93333,0.77333 3.61,1.88333 5.03,3.33c1.42667,1.45333 2.53667,3.19 3.33,5.21c0.8,2.02 1.2,4.31 1.2,6.87c0,3.07333 -0.54,5.80333 -1.62,8.19c-1.08667,2.38667 -2.55333,4.39333 -4.4,6.02c-1.84667,1.62 -4.02333,2.85667 -6.53,3.71c-2.5,0.85333 -5.14333,1.28 -7.93,1.28c-2.56,0 -4.86333,-0.2 -6.91,-0.6c-2.05333,-0.4 -3.84667,-0.91333 -5.38,-1.54l1.79,-6.05c1.30667,0.62 2.85667,1.14333 4.65,1.57c1.79333,0.42667 3.8,0.64 6.02,0.64z"
-                            id="strokeMainSVG" stroke="#d9d9d9" stroke-width="5.33333" stroke-linejoin="round" />
-                      <g stroke="none" stroke-width="1" stroke-linejoin="miter">
-                        <path
-                              d="M124.075,152.4v0c1.93333,0 3.72333,-0.28333 5.37,-0.85c1.65333,-0.56667 3.07667,-1.40667 4.27,-2.52c1.19333,-1.10667 2.13333,-2.42667 2.82,-3.96c0.68,-1.54 1.02,-3.22 1.02,-5.04v0c0,-3.98 -1.18,-6.93667 -3.54,-8.87c-2.36,-1.94 -5.61667,-2.91 -9.77,-2.91v0h-6.32v-2.47l12.29,-18.94l3.93,-3.76l-5.55,0.85h-16.9v-6.31h30.47v2.47l-13.57,20.4l-2.99,2.47v0.17l2.91,-0.59c2.27333,0.05333 4.37667,0.46333 6.31,1.23c1.93333,0.77333 3.61,1.88333 5.03,3.33c1.42667,1.45333 2.53667,3.19 3.33,5.21c0.8,2.02 1.2,4.31 1.2,6.87v0c0,3.07333 -0.54,5.80333 -1.62,8.19c-1.08667,2.38667 -2.55333,4.39333 -4.4,6.02c-1.84667,1.62 -4.02333,2.85667 -6.53,3.71c-2.5,0.85333 -5.14333,1.28 -7.93,1.28v0c-2.56,0 -4.86333,-0.2 -6.91,-0.6c-2.05333,-0.4 -3.84667,-0.91333 -5.38,-1.54v0l1.79,-6.05c1.30667,0.62 2.85667,1.14333 4.65,1.57c1.79333,0.42667 3.8,0.64 6.02,0.64z" />
-                      </g>
-                    </g>
-                  </svg>
-                  <ng-template #confirmado>
-                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                         viewBox="0,0,256,256" width="256px" height="256px" fill-rule="nonzero">
-                      <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt"
-                         stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0"
-                         font-family="none" font-weight="none" font-size="none" text-anchor="none"
-                         style="mix-blend-mode: normal">
-                        <g transform="scale(5.33333,5.33333)">
-                          <!-- confirmado green circle-->
-                          <path
-                                d="M44,24c0,11.045 -8.955,20 -20,20c-11.045,0 -20,-8.955 -20,-20c0,-11.045 8.955,-20 20,-20c11.045,0 20,8.955 20,20z"
-                                fill="#147c12" />
-                          <!-- checkmark -->
-                          <path
-                                d="M34.602,14.602l-13.602,13.597l-5.602,-5.598l-2.797,2.797l8.399,8.403l16.398,-16.402z"
-                                fill="#ffffff" />
-                        </g>
-                      </g>
-                    </svg>
-                  </ng-template>
-
-                  <p class="step">Confirmado</p>
-                  <p class="step step-date" *ngIf="studentGradesData[0].confirmedDate">{{
-                    studentGradesData[0].confirmedDate | date:'yyyy-MM-dd' }}</p>
-
-                </div>
-              </div>
-
-            </div>
-            <form [formGroup]="myForm">
-
-              <div class="container-fluid m-0 p-0" style="column-gap: 1.5rem">
-
-                <ng-container formArrayName="gradeEntryFormRows"
-                              *ngFor="let entry of studentGradesData, let i = index">
-                  <div class="row row-cols-1 row-cols-md-2 m-0">
-                    <div [formGroupName]="i" class="col p-0 my-auto">
-                      <div class="limit-date col p-0">
-                        <p class="state" *ngIf="!studentGradesData[0].confirmedDate; else emailSary">
-                          La fecha límite para subir tus calificaciones es
-                          <br><span>{{studentGradesData[0].gradesEntryEndDate | date: 'fullDate' :'es'}}</span>
-
-                        </p>
-                        <ng-template #emailSary>
-                          <p class="text-danger">
-                            La calificación ha sido revisada y registrada. Cualquier cambio, favor de comunicarse a
-                            <a href="mailto:s.martinez@jovenesadelante.org"
-                               target="_blank">s.martinez&#64;jovenesadelante.org</a>
-                          </p>
-                        </ng-template>
-                      </div>
-
-                      <div class="col p-0 d-flex flex-row align-items-center justify-content-center grade">
-                        <label for="gradePointAvg">Ingresa tu promedio: </label>
-                        <input class="form-control form-control-sm" formControlName="gradePointAvg" name="gradePointAvg"
-                               id="gradePointAvg"
-
-                               type="text" />
-                      </div>
-
-                      <div class="col p-0 d-flex flex-row justify-content-around button-wrapper mx-auto mt-3">
-                        <!--    <button class="btn btn-default m-0" [class.edit]="!studentGradesData[0].confirmedDate"
-            [class.cancel]="studentGradesData[0].confirmedDate" (click)="editForm($event.target)">
-            Editar
-          </button> -->
-                        <button class="btn btn-default m-0 save" type="submit" (click)="saveAllChangedEntries()"
-                                [disabled]="myForm.pristine">
-                          Guardar
-                        </button>
-                      </div>
-                    </div>
-                    <!--  <p style="text-align: right;">app-grades
-        <button [disabled]="myForm.pristine" type="submit" class="btn btn-primary"
-          (click)="saveAllChangedEntries()">Guardar</button>
-      </p> -->
-
-                    <div class="col p-0 grade-image-wrapper mt-4 text-right ">
-                      <!-- <h6 class="mb-3 text-center">Sube tu reporte de calificaciones en el recuadro de abajo</h6> -->
-                      <!-- hacer esto con la alerta y con el cuadro de abajo q nunca se muestra -->
-                      <!--  <h6 >Al arrastrar o seleccionar tu archivo, este se cargará y su nombre se mostrará
-          debajo del recuadro. Hecho esto, tu archivo estará cargado y listo para revisión.</h6>
-        <br> -->
-                      <app-grades-uploader [studentGradeId]=studentGradesData[0].studentGradeId
-                                         [academicTermId]=studentGradesData[0].academicTermId
-                                         (uploadSuccess)="onUploadSuccess()">
-                                         </app-grades-uploader>
-                      <div class="img-wrapper p-1 text-left">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 13 14" fill="none">
-                          <path d="M8.66734 0C7.78194 0 6.89655 0.367845 6.21948 1.03347L1.3932 5.79794C-0.464399 7.67219 -0.464399 10.7025 1.3932 12.5943C3.25079 14.4686 6.2542 14.4686 8.12916 12.5943L10.2992 10.4048L9.10136 9.19612L7.08751 11.1755L6.93127 11.4032C5.73338 12.6118 3.78898 12.6118 2.59109 11.4032C1.41056 10.2121 1.44528 8.28527 2.59109 7.07663L7.41737 2.25962C8.09443 1.57648 9.22288 1.57648 9.91731 2.25962C10.5944 2.94276 10.5597 4.02878 9.91731 4.72943L5.57713 9.05599C5.40352 9.23115 5.10839 9.23115 4.91742 9.05599C4.74382 8.88083 4.74382 8.58305 4.91742 8.39037L5.02159 8.33782L6.60141 6.69127L5.40352 5.48264L3.71953 7.18173C2.88622 8.02252 2.88622 9.40632 3.71953 10.2471C4.55285 11.0879 5.92435 11.1054 6.75766 10.2471L11.0978 5.9731C12.452 4.60682 12.452 2.39975 11.0978 1.05099C10.4208 0.367845 9.55273 0.0175164 8.64998 0.0175164L8.66734 0Z"
-                                fill="#001AFF" />
-                        </svg>
-                        <a class="align-middle ml-2"
-                           [hidden]="!entry?.imageSubmittedDate"
-                           href="{{staticUrlPrefix}}StudentGradesReports/{{entry.academicTermId}}/{{entry.studentGUId | uppercase }}.png"
-                           target="_blank">Archivo subido con éxito -- haga clic para revisar</a>
-
-                      </div>
-                      <small>*Si tu archivo no termina con .png haz clic <a
-                           href="https://imagen.online-convert.com/es/convertir-a-png" target="_blank"
-                           rel="noopener noreferrer">aquí</a></small>
-                    </div>
-                  </div>
-
-                </ng-container>
-              </div>
-
-            </form>
-          </div>
-
-        </ng-container>
-        <!-- end content -->
-      </div>
-    </div>
-
-  </ng-container>
-</div>
-<ng-template #outOfRange>
-
-  <h3 style="padding: 2em;">La entrada de calificaciones no está disponible ahora. </h3>
-
-</ng-template>
+@if (inGradesProcessingPeriod) {
+  <div class="py-4 px-3 px-md-5" >
+    <h1 class="title text-center text-sm-left ">Tu promedio para este periodo</h1>
+    <ng-container>
+      @if (successAlert) {
+        <app-alert (didClose)="closeAlert($event)" [isShown]="successAlert" [type]="'success'"
+        ></app-alert>
+      }
+      @if (errorAlert) {
+        <app-alert (didClose)="closeAlert($event)" [isShown]="errorAlert" [type]="'error'"></app-alert>
+      }
+      <div>
+        <div>
+          @switch (isLoading) {
+            <!-- loader -->
+            @case (true) {
+              <ng-container class="text-center col-md-4 col-md-offset-4">
+                <app-loading-container>
+                </app-loading-container>
+              </ng-container>
+            }
+            <!-- end loader -->
+            <!-- content -->
+            @case (false) {
+              <!-- promedio status section -->
+              <div class=" d-flex flex-column text-center pt-4">
+                <!-- <p class="subtitle">Estado de entrega</p> -->
+                <div class="stepper-wrapper d-flex flex-row justify-content-center">
+                  <div class="stepper-item first d-flex flex-row align-items-center justify-content-around"
+                    [class.completed-first]="studentGradesData[0].gradesEntryStartDate">
+                    <div class="d-flex flex-column align-items-center">
+                      @if (!studentGradesData[0]?.gradesEntryStartDate) {
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                          viewBox="0,0,256,256"
+                          heigth="256px" width="256px" fill-rule="nonzero">
+                          <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt"
+                            stroke-linejoin="none" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0"
+                            font-family="none" font-weight="none" font-size="none" text-anchor="none"
+                            style="mix-blend-mode: normal">
+                            <path transform="scale(5.33333,5.33333)"
+                              d="M44,24c0,11.045 -8.955,20 -20,20c-11.045,0 -20,-8.955 -20,-20c0,-11.045 8.955,-20 20,-20c11.045,0 20,8.955 20,20z"
+                              id="strokeMainSVG" fill="#d9d9d9" stroke="#d9d9d9" stroke-linejoin="round" />
+                              <g transform="scale(5.33333,5.33333)" fill="#ffffff" stroke="none" stroke-linejoin="miter">
+                                <!-- circle -->
+                                <path
+                                  d="M44,24c0,11.045 -8.955,20 -20,20c-11.045,0 -20,-8.955 -20,-20c0,-11.045 8.955,-20 20,-20c11.045,0 20,8.955 20,20z" />
+                                  <!-- checkmark -->
+                                  <path
+                                    d="M34.586,14.586l-13.57,13.586l-5.602,-5.586l-2.828,2.828l8.434,8.414l16.395,-16.414z" />
+                                  </g>
+                                </g>
+                                <g fill="#d9d9d9" fill-rule="nonzero" stroke="none" stroke-width="none" stroke-linecap="butt"
+                                  stroke-linejoin="none" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0"
+                                  font-family="none" font-weight="none" font-size="none" text-anchor="none"
+                                  style="mix-blend-mode: normal">
+                                  <path
+                                    d="M114.48,158.375v-6.31h11.94v-41.3l0.86,-5.04l-3.42,4.01l-9.38,6.74l-3.25,-4.35l18.78,-14.5h3.07v54.44h11.69v6.31z"
+                                    id="strokeMainSVG" stroke="#d9d9d9" stroke-width="5.33333" stroke-linejoin="round" />
+                                    <g stroke="none" stroke-width="1" stroke-linejoin="miter">
+                                      <path
+                                        d="M114.48,158.375v-6.31h11.94v-41.3l0.86,-5.04l-3.42,4.01l-9.38,6.74l-3.25,-4.35l18.78,-14.5h3.07v54.44h11.69v6.31z" />
+                                      </g>
+                                    </g>
+                                  </svg>
+                                } @else {
+                                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    viewBox="0,0,256,256" width="256px" height="256px" fill-rule="nonzero">
+                                    <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt"
+                                      stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0"
+                                      font-family="none" font-weight="none" font-size="none" text-anchor="none"
+                                      style="mix-blend-mode: normal">
+                                      <g transform="scale(5.33333,5.33333)">
+                                        <!-- checkmark -->
+                                        <path
+                                          d="M44,24c0,11.045 -8.955,20 -20,20c-11.045,0 -20,-8.955 -20,-20c0,-11.045 8.955,-20 20,-20c11.045,0 20,8.955 20,20z"
+                                          fill="#147c12" />
+                                          <!-- checkmark -->
+                                          <path
+                                            d="M34.602,14.602l-13.602,13.597l-5.602,-5.598l-2.797,2.797l8.399,8.403l16.398,-16.402z"
+                                            fill="#ffffff" />
+                                          </g>
+                                        </g>
+                                      </svg>
+                                    }
+                                    <p class="step">Solicitado</p>
+                                    @if (studentGradesData[0].gradesTurnedInDate) {
+                                      <p class="step">
+                                      {{studentGradesData[0].gradesEntryStartDate | date:'yyyy-MM-dd'}}</p>
+                                    }
+                                  </div>
+                                </div>
+                                <!-- Entregado_A  --->
+                                <div class="stepper-item second-A d-flex flex-row align-items-center justify-content-around"
+                                  [class.completed-second-A]="studentGradesData[0].gradesTurnedInDate">
+                                  <div class="d-flex flex-column align-items-center">
+                                    @if (!studentGradesData[0].gradesTurnedInDate) {
+                                      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        viewBox="0,0,256,256"
+                                        heigth="256px" width="256px" fill-rule="nonzero">
+                                        <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt"
+                                          stroke-linejoin="none" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0"
+                                          font-family="none" font-weight="none" font-size="none" text-anchor="none"
+                                          style="mix-blend-mode: normal">
+                                          <path transform="scale(5.33333,5.33333)"
+                                            d="M44,24c0,11.045 -8.955,20 -20,20c-11.045,0 -20,-8.955 -20,-20c0,-11.045 8.955,-20 20,-20c11.045,0 20,8.955 20,20z"
+                                            id="strokeMainSVG" fill="#d9d9d9" stroke="#d9d9d9" stroke-linejoin="round" />
+                                            <g transform="scale(5.33333,5.33333)" fill="#ffffff" stroke="none" stroke-linejoin="miter">
+                                              <!-- circle -->
+                                              <path
+                                                d="M44,24c0,11.045 -8.955,20 -20,20c-11.045,0 -20,-8.955 -20,-20c0,-11.045 8.955,-20 20,-20c11.045,0 20,8.955 20,20z" />
+                                                <!-- checkmark -->
+                                                <path
+                                                  d="M34.586,14.586l-13.57,13.586l-5.602,-5.586l-2.828,2.828l8.434,8.414l16.395,-16.414z" />
+                                                </g>
+                                              </g>
+                                              <g fill="#d9d9d9">
+                                                <!-- outline of "2" -->
+                                                <path
+                                                  d="M143.79,112.215c0,3.01333 -0.55667,6.1 -1.67,9.26c-1.10667,3.15333 -2.55667,6.32333 -4.35,9.51c-1.79333,3.18667 -3.79667,6.30333 -6.01,9.35c-2.22,3.04 -4.44,5.92667 -6.66,8.66l-4.18,3.67v0.34l5.46,-0.94h18.6v6.31h-33.96v-2.47c1.25333,-1.30667 2.76,-2.93 4.52,-4.87c1.76667,-1.93333 3.60333,-4.08 5.51,-6.44c1.90667,-2.36 3.78333,-4.86333 5.63,-7.51c1.84667,-2.64667 3.52333,-5.33333 5.03,-8.06c1.51333,-2.73333 2.72333,-5.43667 3.63,-8.11c0.91333,-2.67333 1.37,-5.20333 1.37,-7.59c0,-2.78667 -0.79667,-5.10667 -2.39,-6.96c-1.59333,-1.84667 -4.01333,-2.77 -7.26,-2.77c-2.16,0 -4.26333,0.44 -6.31,1.32c-2.04667,0.88 -3.81,1.89 -5.29,3.03l-2.82,-4.86c1.99333,-1.70667 4.35333,-3.04333 7.08,-4.01c2.73333,-0.96667 5.66333,-1.45 8.79,-1.45c2.44667,0 4.61,0.35333 6.49,1.06c1.88,0.71333 3.47333,1.72333 4.78,3.03c1.30667,1.30667 2.3,2.85667 2.98,4.65c0.68667,1.79333 1.03,3.74333 1.03,5.85z"
+                                                  id="strokeMainSVG" stroke="#d9d9d9" stroke-width="5.33333" stroke-linejoin="round" />
+                                                  <!-- <g stroke="none" stroke-width="1" stroke-linejoin="miter">
+                                                  <path
+                                                    d="M143.79,112.215v0c0,3.01333 -0.55667,6.1 -1.67,9.26c-1.10667,3.15333 -2.55667,6.32333 -4.35,9.51c-1.79333,3.18667 -3.79667,6.30333 -6.01,9.35c-2.22,3.04 -4.44,5.92667 -6.66,8.66v0l-4.18,3.67v0.34l5.46,-0.94h18.6v6.31h-33.96v-2.47c1.25333,-1.30667 2.76,-2.93 4.52,-4.87c1.76667,-1.93333 3.60333,-4.08 5.51,-6.44c1.90667,-2.36 3.78333,-4.86333 5.63,-7.51c1.84667,-2.64667 3.52333,-5.33333 5.03,-8.06c1.51333,-2.73333 2.72333,-5.43667 3.63,-8.11c0.91333,-2.67333 1.37,-5.20333 1.37,-7.59v0c0,-2.78667 -0.79667,-5.10667 -2.39,-6.96c-1.59333,-1.84667 -4.01333,-2.77 -7.26,-2.77v0c-2.16,0 -4.26333,0.44 -6.31,1.32c-2.04667,0.88 -3.81,1.89 -5.29,3.03v0l-2.82,-4.86c1.99333,-1.70667 4.35333,-3.04333 7.08,-4.01c2.73333,-0.96667 5.66333,-1.45 8.79,-1.45v0c2.44667,0 4.61,0.35333 6.49,1.06c1.88,0.71333 3.47333,1.72333 4.78,3.03c1.30667,1.30667 2.3,2.85667 2.98,4.65c0.68667,1.79333 1.03,3.74333 1.03,5.85z" />
+                                                  </g> -->
+                                                </g>
+                                              </svg>
+                                            } @else {
+                                              <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                viewBox="0,0,256,256" width="256px" height="256px" fill-rule="nonzero">
+                                                <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt"
+                                                  stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0"
+                                                  font-family="none" font-weight="none" font-size="none" text-anchor="none"
+                                                  style="mix-blend-mode: normal">
+                                                  <g transform="scale(5.33333,5.33333)">
+                                                    <!-- Entregado_A green circle-->
+                                                    <path
+                                                      d="M44,24c0,11.045 -8.955,20 -20,20c-11.045,0 -20,-8.955 -20,-20c0,-11.045 8.955,-20 20,-20c11.045,0 20,8.955 20,20z"
+                                                      fill="#147c12" />
+                                                      <!-- checkmark -->
+                                                      <path
+                                                        d="M34.602,14.602l-13.602,13.597l-5.602,-5.598l-2.797,2.797l8.399,8.403l16.398,-16.402z"
+                                                        fill="#ffffff" />
+                                                      </g>
+                                                    </g>
+                                                  </svg>
+                                                }
+                                                <p class="step">Entregado</p>
+                                                @if (studentGradesData[0].gradesTurnedInDate) {
+                                                  <p class="step">
+                                                  {{studentGradesData[0].gradesTurnedInDate | date:'yyyy-MM-dd'}}</p>
+                                                }
+                                              </div>
+                                            </div>
+                                            <!-- Entregado_B  --->
+                                            <div class="stepper-item second-B d-flex flex-row align-items-center justify-content-around"
+                                              [class.completed-second-B]="studentGradesData[0].imageSubmittedDate">
+                                              <div class="d-flex flex-column align-items-center">
+                                                @if (!studentGradesData[0].imageSubmittedDate) {
+                                                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                    viewBox="0,0,256,256"
+                                                    heigth="256px" width="256px" fill-rule="nonzero">
+                                                    <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt"
+                                                      stroke-linejoin="none" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0"
+                                                      font-family="none" font-weight="none" font-size="none" text-anchor="none"
+                                                      style="mix-blend-mode: normal">
+                                                      <!-- circle outline -->
+                                                      <path transform="scale(5.33333,5.33333)"
+                                                        d="M44,24c0,11.045 -8.955,20 -20,20c-11.045,0 -20,-8.955 -20,-20c0,-11.045 8.955,-20 20,-20c11.045,0 20,8.955 20,20z"
+                                                        id="strokeMainSVG" fill="#d9d9d9" stroke="#d9d9d9" stroke-linejoin="round" />
+                                                        <g transform="scale(5.33333,5.33333)" fill="#ffffff" stroke="none" stroke-linejoin="miter">
+                                                          <!-- circle -->
+                                                          <path
+                                                            d="M44,24c0,11.045 -8.955,20 -20,20c-11.045,0 -20,-8.955 -20,-20c0,-11.045 8.955,-20 20,-20c11.045,0 20,8.955 20,20z" />
+                                                            <!-- checkmark -->
+                                                            <path
+                                                              d="M34.586,14.586l-13.57,13.586l-5.602,-5.586l-2.828,2.828l8.434,8.414l16.395,-16.414z" />
+                                                            </g>
+                                                          </g>
+                                                          <g fill="#d9d9d9" fill-rule="nonzero" stroke="none" stroke-width="none" stroke-linecap="butt"
+                                                            stroke-linejoin="none" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0"
+                                                            font-family="none" font-weight="none" font-size="none" text-anchor="none"
+                                                            style="mix-blend-mode: normal">
+                                                            <path
+                                                              d="M143.79,112.215c0,3.01333 -0.55667,6.1 -1.67,9.26c-1.10667,3.15333 -2.55667,6.32333 -4.35,9.51c-1.79333,3.18667 -3.79667,6.30333 -6.01,9.35c-2.22,3.04 -4.44,5.92667 -6.66,8.66l-4.18,3.67v0.34l5.46,-0.94h18.6v6.31h-33.96v-2.47c1.25333,-1.30667 2.76,-2.93 4.52,-4.87c1.76667,-1.93333 3.60333,-4.08 5.51,-6.44c1.90667,-2.36 3.78333,-4.86333 5.63,-7.51c1.84667,-2.64667 3.52333,-5.33333 5.03,-8.06c1.51333,-2.73333 2.72333,-5.43667 3.63,-8.11c0.91333,-2.67333 1.37,-5.20333 1.37,-7.59c0,-2.78667 -0.79667,-5.10667 -2.39,-6.96c-1.59333,-1.84667 -4.01333,-2.77 -7.26,-2.77c-2.16,0 -4.26333,0.44 -6.31,1.32c-2.04667,0.88 -3.81,1.89 -5.29,3.03l-2.82,-4.86c1.99333,-1.70667 4.35333,-3.04333 7.08,-4.01c2.73333,-0.96667 5.66333,-1.45 8.79,-1.45c2.44667,0 4.61,0.35333 6.49,1.06c1.88,0.71333 3.47333,1.72333 4.78,3.03c1.30667,1.30667 2.3,2.85667 2.98,4.65c0.68667,1.79333 1.03,3.74333 1.03,5.85z"
+                                                              id="strokeMainSVG" stroke="#d9d9d9" stroke-width="5.33333" stroke-linejoin="round" />
+                                                              <g stroke="none" stroke-width="1" stroke-linejoin="miter">
+                                                                <path
+                                                                  d="M143.79,112.215v0c0,3.01333 -0.55667,6.1 -1.67,9.26c-1.10667,3.15333 -2.55667,6.32333 -4.35,9.51c-1.79333,3.18667 -3.79667,6.30333 -6.01,9.35c-2.22,3.04 -4.44,5.92667 -6.66,8.66v0l-4.18,3.67v0.34l5.46,-0.94h18.6v6.31h-33.96v-2.47c1.25333,-1.30667 2.76,-2.93 4.52,-4.87c1.76667,-1.93333 3.60333,-4.08 5.51,-6.44c1.90667,-2.36 3.78333,-4.86333 5.63,-7.51c1.84667,-2.64667 3.52333,-5.33333 5.03,-8.06c1.51333,-2.73333 2.72333,-5.43667 3.63,-8.11c0.91333,-2.67333 1.37,-5.20333 1.37,-7.59v0c0,-2.78667 -0.79667,-5.10667 -2.39,-6.96c-1.59333,-1.84667 -4.01333,-2.77 -7.26,-2.77v0c-2.16,0 -4.26333,0.44 -6.31,1.32c-2.04667,0.88 -3.81,1.89 -5.29,3.03v0l-2.82,-4.86c1.99333,-1.70667 4.35333,-3.04333 7.08,-4.01c2.73333,-0.96667 5.66333,-1.45 8.79,-1.45v0c2.44667,0 4.61,0.35333 6.49,1.06c1.88,0.71333 3.47333,1.72333 4.78,3.03c1.30667,1.30667 2.3,2.85667 2.98,4.65c0.68667,1.79333 1.03,3.74333 1.03,5.85z" />
+                                                                </g>
+                                                              </g>
+                                                            </svg>
+                                                          } @else {
+                                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                              viewBox="0,0,256,256" width="256px" height="256px" fill-rule="nonzero">
+                                                              <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt"
+                                                                stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0"
+                                                                font-family="none" font-weight="none" font-size="none" text-anchor="none"
+                                                                style="mix-blend-mode: normal">
+                                                                <g transform="scale(5.33333,5.33333)">
+                                                                  <!-- Entregado_A green circle-->
+                                                                  <path
+                                                                    d="M44,24c0,11.045 -8.955,20 -20,20c-11.045,0 -20,-8.955 -20,-20c0,-11.045 8.955,-20 20,-20c11.045,0 20,8.955 20,20z"
+                                                                    fill="#147c12" />
+                                                                    <!-- checkmark -->
+                                                                    <path
+                                                                      d="M34.602,14.602l-13.602,13.597l-5.602,-5.598l-2.797,2.797l8.399,8.403l16.398,-16.402z"
+                                                                      fill="#ffffff" />
+                                                                    </g>
+                                                                  </g>
+                                                                </svg>
+                                                              }
+                                                              <ng-template #Entregado_B>
+                                                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                                  viewBox="0,0,256,256" width="256px" height="256px" fill-rule="nonzero">
+                                                                  <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt"
+                                                                    stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0"
+                                                                    font-family="none" font-weight="none" font-size="none" text-anchor="none"
+                                                                    style="mix-blend-mode: normal">
+                                                                    <g transform="scale(5.33333,5.33333)">
+                                                                      <!-- Entregado_B green circle-->
+                                                                      <path
+                                                                        d="M44,24c0,11.045 -8.955,20 -20,20c-11.045,0 -20,-8.955 -20,-20c0,-11.045 8.955,-20 20,-20c11.045,0 20,8.955 20,20z"
+                                                                        fill="#147c12" />
+                                                                        <!-- checkmark -->
+                                                                        <path
+                                                                          d="M34.602,14.602l-13.602,13.597l-5.602,-5.598l-2.797,2.797l8.399,8.403l16.398,-16.402z"
+                                                                          fill="#ffffff" />
+                                                                        </g>
+                                                                      </g>
+                                                                    </svg>
+                                                                  </ng-template>
+                                                                  <p class="step">Carga de imágenes</p>
+                                                                  @if (studentGradesData[0].imageSubmittedDate) {
+                                                                    <p class="step">
+                                                                    {{studentGradesData[0].imageSubmittedDate | date:'yyyy-MM-dd'}}</p>
+                                                                  }
+                                                                </div>
+                                                              </div>
+                                                              <div class="stepper-item third d-flex flex-row  justify-content-around"
+                                                                [class.completed-third]="studentGradesData[0].confirmedDate">
+                                                                <div class="d-flex flex-column align-items-center">
+                                                                  @if (!studentGradesData[0].confirmedDate) {
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                                      viewBox="0,0,256,256" heigth="256px"
+                                                                      width="256px" fill-rule="nonzero">
+                                                                      <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt"
+                                                                        stroke-linejoin="none" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0"
+                                                                        font-family="none" font-weight="none" font-size="none" text-anchor="none"
+                                                                        style="mix-blend-mode: normal">
+                                                                        <path transform="scale(5.33333,5.33333)"
+                                                                          d="M44,24c0,11.045 -8.955,20 -20,20c-11.045,0 -20,-8.955 -20,-20c0,-11.045 8.955,-20 20,-20c11.045,0 20,8.955 20,20z"
+                                                                          id="strokeMainSVG" fill="#d9d9d9" stroke="#d9d9d9" stroke-linejoin="round" />
+                                                                          <g transform="scale(5.33333,5.33333)" fill="#ffffff" stroke="none" stroke-linejoin="miter">
+                                                                            <!-- circle -->
+                                                                            <path
+                                                                              d="M44,24c0,11.045 -8.955,20 -20,20c-11.045,0 -20,-8.955 -20,-20c0,-11.045 8.955,-20 20,-20c11.045,0 20,8.955 20,20z" />
+                                                                              <!-- checkmark -->
+                                                                              <path
+                                                                                d="M34.586,14.586l-13.57,13.586l-5.602,-5.586l-2.828,2.828l8.434,8.414l16.395,-16.414z" />
+                                                                              </g>
+                                                                            </g>
+                                                                            <g fill="#d9d9d9" fill-rule="nonzero" stroke="none" stroke-width="none" stroke-linecap="butt"
+                                                                              stroke-linejoin="none" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0"
+                                                                              font-family="none" font-weight="none" font-size="none" text-anchor="none"
+                                                                              style="mix-blend-mode: normal">
+                                                                              <path
+                                                                                d="M124.075,152.4c1.93333,0 3.72333,-0.28333 5.37,-0.85c1.65333,-0.56667 3.07667,-1.40667 4.27,-2.52c1.19333,-1.10667 2.13333,-2.42667 2.82,-3.96c0.68,-1.54 1.02,-3.22 1.02,-5.04c0,-3.98 -1.18,-6.93667 -3.54,-8.87c-2.36,-1.94 -5.61667,-2.91 -9.77,-2.91h-6.32v-2.47l12.29,-18.94l3.93,-3.76l-5.55,0.85h-16.9v-6.31h30.47v2.47l-13.57,20.4l-2.99,2.47v0.17l2.91,-0.59c2.27333,0.05333 4.37667,0.46333 6.31,1.23c1.93333,0.77333 3.61,1.88333 5.03,3.33c1.42667,1.45333 2.53667,3.19 3.33,5.21c0.8,2.02 1.2,4.31 1.2,6.87c0,3.07333 -0.54,5.80333 -1.62,8.19c-1.08667,2.38667 -2.55333,4.39333 -4.4,6.02c-1.84667,1.62 -4.02333,2.85667 -6.53,3.71c-2.5,0.85333 -5.14333,1.28 -7.93,1.28c-2.56,0 -4.86333,-0.2 -6.91,-0.6c-2.05333,-0.4 -3.84667,-0.91333 -5.38,-1.54l1.79,-6.05c1.30667,0.62 2.85667,1.14333 4.65,1.57c1.79333,0.42667 3.8,0.64 6.02,0.64z"
+                                                                                id="strokeMainSVG" stroke="#d9d9d9" stroke-width="5.33333" stroke-linejoin="round" />
+                                                                                <g stroke="none" stroke-width="1" stroke-linejoin="miter">
+                                                                                  <path
+                                                                                    d="M124.075,152.4v0c1.93333,0 3.72333,-0.28333 5.37,-0.85c1.65333,-0.56667 3.07667,-1.40667 4.27,-2.52c1.19333,-1.10667 2.13333,-2.42667 2.82,-3.96c0.68,-1.54 1.02,-3.22 1.02,-5.04v0c0,-3.98 -1.18,-6.93667 -3.54,-8.87c-2.36,-1.94 -5.61667,-2.91 -9.77,-2.91v0h-6.32v-2.47l12.29,-18.94l3.93,-3.76l-5.55,0.85h-16.9v-6.31h30.47v2.47l-13.57,20.4l-2.99,2.47v0.17l2.91,-0.59c2.27333,0.05333 4.37667,0.46333 6.31,1.23c1.93333,0.77333 3.61,1.88333 5.03,3.33c1.42667,1.45333 2.53667,3.19 3.33,5.21c0.8,2.02 1.2,4.31 1.2,6.87v0c0,3.07333 -0.54,5.80333 -1.62,8.19c-1.08667,2.38667 -2.55333,4.39333 -4.4,6.02c-1.84667,1.62 -4.02333,2.85667 -6.53,3.71c-2.5,0.85333 -5.14333,1.28 -7.93,1.28v0c-2.56,0 -4.86333,-0.2 -6.91,-0.6c-2.05333,-0.4 -3.84667,-0.91333 -5.38,-1.54v0l1.79,-6.05c1.30667,0.62 2.85667,1.14333 4.65,1.57c1.79333,0.42667 3.8,0.64 6.02,0.64z" />
+                                                                                  </g>
+                                                                                </g>
+                                                                              </svg>
+                                                                            } @else {
+                                                                              <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                                                viewBox="0,0,256,256" width="256px" height="256px" fill-rule="nonzero">
+                                                                                <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt"
+                                                                                  stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0"
+                                                                                  font-family="none" font-weight="none" font-size="none" text-anchor="none"
+                                                                                  style="mix-blend-mode: normal">
+                                                                                  <g transform="scale(5.33333,5.33333)">
+                                                                                    <!-- confirmado green circle-->
+                                                                                    <path
+                                                                                      d="M44,24c0,11.045 -8.955,20 -20,20c-11.045,0 -20,-8.955 -20,-20c0,-11.045 8.955,-20 20,-20c11.045,0 20,8.955 20,20z"
+                                                                                      fill="#147c12" />
+                                                                                      <!-- checkmark -->
+                                                                                      <path
+                                                                                        d="M34.602,14.602l-13.602,13.597l-5.602,-5.598l-2.797,2.797l8.399,8.403l16.398,-16.402z"
+                                                                                        fill="#ffffff" />
+                                                                                      </g>
+                                                                                    </g>
+                                                                                  </svg>
+                                                                                }
+                                                                                <p class="step">Confirmado</p>
+                                                                                @if (studentGradesData[0].confirmedDate) {
+                                                                                  <p class="step step-date">{{
+                                                                                  studentGradesData[0].confirmedDate | date:'yyyy-MM-dd' }}</p>
+                                                                                }
+                                                                              </div>
+                                                                            </div>
+                                                                          </div>
+                                                                          <form [formGroup]="myForm">
+                                                                            <div class="container-fluid m-0 p-0" style="column-gap: 1.5rem">
+                                                                              @for (entry of studentGradesData; track entry; let i = $index) {
+                                                                                <ng-container formArrayName="gradeEntryFormRows"
+                                                                                  >
+                                                                                  <div class="row row-cols-1 row-cols-md-2 m-0">
+                                                                                    <div [formGroupName]="i" class="col p-0 my-auto">
+                                                                                      <div class="limit-date col p-0">
+                                                                                        @if (!studentGradesData[0].confirmedDate) {
+                                                                                          <p class="state">
+                                                                                            La fecha límite para subir tus calificaciones es
+                                                                                            <br><span>{{studentGradesData[0].gradesEntryEndDate | date: 'fullDate' :'es'}}</span>
+                                                                                          </p>
+                                                                                        } @else {
+                                                                                          <p class="text-danger">
+                                                                                            La calificación ha sido revisada y registrada. Cualquier cambio, favor de comunicarse a
+                                                                                            <a href="mailto:s.martinez@jovenesadelante.org"
+                                                                                            target="_blank">s.martinez&#64;jovenesadelante.org</a>
+                                                                                          </p>
+                                                                                        }
+                                                                                      </div>
+                                                                                      <div class="col p-0 d-flex flex-row align-items-center justify-content-center grade">
+                                                                                        <label for="gradePointAvg">Ingresa tu promedio: </label>
+                                                                                        <input class="form-control form-control-sm" formControlName="gradePointAvg" name="gradePointAvg"
+                                                                                          id="gradePointAvg"
+                                                                                          type="text" />
+                                                                                        </div>
+                                                                                        <div class="col p-0 d-flex flex-row justify-content-around button-wrapper mx-auto mt-3">
+                                                                                          <!--    <button class="btn btn-default m-0" [class.edit]="!studentGradesData[0].confirmedDate"
+                                                                                          [class.cancel]="studentGradesData[0].confirmedDate" (click)="editForm($event.target)">
+                                                                                          Editar
+                                                                                        </button> -->
+                                                                                        <button class="btn btn-default m-0 save" type="submit" (click)="saveAllChangedEntries()"
+                                                                                          [disabled]="myForm.pristine">
+                                                                                          Guardar
+                                                                                        </button>
+                                                                                      </div>
+                                                                                    </div>
+                                                                                    <!--  <p style="text-align: right;">app-grades
+                                                                                    <button [disabled]="myForm.pristine" type="submit" class="btn btn-primary"
+                                                                                    (click)="saveAllChangedEntries()">Guardar</button>
+                                                                                  </p> -->
+                                                                                  <div class="col p-0 grade-image-wrapper mt-4 text-right ">
+                                                                                    <!-- <h6 class="mb-3 text-center">Sube tu reporte de calificaciones en el recuadro de abajo</h6> -->
+                                                                                    <!-- hacer esto con la alerta y con el cuadro de abajo q nunca se muestra -->
+                                                                                    <!--  <h6 >Al arrastrar o seleccionar tu archivo, este se cargará y su nombre se mostrará
+                                                                                  debajo del recuadro. Hecho esto, tu archivo estará cargado y listo para revisión.</h6>
+                                                                                  <br> -->
+                                                                                  <app-grades-uploader [studentGradeId]=studentGradesData[0].studentGradeId
+                                                                                    [academicTermId]=studentGradesData[0].academicTermId
+                                                                                    (uploadSuccess)="onUploadSuccess()">
+                                                                                  </app-grades-uploader>
+                                                                                  <div class="img-wrapper p-1 text-left">
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 13 14" fill="none">
+                                                                                      <path d="M8.66734 0C7.78194 0 6.89655 0.367845 6.21948 1.03347L1.3932 5.79794C-0.464399 7.67219 -0.464399 10.7025 1.3932 12.5943C3.25079 14.4686 6.2542 14.4686 8.12916 12.5943L10.2992 10.4048L9.10136 9.19612L7.08751 11.1755L6.93127 11.4032C5.73338 12.6118 3.78898 12.6118 2.59109 11.4032C1.41056 10.2121 1.44528 8.28527 2.59109 7.07663L7.41737 2.25962C8.09443 1.57648 9.22288 1.57648 9.91731 2.25962C10.5944 2.94276 10.5597 4.02878 9.91731 4.72943L5.57713 9.05599C5.40352 9.23115 5.10839 9.23115 4.91742 9.05599C4.74382 8.88083 4.74382 8.58305 4.91742 8.39037L5.02159 8.33782L6.60141 6.69127L5.40352 5.48264L3.71953 7.18173C2.88622 8.02252 2.88622 9.40632 3.71953 10.2471C4.55285 11.0879 5.92435 11.1054 6.75766 10.2471L11.0978 5.9731C12.452 4.60682 12.452 2.39975 11.0978 1.05099C10.4208 0.367845 9.55273 0.0175164 8.64998 0.0175164L8.66734 0Z"
+                                                                                        fill="#001AFF" />
+                                                                                      </svg>
+                                                                                      <a class="align-middle ml-2"
+                                                                                        [hidden]="!entry?.imageSubmittedDate"
+                                                                                        href="{{staticUrlPrefix}}StudentGradesReports/{{entry.academicTermId}}/{{entry.studentGUId | uppercase }}.png"
+                                                                                      target="_blank">Archivo subido con éxito -- haga clic para revisar</a>
+                                                                                    </div>
+                                                                                    <small>*Si tu archivo no termina con .png haz clic <a
+                                                                                      href="https://imagen.online-convert.com/es/convertir-a-png" target="_blank"
+                                                                                    rel="noopener noreferrer">aquí</a></small>
+                                                                                  </div>
+                                                                                </div>
+                                                                              </ng-container>
+                                                                            }
+                                                                          </div>
+                                                                        </form>
+                                                                      </div>
+                                                                    }
+                                                                    <!-- end content -->
+                                                                  }
+                                                                </div>
+                                                              </div>
+                                                            </ng-container>
+                                                          </div>
+                                                        } @else {
+                                                          <h3 style="padding: 2em;">La entrada de calificaciones no está disponible ahora. </h3>
+                                                        }

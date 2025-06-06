@@ -8,8 +8,10 @@
         data-cy="period-selector"
         [(ngModel)]="selectedGradesPeriodId"
         (change)="setSelectedGradesPeriodId($event.target.value)"
-      >
-        <option *ngFor="let gradesProcessingPeriod of gradesProcessingPeriods" [value]="gradesProcessingPeriod.id">{{gradesProcessingPeriod.descriptor}}</option>
+        >
+        @for (gradesProcessingPeriod of gradesProcessingPeriods; track gradesProcessingPeriod) {
+          <option [value]="gradesProcessingPeriod.id">{{gradesProcessingPeriod.descriptor}}</option>
+        }
       </select>
     </span>
     <label for="startDateIndicator">Grade Entry&nbsp;Start:</label>
@@ -18,82 +20,93 @@
     <input type="text" id="endDateIndicator" [value]="entryEndDate" readonly />
   </div>
   <div class="card-body bg-white">
-    <span *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</span>
-    <span *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</span>
+    @if (errorMessage) {
+      <span class="alert alert-danger">{{ errorMessage }}</span>
+    }
+    @if (successMessage) {
+      <span class="alert alert-success">{{ successMessage }}</span>
+    }
 
-    <div [ngSwitch]="isLoading">
-      <div *ngSwitchCase="true" class="text-center col-md-4 col-md-offset-4">
-        <app-loading-container> </app-loading-container>
-      </div>
-      <div *ngSwitchCase="false">
-        <div *ngIf="gradesGivenEntryDTOs.length === 0" class="text-center">
-          [No Grades data found for this period]. Please select a different period.
+    <div>
+      @switch (isLoading) {
+        @case (true) {
+          <div class="text-center col-md-4 col-md-offset-4">
+            <app-loading-container> </app-loading-container>
+          </div>
+        }
+        @case (false) {
+          <div>
+            @if (gradesGivenEntryDTOs.length === 0) {
+              <div class="text-center">
+                [No Grades data found for this period]. Please select a different period.
+              </div>
+            }
+            @if (gradesGivenEntryDTOs.length > 0) {
+              <table  class="table-sm table-striped">
+                <thead>
+                  <tr>
+                    <!-- <td>Id</td> -->
+                    <th></th>
+                    <th></th>
+                    <th app-sortable-column="studentName" sort-direction="asc" (onSortColumn)="onSortColumn($event)">
+                      Student
+                    </th>
+                    <th app-sortable-column="gradesTurnedInDate" (onSortColumn)="onSortColumn($event)">Entered <br />Date</th>
+                    <th app-sortable-column="imageSubmittedDate" (onSortColumn)="onSortColumn($event)">Uploaded <br />Date</th>
+                    <th>View<br />Image</th>
+                    <th app-sortable-column="gradePointAvg" (onSortColumn)="onSortColumn($event)">GPA</th>
+                    <th app-sortable-column="confirmedDate" (onSortColumn)="onSortColumn($event)">Confirmed <br />Date</th>
+                    <th app-sortable-column="gradesTurnedInStatus" (onSortColumn)="onSortColumn($event)">Turned-In<br />Status</th>
+                    <th app-sortable-column="gradePointAvgStatus" (onSortColumn)="onSortColumn($event)">GPA<br />Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (entry of gradesGivenEntryDTOs; track entry; let i = $index) {
+                    <tr>
+                      <td>
+                        {{ i + 1 }}
+                      </td>
+                      <td (click)="gotoStudent(entry.studentGUId, entry.studentName)" class="link">
+                        Profile
+                      </td>
+                      <td (click)="editGradeEntryDetails(entry.studentGUId, entry.studentName)" class="link">
+                        {{ entry.studentName }}
+                      </td>
+                      <!-- <td>
+                      {{ entry.gradesEntryEndDate | truncateDate }}
+                    </td> -->
+                    <td>
+                      {{ entry.gradesTurnedInDate | truncateDate }}
+                    </td>
+                    <td>
+                      {{ entry.imageSubmittedDate | truncateDate }}
+                    </td>
+                    <td class="link">
+                      <div [hidden]="isViewLinkHidden(entry.imageSubmittedDate)">
+                        <a href= "{{staticUrlPrefix}}StudentGradesReports/{{entry.academicTermId}}/{{entry.studentGUId | uppercase }}.png"
+                        target="_blank">{{entry.studentGUId | trimGuid | uppercase  }}</a>
+                      </div>
+                    </td>
+                    <td>
+                      {{ entry.gradePointAvg }}
+                    </td>
+                    <td>
+                      {{ entry.confirmedDate | truncateDate }}
+                    </td>
+                    <td>
+                      {{ entry.gradesTurnedInStatus }}
+                    </td>
+                    <td>
+                      {{ entry.gradePointAvgStatus }}
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          }
         </div>
-        <table *ngIf="gradesGivenEntryDTOs.length > 0"  class="table-sm table-striped">
-          <thead>
-            <tr>
-              <!-- <td>Id</td> -->
-              <th></th>
-              <th></th>
-              <th app-sortable-column="studentName" sort-direction="asc" (onSortColumn)="onSortColumn($event)">
-                Student
-              </th>
-              <th app-sortable-column="gradesTurnedInDate" (onSortColumn)="onSortColumn($event)">Entered <br />Date</th>
-              <th app-sortable-column="imageSubmittedDate" (onSortColumn)="onSortColumn($event)">Uploaded <br />Date</th>
-              <th>View<br />Image</th>
-              <th app-sortable-column="gradePointAvg" (onSortColumn)="onSortColumn($event)">GPA</th>
-             <th app-sortable-column="confirmedDate" (onSortColumn)="onSortColumn($event)">Confirmed <br />Date</th>
-             <th app-sortable-column="gradesTurnedInStatus" (onSortColumn)="onSortColumn($event)">Turned-In<br />Status</th>
-             <th app-sortable-column="gradePointAvgStatus" (onSortColumn)="onSortColumn($event)">GPA<br />Status</th>
-
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let entry of gradesGivenEntryDTOs; let i = index">
-              <td>
-                {{ i + 1 }}
-              </td>
-              <td (click)="gotoStudent(entry.studentGUId, entry.studentName)" class="link">
-                Profile
-              </td>
-              <td (click)="editGradeEntryDetails(entry.studentGUId, entry.studentName)" class="link">
-                {{ entry.studentName }}
-              </td>
-              <!-- <td>
-                {{ entry.gradesEntryEndDate | truncateDate }}
-              </td> -->
-
-              <td>
-                {{ entry.gradesTurnedInDate | truncateDate }}
-              </td>
-              <td>
-                {{ entry.imageSubmittedDate | truncateDate }}
-              </td>
-              <td class="link">
-                <div [hidden]="isViewLinkHidden(entry.imageSubmittedDate)">
-                  <a href= "{{staticUrlPrefix}}StudentGradesReports/{{entry.academicTermId}}/{{entry.studentGUId | uppercase }}.png"
-                  target="_blank">{{entry.studentGUId | trimGuid | uppercase  }}</a>
-                </div>
-              </td>
-              <td>
-                {{ entry.gradePointAvg }}
-              </td>
-
-              <td>
-                {{ entry.confirmedDate | truncateDate }}
-              </td>
-
-              <td>
-                {{ entry.gradesTurnedInStatus }}
-              </td>
-              <td>
-                {{ entry.gradePointAvgStatus }}
-              </td>
-
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+      }
+    }
   </div>
+</div>
 </div>

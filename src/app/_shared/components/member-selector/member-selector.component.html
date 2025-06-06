@@ -1,15 +1,17 @@
 <!-- <label for="requesterRoleSelector">{{ memberTypeLabel }} Role: </label>
 <select id="requesterRoleSelector" [disabled]="true" class="form-control input-sm"
-        (change)="setSelectedRole($event.target.value)">
-        <option [value]="null">Select Role</option>
-        <option *ngFor="let roleId of requesterRoles" [value]="roleId.value">{{roleId.label}}</option>
+  (change)="setSelectedRole($event.target.value)">
+  <option [value]="null">Select Role</option>
+  <option *ngFor="let roleId of requesterRoles" [value]="roleId.value">{{roleId.label}}</option>
 </select> -->
 
 <label for="requesterSelector">{{ memberTypeLabel }}: </label>
 <select id="MemberSelector" [disabled]="!haveMemberType" class="form-control input-sm"
-        (change)="setSelectedMember($event.target.value)"
-        [ngModel] = currMemberId
-        >
-        <option [value]="null">Select Member</option>
-        <option *ngFor="let member of members" [value]="member.memberId">{{member.memberName}}</option>
+  (change)="setSelectedMember($event.target.value)"
+  [ngModel] = currMemberId
+  >
+  <option [value]="null">Select Member</option>
+  @for (member of members; track member) {
+    <option [value]="member.memberId">{{member.memberName}}</option>
+  }
 </select>

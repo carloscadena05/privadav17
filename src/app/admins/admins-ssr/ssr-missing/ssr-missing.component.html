@@ -1,36 +1,48 @@
 <div class="card-body bg-white">
-  <span *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</span>
-  <span *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</span>
+  @if (errorMessage) {
+    <span class="alert alert-danger">{{ errorMessage }}</span>
+  }
+  @if (successMessage) {
+    <span class="alert alert-success">{{ successMessage }}</span>
+  }
   <div>
     <div class="controls">
       <!-- <span class="checkboxes">
-          &nbsp;&nbsp;<label><input type="checkbox" [(ngModel)]="displayOriginalFields">&nbsp;<span>Display Partial
-              Description</span></label>
-        </span> -->
-    </div>
-    <!-- <app-ssr-status-counts [year]=selectedYear [period]=selectedPeriod>
-      </app-ssr-status-counts> -->
-  </div>
+      &nbsp;&nbsp;<label><input type="checkbox" [(ngModel)]="displayOriginalFields">&nbsp;<span>Display Partial
+    Description</span></label>
+  </span> -->
+</div>
+<!-- <app-ssr-status-counts [year]=selectedYear [period]=selectedPeriod>
+</app-ssr-status-counts> -->
+</div>
 
-  <div [ngSwitch]="isLoading">
-    <div *ngSwitchCase="true" class="text-center col-md-4 col-md-offset-4">
-      <app-loading-container> </app-loading-container>
-    </div>
-    <div *ngSwitchCase="false">
-      <div class="row" style="margin-top: 2px" *ngFor="let s of studentMinis; let i = index">
-        <div class="col-md-12">
-          <div class="row mx-auto" id="{{ 'id' + s.studentGUId }}">
-            &nbsp;
-            <span (click)="gotoStudent(s.studentGUId, s.studentName)" class="padded link">
-              {{ s.studentName }}
-            </span>
-            <span class="padded">
-              [
-              {{ s.email }} ]
-            </span>
-          </div>
-        </div>
+<div>
+  @switch (isLoading) {
+    @case (true) {
+      <div class="text-center col-md-4 col-md-offset-4">
+        <app-loading-container> </app-loading-container>
       </div>
-    </div>
-  </div>
+    }
+    @case (false) {
+      <div>
+        @for (s of studentMinis; track s; let i = $index) {
+          <div class="row" style="margin-top: 2px">
+            <div class="col-md-12">
+              <div class="row mx-auto" id="{{ 'id' + s.studentGUId }}">
+                &nbsp;
+                <span (click)="gotoStudent(s.studentGUId, s.studentName)" class="padded link">
+                  {{ s.studentName }}
+                </span>
+                <span class="padded">
+                  [
+                  {{ s.email }} ]
+                </span>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  }
+</div>
 </div>

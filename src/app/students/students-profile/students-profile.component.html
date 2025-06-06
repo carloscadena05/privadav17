@@ -1,108 +1,114 @@
-<app-alert (didClose)="closeAlert($event)" [isShown]="successAlert" [type]="'success'" *ngIf="successAlert"></app-alert>
-<app-alert (didClose)="closeAlert($event)" [isShown]="errorAlert" [type]="'error'" *ngIf="errorAlert"></app-alert>
+@if (successAlert) {
+  <app-alert (didClose)="closeAlert($event)" [isShown]="successAlert" [type]="'success'"></app-alert>
+}
+@if (errorAlert) {
+  <app-alert (didClose)="closeAlert($event)" [isShown]="errorAlert" [type]="'error'"></app-alert>
+}
 
-<div [ngSwitch]="isLoading" class="py-4 px-3 px-md-5 ">
-      <div *ngSwitchCase="true" class="  ">
-            <app-loading-container>
-            </app-loading-container>
+<div class="py-4 px-3 px-md-5 ">
+  @switch (isLoading) {
+    @case (true) {
+      <div class="  ">
+        <app-loading-container>
+        </app-loading-container>
       </div>
-
-      <div *ngSwitchCase="false">
-            <form [formGroup]="myForm" class="container-fluid m-0 p-0">
-                  <label class="main-label d-block m-0 ">Información básica y de contacto</label>
-                  <div class="px-3 col">
-                        <div class="row row-cols-1 row-cols-md-2">
-                              <div class="col">
-                                    <label class="sub-label " for="firstNames">Nombre(s)</label>
-                                    <input class="form-control form-control-sm" id="firstNames"
-                                          formControlName="firstNames" type="text" placeholder="Nombre(s)"
-                                          maxlength="30" />
+    }
+    @case (false) {
+      <div>
+        <form [formGroup]="myForm" class="container-fluid m-0 p-0">
+          <label class="main-label d-block m-0 ">Información básica y de contacto</label>
+          <div class="px-3 col">
+            <div class="row row-cols-1 row-cols-md-2">
+              <div class="col">
+                <label class="sub-label " for="firstNames">Nombre(s)</label>
+                <input class="form-control form-control-sm" id="firstNames"
+                  formControlName="firstNames" type="text" placeholder="Nombre(s)"
+                  maxlength="30" />
                                     <app-display-errors control="firstNames" class="red" [errors]="{
                                           'required': 'Se requiere el(los) nombre(s).',
                                           'maxlength': 'El(los) nombre(s) del estudiante no puede exceder los 30 caracteres de longitud.'
                                     }"></app-display-errors>
-                              </div>
-                              <div class="col">
-                                    <label class="sub-label" for="lastNames">Apellido(s)</label>
-                                    <input class="form-control form-control-sm" id="lastNames"
-                                          formControlName="lastNames" type="text" placeholder="Apellido(s)"
-                                          maxlength="30" />
+                </div>
+                <div class="col">
+                  <label class="sub-label" for="lastNames">Apellido(s)</label>
+                  <input class="form-control form-control-sm" id="lastNames"
+                    formControlName="lastNames" type="text" placeholder="Apellido(s)"
+                    maxlength="30" />
                                     <app-display-errors control="lastNames" class="red" [errors]="{
                                     'required': 'Se requiere el(los) apellido(s)',
                                     'maxlength': 'El(los) apellido(s) del estudiante no puede exceder los 30 caracteres de longitud.'
                               }"></app-display-errors>
-                              </div>
-                              <div class="col">
-                                    <label class="sub-label" for="email">Correo electrónico</label>
-                                    <input class="form-control form-control-sm" id="email" formControlName="email"
-                                          type="text" placeholder="Correo electrónico: correo@electrónico.com" required
-                                          maxlength="50" minlength="3" />
+                  </div>
+                  <div class="col">
+                    <label class="sub-label" for="email">Correo electrónico</label>
+                    <input class="form-control form-control-sm" id="email" formControlName="email"
+                      type="text" placeholder="Correo electrónico: correo@electrónico.com" required
+                      maxlength="50" minlength="3" />
                                     <app-display-errors control="email" class="red" [errors]="{
                                     'required': 'Se requiere el correo electrónico.',
                                     'maxlength': 'El correo electrónico del estudiante no puede exceder los 50 caracteres de longitud.',
                                     'minlength': 'El correo electrónico del estudiante no puede ser menor de 7 caracteres de longitud.'
                               }"></app-display-errors>
-                              </div>
-                              <div class="col">
-                                    <label class="sub-label" for="cellPhone">Número de Teléfono</label>
-                                    <input class="form-control form-control-sm" id="cellPhone"
-                                          formControlName="cellPhone" type="text"
-                                          placeholder="Número de teléfono: ###-###-####" required maxlength="13"
-                                          minlength="7" />
+                    </div>
+                    <div class="col">
+                      <label class="sub-label" for="cellPhone">Número de Teléfono</label>
+                      <input class="form-control form-control-sm" id="cellPhone"
+                        formControlName="cellPhone" type="text"
+                        placeholder="Número de teléfono: ###-###-####" required maxlength="13"
+                        minlength="7" />
                                     <app-display-errors control="cellPhone" class="red" [errors]="{
                                           'required': 'Se requiere el número de teléfono.',
                                           'minlength': 'El número de teléfono debe tener al menos 7 caracteres de longitud.',
                                           'maxlength': 'El número de teléfono no puede exceder de 13 caracteres de longitud.'
                                     }"></app-display-errors>
-                              </div>
-                        </div>
+                      </div>
+                    </div>
                   </div>
                   <label class="main-label d-block m-0 mt-3">Dirección donde vives en San Miguel</label>
                   <div class="px-3 col">
-                        <div class="row row-cols-1 row-cols-md-2">
-                              <div class="col">
-                                    <label class="sub-label" for="smA_Address">Calle y número</label>
-                                    <input class="form-control form-control-sm" id="smA_Address"
-                                          formControlName="smA_Address" type="text" placeholder="Dirección y número"
-                                          required maxlength="50" minlength="3" />
+                    <div class="row row-cols-1 row-cols-md-2">
+                      <div class="col">
+                        <label class="sub-label" for="smA_Address">Calle y número</label>
+                        <input class="form-control form-control-sm" id="smA_Address"
+                          formControlName="smA_Address" type="text" placeholder="Dirección y número"
+                          required maxlength="50" minlength="3" />
                                     <app-display-errors control="smA_Address" class="red" [errors]="{
                                           'required': 'Se requiere la dirección.',
                                           'minlength': 'La dirección debe tener al menos 3 caracteres de longitud.',
                                           'maxlength': 'La dirección no puede exceder de 50 caracteres de longitud.'
                                     }"></app-display-errors>
-                              </div>
-                              <div class="col">
-                                    <label class="sub-label" for="colonia">Colonia/Comunidad</label>
-                                    <input class="form-control form-control-sm" id="colonia" formControlName="colonia"
-                                          type="text" placeholder="Colonia" required maxlength="50" minlength="3" />
+                        </div>
+                        <div class="col">
+                          <label class="sub-label" for="colonia">Colonia/Comunidad</label>
+                          <input class="form-control form-control-sm" id="colonia" formControlName="colonia"
+                            type="text" placeholder="Colonia" required maxlength="50" minlength="3" />
                                     <app-display-errors control="colonia" class="red" [errors]="{
                                     'required': 'Se requiere la colonia.',
                                     'minlength': 'La colonia debe tener al menos 3 caracteres de longitud.',
                                     'maxlength': 'La colonia no puede exceder de 50 caracteres de longitud.'
                               }"></app-display-errors>
-                              </div>
+                          </div>
                         </div>
-                  </div>
-
-                  <label class="main-label d-block m-0 mt-3">Dirección donde vives en el lugar que estudias</label>
-                  <div class="px-3 col">
+                      </div>
+                      <label class="main-label d-block m-0 mt-3">Dirección donde vives en el lugar que estudias</label>
+                      <div class="px-3 col">
                         <div class="row row-cols-1 row-cols-md-2">
-                              <div class="col">
-                                    <label class="sub-label" for="nonSMA_Address">Dirección completa</label>
-                                    <input class="form-control form-control-sm" id="nonSMA_Address"
-                                          formControlName="nonSMA_Address" type="text" placeholder="Dirección y número"
-                                          required maxlength="50" minlength="3" />
+                          <div class="col">
+                            <label class="sub-label" for="nonSMA_Address">Dirección completa</label>
+                            <input class="form-control form-control-sm" id="nonSMA_Address"
+                              formControlName="nonSMA_Address" type="text" placeholder="Dirección y número"
+                              required maxlength="50" minlength="3" />
                                     <app-display-errors control="nonSMA_Address" class="red" [errors]="{
                                           'required': 'Se requiere la dirección.',
                                           'minlength': 'La dirección debe tener al menos 3 caracteres de longitud.',
                                           'maxlength': 'La dirección no puede exceder de 50 caracteres de longitud.'
                                     }"></app-display-errors>
-                              </div>
-                              <div class="col">
-                                    <label class="sub-label" for="nonSMA_City">Ciudad</label>
-                                    <input class="form-control form-control-sm" id="nonSMA_City"
-                                          formControlName="nonSMA_City" type="text" placeholder="Ciudad donde estudia"
-                                          required maxlength="50" minlength="3" />
+                            </div>
+                            <div class="col">
+                              <label class="sub-label" for="nonSMA_City">Ciudad</label>
+                              <input class="form-control form-control-sm" id="nonSMA_City"
+                                formControlName="nonSMA_City" type="text" placeholder="Ciudad donde estudia"
+                                required maxlength="50" minlength="3" />
                                     <app-display-errors control="nonSMA_City" class="red" [errors]="{
                                           'required': 'Se requiere la ciudad.',
                                           'minlength': 'La ciudad debe tener al menos 3 caracteres de longitud.',
@@ -110,59 +116,59 @@
                                     }"></app-display-errors>
                               </div>
                               <div class="col">
-                                    <label class="sub-label" for="nonSMA_StateProvince">Estado</label>
-                                    <input class="form-control form-control-sm" id="nonSMA_StateProvince"
-                                          formControlName="nonSMA_StateProvince" type="text"
-                                          placeholder="Estado donde estudia" required maxlength="50" minlength="3" />
+                                <label class="sub-label" for="nonSMA_StateProvince">Estado</label>
+                                <input class="form-control form-control-sm" id="nonSMA_StateProvince"
+                                  formControlName="nonSMA_StateProvince" type="text"
+                                  placeholder="Estado donde estudia" required maxlength="50" minlength="3" />
                                     <app-display-errors control="nonSMA_StateProvince" class="red" [errors]="{
                                           'required': 'Se requiere el estado.',
                                           'minlength': 'El estado debe tener al menos 3 caracteres de longitud.',
                                           'maxlength': 'El estado no puede exceder de 50 caracteres de longitud.'
                                     }"></app-display-errors>
-                              </div>
-                              <div class="col">
-                                    <label class="sub-label" for="nonSMA_PostalCode">Código Postal</label>
-                                    <input class="form-control form-control-sm" id="nonSMA_PostalCode"
-                                          formControlName="nonSMA_PostalCode" type="text" placeholder="Código Postal"
-                                          required maxlength="7" minlength="3" />
+                                </div>
+                                <div class="col">
+                                  <label class="sub-label" for="nonSMA_PostalCode">Código Postal</label>
+                                  <input class="form-control form-control-sm" id="nonSMA_PostalCode"
+                                    formControlName="nonSMA_PostalCode" type="text" placeholder="Código Postal"
+                                    required maxlength="7" minlength="3" />
                                     <app-display-errors control="nonSMA_PostalCode" class="red" [errors]="{
                                           'required': 'Se requiere el código postal.',
                                           'minlength': 'El código postal debe tener al menos 3 caracteres de longitud.',
                                           'maxlength': 'El código postal no puede exceder de 7 caracteres de longitud.'
                                     }"></app-display-errors>
-                              </div>
-                              <div class="col mt-3" >
+                                  </div>
+                                  <div class="col mt-3" >
                                     <div style="max-width: 355px" class="mb-2">
-                                          <div class="d-flex flex-row justify-content-around">
-                                                <button class="btn  m-0" [class.edit]="myForm.disabled"
-                                                      [class.cancel]="!myForm.disabled" (click)="editForm($event.target)">
-                                                      Editar
-                                                </button>
-                                                <button class="btn  m-0 save" (click)="saveMyForm()"
-                                                      [disabled]="!myForm.valid">
-                                                      Guardar
-                                                </button>
-                                          </div>
-
+                                      <div class="d-flex flex-row justify-content-around">
+                                        <button class="btn  m-0" [class.edit]="myForm.disabled"
+                                          [class.cancel]="!myForm.disabled" (click)="editForm($event.target)">
+                                          Editar
+                                        </button>
+                                        <button class="btn  m-0 save" (click)="saveMyForm()"
+                                          [disabled]="!myForm.valid">
+                                          Guardar
+                                        </button>
+                                      </div>
                                     </div>
                                     <span class="red " [hidden]="myForm.valid || myForm.disabled">Todos los campos deben ser
-                                          completados antes de
-                                          guardar.</span>
+                                      completados antes de
+                                    guardar.</span>
+                                  </div>
+                                </div>
                               </div>
-                        </div>
-                  </div>
-                  <!--
-      <label for="englishSkillLevelId">Nivel de Inglés:</label>
-      <select formControlName="englishSkillLevelId"
-              class="form-control form-control-sm">
-      <option *ngFor="let status of languageStatuses" [value]="status.value">{{status.label}}</option>
-      </select>
-      <app-display-errors control="englishSkillLevelId" class="red"
+                              <!--
+                              <label for="englishSkillLevelId">Nivel de Inglés:</label>
+                              <select formControlName="englishSkillLevelId"
+                                class="form-control form-control-sm">
+                                <option *ngFor="let status of languageStatuses" [value]="status.value">{{status.label}}</option>
+                              </select>
+                              <app-display-errors control="englishSkillLevelId" class="red"
                           [errors]="{
                 'required': 'Se requiere el nivel de Inglés'
       }"></app-display-errors>
--->
-
-            </form>
-      </div>
-</div>
+                              -->
+                            </form>
+                          </div>
+                        }
+                      }
+                    </div>

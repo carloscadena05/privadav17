@@ -3,54 +3,64 @@
     Sponsor Groups
   </div>
   <div class="card-body bg-white">
-    <span *ngIf="errorMessage" class="alert alert-danger">{{errorMessage}}</span>
-    <span *ngIf="successMessage" class="alert alert-success">{{successMessage}}</span>
+    @if (errorMessage) {
+      <span class="alert alert-danger">{{errorMessage}}</span>
+    }
+    @if (successMessage) {
+      <span class="alert alert-success">{{successMessage}}</span>
+    }
 
 
-    <div [ngSwitch]="isLoading">
-      <div *ngSwitchCase="true" class="text-center col-md-4 col-md-offset-4">
-        <app-loading-container>
-        </app-loading-container>
-      </div>
-      <div *ngSwitchCase="false">
-        <table appSortableTable class="table-sm table-striped">
-
-          <thead>
-            <tr>
-              <!--<th app-sortable-column="mentorName" (onSortColumn)="onSortColumn($event)">Id</th>-->
-              <th></th>
-              <th app-sortable-column="sponsorGroupName" sort-direction="asc" (onSortColumn)="onSortColumn($event)">
-                Sponsor Group</th>
-              <th app-sortable-column="sponsorGroupMemberName" (onSortColumn)="onSortColumn($event)">Group Member Name
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let group of sponsorGroups, let i = index">
-              <td>
-                {{ i+1 }}
-              </td>
-              <td>
-                {{ group.sponsorGroupName }} <span (click)="editSponsorGroup(group.sponsorGroupId)" class="link">
-                  Edit</span>
-              </td>
-              <td>
-                {{ group.sponsorGroupMemberName }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="form-group">
-          <label for="SponsorGroupName">Add new Sponsor Group</label>
-          <input id="SponsorGroupName" type="text"
-                 #SponsorGroupName
-                 class="form-control form-control-sm" placeholder="Sponsor Group Name" />
-          <button class="btn btn-primary" (click)="addNewSponsorGroup(SponsorGroupName.value)">
-            Save
-          </button>
-        </div>
-
-      </div>
+    <div>
+      @switch (isLoading) {
+        @case (true) {
+          <div class="text-center col-md-4 col-md-offset-4">
+            <app-loading-container>
+            </app-loading-container>
+          </div>
+        }
+        @case (false) {
+          <div>
+            <table appSortableTable class="table-sm table-striped">
+              <thead>
+                <tr>
+                  <!--<th app-sortable-column="mentorName" (onSortColumn)="onSortColumn($event)">Id</th>-->
+                  <th></th>
+                  <th app-sortable-column="sponsorGroupName" sort-direction="asc" (onSortColumn)="onSortColumn($event)">
+                  Sponsor Group</th>
+                  <th app-sortable-column="sponsorGroupMemberName" (onSortColumn)="onSortColumn($event)">Group Member Name
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (group of sponsorGroups; track group; let i = $index) {
+                  <tr>
+                    <td>
+                      {{ i+1 }}
+                    </td>
+                    <td>
+                      {{ group.sponsorGroupName }} <span (click)="editSponsorGroup(group.sponsorGroupId)" class="link">
+                    Edit</span>
+                  </td>
+                  <td>
+                    {{ group.sponsorGroupMemberName }}
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+          <div class="form-group">
+            <label for="SponsorGroupName">Add new Sponsor Group</label>
+            <input id="SponsorGroupName" type="text"
+              #SponsorGroupName
+              class="form-control form-control-sm" placeholder="Sponsor Group Name" />
+              <button class="btn btn-primary" (click)="addNewSponsorGroup(SponsorGroupName.value)">
+                Save
+              </button>
+            </div>
+          </div>
+        }
+      }
     </div>
   </div>
 

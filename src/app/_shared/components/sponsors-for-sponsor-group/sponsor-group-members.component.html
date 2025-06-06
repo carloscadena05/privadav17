@@ -1,8 +1,11 @@
-<div *ngIf="errorMessage" class="alert alert-danger">{{errorMessage}}</div>
-<div *ngIf="!errorMessage">
-  <style>
-    .btn-group-xs>.btn,
-    .btn-xs {
+@if (errorMessage) {
+  <div class="alert alert-danger">{{errorMessage}}</div>
+}
+@if (!errorMessage) {
+  <div>
+    <style>
+      .btn-group-xs>.btn,
+      .btn-xs {
       padding: .0rem .1rem;
       font-size: .875rem;
       line-height: .3;
@@ -16,21 +19,27 @@
       </tr>
     </thead>
     <tbody>
-
-      <tr *ngFor="let item of sponsorGroupMembers, let i = index"
+      @for (item of sponsorGroupMembers; track item; let i = $index) {
+        <tr
           id="item.sponsorGroupMemberId">
-        <td>
-          <div *ngIf="item.sponsorGroupMemberName">
-            <span class="link" title="Delete"
+          <td>
+            @if (item.sponsorGroupMemberName) {
+              <div>
+                <span class="link" title="Delete"
                   (click)="deleteSponsorGroupMember(item.sponsorGroupId, item.sponsorGroupMemberId)">
-               <b>✖</b>
-            </span>&nbsp; {{item.sponsorGroupMemberName}}
-          </div>
-          <div *ngIf="!item.sponsorGroupMemberName">
-            (no member assigned currently)
-          </div>
-        </td>
-      </tr>
+                  <b>✖</b>
+                </span>&nbsp; {{item.sponsorGroupMemberName}}
+              </div>
+            }
+            @if (!item.sponsorGroupMemberName) {
+              <div>
+                (no member assigned currently)
+              </div>
+            }
+          </td>
+        </tr>
+      }
     </tbody>
   </table>
 </div>
+}

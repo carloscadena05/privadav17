@@ -1,46 +1,49 @@
 <div class="card-body bg-white">
 
 
-  <div class="row" style="border-bottom: 3px solid #ccc; margin-top: 2px;" *ngFor="let mr of mentorReports2; let i = index">
-    <div class="col-md-12">
-      <div class="row">
-
-        <span class="padded">
-          &nbsp;Report Month:
-          {{ mr.lastContactMonth | alphaMonth }}-{{ mr.lastContactYear }}
-        </span>
-        <span class="padded">
-          &nbsp;Report Date:
-          {{ mr.reportDateTime | truncateDate }}
-        </span>
-        <span class="padded">
-          &nbsp;Overall Situation:
-          <img src="{{ emojis[mr.emoji + 1] }}" width="28px" />
-        </span>
-        <span class="padded">
-          &nbsp;Communication:
-          <img src="{{ emojis[mr.communication + 1] }}" width="28px" />
-        </span>                                                          <!-- not copied to QR -->
-        <span *ngIf="i === 0 && latestReportIsCurrentMonth && mr.reviewedStatusId !== 2148" class="padded">
-          <span class="btn btn-primary" (click)="monthlyReportEdit(mr.mentorReportId)" style="margin-left: 10px">
-            Edit Report / Editar informe
+  @for (mr of mentorReports2; track mr; let i = $index) {
+    <div class="row" style="border-bottom: 3px solid #ccc; margin-top: 2px;">
+      <div class="col-md-12">
+        <div class="row">
+          <span class="padded">
+            &nbsp;Report Month:
+            {{ mr.lastContactMonth | alphaMonth }}-{{ mr.lastContactYear }}
           </span>
-        </span>
-      </div>
-      <div class="row">
-        <div class="col-md-2 padded">
-          &nbsp;Narrative (English):
+          <span class="padded">
+            &nbsp;Report Date:
+            {{ mr.reportDateTime | truncateDate }}
+          </span>
+          <span class="padded">
+            &nbsp;Overall Situation:
+            <img src="{{ emojis[mr.emoji + 1] }}" width="28px" />
+          </span>
+          <span class="padded">
+            &nbsp;Communication:
+            <img src="{{ emojis[mr.communication + 1] }}" width="28px" />
+          </span>                                                          <!-- not copied to QR -->
+          @if (i === 0 && latestReportIsCurrentMonth && mr.reviewedStatusId !== 2148) {
+            <span class="padded">
+              <span class="btn btn-primary" (click)="monthlyReportEdit(mr.mentorReportId)" style="margin-left: 10px">
+                Edit Report / Editar informe
+              </span>
+            </span>
+          }
         </div>
-        <div class="col-md-10" [innerHTML]="mr.narrative_English | unsafeHtml">
+        <div class="row">
+          <div class="col-md-2 padded">
+            &nbsp;Narrative (English):
+          </div>
+          <div class="col-md-10" [innerHTML]="mr.narrative_English | unsafeHtml">
+          </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col-md-2 padded">
-          &nbsp;Narrative (Spanish):
-        </div>
-        <div class="col-md-10" [innerHTML]="mr.narrative_Spanish | unsafeHtml">
+        <div class="row">
+          <div class="col-md-2 padded">
+            &nbsp;Narrative (Spanish):
+          </div>
+          <div class="col-md-10" [innerHTML]="mr.narrative_Spanish | unsafeHtml">
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  }
 </div>

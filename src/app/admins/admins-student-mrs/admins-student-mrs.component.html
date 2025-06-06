@@ -1,29 +1,39 @@
 <!-- <div class="btn btn-primary btn-xs"
-     (click)="location.back()">
-  Back
+(click)="location.back()">
+Back
 </div> -->
 <div>&nbsp;</div>
 
-<div *ngIf="errorMessage" class="alert alert-danger">
+@if (errorMessage) {
+  <div class="alert alert-danger">
   {{errorMessage}}</div>
+}
 
-<div [ngSwitch]="isLoading">
-  <div *ngSwitchCase="true" class="text-center col-md-4 col-md-offset-4">
-    <app-loading-container>
-    </app-loading-container>
-  </div>
-  <div *ngSwitchCase="false">
-    <div *ngIf="!errorMessage" class="card bg-primary">
-      <div class="card-header text-white" style="font-size:large">
-        <span>Past Reports for </span>
-        <span>{{studentName}}</span>
-        <span>
-          <span class="btn btn-default active" (click)="createProxyReport()" style="margin: 4px 0 0 10px">
-            Create Proxy Report
-          </span>
-        </span>
+<div>
+  @switch (isLoading) {
+    @case (true) {
+      <div class="text-center col-md-4 col-md-offset-4">
+        <app-loading-container>
+        </app-loading-container>
       </div>
-      <app-mentor-reports2-list [mentorReports2]="mentorReports2"></app-mentor-reports2-list>
-    </div>
-  </div>
+    }
+    @case (false) {
+      <div>
+        @if (!errorMessage) {
+          <div class="card bg-primary">
+            <div class="card-header text-white" style="font-size:large">
+              <span>Past Reports for </span>
+              <span>{{studentName}}</span>
+              <span>
+                <span class="btn btn-default active" (click)="createProxyReport()" style="margin: 4px 0 0 10px">
+                  Create Proxy Report
+                </span>
+              </span>
+            </div>
+            <app-mentor-reports2-list [mentorReports2]="mentorReports2"></app-mentor-reports2-list>
+          </div>
+        }
+      </div>
+    }
+  }
 </div>

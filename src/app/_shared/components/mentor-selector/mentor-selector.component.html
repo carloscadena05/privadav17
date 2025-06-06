@@ -1,7 +1,9 @@
 <label for="requesterSelector">Mentor: </label>
 <select id="MemberSelector" class="form-control input-sm"
-        (change)="setSelectedMember($event.target.value)"
-        [(ngModel)]="initialMemberGUId">
+  (change)="setSelectedMember($event.target.value)"
+  [(ngModel)]="initialMemberGUId">
   <option [value]="null">Select Member</option>
-  <option *ngFor="let member of members" [value]="member.memberGUId">{{member.memberName}}</option>
+  @for (member of members; track member) {
+    <option [value]="member.memberGUId">{{member.memberName}}</option>
+  }
 </select>

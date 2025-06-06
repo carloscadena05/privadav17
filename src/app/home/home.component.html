@@ -1,30 +1,38 @@
 <div class="bodytext">
   <h3>Welcome to the Jovenes Adelante Privada website.</h3>
-  <div *ngIf="!auth.loggedIn">
-     <p>
-      <b>&gt;&gt;For assistance logging in please see <a href = "https://www.youtube.com/watch?v=vyaV7gRrbaI">this video</a></b>.
-      <br />If you have any difficulties logging in please contact <a href='mailto:chris@kapilla.net'>webmaster</a>
-    </p>
-  </div>
-  <div *ngIf="auth.loggedIn">
-    <p>Please select your member type from the menu above (Admin, Mentor, etc.).
-      <br /> If you are not {{auth.nickname}}, please <a href="#" (click)="onLogoutClick($event)">Log Out</a> and log in
-      with your email address.
-    </p>
-  </div>
+  @if (!auth.loggedIn) {
+    <div>
+      <p>
+        <b>&gt;&gt;For assistance logging in please see <a href = "https://www.youtube.com/watch?v=vyaV7gRrbaI">this video</a></b>.
+        <br />If you have any difficulties logging in please contact <a href='mailto:chris@kapilla.net'>webmaster</a>
+      </p>
+    </div>
+  }
+  @if (auth.loggedIn) {
+    <div>
+      <p>Please select your member type from the menu above (Admin, Mentor, etc.).
+        <br /> If you are not {{auth.nickname}}, please <a href="#" (click)="onLogoutClick($event)">Log Out</a> and log in
+        with your email address.
+      </p>
+    </div>
+  }
   <br /><br />
   <h3>Bienvenidos a la Web de Jovenes Adelante Privada.</h3>
-  <div *ngIf="!auth.loggedIn">
-    <p>
-      <b>&gt;&gt;Para asistencia al iniciar sesión por favor vea <a href = "https://www.youtube.com/watch?v=sAM2kdxudQE">este video</a></b>.
-      <br />Si tienes alguna dificultad iniciar sesión, póngase en contacto con <a
-         href='mailto:chris@kapilla.net'>webmaster</a>.
+  @if (!auth.loggedIn) {
+    <div>
+      <p>
+        <b>&gt;&gt;Para asistencia al iniciar sesión por favor vea <a href = "https://www.youtube.com/watch?v=sAM2kdxudQE">este video</a></b>.
+        <br />Si tienes alguna dificultad iniciar sesión, póngase en contacto con <a
+      href='mailto:chris@kapilla.net'>webmaster</a>.
     </p>
   </div>
-  <div *ngIf="auth.loggedIn">
+}
+@if (auth.loggedIn) {
+  <div>
     <p>Por favor seleccione su tipo de miembro desde el menú de arriba (Admin, Estudiante, etc.).
       <br />Si no eres {{auth.nickname}}, por favor, <a href="#" (click)="onLogoutClick($event)">desconectarse</a> e inicie sesión
       con su dirección de correo electrónico.
     </p>
   </div>
+}
 </div>

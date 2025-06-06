@@ -7,29 +7,37 @@
     <span style="margin-left: 2rem">
       <label for="yearSelector">&nbsp;Payment Year/Month:</label>
       <select name="yearSelector" [(ngModel)]="selectedPCSYear"
-              (change)="setSelectedPCSYear($event.target.value)">
+        (change)="setSelectedPCSYear($event.target.value)">
         >
-        <option *ngFor="let year of years" [value]="year.value">{{ year.label }}</option>
+        @for (year of years; track year) {
+          <option [value]="year.value">{{ year.label }}</option>
+        }
       </select>
       <select name="monthSelector"
-              [(ngModel)]="selectedPCSMonthNum"
-              (change)="setSelectedPCSMonthNum($event.target.value)">
+        [(ngModel)]="selectedPCSMonthNum"
+        (change)="setSelectedPCSMonthNum($event.target.value)">
         <option value="0">[Select]</option>
-        <option *ngFor="let month of months" [value]="month.value">{{ month.label }}</option>
+        @for (month of months; track month) {
+          <option [value]="month.value">{{ month.label }}</option>
+        }
       </select>
 
       <label for="ReviewedStatusSelector">Status:</label>
       <select
-              name="ReviewedStatusSelector"
-              [(ngModel)]="selectedReviewedStatus"
-              (change)="setSelectedReviewedStatus($event.target.value)">
+        name="ReviewedStatusSelector"
+        [(ngModel)]="selectedReviewedStatus"
+        (change)="setSelectedReviewedStatus($event.target.value)">
         <option value="0">[All]</option>
-        <option *ngFor="let status of becaPaymentStatuses" [value]="status.value">{{ status.label }}</option>
+        @for (status of becaPaymentStatuses; track status) {
+          <option [value]="status.value">{{ status.label }}</option>
+        }
       </select>
 
-      <span *ngIf="selectedPCSMonthNum !== '0' && !isEditableMonth" class="text-light" style="font-weight: bold;">
-        Data is Locked for this month
-      </span>
+      @if (selectedPCSMonthNum !== '0' && !isEditableMonth) {
+        <span class="text-light" style="font-weight: bold;">
+          Data is Locked for this month
+        </span>
+      }
 
     </span>
 
@@ -37,98 +45,103 @@
   <div class="card-body bg-white">
 
 
-    <span *ngIf="errorMessage" class="alert alert-danger">{{errorMessage}}</span>
-    <span *ngIf="successMessage" class="alert alert-success">{{successMessage}}</span>
+    @if (errorMessage) {
+      <span class="alert alert-danger">{{errorMessage}}</span>
+    }
+    @if (successMessage) {
+      <span class="alert alert-success">{{successMessage}}</span>
+    }
     <div></div>
 
-    <div [ngSwitch]="isLoading">
-      <div *ngSwitchCase="true" class="text-center col-md-4 col-md-offset-4">
-        <app-loading-container> </app-loading-container>
-      </div>
-      <div *ngSwitchCase="false">
-        <!-- <form [formGroup]="myForm"> -->
-          <table class="table-sm table-striped">
-            <thead>
-              <tr>
-                <!-- <td>Id</td> -->
-                <th></th>
-                <!-- <th></th> -->
-                <th></th>
-                <th app-sortable-column="studentName" sort-direction="asc" (onSortColumn)="onSortColumn($event)">
-                  Student
-                </th>
-                <th app-sortable-column="pcsCode" (onSortColumn)="onSortColumn($event)">PCS Code</th>
-                <th app-sortable-column="mentorReportStatus" (onSortColumn)="onSortColumn($event)" title="Mentor Report">MR</th>
-                <th app-sortable-column="studentReportStatus" (onSortColumn)="onSortColumn($event)"  title="Student Self Report">SSR</th>
-                <th app-sortable-column="inscriptionReportStatus" (onSortColumn)="onSortColumn($event)" title="Inscription Reports">IR</th>
-                <th app-sortable-column="gradeReportStatus" (onSortColumn)="onSortColumn($event)" title="Grade Reports"  >GR</th>
-                <th app-sortable-column="paymentStatus" (onSortColumn)="onSortColumn($event)">Status</th>
-                <th app-sortable-column="requestedBeca" (onSortColumn)="onSortColumn($event)">Amount</th>
-                <th app-sortable-column="approvedBy" (onSortColumn)="onSortColumn($event)">Approved By</th>
-                <th app-sortable-column="comment" (onSortColumn)="onSortColumn($event)">Comment</th>
-
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let bp of becaPmts, let i = index">
-                <!-- <td>
-                {{ qr.studentGUId}}
-              </td> -->
-                <td>{{ i+1 }}</td>
-                <td (click)="gotoStudent(bp.studentGUId)"  class="link">
-                  Profile
-                </td>
-                <td
+    <div>
+      @switch (isLoading) {
+        @case (true) {
+          <div class="text-center col-md-4 col-md-offset-4">
+            <app-loading-container> </app-loading-container>
+          </div>
+        }
+        @case (false) {
+          <div>
+            <!-- <form [formGroup]="myForm"> -->
+            <table class="table-sm table-striped">
+              <thead>
+                <tr>
+                  <!-- <td>Id</td> -->
+                  <th></th>
+                  <!-- <th></th> -->
+                  <th></th>
+                  <th app-sortable-column="studentName" sort-direction="asc" (onSortColumn)="onSortColumn($event)">
+                    Student
+                  </th>
+                  <th app-sortable-column="pcsCode" (onSortColumn)="onSortColumn($event)">PCS Code</th>
+                  <th app-sortable-column="mentorReportStatus" (onSortColumn)="onSortColumn($event)" title="Mentor Report">MR</th>
+                  <th app-sortable-column="studentReportStatus" (onSortColumn)="onSortColumn($event)"  title="Student Self Report">SSR</th>
+                  <th app-sortable-column="inscriptionReportStatus" (onSortColumn)="onSortColumn($event)" title="Inscription Reports">IR</th>
+                  <th app-sortable-column="gradeReportStatus" (onSortColumn)="onSortColumn($event)" title="Grade Reports"  >GR</th>
+                  <th app-sortable-column="paymentStatus" (onSortColumn)="onSortColumn($event)">Status</th>
+                  <th app-sortable-column="requestedBeca" (onSortColumn)="onSortColumn($event)">Amount</th>
+                  <th app-sortable-column="approvedBy" (onSortColumn)="onSortColumn($event)">Approved By</th>
+                  <th app-sortable-column="comment" (onSortColumn)="onSortColumn($event)">Comment</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (bp of becaPmts; track bp; let i = $index) {
+                  <tr>
+                    <!-- <td>
+                    {{ qr.studentGUId}}
+                  </td> -->
+                  <td>{{ i+1 }}</td>
+                  <td (click)="gotoStudent(bp.studentGUId)"  class="link">
+                    Profile
+                  </td>
+                  <td
                     (click)="editPaymentDetails(bp.studentGUId, bp.studentName)"
                     [class.link]="true">
-                  {{ bp.studentName }}
-                </td>
-                <td>
-                  {{ bp.pcsCode }}
-                </td>
-                <td>
-                  <span style="text-align: center; white-space: nowrap">
-                    <img src="/assets/images/{{ bp.mentorReportStatus }}.jpg" width="20" />
-                  </span>
-                </td>
-                <td>
-                  <span style="text-align: center; white-space: nowrap">
-                    <img src="/assets/images/{{ bp.studentReportStatus }}.jpg" width="20" />
-                  </span>
-                </td>
-
-                <td>
-                  <span style="text-align: center; white-space: nowrap">
-                    <img src="/assets/images/{{ bp.inscriptionReportStatus }}.jpg" width="20" />
-                  </span>
-                </td>
-                <td>
-                  <span style="text-align: center; white-space: nowrap">
-                    <img src="/assets/images/{{ bp.gradeReportStatus }}.jpg" width="20" />
-                  </span>
-                </td>
-
-
-                <td>
-                  {{ bp.paymentStatus }}
-                </td>
-                <td>
-                  ${{ bp.requestedBeca }}
-                </td>
-
-                <td>
-                  {{ bp.approvedBy }}
-                </td>
-
-                <td>
-                  {{ bp.comment }}
-                </td>
-
-              </tr>
+                    {{ bp.studentName }}
+                  </td>
+                  <td>
+                    {{ bp.pcsCode }}
+                  </td>
+                  <td>
+                    <span style="text-align: center; white-space: nowrap">
+                      <img src="/assets/images/{{ bp.mentorReportStatus }}.jpg" width="20" />
+                    </span>
+                  </td>
+                  <td>
+                    <span style="text-align: center; white-space: nowrap">
+                      <img src="/assets/images/{{ bp.studentReportStatus }}.jpg" width="20" />
+                    </span>
+                  </td>
+                  <td>
+                    <span style="text-align: center; white-space: nowrap">
+                      <img src="/assets/images/{{ bp.inscriptionReportStatus }}.jpg" width="20" />
+                    </span>
+                  </td>
+                  <td>
+                    <span style="text-align: center; white-space: nowrap">
+                      <img src="/assets/images/{{ bp.gradeReportStatus }}.jpg" width="20" />
+                    </span>
+                  </td>
+                  <td>
+                    {{ bp.paymentStatus }}
+                  </td>
+                  <td>
+                    ${{ bp.requestedBeca }}
+                  </td>
+                  <td>
+                    {{ bp.approvedBy }}
+                  </td>
+                  <td>
+                    {{ bp.comment }}
+                  </td>
+                </tr>
+              }
             </tbody>
           </table>
         <!-- </form> -->
       </div>
-    </div>
-  </div>
+    }
+  }
+</div>
+</div>
 </div>

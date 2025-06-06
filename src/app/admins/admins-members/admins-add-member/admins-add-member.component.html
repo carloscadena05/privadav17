@@ -1,153 +1,143 @@
-<div *ngIf="errorMessage" class="alert alert-danger">{{errorMessage}}</div>
-<div *ngIf="successMessage" class="alert alert-success">{{successMessage}}</div>
+@if (errorMessage) {
+  <div class="alert alert-danger">{{errorMessage}}</div>
+}
+@if (successMessage) {
+  <div class="alert alert-success">{{successMessage}}</div>
+}
 <div style="max-width:900px">
 
-  <div [ngSwitch]="isLoading">
-    <div *ngSwitchCase="true" class="text-center col-md-4 col-md-offset-4">
-      <app-loading-container>
-      </app-loading-container>
-    </div>
-    <div *ngSwitchCase="false">
-      <form [formGroup]="myForm" class="form-horizontal">
-        <div class="row">
-          <div class="col">
-            <div class="form-group">
-              <span class="btn btn-primary btn-sm" (click)="backToMemberSearch()">
-                &lt;&lt;&nbsp; Back
-              </span>
-              &nbsp;
-              <button class="btn btn-primary btn-sm" (click)="gotoMember()" [hidden]="!(submitted)">
-                Edit New Member
-              </button>
-              &nbsp;
-
-            </div>
-            <div class="form-group" formGroupName="textGroup">
-
-              <label for="firstNames">First Name(s)</label>
-              <input id="firstNames" formControlName="firstNames"
-                     class="form-control form-control-sm" type="text" placeholder="First Name" />
+  <div>
+    @switch (isLoading) {
+      @case (true) {
+        <div class="text-center col-md-4 col-md-offset-4">
+          <app-loading-container>
+          </app-loading-container>
+        </div>
+      }
+      @case (false) {
+        <div>
+          <form [formGroup]="myForm" class="form-horizontal">
+            <div class="row">
+              <div class="col">
+                <div class="form-group">
+                  <span class="btn btn-primary btn-sm" (click)="backToMemberSearch()">
+                    &lt;&lt;&nbsp; Back
+                  </span>
+                  &nbsp;
+                  <button class="btn btn-primary btn-sm" (click)="gotoMember()" [hidden]="!(submitted)">
+                    Edit New Member
+                  </button>
+                  &nbsp;
+                </div>
+                <div class="form-group" formGroupName="textGroup">
+                  <label for="firstNames">First Name(s)</label>
+                  <input id="firstNames" formControlName="firstNames"
+                    class="form-control form-control-sm" type="text" placeholder="First Name" />
               <app-display-errors control="firstNames" class="red" [errors]="{
                 'required': 'First name is required',
                 'maxlength': 'First name cannot exceed 30 characters in length.'
               }"></app-display-errors>
-
-              <label for="lastNames">Last Name(s)</label>
-              <input id="lastNames" formControlName="lastNames" type="text"
-                     class="form-control form-control-sm" placeholder="Last Name" />
+                    <label for="lastNames">Last Name(s)</label>
+                    <input id="lastNames" formControlName="lastNames" type="text"
+                      class="form-control form-control-sm" placeholder="Last Name" />
               <app-display-errors control="lastNames" class="red" [errors]="{
                 'required': 'Last name is required',
                 'maxlength': 'Last name cannot exceed 30 characters in length.'
               }"></app-display-errors>
-
-              <label for="email">Email</label>
-              <input id="email" formControlName="email" type="text"
-                     class="form-control form-control-sm" placeholder="Valid Email Address" />
+                      <label for="email">Email</label>
+                      <input id="email" formControlName="email" type="text"
+                        class="form-control form-control-sm" placeholder="Valid Email Address" />
               <app-display-errors control="email" class="red" [errors]="{
                 'required': 'Email is required',
                 'maxlength': 'Email cannot exceed 50 characters in length',
                 'email': 'Email address must be in valid format'
               }"></app-display-errors>
-
-              <div class='red'
-                   *ngIf="myForm.get('textGroup').errors?.allText && bInvalidSubmitState ">
-                All text fields must be filled in before submitting.
+                        @if (myForm.get('textGroup').errors?.allText && bInvalidSubmitState ) {
+                          <div class='red'
+                            >
+                            All text fields must be filled in before submitting.
+                          </div>
+                        }
+                      </div>
+                    </div>
+                    <!-- <div formGroupName="statusGroup">
+                    <div class="col">
+                      <div class="row">
+                        <div class="col-6" style="padding:0 2px 0 4px;">
+                          <label for="mentorStatusId">Mentor Status:</label>
+                          <select formControlName="mentorStatusId" class="form-control form-control-sm">
+                            <option value=""></option>
+                            <option *ngFor="let status of roleStatuses" [value]="status.value">{{status.label}}</option>
+                          </select>
+                          <label for="adminStatusId">Admin Status:</label>
+                          <select formControlName="adminStatusId" class="form-control form-control-sm">
+                            <option value=""></option>
+                            <option *ngFor="let status of roleStatuses" [value]="status.value">{{status.label}}</option>
+                          </select>
+                          <label for="volunteerStatusId">Volunteer Status:</label>
+                          <select formControlName="volunteerStatusId" class="form-control form-control-sm">
+                            <option value=""></option>
+                            <option *ngFor="let status of roleStatuses" [value]="status.value">{{status.label}}</option>
+                          </select>
+                          <label for="presidentStatusId">President Status:</label>
+                          <select formControlName="presidentStatusId" class="form-control form-control-sm">
+                            <option value=""></option>
+                            <option *ngFor="let status of roleStatuses" [value]="status.value">{{status.label}}</option>
+                          </select>
+                        </div>
+                        <div class="col-6" style="padding:0 2px 0 4px;">
+                          <label for="sponsorStatusId">Sponsor Status:</label>
+                          <select formControlName="sponsorStatusId" class="form-control form-control-sm">
+                            <option value=""></option>
+                            <option *ngFor="let status of roleStatuses" [value]="status.value">{{status.label}}</option>
+                          </select>
+                          <label for="donorStatusId">Donor Status:</label>
+                          <select formControlName="donorStatusId" class="form-control form-control-sm">
+                            <option value=""></option>
+                            <option *ngFor="let status of roleStatuses" [value]="status.value">{{status.label}}</option>
+                          </select>
+                          <label for="employeeStatusId">Employee Status:</label>
+                          <select formControlName="employeeStatusId" class="form-control form-control-sm">
+                            <option value=""></option>
+                            <option *ngFor="let status of roleStatuses" [value]="status.value">{{status.label}}</option>
+                          </select>
+                          <label for="boardStatusId">Board Status:</label>
+                          <select formControlName="boardStatusId" class="form-control form-control-sm">
+                            <option value=""></option>
+                            <option *ngFor="let status of roleStatuses" [value]="status.value">{{status.label}}</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="red"
+                          *ngIf="myForm.get('statusGroup').errors?.atLeastOne && bInvalidSubmitState ">
+                          At least one status value must be selected for the new Member.
+                        </div>
+                      </div>
+                    </div>
+                  </div> -->
+                </div>
+                <div class="row">
+                  <div class="form-group">
+                    <button class="btn btn-primary" (click)="saveMyForm()" [disabled]="submitted">
+                      Submit
+                    </button>
+                    <!-- <span [hidden]="!bInvalidSubmitState" class='red'>All text fields and at least one status value
+                  must be filled in before submitting. </span> -->
+                </div>
               </div>
-
-
-            </div>
+            </form>
+            <!-- <br />Dirty: {{ myForm.dirty }}
+            <br />Valid: {{ myForm.valid }}
+            <br />Errors: {{ myForm.errors | json }}
+            <br />TG Valid: {{ myForm.controls.textGroup.valid }}
+            <br />TG Touched: {{ myForm.controls.textGroup.touched }}
+            <br />TG Errors: {{ myForm.controls.textGroup.errors | json }}
+            <br />SG Valid: {{ myForm.controls.statusGroup.valid }}
+            <br />SG Touched: {{ myForm.controls.statusGroup.touched }}
+            <br />SG Errors: {{ myForm.controls.statusGroup.errors | json }} -->
           </div>
-          <!-- <div formGroupName="statusGroup">
-            <div class="col">
-              <div class="row">
-                <div class="col-6" style="padding:0 2px 0 4px;">
-                  <label for="mentorStatusId">Mentor Status:</label>
-                  <select formControlName="mentorStatusId" class="form-control form-control-sm">
-                    <option value=""></option>
-                    <option *ngFor="let status of roleStatuses" [value]="status.value">{{status.label}}</option>
-                  </select>
-
-                  <label for="adminStatusId">Admin Status:</label>
-                  <select formControlName="adminStatusId" class="form-control form-control-sm">
-                    <option value=""></option>
-                    <option *ngFor="let status of roleStatuses" [value]="status.value">{{status.label}}</option>
-                  </select>
-
-                  <label for="volunteerStatusId">Volunteer Status:</label>
-                  <select formControlName="volunteerStatusId" class="form-control form-control-sm">
-                    <option value=""></option>
-                    <option *ngFor="let status of roleStatuses" [value]="status.value">{{status.label}}</option>
-                  </select>
-
-                  <label for="presidentStatusId">President Status:</label>
-                  <select formControlName="presidentStatusId" class="form-control form-control-sm">
-                    <option value=""></option>
-                    <option *ngFor="let status of roleStatuses" [value]="status.value">{{status.label}}</option>
-                  </select>
-
-                </div>
-
-                <div class="col-6" style="padding:0 2px 0 4px;">
-
-                  <label for="sponsorStatusId">Sponsor Status:</label>
-                  <select formControlName="sponsorStatusId" class="form-control form-control-sm">
-                    <option value=""></option>
-                    <option *ngFor="let status of roleStatuses" [value]="status.value">{{status.label}}</option>
-                  </select>
-
-
-                  <label for="donorStatusId">Donor Status:</label>
-                  <select formControlName="donorStatusId" class="form-control form-control-sm">
-                    <option value=""></option>
-                    <option *ngFor="let status of roleStatuses" [value]="status.value">{{status.label}}</option>
-                  </select>
-
-
-                  <label for="employeeStatusId">Employee Status:</label>
-                  <select formControlName="employeeStatusId" class="form-control form-control-sm">
-                    <option value=""></option>
-                    <option *ngFor="let status of roleStatuses" [value]="status.value">{{status.label}}</option>
-                  </select>
-
-                  <label for="boardStatusId">Board Status:</label>
-                  <select formControlName="boardStatusId" class="form-control form-control-sm">
-                    <option value=""></option>
-                    <option *ngFor="let status of roleStatuses" [value]="status.value">{{status.label}}</option>
-                  </select>
-                </div>
-              </div>
-              <div class="row">
-                <div class="red"
-                     *ngIf="myForm.get('statusGroup').errors?.atLeastOne && bInvalidSubmitState ">
-                  At least one status value must be selected for the new Member.
-                </div>
-              </div>
-            </div>
-          </div> -->
-        </div>
-
-        <div class="row">
-          <div class="form-group">
-            <button class="btn btn-primary" (click)="saveMyForm()" [disabled]="submitted">
-              Submit
-            </button>
-            <!-- <span [hidden]="!bInvalidSubmitState" class='red'>All text fields and at least one status value
-              must be filled in before submitting. </span> -->
-          </div>
-        </div>
-      </form>
-
-      <!-- <br />Dirty: {{ myForm.dirty }}
-      <br />Valid: {{ myForm.valid }}
-      <br />Errors: {{ myForm.errors | json }}
-
-      <br />TG Valid: {{ myForm.controls.textGroup.valid }}
-      <br />TG Touched: {{ myForm.controls.textGroup.touched }}
-      <br />TG Errors: {{ myForm.controls.textGroup.errors | json }}
-
-      <br />SG Valid: {{ myForm.controls.statusGroup.valid }}
-      <br />SG Touched: {{ myForm.controls.statusGroup.touched }}
-      <br />SG Errors: {{ myForm.controls.statusGroup.errors | json }} -->
+        }
+      }
     </div>
   </div>
-</div>

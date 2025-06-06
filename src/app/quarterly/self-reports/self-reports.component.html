@@ -1,24 +1,28 @@
-<div *ngIf="errorMessage" class="alert alert-danger">{{errorMessage}}</div>
-<div *ngIf="successMessage" class="alert alert-success">{{successMessage}}</div>
+@if (errorMessage) {
+  <div class="alert alert-danger">{{errorMessage}}</div>
+}
+@if (successMessage) {
+  <div class="alert alert-success">{{successMessage}}</div>
+}
 <form [formGroup]="myForm">
   <fieldset>
     <div class="form-group">
       <div hidden class="controls">
         <label for="quarterlyReportId">Id</label>
         <textarea id="quarterlyReportId"
-                  formControlName="quarterlyReportId"
-                  type="text"
-                  class="form-control input-sm">
-                </textarea>
+          formControlName="quarterlyReportId"
+          type="text"
+          class="form-control input-sm">
+        </textarea>
       </div>
       <div class="controls">
         <label for="narrative_Spanish">Texto Español</label>
         <textarea id="narrative_Spanish" #success
-                  formControlName="narrative_Spanish"
-                  type="text"
+          formControlName="narrative_Spanish"
+          type="text"
 
-                  class="form-control input-sm narrative" placeholder="">
-                </textarea>
+          class="form-control input-sm narrative" placeholder="">
+        </textarea>
         <app-display-errors control="narrative_Spanish" class="red"
                             [errors]="{'required': 'Se requiere una entrada, aun si es sólo N/A.',
                 'maxlength': 'La entrada no puede exceder 4000 caracteres del largo.'
@@ -28,38 +32,42 @@
       <div class="controls">
         <label for="narrative_English">English Text</label>
         <textarea id="narrative_English" #success
-                  formControlName="narrative_English"
-                  type="text"
+          formControlName="narrative_English"
+          type="text"
 
-                  class="form-control input-sm narrative" placeholder="">
-              </textarea>
+          class="form-control input-sm narrative" placeholder="">
+        </textarea>
         <app-display-errors control="narrative_English" class="red"
                             [errors]="{'required': 'An entry is required, even if it is just N/A.',
               'maxlength': 'Entry cannot exceed 4000 characters in length.'
                     }"></app-display-errors>
       </div>
-      <div *ngIf="errorMessage" class="alert alert-danger">{{errorMessage}}</div>
-      <div *ngIf="successMessage" class="alert alert-success">{{successMessage}}</div>
+      @if (errorMessage) {
+        <div class="alert alert-danger">{{errorMessage}}</div>
+      }
+      @if (successMessage) {
+        <div class="alert alert-success">{{successMessage}}</div>
+      }
 
       <div class="col-md-6 col-md-offset-1">
         <span>
           <button class="btn btn-primary"
-                  style="width:140px;margin-right:10px"
-                  [hidden]="!qrComponentsEditable"
-                  (click)="onSubmit()">
+            style="width:140px;margin-right:10px"
+            [hidden]="!qrComponentsEditable"
+            (click)="onSubmit()">
             Guardar/Save
           </button>
         </span>&nbsp;
         <span>
           <button type="button"
-                  class="btn btn-default"
-                  style="width:95px"
-                  [hidden]="!qrComponentsEditable"
-                  (click)="onCancel()">
+            class="btn btn-default"
+            style="width:95px"
+            [hidden]="!qrComponentsEditable"
+            (click)="onCancel()">
             Cancelar
           </button>
           <div class="red" [hidden]="myForm.valid || !qrComponentsEditable">Year, Month, Emoji and description must be
-            filled in before saving.<br />Año, mes, Emoji y descripción rellenarse antes de guardar.</div>
+          filled in before saving.<br />Año, mes, Emoji y descripción rellenarse antes de guardar.</div>
         </span>
       </div>
     </div>
