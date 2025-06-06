@@ -3,6 +3,7 @@
   "compilerOptions": {
     "experimentalDecorators": true,
     "incremental": true,
+    "esModuleInterop": true,
     "baseUrl": "./",
     "importHelpers": true,
     "module": "esnext",

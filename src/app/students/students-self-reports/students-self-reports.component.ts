@@ -125,7 +125,7 @@ export class StudentsSelfReportsComponent implements OnInit {
       () => {
         //console.log('done: ');
         this.isLoading = false;
-        this.changeDetector.detectChanges(); // Manually trigger change detection
+        this.changeDetector.markForCheck(); // Manually trigger change detection
       }
     );
   }
@@ -209,7 +209,7 @@ export class StudentsSelfReportsComponent implements OnInit {
   }
 
   ngAfterContentChecked(): void {
-    this.changeDetector.detectChanges();
+    // this.changeDetector.detectChanges();
   }
 
   readMore(position: number) {
@@ -243,6 +243,7 @@ export class StudentsSelfReportsComponent implements OnInit {
         (data) => {
           //console.log(data)
           report["reportFulltext"] = data.narrative_Spanish;
+          this.changeDetector.markForCheck();
         },
         (err) => console.error("Subscribe error: " + err)
       );

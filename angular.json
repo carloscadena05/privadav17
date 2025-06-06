@@ -11,24 +11,26 @@
             "schematics": {},
             "architect": {
                 "build": {
-                    "builder": "@angular-devkit/build-angular:browser",
+                    "builder": "@angular-devkit/build-angular:application",
                     "options": {
                         "allowedCommonJsDependencies": [ "zone.js/dist/zone-error", "util", "highcharts" ],
-                        "outputPath": "dist/ja",
+                        "outputPath": {
+                          "base": "dist/ja"
+                        },
                         "index": "src/index.html",
-                        "main": "src/main.ts",
-                        "polyfills": "src/polyfills.ts",
+                        "polyfills": [
+                          "src/polyfills.ts"
+                        ],
                         "tsConfig": "src/tsconfig.app.json",
                         "assets": [ "src/assets" ],
                         "styles": [ "src/assets/css/main.css", "src/assets/css/project.css" ],
                         "scripts": [],
                         "aot": false,
-                        "vendorChunk": true,
                         "extractLicenses": false,
-                        "buildOptimizer": false,
                         "sourceMap": true,
                         "optimization": false,
-                        "namedChunks": true
+                        "namedChunks": true,
+                        "browser": "src/main.ts"
                     },
                     "configurations": {
                         "production": {
@@ -43,9 +45,7 @@
                             "sourceMap": false,
                             "namedChunks": false,
                             "aot": true,
-                            "extractLicenses": true,
-                            "vendorChunk": false,
-                            "buildOptimizer": true
+                            "extractLicenses": true
                         }
                     },
                     "defaultConfiguration": ""
