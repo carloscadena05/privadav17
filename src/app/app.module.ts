@@ -18,6 +18,8 @@ import { MemberState } from './_store/member/member.state';
 import { StudentState } from './_store/student/student.state';
 import { UIState } from './_store/ui/ui.state';
 // import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatButtonModule } from '@angular/material/button';
 
 export function appInit(constantsService: ConstantsService) {
   return () => constantsService.loadFromDB();
@@ -38,7 +40,8 @@ export function appInit(constantsService: ConstantsService) {
     NgxsLoggerPluginModule.forRoot(),
     AppSharedModule.forRoot(),
     // SweetAlert2Module.forRoot()
-
+    BrowserAnimationsModule,
+    MatButtonModule
   ],
 
   exports: [ReactiveFormsModule, HttpClientModule, AppRoutingModule],
@@ -48,11 +51,11 @@ export function appInit(constantsService: ConstantsService) {
       useValue: '/'
     },
     provideAppInitializer(() => {
-        const initializerFn = (appInit)(inject(ConstantsService));
-        return initializerFn();
-      }),
+      const initializerFn = (appInit)(inject(ConstantsService));
+      return initializerFn();
+    }),
     Location
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }
