@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { HighchartsChartModule } from 'highcharts-angular';
+/* import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+ */import { HighchartsChartModule } from 'highcharts-angular';
 import { NgxFileDropModule } from 'ngx-file-drop';
 import { CallbackComponent } from './components/callback.component';
 import { DisplayErrorsComponent } from './components/display-errors.component';
@@ -24,8 +24,8 @@ import { MemberSelectorComponent } from './components/member-selector/member-sel
 import { MentorReports2ListComponent } from './components/mentor-reports2-list/mentor-reports2-list.component';
 import { MentorSelectorComponent } from './components/mentor-selector/mentor-selector.component';
 import { MentorsForStudentListComponent } from './components/mentors-for-student-list/mentors-for-student-list.component';
-import { NgbdModalContentComponent } from './components/modal-content/modal-content';
-import { QrStatusSelectorComponent } from './components/qr-status-selector/qr-status-selector.component';
+/* import { NgbdModalContentComponent } from './components/modal-content/modal-content';
+ */import { QrStatusSelectorComponent } from './components/qr-status-selector/qr-status-selector.component';
 import { SortableColumnComponent } from './components/sortable-column.component';
 import { SponsorGroupMemberEditComponent } from './components/sponsor-group-member-edit/sponsor-group-member-edit.component';
 import { SponsorGroupMembersComponent } from './components/sponsors-for-sponsor-group/sponsor-group-members.component';
@@ -60,7 +60,7 @@ import { UnsafeHtmlPipe } from './pipes/unsafe-html-pipe';
 @NgModule({
   imports: [
     CommonModule, RouterModule, ReactiveFormsModule, FormsModule,
-    NgbModule, NgxFileDropModule, SweetAlert2Module
+    /* NgbModule, */ NgxFileDropModule, SweetAlert2Module
   ],
   declarations: [
     DisplayErrorsComponent,
@@ -99,8 +99,8 @@ import { UnsafeHtmlPipe } from './pipes/unsafe-html-pipe';
     MemberLookupComponent,
     MemberHeaderComponent,
     MemberHeaderDetailsComponent,
-    NgbdModalContentComponent,
-    StudentHeaderComponent,
+/*     NgbdModalContentComponent,
+ */    StudentHeaderComponent,
     StudentHeader2Component,
     StudentHistoryComponent,
     StudentPhotoComponent,

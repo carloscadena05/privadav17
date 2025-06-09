@@ -5,6 +5,7 @@ import { Component } from '@angular/core';
     standalone: false
 })
 export class MentorReportsContainerComponent {
+  twcss_activeTab: string = 'review'
   constructor() {
     console.log('mr-container constructor');
   }

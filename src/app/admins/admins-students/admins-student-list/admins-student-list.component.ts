@@ -148,6 +148,8 @@ export class AdminsStudentListComponent implements OnInit {
       )
     ) {
       this.isLoading = true;
+      console.log('-----------------------');
+      
       this.studentData
         .getStudentDTOsByStatusAndYear(
           this.selectedFilterMode,
@@ -157,6 +159,8 @@ export class AdminsStudentListComponent implements OnInit {
         )
         .subscribe(
           (data) => {
+            console.log(data);
+            
             this.studentDTOs = data
               .filter((item) => {
                 if (this.displayTestNames) {

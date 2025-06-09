@@ -1,4 +1,41 @@
-<div class="row">
+<div class="container mx-auto px-4">
+  <div class="flex flex-col">
+    <!-- Tabs -->
+    <div class="flex space-x-4 border-b">
+      <button 
+        class="py-2 px-4 border-b-2"
+        [ngClass]="{
+          'border-blue-500 text-blue-500 font-semibold': twcss_activeTab === 'review',
+          'border-transparent text-gray-500 hover:text-blue-500': twcss_activeTab !== 'review'
+        }"
+        (click)="twcss_activeTab = 'review'">
+        Mentor Report Review
+      </button>
+
+      <button 
+        class="py-2 px-4 border-b-2"
+        [ngClass]="{
+          'border-blue-500 text-blue-500 font-semibold': twcss_activeTab === 'submitted',
+          'border-transparent text-gray-500 hover:text-blue-500': twcss_activeTab !== 'submitted'
+        }"
+        (click)="twcss_activeTab = 'submitted'">
+        Submitted Count
+      </button>
+    </div>
+
+    <!-- Tab Content -->
+    <div class="mt-4">
+      <div *ngIf="twcss_activeTab === 'review'">
+        <app-mr-summary-tracking></app-mr-summary-tracking>
+      </div>
+      <div *ngIf="twcss_activeTab === 'submitted'">
+        <app-mr-submitted-count></app-mr-submitted-count>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="row">
   <div class="col">
     <nav ngbNav #nav1="ngbNav" class="nav-tabs">
       <ng-container ngbNavItem>
@@ -19,4 +56,4 @@
     </nav>
     <div [ngbNavOutlet]="nav1" class="mt-2"></div>
   </div>
-</div>
+</div> -->

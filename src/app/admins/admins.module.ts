@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { AppSharedModule } from '../_shared/_shared.module';
+/* import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+ */import { AppSharedModule } from '../_shared/_shared.module';
 
 import { AdminsHomeComponent } from './admins-home/admins-home.component';
 import { AdminsAddMemberComponent } from './admins-members/admins-add-member/admins-add-member.component';
@@ -58,7 +58,7 @@ import { WHSE_QR_Component } from '../_shared/components/whse-qr/whse-qr.compone
 import { WHSE_SU_Component } from '../_shared/components/whse-su/whse-su.component';
 
 @NgModule({
-    imports: [AppSharedModule, AdminsRoutingModule, ReactiveFormsModule, FormsModule, NgbModule],
+    imports: [AppSharedModule, AdminsRoutingModule, ReactiveFormsModule, FormsModule/* , NgbModule */],
     declarations: [
         AdminsComponent,
         AdminsHomeComponent,

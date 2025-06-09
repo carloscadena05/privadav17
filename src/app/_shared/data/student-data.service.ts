@@ -57,6 +57,8 @@ export class StudentDataService extends BaseDataService {
     const url =
       this.WebApiPrefix + 'students' + '/' + activeStatus + '/' + studentStatusId + '/' + yearJoinedJA + '/' + gradYear;
     console.log('sending AuthHttp get request for Students with url ' + url);
+    console.log(this.http.get<StudentDTO[]>(url).pipe(catchError(this.handleError)));
+    
     return this.http.get<StudentDTO[]>(url).pipe(catchError(this.handleError));
   }
 

@@ -1,4 +1,4 @@
-
+/* 
 import { Component, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -25,3 +25,4 @@ export class NgbdModalContentComponent {
 
   constructor(public activeModal: NgbActiveModal) {}
 }
+ */

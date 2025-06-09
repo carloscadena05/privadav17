@@ -1,4 +1,99 @@
-<div class="container">
+<div class="container mx-auto px-4">
+  <div class="flex flex-col">
+    <!-- Tabs -->
+    <div class="flex space-x-4 border-b">
+      <button 
+        class="py-2 px-4 border-b-2"
+        [ngClass]="{
+          'border-blue-500 text-blue-500 font-semibold': twcss_activeTab === 'mentor',
+          'border-transparent text-gray-500 hover:text-blue-500': twcss_activeTab !== 'mentor'
+        }"
+        (click)="twcss_activeTab = 'mentor'">
+        Mentor Reports Data
+      </button>
+
+      <button 
+        class="py-2 px-4 border-b-2"
+        [ngClass]="{
+          'border-blue-500 text-blue-500 font-semibold': twcss_activeTab === 'quarterly',
+          'border-transparent text-gray-500 hover:text-blue-500': twcss_activeTab !== 'quarterly'
+        }"
+        (click)="twcss_activeTab = 'quarterly'">
+        Quarterly Reports Data
+      </button>
+
+      <button 
+        class="py-2 px-4 border-b-2"
+        [ngClass]="{
+          'border-blue-500 text-blue-500 font-semibold': twcss_activeTab === 'grade',
+          'border-transparent text-gray-500 hover:text-blue-500': twcss_activeTab !== 'grade'
+        }"
+        (click)="twcss_activeTab = 'grade'">
+        Grade Submission Data
+      </button>
+
+      <button 
+        class="py-2 px-4 border-b-2"
+        [ngClass]="{
+          'border-blue-500 text-blue-500 font-semibold': twcss_activeTab === 'other',
+          'border-transparent text-gray-500 hover:text-blue-500': twcss_activeTab !== 'other'
+        }"
+        (click)="twcss_activeTab = 'other'">
+        Other Data
+      </button>
+    </div>
+
+    <!-- Tab Content -->
+    <div class="mt-4">
+      <!-- Mentor Reports -->
+      <div *ngIf="twcss_activeTab === 'mentor'" class="space-y-4">
+        <div id="container_daily_mr" class="w-full h-[330px]">
+          <whse-daily-mr></whse-daily-mr>
+        </div>
+        <div id="container_mr" class="w-full h-[330px]">
+          <whse-mr></whse-mr>
+        </div>
+      </div>
+
+      <!-- Quarterly Reports -->
+      <div *ngIf="twcss_activeTab === 'quarterly'" class="space-y-4">
+        <div id="container_daily_ssr" class="w-full h-[330px]">
+          <whse-daily-ssr></whse-daily-ssr>
+        </div>
+        <div id="container_ssr" class="w-full h-[330px]">
+          <whse-ssr></whse-ssr>
+        </div>
+        <div id="container_qr" class="w-full h-[330px]">
+          <whse-qr></whse-qr>
+        </div>
+      </div>
+
+      <!-- Grade Submission -->
+      <div *ngIf="twcss_activeTab === 'grade'" class="space-y-4">
+        <div id="container_gs" class="w-full h-[330px]">
+          <whse-gs></whse-gs>
+        </div>
+      </div>
+
+      <!-- Other Data -->
+      <div *ngIf="twcss_activeTab === 'other'" class="space-y-4">
+        <div class="flex gap-4">
+          <div id="container_sg" class="w-1/2 h-[330px]">
+            <whse-sg></whse-sg>
+          </div>
+          <div id="container_ss" class="w-1/2 h-[330px]">
+            <whse-ss></whse-ss>
+          </div>
+        </div>
+        <div id="container_su" class="w-full h-[330px]">
+          <whse-su></whse-su>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="container">
   <div class="row">
     <div class="col">
       <nav ngbNav #nav1="ngbNav" class="nav-tabs">
@@ -58,3 +153,4 @@
     </div>
   </div>
 </div>
+ -->

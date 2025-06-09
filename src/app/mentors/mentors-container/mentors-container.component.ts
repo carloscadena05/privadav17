@@ -6,6 +6,7 @@ import { SetQRComponentsEditable } from 'src/app/_store/ui/ui.action';
     standalone: false
 })
 export class MentorsContainerComponent implements OnInit {
+  twcss_activeTab = 'monthly';
   constructor(private store: Store) {
     // nada
   }

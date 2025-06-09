@@ -1,4 +1,106 @@
-<div class="col">
+<div class="container mx-auto px-4">
+  <div class="flex flex-col">
+    <!-- Tabs -->
+    <div class="flex flex-wrap border-b space-x-4">
+      <button
+        class="py-2 px-4 border-b-2"
+        [ngClass]="{
+          'border-blue-500 text-blue-500 font-semibold': twcss_activeTab === 'profile',
+          'border-transparent text-gray-500 hover:text-blue-500': twcss_activeTab !== 'profile'
+        }"
+        (click)="twcss_activeTab = 'profile'">
+        Student Profile
+      </button>
+
+      <button
+        class="py-2 px-4 border-b-2"
+        [ngClass]="{
+          'border-blue-500 text-blue-500 font-semibold': twcss_activeTab === 'summary',
+          'border-transparent text-gray-500 hover:text-blue-500': twcss_activeTab !== 'summary'
+        }"
+        (click)="twcss_activeTab = 'summary'">
+        Student Summary
+      </button>
+
+      <button
+        class="py-2 px-4 border-b-2"
+        [ngClass]="{
+          'border-blue-500 text-blue-500 font-semibold': twcss_activeTab === 'member',
+          'border-transparent text-gray-500 hover:text-blue-500': twcss_activeTab !== 'member'
+        }"
+        (click)="twcss_activeTab = 'member'">
+        Member Data
+      </button>
+
+      <button
+        class="py-2 px-4 border-b-2"
+        [ngClass]="{
+          'border-blue-500 text-blue-500 font-semibold': twcss_activeTab === 'history',
+          'border-transparent text-gray-500 hover:text-blue-500': twcss_activeTab !== 'history'
+        }"
+        (click)="twcss_activeTab = 'history'">
+        History
+      </button>
+
+      <button
+        class="py-2 px-4 border-b-2"
+        [ngClass]="{
+          'border-blue-500 text-blue-500 font-semibold': twcss_activeTab === 'mrs',
+          'border-transparent text-gray-500 hover:text-blue-500': twcss_activeTab !== 'mrs'
+        }"
+        (click)="twcss_activeTab = 'mrs'">
+        Mentor Reports
+      </button>
+
+      <button
+        class="py-2 px-4 border-b-2"
+        [ngClass]="{
+          'border-blue-500 text-blue-500 font-semibold': twcss_activeTab === 'ssr',
+          'border-transparent text-gray-500 hover:text-blue-500': twcss_activeTab !== 'ssr'
+        }"
+        (click)="twcss_activeTab = 'ssr'">
+        SSR
+      </button>
+
+      <button
+        class="py-2 px-4 border-b-2"
+        [ngClass]="{
+          'border-blue-500 text-blue-500 font-semibold': twcss_activeTab === 'qrs',
+          'border-transparent text-gray-500 hover:text-blue-500': twcss_activeTab !== 'qrs'
+        }"
+        (click)="twcss_activeTab = 'qrs'">
+        Quarterly Reports
+      </button>
+    </div>
+
+    <!-- Tab Content -->
+    <div class="mt-4">
+      <div *ngIf="twcss_activeTab === 'profile'">
+        <app-admins-student-student-profile></app-admins-student-student-profile>
+      </div>
+      <div *ngIf="twcss_activeTab === 'summary'">
+        <app-student-header></app-student-header>
+      </div>
+      <div *ngIf="twcss_activeTab === 'member'">
+        <app-admins-student-member-profile></app-admins-student-member-profile>
+      </div>
+      <div *ngIf="twcss_activeTab === 'history'">
+        <app-student-history></app-student-history>
+      </div>
+      <div *ngIf="twcss_activeTab === 'mrs'">
+        <app-admins-student-mrs></app-admins-student-mrs>
+      </div>
+      <div *ngIf="twcss_activeTab === 'ssr'">
+        <app-admins-student-ssr></app-admins-student-ssr>
+      </div>
+      <div *ngIf="twcss_activeTab === 'qrs'">
+        <app-admins-student-qrs></app-admins-student-qrs>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="col">
   <div class="row">
 
     <nav ngbNav #nav1="ngbNav" class="nav-tabs">
@@ -59,4 +161,4 @@
     </nav>
     <div [ngbNavOutlet]="nav1" class="mt-2"></div>
   </div>
-</div>
+</div> -->

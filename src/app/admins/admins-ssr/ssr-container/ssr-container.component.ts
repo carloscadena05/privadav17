@@ -5,6 +5,7 @@ import { Component } from '@angular/core';
     standalone: false
 })
 export class StudentSelfReportsContainerComponent {
+  twcss_activeTab = 'ssrReview';
   constructor() {
     console.log('ssr-container constructor');
   }

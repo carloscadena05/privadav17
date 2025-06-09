@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { StudentHeaderMentorsComponent } from '../mentors/student-header-mentors/student-header-mentors.component';
+/* import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+ */import { StudentHeaderMentorsComponent } from '../mentors/student-header-mentors/student-header-mentors.component';
 import { QuarterlyModule } from '../quarterly/quarterly.module';
 import { AppSharedModule } from '../_shared/_shared.module';
 // import { FollowUpRequestsAddComponent } from './follow-up-requests-add/follow-up-requests-add.component';
@@ -24,7 +24,7 @@ import { StudentSelfReportContainerComponent } from './student-self-report-conta
     AppSharedModule,
     MentorsRoutingModule,
     QuarterlyModule,
-    NgbModule
+    /* NgbModule */
   ],
   declarations: [
     MentorsComponent,

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { StudentHeaderQuarterlyComponent } from '../quarterly/student-header-quarterly/student-header-quarterly.component';
+/* import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+ */import { StudentHeaderQuarterlyComponent } from '../quarterly/student-header-quarterly/student-header-quarterly.component';
 import { AppSharedModule } from '../_shared/_shared.module';
 import { JaCommentsComponent } from './ja-comments/ja-comments.component';
 import { MrConsolidatedComponent } from './mr-consolidated/mr-consolidated.component';
@@ -29,8 +29,8 @@ import { SelfReportsComponent } from './self-reports/self-reports.component';
     CommonModule,
     AppSharedModule,
     QuarterlyRoutingModule,
-    NgbModule
-  ],
+/*     NgbModule
+ */  ],
   exports: [
     JaCommentsComponent,
     MrConsolidatedComponent,

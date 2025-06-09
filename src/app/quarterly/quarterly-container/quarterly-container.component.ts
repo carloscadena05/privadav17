@@ -31,7 +31,7 @@ export class QuarterlyContainerComponent implements OnInit {
 
    currentGUId$ = this.store.select<string>(StudentState.getSelectedStudentGUId);
    selectedQRPeriod$ = this.store.select<string>(UIState.getSelectedQRPeriod);
-
+  twcss_activeTab = 'student';
   constructor(private route: ActivatedRoute,
     public quarterlyData: QuarterlyDataService,
     public store: Store) {}
