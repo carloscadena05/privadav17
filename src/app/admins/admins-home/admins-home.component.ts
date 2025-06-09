@@ -7,7 +7,10 @@ import { Component } from '@angular/core';
     standalone: false
 })
 export class AdminsHomeComponent {
+
   twcss_activeTab: string = 'mentor'
+
+
   constructor() {
     // nada
   }

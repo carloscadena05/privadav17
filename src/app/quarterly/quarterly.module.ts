@@ -28,9 +28,11 @@ import { SelfReportsComponent } from './self-reports/self-reports.component';
   imports: [
     CommonModule,
     AppSharedModule,
+
     QuarterlyRoutingModule,
 /*     NgbModule
  */  ],
+
   exports: [
     JaCommentsComponent,
     MrConsolidatedComponent,

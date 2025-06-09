@@ -20,6 +20,10 @@ export class SponsorsContainerComponent implements OnInit {
 
    selectedQRPeriod$ = this.store.select<string>(UIState.getSelectedQRPeriod);
 twcss_activeTab = 'student';
+
+
+
+
   constructor(private store: Store) {}
 
   ngOnInit() {

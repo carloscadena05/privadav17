@@ -1,6 +1,6 @@
 /* Reset */
 /* this set of reset rules doesn't work due bootstrap higher priority  */
-@import "tailwindcss";
+/* @import "tailwindcss"; */
 
 html,
 body,

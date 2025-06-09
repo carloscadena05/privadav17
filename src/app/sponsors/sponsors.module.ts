@@ -14,8 +14,13 @@ import { StudentHeaderSponsorsComponent } from './student-header-sponsors/studen
   imports: [
     AppSharedModule,
     SponsorsRoutingModule,
+
     QuarterlyModule,
     /* NgbModule */
+
+    QuarterlyModule/* ,
+    NgbModule */
+
   ],
   declarations: [
     SponsorsComponent,

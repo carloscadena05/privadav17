@@ -18,6 +18,10 @@ export class AdminsStudentContainerComponent implements OnInit {
   readonly reviewedStatuses: SELECTITEM[] = constants.reviewedQRStatuses;
   subscription: Subscription;
   twcss_activeTab = 'profile';
+
+
+
+
   constructor(private route: ActivatedRoute, private store: Store) {
 
   }
