@@ -5,7 +5,7 @@ import { MemberMiniDTO } from '../../models/memberMiniDTO';
 @Component({
     selector: 'app-member-selector',
     templateUrl: './member-selector.component.html',
-    styleUrls: ['./member-selector.component.css'],
+    styleUrls: ['./member-selector.component.scss'],
     standalone: false
 })
 export class MemberSelectorComponent implements OnInit {

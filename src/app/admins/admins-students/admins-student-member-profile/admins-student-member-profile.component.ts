@@ -15,7 +15,7 @@ import { StudentState } from 'src/app/_store/student/student.state';
 @Component({
     selector: 'app-admins-student-member-profile',
     templateUrl: './admins-student-member-profile.component.html',
-    styleUrls: ['./admins-student-member-profile.component.css'],
+    styleUrls: ['./admins-student-member-profile.component.scss'],
     standalone: false
 })
 export class AdminsStudentMemberDataComponent implements OnInit {

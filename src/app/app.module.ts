@@ -32,8 +32,8 @@ export function appInit(constantsService: ConstantsService) {
   imports: [
     BrowserModule,
     ReactiveFormsModule.withConfig({ warnOnNgModelWithFormControl: 'always' }),
-    HttpClientModule,
-    AppRoutingModule,
+/*     HttpClientModule,
+ */    AppRoutingModule,
     NgxFileDropModule,
     NgxsModule.forRoot([StudentState, MemberState, UIState], { developmentMode: !environment.production }),
     NgxsReduxDevtoolsPluginModule.forRoot(),

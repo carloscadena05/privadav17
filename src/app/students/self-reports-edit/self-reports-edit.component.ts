@@ -12,7 +12,7 @@ import { SELECTITEM } from '../../_shared/interfaces/SELECTITEM';
 
 @Component({
     templateUrl: './self-reports-edit.component.html',
-    styleUrls: ['./self-reports-edit.component.css', '../../../assets/css/forms.css', '../students.component.css'],
+    styleUrls: ['./self-reports-edit.component.scss', '../../../assets/css/forms.scss', '../students.component.scss'],
     standalone: false
 })
 export class SelfReportsEditComponent implements OnInit {

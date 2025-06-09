@@ -13,7 +13,7 @@ import { SessionService } from '../../_shared/services/session.service';
 @Component({
     selector: 'app-self-reports',
     templateUrl: './self-reports.component.html',
-    styleUrls: ['./self-reports.component.css', '../../../assets/css/forms.css'],
+    styleUrls: ['./self-reports.component.scss', '../../../assets/css/forms.scss'],
     standalone: false
 })
 export class SelfReportsComponent implements OnInit {

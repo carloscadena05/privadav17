@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
 @Component({
     selector: 'app-sponsors-navbar',
     templateUrl: './sponsors-navbar.component.html',
-    styleUrls: ['./sponsors-navbar.component.css'],
+    styleUrls: ['./sponsors-navbar.component.scss'],
     standalone: false
 })
 

@@ -15,7 +15,7 @@ import { SessionService } from '../../_shared/services/session.service';
 
 @Component({
     templateUrl: './quarterly-list.html',
-    styleUrls: ['./quarterly-list.component.css'],
+    styleUrls: ['./quarterly-list.component.scss'],
     standalone: false
 })
 export class QuarterlyListComponent implements OnInit {

@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
 @Component({
     selector: 'app-quarterly-navbar',
     templateUrl: './quarterly-navbar.component.html',
-    styleUrls: ['./quarterly-navbar.component.css'],
+    styleUrls: ['./quarterly-navbar.component.scss'],
     standalone: false
 })
 

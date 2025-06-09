@@ -9,7 +9,7 @@ import { Member } from '../../_shared/models/member';
 
 @Component({
     templateUrl: './students-profile.component.html',
-    styleUrls: ['./students-profile.component.css', '../students.component.css'],
+    styleUrls: ['./students-profile.component.scss', '../students.component.scss'],
     standalone: false
 })
 export class StudentProfileComponent implements OnInit {

@@ -9,7 +9,7 @@ import { ColumnSortService } from 'src/app/_shared/services/column-sort.service'
 @Component({
   selector: 'app-ssr-submitted-count',
   templateUrl: './mentor-reports-submitted.component.html',
-  styleUrls: [ './mentor-reports-submitted.component.css' ]
+  styleUrls: [ './mentor-reports-submitted.component.scss' ]
 })
 export class StudentSelfReportsSubmittedComponent implements OnInit {
   reportTypes: SELECTITEM[];

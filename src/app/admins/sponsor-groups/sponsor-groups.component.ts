@@ -11,7 +11,7 @@ import { ColumnSortService } from '../../_shared/services/column-sort.service';
 @Component({
     selector: 'app-sponsor-groups',
     templateUrl: './sponsor-groups.component.html',
-    styleUrls: ['./sponsor-groups.component.css'],
+    styleUrls: ['./sponsor-groups.component.scss'],
     standalone: false
 })
 export class SponsorGroupsComponent implements OnInit {

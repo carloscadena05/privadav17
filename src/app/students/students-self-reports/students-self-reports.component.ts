@@ -16,7 +16,7 @@ import { SessionService } from "../../_shared/services/session.service";
 
 @Component({
     templateUrl: "./students-self-reports.component.html",
-    styleUrls: ["./students-self-reports.component.css", "../students.component.css"],
+    styleUrls: ["./students-self-reports.component.scss", "../students.component.scss"],
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })

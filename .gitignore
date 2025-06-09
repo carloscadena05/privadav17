@@ -3,8 +3,8 @@ dockerfile
 .dockerignore
 nginx.conf
 
-src/assets/css/bootstrap.min_ORIG.css
-src/assets/css/bootstrap_ORIG.css
+src/assets/css/bootstrap.min_ORIG.scss
+src/assets/css/bootstrap_ORIG.scss
 src/assets/images/StudentPhotos
 src/assets/images/MemberPhotos
 src/app/_shared/services/url-config.ts

@@ -13,7 +13,7 @@ import { UIState } from '../../../_store/ui/ui.state';
 @Component({
     selector: 'app-ssr-summary-tracking',
     templateUrl: 'ssr-summary-tracking.component.html',
-    styleUrls: ['ssr-summary-tracking.component.css'],
+    styleUrls: ['ssr-summary-tracking.component.scss'],
     standalone: false
 })
 export class StudentSelfReportsTrackingComponent implements OnInit

@@ -7,7 +7,7 @@ import { FollowUpRequestDTO } from '../../_shared/models/follow-up-requestDTO';
 import { SessionService } from '../../_shared/services/session.service';
 @Component({
     selector: 'app-follow-up-requests',
-    styleUrls: ['./follow-up-requests.component.css'],
+    styleUrls: ['./follow-up-requests.component.scss'],
     templateUrl: 'follow-up-requests.component.html',
     standalone: false
 })

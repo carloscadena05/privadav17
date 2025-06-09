@@ -12,7 +12,7 @@ import { UIState } from 'src/app/_store/ui/ui.state';
 
 @Component({
     templateUrl: './admins-member-list.component.html',
-    styleUrls: ['./admins-member-list.component.css'],
+    styleUrls: ['./admins-member-list.component.scss'],
     standalone: false
 })
 export class AdminsMemberListComponent implements OnInit {

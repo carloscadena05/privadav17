@@ -19,7 +19,7 @@ import { UrlService } from '../../_shared/services/url.service';
 
 @Component({
     templateUrl: './payments-edit.component.html',
-    styleUrls: ['./payments-edit.component.css'],
+    styleUrls: ['./payments-edit.component.scss'],
     standalone: false
 })
 export class PaymentsEditComponent implements OnInit {

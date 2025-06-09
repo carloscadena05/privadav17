@@ -20,7 +20,7 @@ import { UrlService } from '../../_shared/services/url.service';
 
 @Component({
     templateUrl: './inscriptions-edit.component.html',
-    styleUrls: ['./inscriptions-edit.component.css'],
+    styleUrls: ['./inscriptions-edit.component.scss'],
     standalone: false
 })
 export class InscriptionsEditComponent implements OnInit {

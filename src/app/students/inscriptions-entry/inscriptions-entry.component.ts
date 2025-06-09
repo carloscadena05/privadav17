@@ -20,7 +20,7 @@ registerLocaleData(localePy, "es");
 
 @Component({
     templateUrl: "./inscriptions-entry.component.html",
-    styleUrls: ["./inscriptions-entry.component.css", "../students.component.css"],
+    styleUrls: ["./inscriptions-entry.component.scss", "../students.component.scss"],
     standalone: false
 })
 export class InscriptionsEntryComponent implements OnInit {

@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
  */
 @Component({
     templateUrl: 'admins.component.html',
-    styleUrls: ['admins.component.css'],
+    styleUrls: ['admins.component.scss'],
     standalone: false
 })
 export class AdminsComponent {}

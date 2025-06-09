@@ -30,9 +30,10 @@
               "src/assets"
             ],
             "styles": [
-              "src/assets/css/main.css",
-              "src/assets/css/project.css",
-              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css"
+              "src/styles.css",
+              "src/assets/css/main.scss",
+              "src/assets/css/project.scss",
+              "./node_modules/@angular/material/prebuilt-themes/azure-blue.scss"
             ],
             "scripts": [],
             "aot": false,

@@ -9,7 +9,7 @@ import { ColumnSortService } from '../../_shared/services/column-sort.service';
 @Component({
     selector: 'app-universities',
     templateUrl: './universities.component.html',
-    styleUrls: ['./universities.component.css'],
+    styleUrls: ['./universities.component.scss'],
     standalone: false
 })
 export class UniversitiesComponent implements OnInit {

@@ -12,7 +12,7 @@ import { StudentState } from 'src/app/_store/student/student.state';
 
 @Component({
     templateUrl: './mr-summary-updates.component.html',
-    styleUrls: ['../../../../assets/css/forms.css'],
+    styleUrls: ['../../../../assets/css/forms.scss'],
     standalone: false
 })
 export class MentorReportSummaryUpdatesComponent implements OnInit {

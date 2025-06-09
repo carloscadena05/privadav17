@@ -8,7 +8,7 @@ import { SessionService } from '../_shared/services/session.service';
 @Component({
     selector: 'app-headerbar',
     templateUrl: 'headerbar.component.html',
-    styleUrls: ['headerbar.component.css'],
+    styleUrls: ['headerbar.component.scss'],
     standalone: false
 })
 export class HeaderbarComponent implements OnInit {

@@ -18,7 +18,7 @@ import { UIState } from '../../_store/ui/ui.state';
 
 @Component({
     templateUrl: './inscriptions-list.component.html',
-    styleUrls: ['./inscriptions-list.component.css'],
+    styleUrls: ['./inscriptions-list.component.scss'],
     standalone: false
 })
 export class InscriptionsListComponent implements OnInit {

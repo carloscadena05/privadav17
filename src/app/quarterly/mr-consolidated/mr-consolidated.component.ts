@@ -13,7 +13,7 @@ import { SessionService } from '../../_shared/services/session.service';
 @Component({
     selector: 'app-mr-consolidated',
     templateUrl: './mr-consolidated.component.html',
-    styleUrls: ['./mr-consolidated.component.css'],
+    styleUrls: ['./mr-consolidated.component.scss'],
     standalone: false
 })
 export class MrConsolidatedComponent implements OnInit {

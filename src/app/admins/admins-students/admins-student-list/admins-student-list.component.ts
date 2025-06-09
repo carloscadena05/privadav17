@@ -23,7 +23,7 @@ import { UIState } from 'src/app/_store/ui/ui.state';
 @Component({
     selector: 'app-admins-student-list',
     templateUrl: './admins-student-list.component.html',
-    styleUrls: ['./admins-student-list.component.css'],
+    styleUrls: ['./admins-student-list.component.scss'],
     standalone: false
 })
 export class AdminsStudentListComponent implements OnInit {

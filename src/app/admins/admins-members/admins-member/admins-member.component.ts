@@ -10,7 +10,7 @@ import { UrlService } from 'src/app/_shared/services/url.service';
 
 @Component({
     templateUrl: './admins-member.component.html',
-    styleUrls: ['./admins-member.component.css'],
+    styleUrls: ['./admins-member.component.scss'],
     standalone: false
 })
 export class AdminsMemberComponent implements OnInit {

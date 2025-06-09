@@ -3,7 +3,7 @@ import { UrlService } from 'src/app/_shared/services/url.service';
 
 @Component({
     templateUrl: 'utilities.component.html',
-    styleUrls: ['utilities.component.css'],
+    styleUrls: ['utilities.component.scss'],
     standalone: false
 })
 

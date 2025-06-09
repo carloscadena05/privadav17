@@ -13,7 +13,7 @@ import { UIState } from 'src/app/_store/ui/ui.state';
 @Component({
     selector: 'app-ssr-missing',
     templateUrl: 'ssr-missing.component.html',
-    styleUrls: ['ssr-missing.component.css'],
+    styleUrls: ['ssr-missing.component.scss'],
     standalone: false
 })
 export class SSRMissingComponent implements OnInit {

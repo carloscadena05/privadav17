@@ -13,7 +13,7 @@ import { SessionService } from '../../_shared/services/session.service';
 @Component({
     selector: 'app-ja-comments',
     templateUrl: './ja-comments.component.html',
-    styleUrls: ['./ja-comments.component.css'],
+    styleUrls: ['./ja-comments.component.scss'],
     standalone: false
 })
 export class JaCommentsComponent implements OnInit {

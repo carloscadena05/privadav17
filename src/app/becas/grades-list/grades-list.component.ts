@@ -18,7 +18,7 @@ import { SessionService } from '../../_shared/services/session.service';
 
 @Component({
     templateUrl: './grades-list.component.html',
-    styleUrls: ['./grades-list.component.css'],
+    styleUrls: ['./grades-list.component.scss'],
     standalone: false
 })
 export class GradesListComponent implements OnInit {

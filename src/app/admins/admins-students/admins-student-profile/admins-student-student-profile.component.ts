@@ -19,7 +19,7 @@ import { StudentState } from 'src/app/_store/student/student.state';
 @Component({
     selector: 'app-admins-student-student-profile',
     templateUrl: './admins-student-student-profile.component.html',
-    styleUrls: ['./admins-student-student-profile.component.css'],
+    styleUrls: ['./admins-student-student-profile.component.scss'],
     standalone: false
 })
 export class AdminsStudentProfileComponent implements OnInit {

@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
  */
 @Component({
     templateUrl: './mentors.component.html',
-    styleUrls: ['./mentors.component.css'],
+    styleUrls: ['./mentors.component.scss'],
     standalone: false
 })
 export class MentorsComponent {

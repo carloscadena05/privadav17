@@ -20,7 +20,7 @@ import { SessionService } from "../../_shared/services/session.service";
 registerLocaleData(localePy, "es");
 @Component({
     templateUrl: "./grade-entry.component.html",
-    styleUrls: ["./grade-entry.component.css", "../students.component.css"],
+    styleUrls: ["./grade-entry.component.scss", "../students.component.scss"],
     standalone: false
 })
 export class GradeEntryComponent implements OnInit {

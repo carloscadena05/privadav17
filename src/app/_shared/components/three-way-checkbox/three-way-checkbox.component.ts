@@ -6,7 +6,7 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
 @Component({
     selector: 'app-three-way-checkbox',
     templateUrl: './three-way-checkbox.component.html',
-    styleUrls: ['./three-way-checkbox.component.css'],
+    styleUrls: ['./three-way-checkbox.component.scss'],
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,
