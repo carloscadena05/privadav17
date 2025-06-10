@@ -1,6 +1,6 @@
 import { APP_BASE_HREF, Location } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { NgModule, inject, provideAppInitializer } from '@angular/core';
+import { NgModule, inject, APP_INITIALIZER } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
@@ -21,8 +21,9 @@ import { UIState } from './_store/ui/ui.state';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatInputModule} from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 
 
@@ -58,11 +59,18 @@ export function appInit(constantsService: ConstantsService) {
       provide: APP_BASE_HREF,
       useValue: '/'
     },
-    provideAppInitializer(() => {
-      const initializerFn = (appInit)(inject(ConstantsService));
-      return initializerFn();
-    }),
-    Location
+    {
+      provide: APP_INITIALIZER,
+      useFactory: () => {
+        const constantsService = inject(ConstantsService);
+        return () => constantsService.loadFromDB();
+      },
+      multi: true
+    },
+
+
+    Location,
+    provideAnimationsAsync()
   ],
   bootstrap: [AppComponent]
 })

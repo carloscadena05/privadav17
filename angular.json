@@ -30,9 +30,10 @@
               "src/assets"
             ],
             "styles": [
+              "@angular/material/prebuilt-themes/indigo-pink.css",
               "src/assets/css/main.scss",
               "src/assets/css/project.scss",
-              "src/custom_theme-colors.scss"
+              "src/styles.scss"
             ],
             "scripts": [],
             "aot": false,

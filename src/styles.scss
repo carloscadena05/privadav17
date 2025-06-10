@@ -6,14 +6,14 @@
 @include mat.core();
 
 // Tailwind
-@import "tailwindcss";
-// @import "tailwindcss/components";
-// @import "tailwindcss/utilities";
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
 // Colores base (formato RGB separados)
-$primary_color: 130 2 99;
-$secondary_color: 251 139 36;
-$tertiary_color: 217 3 104;
+$primary_color: 28 148 164;
+$secondary_color: 22 56 77;
+$tertiary_color: 19 83 138;
 
 $success_color: 80 247 144;
 $advertence_color: 247 194 80;
