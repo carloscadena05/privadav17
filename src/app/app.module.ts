@@ -20,6 +20,11 @@ import { UIState } from './_store/ui/ui.state';
 // import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+
+
 
 export function appInit(constantsService: ConstantsService) {
   return () => constantsService.loadFromDB();
@@ -41,7 +46,10 @@ export function appInit(constantsService: ConstantsService) {
     AppSharedModule.forRoot(),
     // SweetAlert2Module.forRoot()
     BrowserAnimationsModule,
-    MatButtonModule
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatCheckboxModule
   ],
 
   exports: [ReactiveFormsModule, HttpClientModule, AppRoutingModule],
