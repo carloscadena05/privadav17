@@ -51,6 +51,7 @@ export class Member {
 
     public coloniaID?: number,
     public cellPhone?: string,
-    public colonia?: string
+    public colonia?: string,
+    public neonID?: number
   ) {}
 }

@@ -1,5 +1,10 @@
 import { Injectable } from '@angular/core';
 import { URL_CONFIG } from '../../../url-config';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { catchError, delay, mergeMap, retryWhen } from 'rxjs/operators';
+import { of, throwError } from 'rxjs';
+
+export declare type Method = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
 @Injectable({ providedIn: 'root' })
 export class UrlService {
@@ -8,7 +13,9 @@ export class UrlService {
   clientUrl: string;
 
 
-  constructor() {
+  constructor(
+    private http: HttpClient
+  ) {
     console.log('urlService constructor has ' + window.location.hostname);
     const hostName = window.location.hostname.toLocaleLowerCase();
 
@@ -50,5 +57,53 @@ export class UrlService {
 
   public getClientCallbackUrl(): string {
     return this.clientUrl + '/callback';
+  }
+
+  
+  async production<T>(method: Method, url: string, options?: {
+    body?: any,
+    params?: any,
+    headers?: any
+  }): Promise<T> {
+    if (url.includes('/neon/')) {
+      options = options || {};
+      options.headers = {
+        ...options.headers,
+        Authorization: "Basic am92ZW5lc2FkZWxhbnRlOjk5MDVlZGMyYTlhZTJlMGQ3MmRjYjU0NmQ1NTg0YWVi"
+      };
+    }
+
+    const _options: any = {
+      body: options?.body,
+      params: options?.params,
+      headers: new HttpHeaders(options?.headers || {})
+    };
+    console.log(url, options);
+    
+
+    return new Promise<T>((resolve) => {
+      this.http.request<T>(method, url, _options).pipe(
+        retryWhen(errors =>
+          errors.pipe(
+            mergeMap((error, i) => {
+              const maxRetries = 3;
+              const delayMs = 1000;
+              if (i < maxRetries) {
+                console.warn(`Reintentando (${i + 1}/${maxRetries}) para: ${url}`);
+                return of(error).pipe(delay(delayMs));
+              }
+              console.error(`Fallo definitivo para: ${url}`, error);
+              return throwError(() => error);
+            })
+          )
+        ),
+        catchError(error => {
+          console.error('Error capturado en catchError:', error);
+          return of(null);
+        })
+      ).subscribe((response: any) => {
+        resolve(response);
+      });
+    });
   }
 }

@@ -23,6 +23,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatMenuModule } from '@angular/material/menu';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 
@@ -50,7 +51,8 @@ export function appInit(constantsService: ConstantsService) {
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatMenuModule
   ],
 
   exports: [ReactiveFormsModule, HttpClientModule, AppRoutingModule],

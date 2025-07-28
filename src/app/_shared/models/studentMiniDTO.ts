@@ -5,6 +5,7 @@ export class StudentMiniDTO {
     public studentGUId?: string,
     public studentName?: string, // StudentName
     public statusId?: number, // StatusID
-    public email?: string
+    public email?: string,
+    public photoUrl?: string
   ) { }
 }

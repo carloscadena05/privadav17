@@ -53,6 +53,17 @@ import { MarkedPipe } from './pipes/marked-pipe';
 import { TrimGuidPipe } from './pipes/trim-guid-pipe';
 import { TruncateDatePipe } from './pipes/truncate-date-pipe';
 import { UnsafeHtmlPipe } from './pipes/unsafe-html-pipe';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { HugeiconsIconComponent } from '@hugeicons/angular';
 /**
  * Do not specify provider's for modules that might be imported by a lazy loaded module.
  */
@@ -60,7 +71,9 @@ import { UnsafeHtmlPipe } from './pipes/unsafe-html-pipe';
 @NgModule({
   imports: [
     CommonModule, RouterModule, ReactiveFormsModule, FormsModule,
-    /* NgbModule, */ NgxFileDropModule, SweetAlert2Module
+    /* NgbModule, */ NgxFileDropModule, SweetAlert2Module, HugeiconsIconComponent, MatInputModule,
+    MatFormFieldModule, MatTableModule, MatPaginatorModule, MatSortModule, MatDialogModule,
+    MatCheckboxModule, MatSlideToggleModule, MatAutocompleteModule
   ],
   declarations: [
     DisplayErrorsComponent,
@@ -163,7 +176,7 @@ import { UnsafeHtmlPipe } from './pipes/unsafe-html-pipe';
     HighchartsChartModule,
     AlertComponent,
     ThreeWayCheckboxComponent,
-
+    MatTooltipModule
   ]
 })
 export class AppSharedModule {

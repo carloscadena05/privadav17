@@ -77,7 +77,7 @@ private subscription: Subscription;
   }
 
   ngOnInit() {
-    this.isLoading = true;
+    this.isLoading = false;
 
     // // this.studentGUId = this.currRoute.snapshot.params['guid'];
     // this.followUpRequest.studentGUId = this.currentStudentGUId;
@@ -129,6 +129,8 @@ setSelectedStudent(studentGUId: string): void {
 
 
   onSubmit() {
+    this.isLoading = true;
+    
     console.log('Hi from FollowUpRequests Submit');
 
     if (this.myForm.invalid) {

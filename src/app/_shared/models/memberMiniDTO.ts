@@ -4,6 +4,7 @@ export class MemberMiniDTO {
     public memberId: number,
     public memberGUId: string,
     public memberName: string,
-    public email: string
+    public email: string,
+    public neonID?: number
   ) { }
 }

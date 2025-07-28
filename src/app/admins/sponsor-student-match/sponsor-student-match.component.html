@@ -1,0 +1,511 @@
+<!-- <div class="ripple-loader">
+    <div></div>
+    <div></div>
+</div>
+
+<div id="map" class="w-full h-96">
+</div>
+ -->
+<form [formGroup]="form" class="flex flex-wrap gap-6">
+    <section
+        [@expand]="selected_sponsor.value['First Name'] || selected_student.value.studentName ? 'opened' : 'closed'"
+        class="grid grid-cols-3 gap-6 basis-full ja-bg-white p-3 rounded-2xl z-50 ring-8 ring-slate-300 ">
+        <div [@expand]="selected_sponsor.value['First Name'] ? 'opened' : 'closed'"
+            class="rounded-lg ja-bg-slate-100 p-3 basis-72">
+            <h2 class="text-xl font-semibold leading-6 text-[#24384d]">Selected Sponsor</h2>
+            <h3 class="text-lg font-semibold text-[#1c94a4]">{{selected_sponsor.value["First Name"]}}
+                {{selected_sponsor.value["Last Name"]}}</h3>
+            <p class="text-[#24384d] italic -mt-2"> {{selected_sponsor.value['Field of Study or Student Type']}} </p>
+            <div class="flex items-baseline gap-x-1 -mt-1">
+                <p class="text-2xl font-semibold"
+                    [ngStyle]="{color: color(selected_sponsor.value['Pledge Balance'], selected_sponsor.value['Pledge Amount'])}">
+                    {{selected_sponsor.value["Pledge Balance"] | currency}} </p>
+                <p class="text-slate-500">/</p>
+                <p class="text-slate-500"> {{selected_sponsor.value["Pledge Amount"] | currency}} </p>
+            </div>
+        </div>
+
+        <div [@expand]="selected_student.value.studentName ? 'opened' : 'closed'"
+            class="rounded-lg ja-bg-slate-100 p-3 basis-72">
+            <h2 class="text-xl font-semibold leading-6 text-[#24384d]">Selected Student</h2>
+            <h3 class="text-lg font-semibold text-[#1c94a4]"> {{selected_student.value.studentName}}</h3>
+            <div class="flex flex-wrap gap-x-1.5 text-[#24384d] -mt-2">
+                <p class="italic inline"> {{selected_student.value.major}} </p>
+                -
+                <ng-container *ngTemplateOutlet="grad; context: {$implicit: selected_student.value}"></ng-container>
+            </div>
+            <div class="flex items-baseline gap-x-1 -mt-1">
+                <p class="text-2xl font-semibold"
+                    [ngStyle]="{color: color(selected_student.value.student_cost - selected_student.value.student_balance, selected_student.value.student_cost)}">
+                    {{selected_student.value.student_cost - selected_student.value.student_balance | currency}} </p>
+                <p class="text-slate-500">/</p>
+                <p class="text-slate-500"> {{selected_student.value.student_cost | currency}} </p>
+            </div>
+        </div>
+        @if(selected_sponsor.value['First Name'] && selected_student.value.studentName){
+            <button
+            (click)="match_sponsor_student()" class="ja-btn ja-btn-primary m-auto" type="button">Match Sponsor-Student</button>
+        }
+    </section>
+
+    <section [@change-size]="ready_to_match ? 'closed' : 'opened'" formGroupName="config"
+        class="basis-full shrink-0 rounded-2xl ja-bg-white p-3">
+        <h2 class="text-xl font-semibold text-[#24384d] w-full pb-3 col-span-3">Configuration balances</h2>
+        @if(!ready_to_match) {
+            <p class="text-slate-600 -mt-3 pb-3">Please, fill the fields with the cost information,
+                to provide the best possible matching</p>
+            }
+        @if(!ready_to_match){
+        <div class="flex *:basis-1/4 grow gap-x-6">
+            <mat-form-field appearance="outline">
+                <mat-label>Dollar cost</mat-label>
+                <input type="number" matInput="" formControlName="dollar" (keyup)="update_student_costs()">
+                <span matSuffix class="font-medium text-slate-600">MXN</span>
+                <mat-error>Please, type a valid value</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Current year</mat-label>
+                <input type="number" matInput="" formControlName="current_year" (keyup)="update_student_costs()">
+                <mat-error>Please, type a valid value</mat-error>
+            </mat-form-field>
+
+            <!-- <mat-form-field appearance="outline">
+                <mat-label>Operation cost</mat-label>
+                <input type="number" matInput="" formControlName="operation_cost" (keyup)="update_student_costs()">
+                <span matSuffix class="font-medium text-slate-600">MXN</span>
+                <mat-error>Please, type a valid value</mat-error>
+            </mat-form-field> -->
+
+            <mat-form-field appearance="outline">
+                <mat-label>Laptop cost</mat-label>
+                <input type="number" matInput="" formControlName="laptop_cost" (keyup)="update_student_costs()">
+                <span matSuffix class="font-medium text-slate-600">MXN</span>
+                <mat-error>Please, type a valid value</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Monthly payment</mat-label>
+                <input type="number" matInput="" formControlName="current_monthly_payment"
+                    (keyup)="update_student_costs()">
+                <span matSuffix class="font-medium text-slate-600">MXN</span>
+                <mat-error>Please, type a valid value</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Pledge exchange rate</mat-label>
+                <input type="number" matInput="" formControlName="pledge_exchange_rate"
+                    (keyup)="update_student_costs()">
+                <span matSuffix class="font-medium text-slate-600">MXN</span>
+                <mat-error>Please, type a valid value</mat-error>
+            </mat-form-field>
+        </div>
+        }
+        @if(ready_to_match){
+        <div class="flex *:basis-1/4 grow gap-x-6">
+            <div class="flex gap-x-1.5">
+                <span class="font-semibold">Dollar cost:</span>
+                <span>{{form.value.config!.dollar}} MXN</span>
+            </div>
+            <div class="flex gap-x-1.5">
+                <span class="font-semibold">Current year:</span>
+                <span>{{form.value.config!.current_year}}</span>
+            </div>
+            <!-- <div class="flex gap-x-1.5">
+                <span class="font-semibold">Operation cost:</span>
+                <span>{{form.value.config!.operation_cost}} MXN</span>
+            </div> -->
+            <div class="flex gap-x-1.5">
+                <span class="font-semibold">Laptop cost:</span>
+                <span>{{form.value.config!.laptop_cost}} MXN</span>
+            </div>
+            <div class="flex gap-x-1.5">
+                <span class="font-semibold">Current monthly payment:</span>
+                <span>{{form.value.config!.current_monthly_payment}} MXN</span>
+            </div>
+            <div class="flex gap-x-1.5">
+                <span class="font-semibold">Pledge exchange rate:</span>
+                <span>{{form.value.config!.pledge_exchange_rate}} MXN</span>
+            </div>
+        </div>
+        }
+        @if(!ready_to_match) {
+            <button (click)="ready_to_match = true" class="ja-btn ja-btn-primary-sc place-self-end">Ready
+                to match!</button>
+        }
+
+    </section>
+    <div [@expand]="ready_to_match ? 'opened' : 'closed'" class="px-3 flex gap-x-6 basis-full">
+
+        <section formGroupName="sponsors" class="w-full grow flex flex-col gap-y-6 duration-300">
+            <div class="flex items-baseline flex-wrap gap-x-3 justify-between *:mt-auto max-h-8">
+                <h2 class="text-xl font-semibold leading-6 text-[#24384d] !mt-0">Sponsors</h2>
+
+                <div class="flex gap-x-1.5">
+                    <div class="flex gap-x-1">
+                        <p class="font-medium text-[#24384d]">Conditions</p>
+                        <mat-form-field class="simple">
+                            <mat-select value="any" #cond>
+                                <mat-option value="any">Any</mat-option>
+                                @for(value of customFields['CONDITIONS']?.optionValues; track value){
+                                <mat-option [value]="value.name" class="simple"> 
+                                    <div class="flex gap-x-2">
+                                        <ng-container *ngTemplateOutlet="request; context: {$implicit: value.name}"></ng-container>
+                                        {{value.name}}
+                                    </div>
+                                </mat-option>
+                                }
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="flex gap-x-1">
+                        <p class="font-medium text-[#24384d]">Field</p>
+                        <mat-form-field class="simple">
+                            <mat-select value="any" #field>
+                                <mat-option value="any">Any</mat-option>
+                                @for(value of customFields['Field of Study or Student Type']?.optionValues; track value){
+                                    <mat-option [value]="value.name" class="simple"> {{value.name}} </mat-option>
+                                }
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <button type="button" (click)="alphabetize()" class="mb-1">
+                        @if(sort_direction != 'asc'){
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20"
+                                color="#24384d" fill="none">
+                                <path
+                                    d="M4 14H8.42109C9.35119 14 9.81624 14 9.94012 14.2801C10.064 14.5603 9.74755 14.8963 9.11466 15.5684L5.47691 19.4316C4.84402 20.1037 4.52757 20.4397 4.65145 20.7199C4.77533 21 5.24038 21 6.17048 21H10"
+                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                                <path
+                                    d="M4 9L6.10557 4.30527C6.49585 3.43509 6.69098 3 7 3C7.30902 3 7.50415 3.43509 7.89443 4.30527L10 9"
+                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                                <path
+                                    d="M17.5 20V4M17.5 20C16.7998 20 15.4915 18.0057 15 17.5M17.5 20C18.2002 20 19.5085 18.0057 20 17.5"
+                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                        }
+                        @if(sort_direction == 'asc'){
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20"
+                                color="#24384d" fill="none">
+                                <path
+                                    d="M4 3H8.42109C9.35119 3 9.81624 3 9.94012 3.28013C10.064 3.56026 9.74755 3.89632 9.11466 4.56842L5.47691 8.43158C4.84402 9.10368 4.52757 9.43974 4.65145 9.71987C4.77533 10 5.24038 10 6.17048 10H10"
+                                    stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                </path>
+                                <path
+                                    d="M4 21L6.10557 16.3053C6.49585 15.4351 6.69098 15 7 15C7.30902 15 7.50415 15.4351 7.89443 16.3053L10 21"
+                                    stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                </path>
+                                <path
+                                    d="M17.5 20V4M17.5 20C16.7998 20 15.4915 18.0057 15 17.5M17.5 20C18.2002 20 19.5085 18.0057 20 17.5"
+                                    stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                </path>
+                            </svg>
+                        }
+                    </button>
+                </div>
+            </div>
+
+            <mat-form-field appearance="outline" class="-my-6">
+                <mat-label>Search</mat-label>
+                <input type="text" matInput #search_sponsor>
+            </mat-form-field>
+            <!-- | filterByObject: search_sponsor.value | filterByField: {field: 'CONDITIONS', value: cond.value}  | filterByField: {field: 'Field of Study or Student Type', value: field.value} | aphabetize: sort_direction -->
+            @for(sponsor of sponsors_array().controls; let sponsor_i = $index; track sponsor){
+            <div (click)="select_sponsor(sponsor); selected_sponsor_i = sponsor_i"
+                [formGroupName]="sponsor_i"
+                [ngClass]="(!sponsor.value.active && 'hidden') + sponsor_is_selected(sponsor.value['Account ID']) + hide_object(sponsor.value, search_sponsor.value) + hide_object(sponsor.value, cond.value, 'CONDITIONS') + hide_object(sponsor.value, field.value, 'Field of Study or Student Type')"
+                [ngStyle]="{'order': get_sponsor_order(sponsor.value['Account ID'], sponsor.value['Pledge Balance'])}"
+                class="rounded-2xl ja-bg-white p-3 border-2 hover:border-[#1c94a4] duration-300">
+                <h3 class="text-lg font-semibold text-[#1c94a4] flex gap-x-1.5 items-center">
+                    {{sponsor.value["First Name"]}} {{sponsor.value["Last Name"]}}
+                    <ng-container
+                        *ngTemplateOutlet="request; context: {$implicit: sponsor?.value?.['CONDITIONS']}"></ng-container>
+
+                    <ng-container
+                        *ngTemplateOutlet="Gender; context: {$implicit: sponsor?.value?.['Gender']}"></ng-container>
+                </h3>
+                <p class="text-[#24384d] italic"> {{sponsor.value['Field of Study or Student Type']}} </p>
+                <div class="flex items-baseline gap-x-1">
+                    <p class="text-2xl font-semibold"
+                        [ngStyle]="{color: color(sponsor.value['Pledge Balance'], sponsor.value['Pledge Amount'])}">
+                        {{sponsor.value["Pledge Balance"] | currency}} </p>
+                    <p class="text-slate-500">/</p>
+                    <p class="text-slate-500"> {{sponsor.value["Pledge Amount"] | currency}} </p>
+                </div>
+            </div>
+            }
+        </section>
+
+        <section formGroupName="students" class="w-full grow flex flex-col gap-y-6 duration-300">
+            <h2 class="text-xl font-semibold leading-6 text-[#24384d] h-8">Students</h2>
+
+            <mat-form-field appearance="outline" class="-my-6">
+                <mat-label>Search</mat-label>
+                <input type="text" matInput #search_student>
+            </mat-form-field>
+            <!-- | filterByObject: search_student.value  -->
+            @for(student of students_array().controls ; let student_i = $index; track student){
+            <div (click)="select_student(student); selected_student_i = student_i"
+                [formGroupName]="student_i"
+                [ngClass]="(!student.value.active ? 'hidden' : '') + student_is_selected(student.value['studentId']) +  hide_object(student.value, search_student.value)"
+                [ngStyle]="{'order': ordered_index(student.value.studentId)}"
+                class="flex gap-x-2 justify-between rounded-2xl ja-bg-white p-3 border-2 hover:border-[#1c94a4] duration-300"><!-- {{student.value | json}} -->
+                <!-- <img src="https://privada.jovenesadelante.org/{{student.value.photoUrl?.substring(9)}}" class="max-h-20 rounded-lg aspect-v-photo object-cover"> -->
+                <div class="grow">
+                    <h3 class="text-lg font-semibold text-[#1c94a4] flex gap-x-1.5 items-center">
+                        {{student.value.studentName}}
+                        <ng-container
+                            *ngTemplateOutlet="Gender; context: {$implicit: student.value?.['gender']}"></ng-container>
+                    </h3>
+                    <div class="flex flex-wrap gap-x-1.5 text-[#24384d]">
+                        <p class="italic"> {{student.value.major}} </p>
+                        -
+                        <ng-container *ngTemplateOutlet="grad; context: {$implicit: student.value}"></ng-container>
+                    </div>
+                    <div class="flex items-baseline gap-x-1">
+                        <p class="text-2xl font-semibold"
+                            [ngStyle]="{color: color(student.value.student_cost - student.value.student_balance, student.value.student_cost)}">
+                            {{student.value.student_cost - student.value.student_balance | currency}} </p>
+                        <p class="text-slate-500">/</p>
+                        <p class="text-slate-500"> {{student.value.student_cost | currency}} </p>
+                    </div>
+                </div>
+                <table class="shrink-0 rounded-md overflow-hidden">
+                    <thead>
+                        <tr class="bg-secondary text-white text-xs">
+                            <th>Concept</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody><!-- En tu template (línea ~292) -->
+<!-- @for(year of [].constructor(Math.max(0, months_years(student.value).years)); track year; let i = $index) { -->
+                        @for(year of [].constructor(months_years(student.value).years); track year; let i = $index) {
+                            <tr>
+                                <td class="text-xxs p-0.5"> {{current_year + i}} - {{current_year + i + 1}} </td>
+                                <td class="text-xxs p-0.5"> {{12 * form.value.config.current_monthly_payment | currency }} </td>
+                            </tr>
+                        }
+                            
+                        @if(months_years(student.value).months) {
+                            <tr>
+                                <td class="text-xxs p-0.5"> 
+                                    Aug {{current_year + months_years(student.value).years}} - {{month_from(months_years(student.value).months)}} 
+                                    @if(months_years(student.value).months > 5) {
+                                        {{current_year + months_years(student.value).years + 1}}
+                                    } @else {
+                                        {{current_year + months_years(student.value).years}}
+                                    }
+                                </td>
+                                <td class="text-xxs p-0.5"> {{(months_years(student.value).months) * form.value.config.current_monthly_payment | currency }} </td>
+                            </tr>
+                        }
+                            
+                        <!-- <tr class="bg-primary text-white">
+                                <td class="text-xxs p-0.5"> SUB months </td>
+                                <td class="text-xxs p-0.5"> {{months_years(student.value).years * 12 * form.value.config.current_monthly_payment + (months_years(student.value).months) * form.value.config.current_monthly_payment}} </td>
+                            </tr> -->
+
+                            <tr>
+                                <td class="text-xxs p-0.5"> Laptop </td>
+                                <td class="text-xxs p-0.5"> {{form.value.config.laptop_cost | currency}} </td>
+                            </tr>
+                            
+                            <!-- <tr class="bg-primary text-white">
+                                <td class="text-xxs p-0.5"> SUB lap </td>
+                                <td class="text-xxs p-0.5"> {{form.value.config.laptop_cost + months_years(student.value).years * 12 * form.value.config.current_monthly_payment + (months_years(student.value).months) * form.value.config.current_monthly_payment}} </td>
+                            </tr> -->
+
+                            <tr>
+                                <td class="text-xxs p-0.5"> Título </td>
+                                <td class="text-xxs p-0.5">
+                                    <input type="number" formControlName="titulo" (keyup)="update_student_costs()"
+                                    (click)="$event.stopPropagation()" placeholder="Titulo Cost" class="bg-primary/10 placeholder:text-primary max-w-24">
+                                </td>
+                            </tr>
+                            
+                            <!-- <tr class="bg-primary text-white">
+                                <td class="text-xxs p-0.5"> SUB tit </td>
+                                <td class="text-xxs p-0.5"> {{student.value.titulo + form.value.config.laptop_cost + months_years(student.value).years * 12 * form.value.config.current_monthly_payment + (months_years(student.value).months) * form.value.config.current_monthly_payment}} </td>
+                            </tr> -->
+
+                            <tr class="border-b border-b-secondary">
+                                <td class="text-xxs p-0.5"> 20% Op. cost </td>
+                                <td class="text-xxs p-0.5"> {{student.value.operation_cost | currency }} </td>
+                            </tr>
+
+                            <tr>
+                                <td class="text-xxs p-0.5"> Projected Pesos</td>
+                                <td class="text-xxs p-0.5"> {{(student.value.student_cost * form.value.config.dollar) | currency }} </td>
+                            </tr>
+
+                            <tr>
+                                <td class="text-xxs p-0.5"> Projected Dollar</td>
+                                <td class="text-xxs p-0.5"> {{student.value.student_cost | currency }} USD </td>
+                            </tr>
+                    </tbody>
+                </table>
+            </div>
+            }
+        </section>
+
+        @if(matched_array().value.length){
+            <section formGroupName="matched" class="w-full grow flex flex-col gap-y-6 duration-300">
+            <h2 class="text-xl font-semibold leading-6 text-[#24384d]">Matched Sponsors-Students</h2>
+            <button (click)="save()" type="button" class="ja-btn ja-btn-primary -mt-5 !py-2.5">Apply matches</button>
+            @for(match of matched_array().controls; let match_i = $index; track match){
+            <div [formGroupName]="match_i"
+                class="rounded-2xl ja-bg-white p-3 border-2 hover:border-[#1c94a4] duration-300">
+                <div class="flex gap-x-2">
+                    <!-- <img src="https://privada.jovenesadelante.org/{{match.value.photoUrl?.substring(9)}}" class="max-h-20 rounded-lg aspect-v-photo object-cover"> -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-[#1c94a4] flex gap-x-1.5"> {{match.value.studentName}}</h3>
+                        <div class="flex items-baseline gap-x-1">
+                            <p class="text-2xl font-semibold"
+                                [ngStyle]="{color: color(match.value.student_cost - match.value.student_balance, match.value.student_cost)}">
+                                {{ match.value.student_cost - match.value.student_balance | currency}} </p>
+                            <p class="text-slate-500">/</p>
+                            <p class="text-slate-500"> {{match.value.student_cost | currency}} </p>
+                        </div>
+                    </div>
+                </div>
+                <hr class="mt-3 pt-3 border-t border-slate-200">
+                <p class="text-[#1c94a4]  font-semibold">Sponsors</p>
+                @for(sponsor of match.value.balance_history; let balance_history_i = $index; track sponsor){
+                <div class="flex gap-x-1.5 justify-between">
+                    <div class="flex gap-x-1.5">
+                        <p class="italic text-[#24384d] font-semibold">{{sponsor.sponsor_name}} </p>
+                        <p class="text-[#00cd33]">{{sponsor.balance_received | currency}}</p>
+                    </div>
+                    <button (click)="unmatch_sponsor_student(match_i, balance_history_i)" type="button"
+                        class="ja-btn ja-btn-red-light !rounded-full aspect-square scale-75 !p-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16"
+                            color="#c2026b" fill="none">
+                            <path d="M19.0005 4.99988L5.00049 18.9999M5.00049 4.99988L19.0005 18.9999"
+                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                    </button>
+                </div>
+                }
+            </div>
+            }
+        </section>
+    }
+    </div>
+</form>
+
+<ng-template #Gender let-g>
+    @if(g == 'M' || g == 'Male'){
+        <div class="bg-[#289ce8]/10 flex justify-center items-center rounded-full size-8" [matTooltip]="'Gender: ' + g">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#289ce8" fill="none">
+            <path
+                d="M14 4C14 5.10457 13.1046 6 12 6C10.8954 6 10 5.10457 10 4C10 2.89543 10.8954 2 12 2C13.1046 2 14 2.89543 14 4Z"
+                stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path
+                d="M16 12.5C16 10.6144 16 9.67157 15.4142 9.08579C14.8284 8.5 13.8856 8.5 12 8.5C10.1144 8.5 9.17157 8.5 8.58579 9.08579C8 9.67157 8 10.6144 8 12.5V14C8 14.9428 8 15.4142 8.29289 15.7071C8.58579 16 9.05719 16 10 16V20C10 20.9428 10 21.4142 10.2929 21.7071C10.5858 22 11.0572 22 12 22C12.9428 22 13.4142 22 13.7071 21.7071C14 21.4142 14 20.9428 14 20V16C14.9428 16 15.4142 16 15.7071 15.7071C16 15.4142 16 14.9428 16 14V12.5Z"
+                stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+        </svg>
+        </div>
+    }
+
+    @if(g == 'F' || g == 'Female'){
+    <div class="bg-[#f56595]/10 flex justify-center items-center rounded-full size-8" [matTooltip]="'Gender: ' + g">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#f56595" fill="none">
+            <path
+                d="M14 4C14 5.10457 13.1046 6 12 6C10.8954 6 10 5.10457 10 4C10 2.89543 10.8954 2 12 2C13.1046 2 14 2.89543 14 4Z"
+                stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path
+                d="M10.0002 16V20C10.0002 20.9428 10.0002 21.4142 10.2931 21.7071C10.586 22 11.0574 22 12.0002 22C12.943 22 13.4144 22 13.7073 21.7071C14.0002 21.4142 14.0002 20.9428 14.0002 20V16L14.2603 16.0007C15.8127 16.0005 16.5889 16.0004 16.8927 15.5149C17.1965 15.0295 16.8312 14.3728 16.1007 13.0595L14.3008 9.82358C13.8476 9.00874 12.9628 8.49982 11.9996 8.5C11.0368 8.50018 10.1525 9.00901 9.69941 9.82351L7.89935 13.0595C7.1688 14.3728 6.80353 15.0294 7.10731 15.5149C7.41109 16.0004 8.1873 16.0005 9.73972 16.0007L10.0002 16Z"
+                stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+        </svg>
+    </div>
+    }
+
+    @if(g == 'Couple (straight)')    {
+        <div class="bg-gradient-to-r from-[#289ce8]/10 to-[#f56595]/10 flex justify-center items-center gap-x-2 rounded-full size-8" [matTooltip]="'Gender: ' + g">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#000000" fill="none">
+            <path
+                d="M19.4995 20V16.5C20.5856 16.5 21.1991 16.5 21.4186 16.0257C21.6381 15.5515 21.3953 14.9028 20.9095 13.6056L19.6676 10.2889C19.2571 9.19253 18.4179 8.5 17.5 8.5C16.5821 8.5 15.7429 9.19253 15.3324 10.2889L14.0905 13.6056C13.6047 14.9028 13.3619 15.5515 13.5814 16.0257C13.8009 16.5 14.4133 16.5 15.4995 16.5V20C15.4995 20.9428 15.4995 21.4142 15.7924 21.7071C16.0853 22 16.5567 22 17.4995 22C18.4423 22 18.9137 22 19.2066 21.7071C19.4995 21.4142 19.4995 20.9428 19.4995 20Z"
+                stroke="#f56595" stroke-width="1.5" stroke-linejoin="round" />
+            <path
+                d="M8.5 4C8.5 5.10457 7.60457 6 6.5 6C5.39543 6 4.5 5.10457 4.5 4C4.5 2.89543 5.39543 2 6.5 2C7.60457 2 8.5 2.89543 8.5 4Z"
+                stroke="#289ce8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path
+                d="M19.5 4C19.5 5.10457 18.6046 6 17.5 6C16.3954 6 15.5 5.10457 15.5 4C15.5 2.89543 16.3954 2 17.5 2C18.6046 2 19.5 2.89543 19.5 4Z"
+                stroke="#f56595" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path
+                d="M10.5 12.5C10.5 10.6144 10.5 9.67157 9.91421 9.08579C9.32843 8.5 8.38562 8.5 6.5 8.5C4.61438 8.5 3.67157 8.5 3.08579 9.08579C2.5 9.67157 2.5 10.6144 2.5 12.5V14.5C2.5 15.4428 2.5 15.9142 2.79289 16.2071C3.08579 16.5 3.55719 16.5 4.5 16.5V20C4.5 20.9428 4.5 21.4142 4.79289 21.7071C5.08579 22 5.55719 22 6.5 22C7.44281 22 7.91421 22 8.20711 21.7071C8.5 21.4142 8.5 20.9428 8.5 20V16.5C9.44281 16.5 9.91421 16.5 10.2071 16.2071C10.5 15.9142 10.5 15.4428 10.5 14.5V12.5Z"
+                stroke="#289ce8" stroke-width="1.5" stroke-linejoin="round" />
+        </svg>
+        </div>
+    }
+</ng-template>
+
+<ng-template #grad let-s>
+    <div class="flex items-center gap-x-1.5">
+        <div class="bg-[#ffb90a]/10 p-1 rounded-full">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" color="#ffb90a"
+                fill="none">
+                <path
+                    d="M2 8C2 9.34178 10.0949 13 11.9861 13C13.8772 13 21.9722 9.34178 21.9722 8C21.9722 6.65822 13.8772 3 11.9861 3C10.0949 3 2 6.65822 2 8Z"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                <path
+                    d="M5.99414 11L6.23925 16.6299C6.24415 16.7426 6.25634 16.8555 6.28901 16.9635C6.38998 17.2973 6.57608 17.6006 6.86 17.8044C9.08146 19.3985 14.8901 19.3985 17.1115 17.8044C17.3956 17.6006 17.5816 17.2973 17.6826 16.9635C17.7152 16.8555 17.7274 16.7426 17.7324 16.6299L17.9774 11"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                <path
+                    d="M20.4734 9.5V16.5M20.4734 16.5C19.6814 17.9463 19.3312 18.7212 18.9755 20C18.8983 20.455 18.9596 20.6843 19.2732 20.8879C19.4006 20.9706 19.5537 21 19.7055 21H21.2259C21.3876 21 21.5507 20.9663 21.6838 20.8745C21.9753 20.6735 22.0503 20.453 21.9713 20C21.6595 18.8126 21.2623 18.0008 20.4734 16.5Z"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+        </div>
+        @if(s?.gradMonthNum && s?.gradYear){
+        <p class="text-[#24384d] ">{{ s?.gradMonthNum + '-01-' + s?.gradYear |
+            date:'MMM, YYYY'}}</p>
+            }
+    </div>
+</ng-template>
+
+<ng-template #request let-r>
+    @if(r == 'Yes'){
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#00cd34" fill="none" [matTooltip]="'Request: ' + r">
+            <path
+                d="M22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12Z"
+                stroke="currentColor" stroke-width="1.5" />
+            <path d="M8 12.75C8 12.75 9.6 13.6625 10.4 15C10.4 15 12.8 9.75 16 8" stroke="currentColor"
+                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+    }
+
+    @if(r != 'Yes' && r != 'No' && r != null){
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#34cefe" fill="none" [matTooltip]="'Request: ' + r">
+            <path
+                d="M22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12Z"
+                stroke="currentColor" stroke-width="1.5"></path>
+            <path d="M12.2422 17V12C12.2422 11.5286 12.2422 11.2929 12.0957 11.1464C11.9493 11 11.7136 11 11.2422 11"
+                stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M11.992 8H12.001" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                stroke-linejoin="round"></path>
+        </svg>
+    }
+
+    @if(r == 'No'){
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#eb4034" fill="none" [matTooltip]="'Request: ' + r">
+            <path d="M14.9994 15L9 9M9.00064 15L15 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                stroke-linejoin="round" />
+            <path
+                d="M22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12Z"
+                stroke="currentColor" stroke-width="1.5" />
+        </svg>
+    }
+
+    @if(!r) {
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#1c94a4" fill="none">
+            <circle cx="12" cy="12" r="10" stroke="#141B34" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M9.5 9.5C9.5 8.11929 10.6193 7 12 7C13.3807 7 14.5 8.11929 14.5 9.5C14.5 10.3569 14.0689 11.1131 13.4117 11.5636C12.7283 12.0319 12 12.6716 12 13.5" stroke="#141B34" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M12.0001 17H12.009" stroke="#141B34" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+    }
+</ng-template>

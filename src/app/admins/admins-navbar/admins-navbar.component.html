@@ -1,11 +1,13 @@
-<nav>
-  <a [routerLinkActive]="['active']" [routerLink]="['/admins']" [routerLinkActiveOptions]="{ exact: true }">Data</a>
-  <a [routerLinkActive]="['active']" [routerLink]="['/admins/students']">Students</a>
-  <a [routerLinkActive]="['active']" [routerLink]="['/admins/members']">Members</a>
-  <a [routerLinkActive]="['active']" [routerLink]="['/admins/sponsor-groups']" data-cy="admins-sponsors" >Sponsors</a>
-  <a [routerLinkActive]="['active']" [routerLink]="['/admins/mentor-reports/mr-container']">MentorRpts</a>
-  <a [routerLinkActive]="['active']" [routerLink]="['/admins/student-reports/ssr-container']">StudentRpts</a>
-  <a [routerLinkActive]="['active']" [routerLink]="['/admins/follow-up/requests']">FollowUp</a>
-  <a [routerLinkActive]="['active']" [routerLink]="['/admins/universities']">Uni</a>
-  <a [routerLinkActive]="['active']" [routerLink]="['/admins/utilities']">Resources</a>
+<nav class="flex h-12 items-center justify-center gap-x-3 bg-secondary px-[5%]">
+  <a routerLinkActive="bg-white/20" [routerLink]="['/admins']" [routerLinkActiveOptions]="{ exact: true }" class="cursor-pointer rounded-lg px-2 font-medium text-slate-50 duration-300 hover:bg-white/10">Data</a>
+  <a routerLinkActive="bg-white/20" [routerLink]="['/admins/students']" class="cursor-pointer rounded-lg px-2 font-medium text-slate-50 duration-300 hover:bg-white/10">Students</a>
+  <a routerLinkActive="bg-white/20" [routerLink]="['/admins/members']" class="cursor-pointer rounded-lg px-2 font-medium text-slate-50 duration-300 hover:bg-white/10">Members</a>
+  <a routerLinkActive="bg-white/20" [routerLink]="['/admins/sponsor-groups']" data-cy="admins-sponsors"  class="cursor-pointer rounded-lg px-2 font-medium text-slate-50 duration-300 hover:bg-white/10">Sponsors</a>
+  <a routerLinkActive="bg-white/20" [routerLink]="['/admins/mentor-reports/mr-container']" class="cursor-pointer rounded-lg px-2 font-medium text-slate-50 duration-300 hover:bg-white/10">MentorRpts</a>
+  <a routerLinkActive="bg-white/20" [routerLink]="['/admins/student-reports/ssr-container']" class="cursor-pointer rounded-lg px-2 font-medium text-slate-50 duration-300 hover:bg-white/10">StudentRpts</a>
+  <a routerLinkActive="bg-white/20" [routerLink]="['/admins/follow-up/requests']" class="cursor-pointer rounded-lg px-2 font-medium text-slate-50 duration-300 hover:bg-white/10">FollowUp</a>
+  <a routerLinkActive="bg-white/20" [routerLink]="['/admins/universities']" class="cursor-pointer rounded-lg px-2 font-medium text-slate-50 duration-300 hover:bg-white/10">Uni</a>
+  <a routerLinkActive="bg-white/20" [routerLink]="['/admins/utilities']" class="cursor-pointer rounded-lg px-2 font-medium text-slate-50 duration-300 hover:bg-white/10">Resources</a>
+  <a routerLinkActive="bg-white/20" [routerLink]="['/admins/sponsor-student-match']" class="cursor-pointer rounded-lg px-2 font-medium text-slate-50 duration-300 hover:bg-white/10">Sponsor match</a>
+  <a routerLinkActive="bg-white/20" [routerLink]="['/admins/donations']" class="cursor-pointer rounded-lg px-2 font-medium text-slate-50 duration-300 hover:bg-white/10">Donations</a>
 </nav>

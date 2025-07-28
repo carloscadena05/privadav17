@@ -24,7 +24,10 @@ import { SponsorGroupComponent } from './sponsor-group/sponsor-group.component';
 import { SponsorGroupsComponent } from './sponsor-groups/sponsor-groups.component';
 import { UniversitiesComponent } from './universities/universities.component';
 import { UniversityEditComponent } from './university-edit/university-edit.component';
+import { UniversityAddComponent } from './universities/university-add/university-add.component';
 import { UtilitiesComponent } from './utilities/utilities.component';
+import { SponsorStudentMatchComponent } from './sponsor-student-match/sponsor-student-match.component';
+import { ExportDonationsComponent } from './export-donations/export-donations.component';
 
 const adminRoutes: Routes = [
   {
@@ -54,7 +57,7 @@ const adminRoutes: Routes = [
       },
 
 
-      {
+      /* {
         path: 'members',
         title: 'Members',
         component: AdminsMemberSearchComponent
@@ -62,6 +65,11 @@ const adminRoutes: Routes = [
       {
         path: 'members/memberList',
         title: 'Memberlist',
+        component: AdminsMemberListComponent
+      }, */
+      {
+        path: 'members',
+        title: 'Members',
         component: AdminsMemberListComponent
       },
       {
@@ -179,9 +187,24 @@ const adminRoutes: Routes = [
         component: UniversityEditComponent
       },
       {
+        path: 'university-add', // /:universityId',
+        title: 'University Add', // /:Universityid',
+        component: UniversityAddComponent
+      },
+      {
         path: 'utilities',
         title: 'Utilities',
         component: UtilitiesComponent
+      },
+      {
+        path: 'sponsor-student-match',
+        title: 'Sponsor Student Match',
+        component: SponsorStudentMatchComponent
+      },
+      {
+        path: 'donations',
+        title: 'Donations',
+        component: ExportDonationsComponent
       },
     ]
   }

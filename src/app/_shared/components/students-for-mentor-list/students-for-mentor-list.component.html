@@ -1,4 +1,4 @@
-<div *ngIf="errorMessage" class="alert alert-danger">{{errorMessage}}</div>
+<!-- <div *ngIf="errorMessage" class="alert alert-danger">{{errorMessage}}</div>
 <div *ngIf="!errorMessage">
   <table class="table table-condensed">
     <thead>
@@ -26,4 +26,37 @@
       </tr>
     </tbody>
   </table>
+</div> -->
+
+@if(errorMessage) {
+<div *ngIf="errorMessage" class="alert alert-danger">{{errorMessage}}</div>
+} @else {
+@if(haveData) {
+<div class="flex gap-4 justify-center flex-wrap">
+  <h3 class="basis-full text-secondary font-semibold">MENTORED STUDENTS</h3>
+  @for(student of students; track student) {
+  <div (click)='gotoStudent(student.studentGUId)'
+    class="w-32 rounded-2xl shadow-md p-2 flex flex-col items-center cursor-pointer relative hover:shadow-primary/50 duration-300">
+    <img [src]="'https://privada.jovenesadelante.org/' + student.photoUrl.substring(9)" alt=""
+      class="w-full aspect-v-photo object-cover rounded-lg">
+    <h4 class="text-primary font-semibold text-sm leading-4 text-center">{{student.studentName}}</h4>
+    <div class="flex gap-x-2">
+      <span class="text-slate-700 text-xs leading-3 text-center">{{student.status}}</span>
+      @if(student.status=='Current') {
+      <img src="/assets/images/{{ student.timelyMentorReportStatus }}.jpg" width="20" />
+      }@else {
+      <img src="/assets/images/NA.jpg" width="20" />
+      }
+      @if (student.status == 'Grad') {
+      <img src="/assets/images/svg/grad.svg" alt="" class="absolute -top-2 -right-2 rotate-45">
+      }
+      <!-- @if(student.studentMastersUniversityID) {
+      <img src="/assets/images/svg/masters.svg" alt="" matTooltip="Graduate studies student"
+        class="absolute -top-2 -left-2 -rotate-45">
+      } -->
+    </div>
+  </div>
+  }
 </div>
+}
+}

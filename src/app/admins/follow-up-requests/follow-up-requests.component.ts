@@ -5,6 +5,7 @@ import { constants } from '../../_shared/constants/constants';
 import { SELECTITEM } from '../../_shared/interfaces/SELECTITEM';
 import { FollowUpRequestDTO } from '../../_shared/models/follow-up-requestDTO';
 import { SessionService } from '../../_shared/services/session.service';
+import { PlusSignIcon } from '@hugeicons/core-free-icons';
 @Component({
     selector: 'app-follow-up-requests',
     styleUrls: ['./follow-up-requests.component.scss'],
@@ -22,6 +23,8 @@ export class FollowUpRequestsComponent implements OnInit {
   displayCompleteHistory: true;
   showAddDetails: boolean;
   selectedRequestStatusId: number;
+  PlusSignIcon = PlusSignIcon
+  spanish = navigator.language.startsWith('es');
 
   constructor(public followUpData: FollowUpDataService,
     public currRoute: ActivatedRoute,

@@ -1,0 +1,46 @@
+<section class="flex flex-wrap gap-1.5 text-xs border-b border-b-[#1c94a4]/10 pb-1.5 w-full">
+    <div class="text-[#1c94a4] font-semibold text-base">Applied filters</div>
+    
+    <ng-container *ngTemplateOutlet="chips; context: {$implicit: neon.donations_applied_filters}"></ng-container>
+    
+    <ng-container *ngTemplateOutlet="chips; context: {$implicit: neon.donations_custom_applied_filters}"></ng-container>
+    
+    @if(neon.group_donations){
+        <div class="flex gap-x-1 rounded-xl text-[#1c94a4] bg-[#1c94a4]/20 px-1.5 py-1">
+            Group donations by year
+            <button (click)="group_donations()" type="button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="12" height="12" color="#1c94a4"
+                    fill="none">
+                    <path d="M19.0005 4.99988L5.00049 18.9999M5.00049 4.99988L19.0005 18.9999" stroke="currentColor"
+                        stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </button>
+        </div>
+}
+</section>
+
+<ng-template #chips let-array >
+    @for(field of array; track field){
+        <div class="flex gap-x-1 rounded-xl text-[#1c94a4] bg-[#1c94a4]/20 px-1.5 py-1">
+            <h4 class="font-semibold text-[#1c94a4]">{{field.field}}:</h4>
+            @if(field.operator == 'IN_RANGE' || field.operator == 'NOT_IN_RANGE'){
+                {{field.valueList?.join(', ')}}
+            }
+            @if(field.operator == 'BLANK' || field.operator == 'NOT_BLANK') {
+
+            } @else {
+                <span>{{field.value}}</span>
+            }
+            @if(field.field != 'Account Type'){
+                <button (click)="delete_filter(field); reload_after_deleting ? update_donations() : null" type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="12" height="12" color="#1c94a4"
+                        fill="none">
+                        <path d="M19.0005 4.99988L5.00049 18.9999M5.00049 4.99988L19.0005 18.9999" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </button>
+                
+        }
+        </div>
+    }
+</ng-template>

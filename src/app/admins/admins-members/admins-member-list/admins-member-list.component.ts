@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { constants } from 'src/app/_shared/constants/constants';
@@ -11,9 +14,9 @@ import { SessionService } from 'src/app/_shared/services/session.service';
 import { UIState } from 'src/app/_store/ui/ui.state';
 
 @Component({
-    templateUrl: './admins-member-list.component.html',
-    styleUrls: ['./admins-member-list.component.scss'],
-    standalone: false
+  templateUrl: './admins-member-list.component.html',
+  styleUrls: ['./admins-member-list.component.scss'],
+  standalone: false
 })
 export class AdminsMemberListComponent implements OnInit {
   memberTypes: SELECTITEM[];
@@ -29,7 +32,17 @@ export class AdminsMemberListComponent implements OnInit {
   sortCriteria: SORTCRITERIA;
   displayTestNames: boolean;
 
-   testNameVisibility$ = this.store.select<boolean>(UIState.getTestNamesVisibility);
+  testNameVisibility$ = this.store.select<boolean>(UIState.getTestNamesVisibility);
+
+  /* 
+  + CARLOS' CODE
+   */
+
+  displayedColumns: string[] = ['index', 'member', 'status', 'email', 'student', 'student_status'];
+  dataSource: MatTableDataSource<MemberWithAnyRelatedStudent>;
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   constructor(
     public memberData: MemberDataService,
@@ -77,27 +90,51 @@ export class AdminsMemberListComponent implements OnInit {
 
   ngOnInit() {
     console.log('ngOnInit');
-    console.log('types[2] = ' + this.memberTypes[2].label);
+    console.log('types[2] = ' + this.memberTypes[2]?.label);
+
     const memType = this.session.getMemberType();
     let idx = 2;
     if (memType) {
       idx = this.memberTypes.findIndex((x) => x.value === memType.value);
       console.log('setting MemberType to saved ' + memType);
     }
-    this._selectedType = this.memberTypes[idx];
-    console.log('statuses[0] = ' + this.roleStatuses[0].value);
-    this._selectedStatus = this.roleStatuses[0];
-    this._selectedStudentStatus = this.studentStatuses[2];
+    this._selectedType = this.memberTypes[idx] ?? {
+      "value": "1010",
+      "label": "Mentor"
+    };
+    console.log('statuses[0] = ' + this.roleStatuses[0]?.value);
+    this._selectedStatus = this.roleStatuses[0] ?? {
+      "value": "1015",
+      "label": "Active"
+    };
+    this._selectedStudentStatus = this.studentStatuses[2] ?? {
+      "value": "1005",
+      "label": "Current"
+    };
     this.fetchFilteredData();
+  }
+
+  gotoCreateNewMember() {
+    const link = 'admins/members/createNewMember';
+    this.router.navigateByUrl(link);
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 
   fetchFilteredData() {
     this.isLoading = true;
     this.memberData
       .getMemberWithAnyRelatedStudent(
-        this.selectedType.label,
-        Number(this.selectedStatus.value),
-        Number(this.selectedStudentStatus.value)
+        this.selectedType?.label,
+        Number(this.selectedStatus?.value),
+        Number(this.selectedStudentStatus?.value)
       )
       .subscribe(
         (data) => {
@@ -108,6 +145,11 @@ export class AdminsMemberListComponent implements OnInit {
               return item;
             }
           });
+          this.dataSource = new MatTableDataSource(this.members);
+          setTimeout(() => {
+            this.dataSource.paginator = this.paginator;
+            this.dataSource.sort = this.sort;
+          }, 100);
         },
         (err) => (this.errorMessage = err),
         () => {
@@ -122,7 +164,7 @@ export class AdminsMemberListComponent implements OnInit {
     this.router.navigate(link);
   }
   gotoStudent(guid: string, studentName: string) {
-    console.log('setting studentName to ' + studentName + ' for guid ' + guid); ;
+    console.log('setting studentName to ' + studentName + ' for guid ' + guid);;
     // XXYYZZ this.session.setStudentInContextName(studentName);
     const link = ['admins/students/student-container', { guid: guid }];
 
@@ -139,4 +181,8 @@ export class AdminsMemberListComponent implements OnInit {
     console.log('parent received sortColumnCLick event with ' + sortCriteria.sortColumn);
     return this.members.sort((a, b) => this.columnSorter.compareValues(a, b, sortCriteria));
   }
+
+  compare_individual_types = (option: any, value: any) => {
+    return option && value && option.value == value.value;
+  };
 }

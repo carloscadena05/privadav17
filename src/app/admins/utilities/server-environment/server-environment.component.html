@@ -1,4 +1,4 @@
-<div>
+<!-- <div>
   <div class="row">
     <div class="col">
       <table>
@@ -14,5 +14,18 @@
 
       </table>
     </div>
+  </div>
+</div> -->
+
+<div class="flex rounded-2xl overflow-hidden">
+  <div class="flex flex-col bg-secondary text-slate-100 font-medium">
+    <div class="p-2">WebAPI ServerName</div>
+    <div class="p-2">Database ServerName</div>
+    <div class="p-2">Database Name</div>
+  </div>
+  <div class="flex flex-col *:p-2 w-24">
+    <div>{{ env.webApiServerName }}</div>
+    <div class="bg-secondary/15">{{ env.databaseServerName }}</div>
+    <div>{{ env.databaseName }}</div>
   </div>
 </div>

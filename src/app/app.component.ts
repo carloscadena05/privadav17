@@ -12,6 +12,7 @@ import { SessionService } from './_shared/services/session.service';
     standalone: false
 })
 export class AppComponent {
+  year = new Date().getFullYear();
 
   constructor(public auth: AuthService, public session: SessionService) {
     console.log('AppComponentConstructor, calling localAuthSetup');

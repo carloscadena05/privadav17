@@ -1,26 +1,99 @@
-<div class="card bg-primary">
-  <div class="card-header text-white" style="font-size:large">
-    Universities
-  </div>
-  <div class="card-body bg-white">
+<div>
+  <div class="flex flex-wrap gap-4 justify-center ja-bg-white p-4 rounded-xl">
+    <div class="w-full flex justify-between items-center gap-x-4">
+      <h1 class="ja-big-title">Browse Universities</h1><!-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="btn btn-secondary link "
+        (click)="gotoMemberSearch()">Member Search</span> -->
+      <button (click)="addNewUniversity()" type="button" class="ja-btn ja-btn-primary">
+        <hugeicons-icon
+          [icon]="PlusSignIcon"
+          [size]="24"
+          color="currentColor"
+          [strokeWidth]="1.5"
+        ></hugeicons-icon>
+            Add New University</button>
+    </div>
     @if (errorMessage) {
-      <span class="alert alert-danger">{{errorMessage}}</span>
+    <span class="alert alert-danger">{{errorMessage}}</span>
     }
     @if (successMessage) {
-      <span class="alert alert-success">{{successMessage}}</span>
+    <span class="alert alert-success">{{successMessage}}</span>
     }
-
-
     <div>
       @switch (isLoading) {
-        @case (true) {
-          <div class="text-center col-md-4 col-md-offset-4">
-            <app-loading-container>
-            </app-loading-container>
-          </div>
-        }
-        @case (false) {
-          <div>
+      @case (true) {
+      <div class="text-center col-md-4 col-md-offset-4">
+        <app-loading-container>
+        </app-loading-container>
+      </div>
+      }
+      @case (false) {
+
+      <div class="flex gap-x-4 flex-wrap justify-start md:justify-between">
+        <mat-form-field appearance="outline" class="w-full max-w-96">
+          <mat-label>Find university</mat-label>
+          <input matInput (keyup)="applyFilter($event)" #input>
+        </mat-form-field>
+
+        <mat-form-field class="simple">
+          <mat-select (selectionChange)="apply_filter({academicYearType: academicYearType.value})" #academicYearType
+            [value]="true">
+            <mat-option [value]="true" class="simple">(All)</mat-option>
+            <mat-option value="Cuatri" class="simple">Cuatrimestral</mat-option>
+            <mat-option value="Sem" class="simple">Semestral</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+      </div>
+
+      <div>
+        <table mat-table [dataSource]="dataSource" matSort class="ja-bg-white p-4 rounded-xl">
+
+          <ng-container matColumnDef="index">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>  </th>
+            <td mat-cell *matCellDef="let univ; let i = index"> {{ (paginator?.pageSize * paginator?.pageIndex) + (i + 1) }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+            <td mat-cell *matCellDef="let univ"> {{univ?.universityId }} </td>
+          </ng-container>
+          
+          <ng-container matColumnDef="universityAbbrev">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Abbreviation </th>
+            <td mat-cell *matCellDef="let univ"> {{univ?.universityAbbrev }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="universityName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+            <td mat-cell *matCellDef="let univ"> {{univ?.universityName }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="academicYearType">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Term </th>
+            <td mat-cell *matCellDef="let univ"> {{ univ?.academicYearType }}</td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+          </tr>
+        </table>
+
+        <mat-paginator [pageSizeOptions]="[10, 25, 100, universities.length]" aria-label="Select page of universities"></mat-paginator>
+      </div>
+<!--       <div class="form-group">
+        <label for="universityAbbrev">Add new University</label>
+        <input id="universityAbbrev" type="text" #UniversityAbbrev class="form-control form-control-sm"
+          placeholder="Abbreviation (2 - 10 characters)" />
+        <button class="btn btn-primary" (click)="addNewUniversity(UniversityAbbrev.value)">
+          Submit
+        </button>
+      </div>
+ -->
+
+      <!-- <div>
             <table appSortableTable class="table-sm table-striped">
               <thead>
                 <tr>
@@ -69,11 +142,86 @@
               @if (successMessage) {
                 <span class="alert alert-success">{{successMessage}}</span>
               }
-            </div>
+            </div> -->
+      }
+      }
+    </div>
+  </div>
+  <!-- <div class="card bg-primary">
+    <div class="card-header text-white" style="font-size:large">
+      Universities
+    </div>
+    <div class="card-body ja-bg-white">
+      @if (errorMessage) {
+      <span class="alert alert-danger">{{errorMessage}}</span>
+      }
+      @if (successMessage) {
+      <span class="alert alert-success">{{successMessage}}</span>
+      }
+
+
+      <div>
+        @switch (isLoading) {
+        @case (true) {
+        <div class="text-center col-md-4 col-md-offset-4">
+          <app-loading-container>
+          </app-loading-container>
+        </div>
+        }
+        @case (false) {
+        <div>
+          <table appSortableTable class="table-sm table-striped">
+            <thead>
+              <tr>
+                <th></th>
+                <th>&nbsp;</th>
+                <th app-sortable-column="universityAbbrev" sort-direction="asc" (onSortColumn)="onSortColumn($event)">
+                  Abbrev</th>
+                <th app-sortable-column="universityName" (onSortColumn)="onSortColumn($event)">
+                  Name</th>
+                <th app-sortable-column="academicYearType" (onSortColumn)="onSortColumn($event)">
+                  Term</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (uni of universities; track uni; let i = $index) {
+              <tr>
+                <td>
+                  {{ i+1 }}
+                </td>
+                <td>
+                  <span (click)="editUniversity(uni.universityId)" class="link">
+                    Edit</span>
+                </td>
+                <td>
+                  {{ uni.universityAbbrev }}
+                </td>
+                <td>
+                  {{ uni.universityName }}
+                </td>
+                <td>
+                  {{ uni.academicYearType }}
+                </td>
+              </tr>
+              }
+            </tbody>
+          </table>
+          <div class="form-group">
+            <label for="universityAbbrev">Add new University</label>
+            <input id="universityAbbrev" type="text" #UniversityAbbrev class="form-control form-control-sm"
+              placeholder="Abbreviation (2 - 10 characters)" />
+            <button class="btn btn-primary" (click)="addNewUniversity(UniversityAbbrev.value)">
+              Submit
+            </button>
+          </div>
+          @if (successMessage) {
+          <span class="alert alert-success">{{successMessage}}</span>
           }
+        </div>
+        }
         }
       </div>
     </div>
 
 
-    l
+    l -->

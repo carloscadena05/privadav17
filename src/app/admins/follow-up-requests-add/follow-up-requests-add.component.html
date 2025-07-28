@@ -1,77 +1,101 @@
+<div class="flex flex-wrap gap-4 justify-center ja-bg-white p-4 rounded-xl">
+  <div class="w-full flex justify-between items-center gap-x-4">
+    <h1 class="ja-big-title">Add New FollowUp Request</h1>
+    <div class="flex gap-x-2">
+      <button (click)="onCancel()" type="button" class="ja-btn ja-btn-primary-sc">
+        Cancel
+      </button>
+      <button (click)="onSubmit()" type="button" class="ja-btn ja-btn-primary">
+        Submit
+      </button>
+    </div>
+  </div>
+
+  @if(isLoading) {
+  <app-loading-container> </app-loading-container>
+  }
+  @else {
+    <form [formGroup]="myForm" class="flex flex-col *:w-full *:max-w-[30rem] w-full max-w-[30rem]">
+      <app-student-lookup [showSearchButton]="false" [showNonEssential]="false" [showSearchActiveOnly]="false"
+        (onSelectedStudentGUId)="onSelectedStudentGUId($event)"> </app-student-lookup>
+      @if (admins$ | async; as admins) {
+        <mat-form-field appearance="outline">
+          <mat-label>Assigned To:</mat-label>
+          <mat-select type="text" matInput formControlName="assignedToId" (change)="onSelectedAssignedToId()">
+            @for (admin of admins; track admin) {
+            <mat-option [value]="admin.value">{{ admin.label }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      }
+      <mat-form-field appearance="outline">
+        <mat-label>Subject (English or Spanish)</mat-label>
+        <input type="text" matInput formControlName="subject_English">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Detailed Description (English or Spanish)</mat-label>
+        <textarea type="text" matInput formControlName="updateHistory_English"></textarea>
+      </mat-form-field>
+    </form>
+  }
+</div>
+<!-- 
 <div class="card">
   <div class="card-header bg-warning text-for-warning" style="font-size: large">Add New FollowUp Request</div>
   <div class="card-body bg-white">
     @if (errorMessage) {
-      <div class="alert alert-danger">{{ errorMessage }}</div>
+    <div class="alert alert-danger">{{ errorMessage }}</div>
     }
     @if (successMessage) {
-      <div class="alert alert-success">{{ successMessage }}</div>
+    <div class="alert alert-success">{{ successMessage }}</div>
     }
 
     <form [formGroup]="myForm">
       <fieldset [disabled]="submitted">
         <div class="form-group">
           <div class="controls">
-            <app-student-lookup
-              [showSearchButton]="false"
-              [showNonEssential]="false"
-              [showSearchActiveOnly]="false"
-            (onSelectedStudentGUId)="onSelectedStudentGUId($event)"> </app-student-lookup>
+            <app-student-lookup [showSearchButton]="false" [showNonEssential]="false" [showSearchActiveOnly]="false"
+              (onSelectedStudentGUId)="onSelectedStudentGUId($event)"> </app-student-lookup>
           </div>
           <div class="controls">
             <label for="assignedToId">Assigned To: </label>
             @if (admins$ | async; as admins) {
-              <div>
-                <select
-                  id="assignedToId"
-                  formControlName="assignedToId"
-                  (change)="onSelectedAssignedToId()"
-                  class="form-control input-sm"
-                  >
-                  @for (admin of admins; track admin) {
-                    <option [value]="admin.value">{{ admin.label }}</option>
-                  }
-                </select>
-              </div>
+            <div>
+              <select id="assignedToId" formControlName="assignedToId" (change)="onSelectedAssignedToId()"
+                class="form-control input-sm">
+                @for (admin of admins; track admin) {
+                <option [value]="admin.value">{{ admin.label }}</option>
+                }
+              </select>
+            </div>
             }
 
             <div class="controls">
               <label>Subject (English or Spanish)</label>
-              <input
-                #success
-                formControlName="subject_English"
-                type="text"
-                class="form-control input-sm"
-                placeholder="Brief Description of Request"
-                />
-              </div>
+              <input #success formControlName="subject_English" type="text" class="form-control input-sm"
+                placeholder="Brief Description of Request" />
+            </div>
 
-              <div class="controls">
-                <label>Detailed Description (English or Spanish)</label>
-                <textarea
-                  #success
-                  formControlName="updateHistory_English"
-                  type="text"
-                  class="form-control input-sm"
-                  placeholder=""
-                  >
+            <div class="controls">
+              <label>Detailed Description (English or Spanish)</label>
+              <textarea #success formControlName="updateHistory_English" type="text" class="form-control input-sm"
+                placeholder="">
                 </textarea>
-              </div>
             </div>
-            <div class="form-group">
-              <div class="col-md-6 col-md-offset-1">
-                <span>
-                  <button class="btn btn-primary" style="width: 80px; margin-right: 10px" (click)="onSubmit()">
-                    Submit
-                  </button> </span
-                  >&nbsp;
-                  <span>
-                    <button type="button" class="btn btn-default" style="width: 75px" (click)="onCancel()">Cancel</button>
-                  </span>
-                </div>
-              </div>
+          </div>
+          <div class="form-group">
+            <div class="col-md-6 col-md-offset-1">
+              <span>
+                <button class="btn btn-primary" style="width: 80px; margin-right: 10px" (click)="onSubmit()">
+                  Submit
+                </button> </span>&nbsp;
+              <span>
+                <button type="button" class="btn btn-default" style="width: 75px" (click)="onCancel()">Cancel</button>
+              </span>
             </div>
-          </fieldset>
-        </form>
-      </div>
-    </div>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+</div> -->

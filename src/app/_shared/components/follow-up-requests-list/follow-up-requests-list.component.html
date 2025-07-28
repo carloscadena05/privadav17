@@ -1,89 +1,95 @@
-<div class="card-body bg-white">
-  <div class="row">
-  <table class="table-sm">
-    <thead>
-      <tr>
-        <!-- <th>ID</th> -->
-        <th></th>
-        <th>SubStatus</th>
-        <th>Assigned To</th>
-        <th>Student</th>
-        <th>Subject</th>
-        <th>Requested By</th>
-        <th>Updated By</th>
-        <th>Details</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let request of followUpRequests; let i = index" [ngClass]="{'table-info':request.followUpRequestId==currentRequestId}">
-        <td>
-          <span
-            class="btn btn-primary"
-            (click)="editFollowUpRequest(request.followUpRequestId)"
-            style="margin-left: 5px"
-          >
-          Edit
-            <!--  {{ 'id' + request.followUpRequestId }} -->
-          </span>
-        </td>
-        <td>
-          {{ request.requestSubStatus }}
-        </td>
-        <td>
-          {{ request.assignedToName }}
-        </td>
-        <td>
-          {{ request.studentName }}
-        </td>
-        <td>
-          {{ request.subject_English }}<br />
-          {{ request.subject_Spanish }}
-        </td>
-        <td>
-          {{ request.requesterName }} <br />
-          {{ request.createDateTime | truncateDate }}
-        </td>
-        <td>
-          {{ request.updaterName }} <br />
-          {{ request.lastUpdateDateTime | truncateDate }}
-        </td>
-        <td>
-          <span *ngIf="request.followUpRequestId==currentRequestId"
-            class="link"
-            (click)="clearSelectedRow()"
-            style="margin-left: 1px"
-           >
-           Hide&lt;&lt;
-          </span>
-          <span *ngIf="request.followUpRequestId!=currentRequestId"
-           class="link"
-           (click)="setSelectedRow(request.followUpRequestId)"
-           style="margin-left: 1px"
-          >
-           Show>>
-          </span>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <table>
+<div>
+  <table mat-table [dataSource]="dataSource" matSort class="ja-bg-white p-4 rounded-xl">
 
-  <tbody *ngIf="currentRequestId">
-     <tr><td><b>Details for Selected Row:</b></td></tr>
-      <tr class="table-info" style="width:100%;margin-top: 3px;"*ngFor="let request2 of followUpRequests; let j = index">
+    <!-- <ng-container matColumnDef="index">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>  </th>
+            <td mat-cell *matCellDef="let univ; let i = index"> {{ (paginator?.pageSize * paginator?.pageIndex) + (i + 1) }} </td>
+          </ng-container> -->
 
-            <td style="width:50%" *ngIf="request2.followUpRequestId==currentRequestId">
-              <div>
-             English Text:<br /> {{ request2.updateHistory_English }}
-            </div>
-            </td>
-            <td style="width:50%" *ngIf="request2.followUpRequestId==currentRequestId">
-              <div>
-             Texto Español:<br /> {{ request2.updateHistory_Spanish }}
-             </div>
-            </td>
-      </tr>
-    </tbody>
+    <ng-container matColumnDef="requestSubStatus">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> SubStatus </th>
+      <td mat-cell *matCellDef="let request"> {{request?.requestSubStatus }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="assignedToName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Assigned To </th>
+      <td mat-cell *matCellDef="let request"> {{request?.assignedToName }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="studentName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Student </th>
+      <td mat-cell *matCellDef="let request"> {{request?.studentName }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="subject">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Subject </th>
+      <td mat-cell *matCellDef="let request">
+        @if(spanish) {
+        {{ request.subject_Spanish }}
+        } @else {
+        {{ request.subject_English }}
+        }
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="requesterName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Requested By </th>
+      <td mat-cell *matCellDef="let request">
+        {{ request.requesterName }}
+        <br />
+        {{ request.createDateTime | date }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="updaterName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Updated By </th>
+      <td mat-cell *matCellDef="let request">
+        {{ request.updaterName }}
+        <br />
+        {{ request.lastUpdateDateTime | date }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="detail">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> </th>
+      <td mat-cell *matCellDef="let request">
+        <button (click)="show_more_request(selected_request, request)" class="ja-btn ja-btn-primary-sc">Show</button>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="edit">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> </th>
+      <td mat-cell *matCellDef="let request">
+        <button (click)="editFollowUpRequest(request.followUpRequestId)" class="ja-btn ja-btn-primary">Edit</button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="99">No data matching the filter "{{input.value}}"</td>
+    </tr>
   </table>
+
+  <mat-paginator [pageSizeOptions]="[10, 25, 100, followUpRequests.length]"
+    aria-label="Select page of requests"></mat-paginator>
 </div>
-</div>
+
+<ng-template #selected_request>
+  <header mat-dialog-title> 
+    <h1 class="ja-big-title">Request for {{currentRequest.studentName}}</h1>
+  </header>
+  <div mat-dialog-content>
+    <p>
+      @if(spanish) {
+      {{ currentRequest.updateHistory_Spanish }}
+      } @else {
+      {{ currentRequest.updateHistory_English }}
+      }
+    </p>
+  </div>
+  <div mat-dialog-actions align="end">
+    <button [mat-dialog-close]="true" class="ja-btn ja-btn-primary-sc">Close</button>
+  </div>
+</ng-template>

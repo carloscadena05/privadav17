@@ -1,95 +1,163 @@
-<div class="card bg-primary">
-  <div class="card-header text-white" style="font-size:large">
-    <span>Browse Members</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="btn btn-secondary link "
-  (click)="gotoMemberSearch()">Member Search</span>
-</div>
-<div class="card-body bg-white">
-  @if (errorMessage) {
+<div>
+  <div class="flex flex-wrap gap-4 justify-center ja-bg-white p-4 rounded-xl">
+    <div class="w-full flex justify-between items-center gap-x-4">
+      <h1 class="ja-big-title">Browse Members</h1><!-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="btn btn-secondary link "
+        (click)="gotoMemberSearch()">Member Search</span> -->
+      <button (click)="gotoCreateNewMember()" type="button" class="ja-btn ja-btn-primary">Add new member</button>
+    </div>
+    @if (errorMessage) {
     <span class="alert alert-danger">{{errorMessage}}</span>
-  }
-  @if (successMessage) {
+    }
+    @if (successMessage) {
     <span class="alert alert-success">{{successMessage}}</span>
-  }
-
-  <div>
-    <label for="TypeSelector">Type:</label>
-    <select name="TypeSelector" [(ngModel)]="selectedType">
-      @for (type of memberTypes; track type) {
-        <option [ngValue]="type">{{type.label}}</option>
-      }
-    </select>
-    &nbsp;
-    <label for="StatusSelector">Member Status:</label>
-    <select name="StatusSelector" [(ngModel)]="selectedStatus">
-      @for (status of roleStatuses; track status) {
-        <option [ngValue]="status">{{status.label}}</option>
-      }
-    </select>
-    &nbsp;
-    <label for="StudentStatusSelector">Student Status:</label>
-    <select name="StudentStatusSelector" [(ngModel)]="selectedStudentStatus">
-      @for (status of studentStatuses; track status) {
-        <option [ngValue]="status">{{status.label}}</option>
-      }
-    </select>
-
-  </div>
-  <div>
-    @switch (isLoading) {
+    }
+    <div>
+      @switch (isLoading) {
       @case (true) {
-        <div class="text-center col-md-4 col-md-offset-4">
-          <app-loading-container>
-          </app-loading-container>
-        </div>
+      <div class="text-center col-md-4 col-md-offset-4">
+        <app-loading-container>
+        </app-loading-container>
+      </div>
       }
       @case (false) {
-        <div>
-          <table appSortableTable class="table-sm table-striped">
-            <thead>
-              <tr>
-                <th></th>
-                <th></th>
-                <th app-sortable-column="memberName" (onSortColumn)="onSortColumn($event)">Member</th>
-                <th app-sortable-column="memberStatus" (onSortColumn)="onSortColumn($event)">Member Status</th>
-                <th app-sortable-column="email" (onSortColumn)="onSortColumn($event)">Email</th>
-                <th app-sortable-column="relatedStudentName" (onSortColumn)="onSortColumn($event)">Related Student</th>
-                <th app-sortable-column="relatedStudentStatus" (onSortColumn)="onSortColumn($event)">Student Status</th>
-                <!-- <th app-sortable-column="mentorName" (onSortColumn)="onSortColumn($event)">Communication History</th> -->
-              </tr>
-            </thead>
-            <tbody>
-              @for (member of members; track member; let i = $index) {
-                <tr>
-                  <td>
-                    {{ i+1 }}
-                  </td>
-                  <td>
-                    <img [src]="member.photoUrl" height="30" class="thumbnail" />
-                  </td>
-                  <td (click)='gotoMember(member.memberGUId)' class='link'>
-                    {{ member.lastNames }}, {{ member.firstNames }}
-                  </td>
-                  <td>
-                    {{member.memberStatus}}
-                  </td>
-                  <td>
-                    <a href='mailto:{{ member.email }}'>{{ member.email }}</a>
-                  </td>
-                  <td (click)='gotoStudent(member.relatedStudentGUId, member.relatedStudentName)' class='link'>
-                    {{ member.relatedStudentName }}
-                  </td>
-                  <td>
-                    {{member.relatedStudentStatus}}
-                  </td>
-                </tr>
+
+      <div class="flex gap-x-4 flex-wrap justify-start md:justify-between">
+        <mat-form-field appearance="outline" class="w-full max-w-96">
+          <mat-label>Find member</mat-label>
+          <input matInput (keyup)="applyFilter($event)" #input>
+        </mat-form-field>
+
+        <div class="flex flex-wrap gap-x-2">
+          <p class="font-medium text-[#24384d]">Type</p>
+          <mat-form-field class="simple">
+            <mat-select [compareWith]="compare_individual_types" [(ngModel)]="selectedType">
+              @for (type of memberTypes; track type) {
+              <mat-option class="simple" [value]="type">{{type.label}}</mat-option>
               }
-            </tbody>
-          </table>
+            </mat-select>
+          </mat-form-field>
+          &nbsp;
+          <p class="font-medium text-[#24384d]">Member Status</p>
+          <mat-form-field class="simple">
+            <mat-select [compareWith]="compare_individual_types" [(ngModel)]="selectedStatus">
+              @for (status of roleStatuses; track status) {
+              <mat-option class="simple" [value]="status">{{status.label}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          &nbsp;
+          <p class="font-medium text-[#24384d]">Student Status</p>
+          <mat-form-field class="simple">
+            <mat-select [compareWith]="compare_individual_types" [(ngModel)]="selectedStudentStatus">
+              @for (status of studentStatuses; track status) {
+              <mat-option class="simple" [value]="status">{{status.label}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
         </div>
+      </div>
+
+      <div>
+        <table mat-table [dataSource]="dataSource" matSort class="ja-bg-white p-4 rounded-xl">
+
+          <ng-container matColumnDef="index">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> </th>
+            <td mat-cell *matCellDef="let member; let i = index">
+              <div class="flex gap-x-4 items-center">
+                <span>{{i + 1}}</span>
+                <img [src]="'https://privada.jovenesadelante.org/' + member.photoUrl.substring(9)"
+                  class="h-10 rounded-md object-cover hover:h-24 duration-300" />
+              </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="member">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Member </th>
+            <td mat-cell *matCellDef="let member" (click)="gotoMember(member.memberGUId)" class="link"> {{
+              member?.lastNames }}, {{ member?.firstNames }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Member Status </th>
+            <td mat-cell *matCellDef="let member"> {{member?.memberStatus}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
+            <td mat-cell *matCellDef="let member"> <a href="mailto:{{ member.email }}" class="link">{{ member?.email
+                }}</a> </td>
+          </ng-container>
+
+          <ng-container matColumnDef="student">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Related Student </th>
+            <td mat-cell *matCellDef="let member"
+              (click)="gotoStudent(member.relatedStudentGUId, member.relatedStudentName)" class="link"> {{
+              member?.relatedStudentName }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="student_status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Student Status </th>
+            <td mat-cell *matCellDef="let member"> {{member?.relatedStudentStatus}} </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+          </tr>
+        </table>
+
+        <mat-paginator [pageSizeOptions]="[10, 25, 100, members.length]"
+          aria-label="Select page of users"></mat-paginator>
+      </div>
+
+
+
+      <!-- <div>
+        <table appSortableTable class="table-sm table-striped">
+          <thead>
+            <tr>
+              <th></th>
+              <th></th>
+              <th app-sortable-column="memberName" (onSortColumn)="onSortColumn($event)">Member</th>
+              <th app-sortable-column="memberStatus" (onSortColumn)="onSortColumn($event)">Member Status</th>
+              <th app-sortable-column="email" (onSortColumn)="onSortColumn($event)">Email</th>
+              <th app-sortable-column="relatedStudentName" (onSortColumn)="onSortColumn($event)">Related Student</th>
+              <th app-sortable-column="relatedStudentStatus" (onSortColumn)="onSortColumn($event)">Student Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (member of members; track member; let i = $index) {
+            <tr>
+              <td>
+                {{ i+1 }}
+              </td>
+              <td>
+                <img [src]="member.photoUrl" height="30" class="thumbnail" />
+              </td>
+              <td (click)='gotoMember(member.memberGUId)' class='link'>
+                {{ member.lastNames }}, {{ member.firstNames }}
+              </td>
+              <td>
+                {{member.memberStatus}}
+              </td>
+              <td>
+                <a href='mailto:{{ member.email }}'>{{ member.email }}</a>
+              </td>
+              <td (click)='gotoStudent(member.relatedStudentGUId, member.relatedStudentName)' class='link'>
+                {{ member.relatedStudentName }}
+              </td>
+              <td>
+                {{member.relatedStudentStatus}}
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div> -->
       }
-    }
+      }
+    </div>
   </div>
-</div>
-
-
-l

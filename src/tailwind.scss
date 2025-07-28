@@ -1,0 +1,73 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+@layer components {
+    .important {
+        @apply #{!important};
+    }
+
+    .ja-big-title {
+        @apply bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent text-2xl font-semibold inline;
+    }
+
+    .ja-btn {
+        @apply flex gap-2 justify-center items-center px-4 py-2 rounded-lg font-medium cursor-pointer hover:saturate-150 hover:brightness-110 disabled:saturate-[.1] disabled:contrast-50 disabled:brightness-125 disabled:cursor-not-allowed duration-300 important;
+    }
+
+    .ja-btn-primary {
+        @apply bg-primary text-slate-100 important;
+    }
+
+    .ja-btn-secondary {
+        @apply bg-secondary text-slate-100 important;
+    }
+
+    .ja-btn-primary-sc {
+        @apply text-primary bg-primary/20 important;
+    }
+
+    .ja-btn-secondary-sc {
+        @apply text-secondary bg-secondary/20 important;
+    }
+
+    .nav-item {
+        @apply cursor-pointer rounded-lg px-2 py-1 font-medium text-slate-50 duration-300 hover:bg-slate-100/10 important;
+
+        &.active {
+            @apply bg-white/20;
+        }
+    }
+
+    .link {
+        @apply text-primary underline cursor-pointer;
+    }
+
+    .ja-bg-white {
+        @apply bg-white dark:bg-slate-950 duration-300;
+    }
+
+    .ja-bg-slate-100 {
+        @apply bg-slate-100 dark:bg-slate-900 duration-300;
+    }
+
+    .ja-bg-slate-300 {
+        @apply bg-slate-300 dark:bg-slate-700 duration-300;
+    }
+
+    .ja-text-white {
+        @apply dark:text-white text-slate-950 duration-300;
+    }
+
+    .ja-text-slate-900 {
+        @apply dark:text-slate-100 text-slate-900 duration-300;
+    }
+
+    .ja-text-slate-700 {
+        @apply dark:text-slate-300 text-slate-700 duration-300;
+    }
+}
+
+/* :is(h1, h2, h3, h4, span, p, div):not(:is(.ja-big-title, .link)) {
+    @apply ja-text-white;
+}  */

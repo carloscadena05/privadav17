@@ -2,7 +2,7 @@ import { Component, Host, Input } from '@angular/core';
 import { UntypedFormGroup, FormGroupDirective } from '@angular/forms';
 
 @Component({
-    template: '<div>{{currentError}}</div>',
+    template: '<mat-error>{{currentError}}</mat-error>',
     selector: 'app-display-errors',
     standalone: false
 })

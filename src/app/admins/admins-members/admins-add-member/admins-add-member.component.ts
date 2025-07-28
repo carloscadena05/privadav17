@@ -1,23 +1,33 @@
 import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { Component, inject, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { constants } from 'src/app/_shared/constants/constants';
 import { MemberDataService } from 'src/app/_shared/data/member-data.service';
 import { SELECTITEM } from 'src/app/_shared/interfaces/SELECTITEM';
 import { Member } from 'src/app/_shared/models/member';
+import { Country } from 'src/app/_shared/models/neon/country.interface';
+import { State } from 'src/app/_shared/models/neon/state.interface';
+import { MasterService } from 'src/app/_shared/services/master.service';
+import { NeonService } from 'src/app/_shared/services/neon.service';
+import { ProviderService } from 'src/app/_shared/services/provider.service';
 import { UrlService } from 'src/app/_shared/services/url.service';
 
 @Component({
-    templateUrl: './admins-add-member.component.html',
-    styleUrls: ['./admins-add-member.component.scss'],
-    standalone: false
+  templateUrl: './admins-add-member.component.html',
+  styleUrls: ['./admins-add-member.component.scss'],
+  standalone: false
 })
 export class AdminsAddMemberComponent implements OnInit {
+  private form_builder: FormBuilder = inject(FormBuilder);
+  private neon: NeonService = inject(NeonService);
+  private provider: ProviderService = inject(ProviderService);
+  private master: MasterService = inject(MasterService);
+
   myForm: UntypedFormGroup;
   data: Object;
   isLoading: boolean;
-  submitted: boolean;
+  submitted: boolean = false;
   bReadOnly = true;
   errorMessage: string;
   successMessage: string;
@@ -34,6 +44,13 @@ export class AdminsAddMemberComponent implements OnInit {
   public bInvalidSubmitState = false;
 
   // public statusGroupError = 'statusGroupError';
+
+  /* 
+  + CARLOS' CODE
+   */
+  add_sponsor_form: FormGroup;
+  countries: Country[] = [];
+  stateProvinces: State[] = [];
 
   constructor(
     public currRoute: ActivatedRoute,
@@ -53,7 +70,8 @@ export class AdminsAddMemberComponent implements OnInit {
         {
           firstNames: ['', Validators.compose([Validators.required, Validators.maxLength(30)])],
           lastNames: ['', Validators.compose([Validators.required, Validators.maxLength(30)])],
-          email: ['', Validators.compose([Validators.required, Validators.email, Validators.maxLength(50)])]
+          email: ['', Validators.compose([Validators.required, Validators.email, Validators.maxLength(50)])],
+          is_sponsor: [false]
         },
         { validator: this.setAllTextFields }
       )
@@ -70,6 +88,26 @@ export class AdminsAddMemberComponent implements OnInit {
       //   },
       //   { validator: this.setAtLeastOneStatus }
       // )
+    });
+
+    /* 
+    + CARLOS' CODE
+    */
+
+    this.add_sponsor_form = this.form_builder.group({
+      firstNames: [null, Validators.required],
+      middleName: [null, Validators.required],
+      lastNames: [null, Validators.required],
+      email: [null, Validators.required],
+      smA_Phone: [null],
+      city: [null],
+      addressLine1: [null],
+      addressLine2: [null],
+      addressLine3: [null],
+      addressLine4: [null],
+      stateProvince: this.form_builder.control([]),
+      country: this.form_builder.control([]),
+      zipCode: [null]
     });
 
     // this.myForm.controls.statusGroup.setValidators(this.setAtLeastOneStatus);
@@ -99,6 +137,7 @@ export class AdminsAddMemberComponent implements OnInit {
     console.log('admins AddMember ngOnInit');
     this.setFormValues(this.member);
     this.isLoading = false;
+    this.get_neon_lists();
   }
 
   setFormValues(member: Member) {
@@ -131,23 +170,29 @@ export class AdminsAddMemberComponent implements OnInit {
     };
   }
 
-  saveMyForm(): boolean {
+  async saveMyForm(): Promise<boolean> {
     console.log('saving admin member ');
 
     if (!this.myForm.valid) {
       this.bInvalidSubmitState = true;
       return false;
     }
+    if (this.myForm.value.textGroup.is_sponsor) {
+      const neon_sponsor: any = await this.save_sponsor();
+      this.member.neonID = await neon_sponsor.id
+    }
 
     this.isLoading = true;
     this.retrieveFormValues();
     this.memberData.addMember(this.member).subscribe(
-      (member) => {
+      async (member) => {
         console.log('subscribe result in updateMember');
         // need timeout to avoid "Expression has changed error"
+
         window.setTimeout(() => {
-          this.successMessage =
-            'New Member was created successfully. Click [Edit New Member] below to fill in additional details for this member.';
+          this.master.snack('success', 'New Member was created successfully. Click [Edit New Member] below to fill in additional details for this member.')
+          /* this.successMessage =
+            'New Member was created successfully. Click [Edit New Member] below to fill in additional details for this member.'; */
         }, 0);
         this.newGUId = member.memberGUId;
         this.submitted = true;
@@ -160,14 +205,15 @@ export class AdminsAddMemberComponent implements OnInit {
       },
       (error) => {
         console.log(error);
-        this.errorMessage = 'An error occurred; please check if a member with that email address already exits.'; // <any>error.message;
+        this.master.snack('error', 'An error occurred; please check if a member with that email address already exits.')
+        // this.errorMessage = 'An error occurred; please check if a member with that email address already exits.'; // <any>error.message;
         this.isLoading = false;
         window.setTimeout(() => {
           // console.log('clearing error message');
           this.errorMessage = '';
         }, 10000);
       }
-    );
+    ); 
     // prevent default action of reload
     return false;
   }
@@ -221,4 +267,64 @@ export class AdminsAddMemberComponent implements OnInit {
     console.log('hasChanges net is ' + this.myForm.dirty || this.submitted);
     return this.myForm.dirty && !this.submitted;
   }
+
+  /* 
+  + CARLOS' CODE
+  */
+
+  async get_neon_lists() {
+    this.countries = <Country[]>await this.neon.get_properties('countries')
+    this.stateProvinces = <State[]>await this.neon.get_properties('stateProvinces')
+  }
+
+
+  async save_sponsor() {
+    const sponsor = {
+      "individualAccount": {
+        "firstName": this.myForm.value.textGroup.firstNames, // this.add_sponsor_form.value.firstNames,
+        "lastName": this.myForm.value.textGroup.lastNames,
+        "primaryContact": {
+          "firstName": this.myForm.value.textGroup.firstNames,
+          "middleName": this.add_sponsor_form.value.middleName,
+          "lastName": this.myForm.value.textGroup.lastNames,
+          "email1": this.myForm.value.textGroup.email,
+          "addresses": [{
+            "isPrimaryAddress": true,
+            "phone1": this.add_sponsor_form.value.smA_Phone,
+            "country": this.add_sponsor_form.value.country,
+            "stateProvince": this.add_sponsor_form.value.stateProvince,
+            "city": this.add_sponsor_form.value.city,
+            "addressLine1": this.add_sponsor_form.value.addressLine1,
+            "addressLine2": this.add_sponsor_form.value.addressLine2,
+            "addressLine3": this.add_sponsor_form.value.addressLine3,
+            "addressLine4": this.add_sponsor_form.value.addressLine4,
+            "zipCode": this.add_sponsor_form.value.zipCode,
+          }]
+        }
+      }
+    }
+
+    return await this.provider.production('POST', '/neon/accounts', { body: sponsor })
+  }
+
+  select_country(id: string) {
+    const country = this.countries.find((country: any) => country.id == id);
+
+    if (country)
+      this.add_sponsor_form.controls['country'].patchValue(country);
+  }
+  select_state(id: string) {
+    const state = this.stateProvinces.find((state: any) => state.code == id);
+
+    if (state)
+      this.add_sponsor_form.controls['stateProvince'].patchValue(state);
+  }
+
+    /* 
+  * COMPARE FUNCTIONS
+  */
+
+  compare_individual_types = (option: any, value: any) => {
+    return option && value && ((option.id && option.id == value.id) || option.code && option.code == value.code);
+  };
 }

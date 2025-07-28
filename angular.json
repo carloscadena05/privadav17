@@ -33,7 +33,9 @@
               "@angular/material/prebuilt-themes/indigo-pink.css",
               "src/assets/css/main.scss",
               "src/assets/css/project.scss",
-              "src/styles.scss"
+              "src/styles.scss",
+              "src/material.scss",
+              "src/tailwind.scss"
             ],
             "scripts": [],
             "aot": false,
@@ -64,7 +66,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "buildTarget": "ja:build"
+            "buildTarget": "ja:build",
+            "proxyConfig": "proxy.conf.json"
           },
           "configurations": {
             "production": {

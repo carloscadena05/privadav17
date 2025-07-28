@@ -1,145 +1,189 @@
-@use "@angular/material" as mat;
-
-@use "sass:color";
-@use "sass:math";
-
-@include mat.core();
-
-// Tailwind
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
-
-// Colores base (formato RGB separados)
-$primary_color: 28 148 164;
-$secondary_color: 22 56 77;
-$tertiary_color: 19 83 138;
-
-$success_color: 80 247 144;
-$advertence_color: 247 194 80;
-$info_color: 80 144 247;
-$warn_color: 239 68 68;
-
-// Variables CSS disponibles desde JS
-@layer components {
   :root {
-    --primary: #{$primary_color};
-    --secondary: #{$secondary_color};
-    --tertiary: #{$tertiary_color};
-    --success: #{$success_color};
-    --advertence: #{$advertence_color};
-    --info: #{$info_color};
-    --warn: #{$warn_color};
+    --primary: 28 148 164; // rgb(28, 148, 164)
+    --secondary: 19 83 138; // rgb(19, 83, 138)
+    --tertiary: 22 56 77; // rgb(22, 56, 77)
+    --accent: 243 213 39; // rgb(243, 213, 39)
   }
+
+.mat-mdc-form-field-infix {
+    padding-top: 0.25rem !important;
+    padding-bottom: 0.25rem !important;
 }
 
-// Conversión a rgba
-$primary: rgba($primary_color);
-$secondary: rgba($secondary_color);
-$tertiary: rgba($tertiary_color);
-$success: rgba($success_color);
-$advertence: rgba($advertence_color);
-$info: rgba($info_color);
-$warn: rgba($warn_color);
+/* .mat-mdc-floating-label {
+    transform: translateY(-1rem) scale(0.75) !important;
+    width: 133.33333% !important;
+} */
 
-// Generador de paletas
-$stops: 20;
-$half_stops: calc($stops / 2);
+.mdc-text-field .mdc-floating-label:not(.mdc-floating-label--float-above.mdc-floating-label) {
+    top: 25%;
+}
 
-@function generate-palette($base-color) {
-  $color-lighten: calc(100% - color.lightness($base-color));
-  $color-darken: color.lightness($base-color);
+.mdc-text-field .mdc-floating-label--float-above.mdc-floating-label {
+    top: 100%;
+}
 
-  $lighten-offset: math.floor(calc($color-lighten / $half_stops));
-  $darken-offset: math.floor(calc($color-darken / $half_stops));
+.mdc-text-field--outlined:not(:has(textarea)) {
+    max-height: 2.25rem !important;
+}
 
-  $contrast-light-text: rgba(black, 0.87);
-  $contrast-dark-text: rgba(white, 0.87);
+.mat-mdc-text-field-wrapper .mat-mdc-form-field-flex .mat-mdc-floating-label {
+    height: 1.125rem !important;
+}
 
-  $palette: ();
-  $contrast_map: ();
+.mat-mdc-form-field-has-prefix .mat-mdc-floating-label {
+    left: -0.5rem !important;
+}
 
-  @for $i from 1 through $stops {
-    $new-color: null;
-    $contrast: null;
-    $light-ammount: null;
+.mat-mdc-form-field-icon-prefix,
+.mat-mdc-form-field-icon-suffix {
+    top: 0 !important;
+}
 
-    @if ($i < $half_stops) {
-      $contrast: $contrast-light-text;
-      $light-ammount: math.floor(100% - (($i + 1) * $lighten-offset));
-    } @else if ($i > $half_stops) {
-      $contrast: $contrast-dark-text;
-      $light-ammount: math.round($color-darken - (($i - $half_stops) * $darken-offset));
-    } @else {
-      $contrast: $contrast-dark-text;
-      $light-ammount: $color-darken;
+.mat-mdc-form-field-subscript-wrapper {
+    margin-top: 0.25rem !important;
+}
+
+.mdc-notched-outline {
+    border-radius: 0.5rem;
+}
+
+.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__leading {
+    border-top-color: #cbd5e1 !important;
+    border-bottom-color: #cbd5e1 !important;
+    border-left-color: #cbd5e1 !important;
+    border-right-color: transparent !important;
+}
+
+.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__notch {
+    border-top-color: #cbd5e1 !important;
+    border-bottom-color: #cbd5e1 !important;
+    border-right-color: transparent !important;
+    border-left-color: transparent !important;
+}
+
+.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__trailing {
+    border-top-color: #cbd5e1 !important;
+    border-bottom-color: #cbd5e1 !important;
+    border-right-color: #cbd5e1 !important;
+    border-left-color: transparent !important;
+}
+
+.mdc-notched-outline__leading,
+.mdc-notched-outline__notch,
+.mdc-notched-outline__trailing {
+    // background: #f1f5f9 !important;
+
+}
+
+.mat-mdc-header-cell {
+    color: #f1f5f9 !important;
+}
+
+.mat-mdc-table {
+    border-radius: 1rem;
+    overflow: hidden;
+    .mat-mdc-header-row {
+        background: rgb(var(--secondary) / 1) !important;
+
+        .mat-sort-header {
+            .mat-sort-header-container {
+                .mat-sort-header-content, .mat-mdc-header-cell {
+                    color: #f1f5f9 !important;
+                }
+            }
+        }
     }
 
-    $index: $i * calc(1000 / $stops);
-    $new-color: color.change($base-color, $lightness: $light-ammount);
+    .mdc-data-table__content {
+        .mat-mdc-row {
+            transition-duration: 300ms;
+        }
+        .mat-mdc-row:nth-child(even) {
+            background: rgb(var(--secondary) / .05) !important;
+        }
 
-    $contrast_map: map-merge($contrast_map, ($index: $contrast));
-    $palette: map-merge($palette, ($index: $new-color));
-  }
-
-  $palette: map-merge($palette, (contrast: $contrast_map));
-  @return $palette;
+        .mat-mdc-row:hover {
+            background: rgb(var(--secondary) / .15) !important;
+        }
+    }
 }
 
-// Paletas personalizadas
-$primary-palette: generate-palette($primary);
-$secondary-palette: generate-palette($secondary);
-$tertiary-palette: generate-palette($tertiary);
-$warn-palette: generate-palette($warn);
+.simple.mat-mdc-form-field {
+    max-width: 7rem;
+    
+    &.mat-form-field-invalid.ng-touched {
+        border-bottom-color: #ef4444 !important;
+        .mat-mdc-form-field-suffix {
+            span {
+                color: #ef4444 !important;
+            }
+        }
+    }
+    
+    &:not(.mat-form-field-invalid.ng-touched) {
+        border-bottom-color: #475569 !important;
+        .mat-mdc-form-field-suffix {
+            span {
+                color: #475569 !important;
+            }
+        }
+    }
+    &.no-hint {
+        .mat-mdc-form-field-subscript-wrapper {
+            height: 0 !important;
+        }
+    }
+    
+    .mat-mdc-text-field-wrapper {
+        padding: 0 .5rem !important;
+        max-height: 2rem;
+        
+        .mat-mdc-form-field-flex > .mat-mdc-form-field-infix {
+            padding: 0 !important;
+            border-top: 0.25rem solid transparent;
+            width: unset;
+            min-height: unset;
+        }
 
-// Tema de Angular Material
-$my-theme: mat.define-light-theme((
-  color: (
-    primary: mat.define-palette($primary-palette, 500),
-    accent: mat.define-palette($secondary-palette, 500),
-    warn: mat.define-palette($warn-palette, 500),
-  ),
-  density: 0,
-));
+        .mat-mdc-form-field-bottom-align {
+            display: none !important;
+        }
 
-// Aplicar tema global
-@include mat.all-component-themes($my-theme);
+        .mat-mdc-form-field-subscript-wrapper {
+            margin-top: 1.3rem !important;
+            position: static !important;
+            display: none !important;
+        }
 
-// Variables CSS para usar con `var()`
-:root {
-  --main-0: #{map-get($primary-palette, 0)};
-  --main-50: #{map-get($primary-palette, 50)};
-  --main-100: #{map-get($primary-palette, 100)};
-  --main-150: #{map-get($primary-palette, 150)};
-  --main-200: #{map-get($primary-palette, 200)};
-  --main-250: #{map-get($primary-palette, 250)};
-  --main-300: #{map-get($primary-palette, 300)};
-  --main-350: #{map-get($primary-palette, 350)};
-  --main-400: #{map-get($primary-palette, 400)};
-  --main-450: #{map-get($primary-palette, 450)};
-  --main-500: #{map-get($primary-palette, 500)};
-  --main-550: #{map-get($primary-palette, 550)};
-  --main-600: #{map-get($primary-palette, 600)};
-  --main-650: #{map-get($primary-palette, 650)};
-  --main-700: #{map-get($primary-palette, 700)};
-  --main-750: #{map-get($primary-palette, 750)};
-  --main-800: #{map-get($primary-palette, 800)};
-  --main-850: #{map-get($primary-palette, 850)};
-  --main-900: #{map-get($primary-palette, 900)};
-  --main-950: #{map-get($primary-palette, 950)};
-  --main-1000: #{map-get($primary-palette, 1000)};
+        .mat-mdc-form-field-focus-overlay {
+            background: rgb(var(--primary) / 1);
+        }
 
-  --tertiary-550: #{map-get($tertiary-palette, 600)};
-  --tertiary-500: #{map-get($tertiary-palette, 500)};
+        &.mdc-text-field--filled:not(.mdc-text-field--disabled) {
+            background: rgb(var(--primary) / .15);
+            border-radius: 0.5rem;
 
-  --main: var(--main-500);
-  --secondary-main: #{map-get($secondary-palette, 500)};
-  --text-warning: var(--main-400);
-  --border-box: var(--main-600);
-  --border-box-light: var(--main-200);
-  --background: rgb(var(--primary) / 0.2);
-  --background-today: var(--main-600);
-  --background-weekend: #00000000;
+            .mdc-line-ripple::before {
+                border: none !important;
+            }
+        }
+    }
+    
+    .mat-mdc-select-min-line {
+        color: rgb(var(--primary) / 1);
+    }
+}
 
-  --mdc-circular-progress-active-indicator-color: var(--main);
+.simple.mat-mdc-option {
+    min-height: 36px !important;
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+}
+
+.cdk-overlay-pane:has(.simple.mat-mdc-option) {
+    width: 10rem !important;
+    .mat-mdc-select-panel {
+        border-radius: 1rem;
+    }
 }

@@ -1,24 +1,50 @@
-<div class="container-fluid px-0 h-100">
-    <div class="row m-0">
-        <div class="col p-0">
-            <app-headerbar></app-headerbar>
-            <router-outlet></router-outlet>
-            <footer class="d-flex justify-content-between align-items-center p-1 main-blue-bg">
-                <p class="m-1">
-                    &copy; 2024 <a href="http://www.jovenesadelante.org">
-                        <u>Jóvenes Adelante</u></a>
-                </p>
-                <p class="m-1 pr-2">
-                    v 11.2.4
-                </p>
-            </footer>
-
-            <div class="text-right">
-                <a height="60"
-                href="https://auth0.com/?utm_source=oss&utm_medium=gp&utm_campaign=oss" target="_blank"
-                alt="Single Sign On & Token Based Authentication - Auth0"><img height="60"
-                    alt="JWT Auth for open source projects" src="//cdn.auth0.com/oss/badges/a0-badge-light.png" /></a>
-            </div>
-        </div>
+<div class="w-screen max-w-[100vw] overflow-x-hidden flex flex-col justify-between">
+  <app-headerbar></app-headerbar>
+  <div class="h-full">
+    <router-outlet></router-outlet>
+  </div>
+  <footer class="h-16 flex justify-between items-center bg-primary px-4">
+    <div class="flex flex-col font-medium">
+      <p class="text-slate-100">
+        &copy;{{year}}
+        <a href="http://www.jovenesadelante.org" class="text-slate-100">
+          Jóvenes Adelante
+        </a>
+      </p>
+      <p class="text-slate-100">
+        v 11.2.4
+      </p>
     </div>
+    <a href="https://auth0.com/?utm_source=oss&utm_medium=gp&utm_campaign=oss" target="_blank"
+      alt="Single Sign On & Token Based Authentication - Auth0">
+      <img alt="JWT Auth for open source projects" src="//cdn.auth0.com/oss/badges/a0-badge-light.png" class="h-10">
+    </a>
+  </footer>
+
 </div>
+
+<!-- 
+<div class="container-fluid px-0 h-100">
+  <div class="row m-0">
+    <div class="col p-0">
+      <app-headerbar></app-headerbar>
+      <router-outlet></router-outlet>
+      <footer class="d-flex justify-content-between align-items-center p-1 main-blue-bg">
+        <p class="m-1">
+          &copy; 2024 <a href="http://www.jovenesadelante.org">
+            <u>Jóvenes Adelante</u></a>
+        </p>
+        <p class="m-1 pr-2">
+          v 11.2.4
+        </p>
+      </footer>
+
+      <div class="text-right">
+        <a height="60" href="https://auth0.com/?utm_source=oss&utm_medium=gp&utm_campaign=oss" target="_blank"
+          alt="Single Sign On & Token Based Authentication - Auth0"><img height="60"
+            alt="JWT Auth for open source projects" src="//cdn.auth0.com/oss/badges/a0-badge-light.png" /></a>
+      </div>
+    </div>
+  </div>
+</div> 
+-->

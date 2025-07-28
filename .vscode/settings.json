@@ -15,23 +15,79 @@ Happy linting! 💖
     "typescript.tsdk": "node_modules\\typescript\\lib",
     "angular.enable-strict-mode-prompt": false,
     "workbench.colorCustomizations": {
-        "activityBar.activeBackground": "#215575",
-        "activityBar.background": "#215575",
-        "activityBar.foreground": "#e7e7e7",
-        "activityBar.inactiveForeground": "#e7e7e799",
-        "activityBarBadge.background": "#ce519e",
+        "activityBar.activeBackground": "#23bbd0",
+        "activityBar.background": "#23bbd0",
+        "activityBar.foreground": "#15202b",
+        "activityBar.inactiveForeground": "#15202b99",
+        "activityBarBadge.background": "#bf20ac",
         "activityBarBadge.foreground": "#e7e7e7",
         "commandCenter.border": "#e7e7e799",
-        "sash.hoverBorder": "#215575",
-        "statusBar.background": "#16384d",
+        "sash.hoverBorder": "#23bbd0",
+        "statusBar.background": "#1c94a4",
         "statusBar.foreground": "#e7e7e7",
-        "statusBarItem.hoverBackground": "#215575",
-        "statusBarItem.remoteBackground": "#16384d",
+        "statusBarItem.hoverBackground": "#23bbd0",
+        "statusBarItem.remoteBackground": "#1c94a4",
         "statusBarItem.remoteForeground": "#e7e7e7",
-        "titleBar.activeBackground": "#16384d",
+        "titleBar.activeBackground": "#1c94a4",
         "titleBar.activeForeground": "#e7e7e7",
-        "titleBar.inactiveBackground": "#16384d99",
+        "titleBar.inactiveBackground": "#1c94a499",
         "titleBar.inactiveForeground": "#e7e7e799"
     },
-    "peacock.color": "#16384d"
+    "peacock.color": "#1c94a4",
+    "better-comments.tags": [
+        {
+            "tag": "+",
+            "color": "#F1F5F9",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "#1C94A4",
+            "bold": false,
+            "italic": false
+        },
+        {
+            "tag": "!",
+            "color": "#FF2D00",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": false,
+            "italic": false
+        },
+        {
+            "tag": "?",
+            "color": "#3498DB",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": false,
+            "italic": false
+        },
+        {
+            "tag": "//",
+            "color": "#474747",
+            "strikethrough": true,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": false,
+            "italic": false
+        },
+        {
+            "tag": "todo",
+            "color": "#FF8C00",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": false,
+            "italic": false
+        },
+        {
+            "tag": "*",
+            "color": "#98C379",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": false,
+            "italic": false
+        }
+    ]
 }

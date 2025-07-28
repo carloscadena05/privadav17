@@ -51,6 +51,8 @@ export class StudentsForMentorListComponent implements OnInit {
             return item;
           }
         });
+        console.log(this.students);
+        
       },
       (err) => console.error('Subscribe error: ' + err),
       () => {

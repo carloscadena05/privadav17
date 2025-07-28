@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../_shared/services/auth.service';
 import { SessionService } from '../_shared/services/session.service';
+import { HomeIcon, AppleIcon, MoreVerticalIcon } from '@hugeicons/core-free-icons';
+import { MediaMatcher } from '@angular/cdk/layout';
+
 /**
  * This class represents the app-navbar component.
  */
@@ -12,7 +15,11 @@ import { SessionService } from '../_shared/services/session.service';
     standalone: false
 })
 export class HeaderbarComponent implements OnInit {
+   private _media_matcher: MediaMatcher = inject(MediaMatcher)
   private initialNavigation = true;
+  spanish: boolean = false;
+  MoreVertical = MoreVerticalIcon
+   theme: boolean = this._media_matcher.matchMedia("(prefers-color-scheme: light)").matches;
 
   constructor(public auth: AuthService, public session: SessionService, private router: Router) {}
   ngOnInit(): void {
@@ -26,6 +33,7 @@ export class HeaderbarComponent implements OnInit {
     //     return false;
     //   }
     // });
+    this.spanish = navigator.language.startsWith('es');
   }
 
   public isAdminWithValidToken(): boolean {
@@ -43,4 +51,10 @@ export class HeaderbarComponent implements OnInit {
   public isStudentWithValidToken(): boolean {
     return this.auth.loggedIn && this.session.isStudent();
   }
+
+  change_theme() {
+      this.theme = !this.theme;
+      document.documentElement.classList.toggle('dark');
+  }
+
 }

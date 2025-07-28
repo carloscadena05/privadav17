@@ -1,47 +1,81 @@
-<ng-container *ngTemplateOutlet="isStudentWithValidToken() === true ? studentNavbar : navbar"></ng-container>
-<ng-template #navbar>
-  <nav class="navbar navbar-expand-sm bg-primary navbar-dark fixedbar" *ngIf=!isStudentWithValidToken()>
-    <!--     <a class="navbar-brand" href="#"><img src="../../../assets/images/JAPrivadaLogo.png" /></a>-->
-    <a class="navbar-brand" href="#"><img src="../../../assets/images/1.png" /></a>
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a [routerLinkActive]="['active']" [routerLink]="['home']">Home</a>
-      </li>
-      <li class="nav-item">
-        <a [routerLinkActive]="['active']" [routerLink]="['admins']" [hidden]=!isAdminWithValidToken()>Admins</a>
-      </li>
-      <li class="nav-item">
-        <a [routerLinkActive]="['active']" [routerLink]="['mentors']" [hidden]=!isMentorWithValidToken()>Mentors</a>
-      </li>
-      <li class="nav-item">
-        <a [routerLinkActive]="['active']" [routerLink]="['sponsors/becas-home']" data-cy="top-sponsors"
-          [hidden]=!isSponsorWithValidToken()>Sponsors</a>
-      </li>
-      <li class="nav-item">
+<!-- <ng-container *ngTemplateOutlet="isStudentWithValidToken() === true ? studentNavbar : navbar"></ng-container> -->
+<!-- <ng-template #navbar> -->
+  <nav class="flex h-20 items-center justify-between gap-x-3 !bg-primary px-[5%]"
+    *ngIf=!isStudentWithValidToken()>
+    <img src="../../../assets/images/logo-1-bco.svg" class="h-16" />
+
+    <div class="hidden md:flex md:gap-x-3">
+      <a [routerLinkActive]="['active']" [routerLink]="['home']" class="nav-item">Home</a>
+      @if (isStudentWithValidToken() === true) {
+        <a [routerLinkActive]="['active']" [routerLink]="['students']" class="nav-item">Estudiantes</a>
+      } @else {
+        <a [routerLinkActive]="['active']" [routerLink]="['admins']" [hidden]=!isAdminWithValidToken()
+        class="nav-item">Admins</a>
+      <a [routerLinkActive]="['active']" [routerLink]="['mentors']" [hidden]=!isMentorWithValidToken()
+        class="nav-item">Mentors</a>
+      <a [routerLinkActive]="['active']" [routerLink]="['sponsors/becas-home']" data-cy="top-sponsors"
+        [hidden]=!isSponsorWithValidToken() class="nav-item">Sponsors</a>
         <a [routerLinkActive]="['active']" [routerLink]="['students']" data-cy="top-students"
-          [hidden]=!isStudentWithValidToken()>Estudiantes</a>
-      </li>
-      <li class="nav-item">
-        <a [routerLinkActive]="['active']" [routerLink]="['becas']" [hidden]=!isAdminWithValidToken()>Becas</a>
-      </li>
-      <li class="nav-item">
-        <a [routerLinkActive]="['active']" [routerLink]="['titulos']" [hidden]=!isAdminWithValidToken()>Titulos</a>
-      </li>
-      <li class="nav-item">
-        <a [routerLinkActive]="['active']" [routerLink]="['quarterly']" [hidden]=!isAdminWithValidToken()>Quarterly</a>
-      </li>
-    </ul>
-    <div class="navbar-text ml-auto" data-cy="login_welcome">
-      <section id="login">
-        <button class="btn btn-primary btn-sm" data-cy="login" (click)="auth.login()" *ngIf="!auth.loggedIn">Log In /
-          Iniciar
-          sesión</button>
-        <span *ngIf="auth.loggedIn">Welcome {{auth.nickname}} <br /></span>
-        <span class="link" data-cy="logout" (click)="auth.logout()" *ngIf="auth.loggedIn">Log Out</span>
-      </section>
+        [hidden]=!isStudentWithValidToken() class="nav-item">Estudiantes</a>
+        <a [routerLinkActive]="['active']" [routerLink]="['becas']" [hidden]=!isAdminWithValidToken()
+        class="nav-item">Becas</a>
+        <a [routerLinkActive]="['active']" [routerLink]="['titulos']" [hidden]=!isAdminWithValidToken()
+        class="nav-item">Titulos</a>
+        <a [routerLinkActive]="['active']" [routerLink]="['quarterly']" [hidden]=!isAdminWithValidToken()
+        class="nav-item">Quarterly</a>
+      }
+    </div>
+    <div class="flex gap-x-2 items-center">
+      
+      <!-- <button (click)="change_theme()" class="relative w-6 h-6 flex items-center justify-center">
+        <svg  [class.opacity-0]="!theme" [class.scale-0]="!theme" class="absolute transition-all duration-500 ease-in-out transform" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"  width="24"  height="24"  color="#f1f5f9"  fill="none">
+          <path d="M21.5 14.0784C20.3003 14.7189 18.9301 15.0821 17.4751 15.0821C12.7491 15.0821 8.91792 11.2509 8.91792 6.52485C8.91792 5.06986 9.28105 3.69968 9.92163 2.5C5.66765 3.49698 2.5 7.31513 2.5 11.8731C2.5 17.1899 6.8101 21.5 12.1269 21.5C16.6849 21.5 20.503 18.3324 21.5 14.0784Z" stroke="#f1f5f9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <svg  [class.opacity-0]="theme" [class.scale-0]="theme" class="absolute transition-all duration-500 ease-in-out transform" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"  width="24"  height="24"  color="#f1f5f9"  fill="none">
+          <path d="M17 12C17 14.7614 14.7614 17 12 17C9.23858 17 7 14.7614 7 12C7 9.23858 9.23858 7 12 7C14.7614 7 17 9.23858 17 12Z" stroke="#f1f5f9" stroke-width="1.5"></path>
+          <path d="M11.9955 3H12.0045M11.9961 21H12.0051M18.3588 5.63599H18.3678M5.63409 18.364H5.64307M5.63409 5.63647H5.64307M18.3582 18.3645H18.3672M20.991 12.0006H21M3 12.0006H3.00898" stroke="#f1f5f9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </button> -->
+      <button class="flex md:hidden size-12" [matMenuTriggerFor]="mobile_menu">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#f1f5f9" fill="none">
+          <path d="M11.992 12H12.001" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+            stroke-linejoin="round" />
+          <path d="M11.9842 18H11.9932" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+            stroke-linejoin="round" />
+          <path d="M11.9998 6H12.0088" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+      </button>
+      <div class="text-slate-100 flex flex-col items-end gap-y-0" data-cy="login_welcome">
+          @if(!auth.loggedIn){
+          <button (click)="auth.login()" class="ja-btn ja-btn-secondary" data-cy="login">
+            @if(spanish) {
+            Iniciar sesión
+            } @else {
+            Log In
+            }
+          </button>
+          } @else {
+          <span class="leading-4">
+            @if(spanish){
+            Bienvenido,
+            } @else {
+            Welcome,
+            }
+            {{auth.nickname}}
+          </span>
+          <span (click)="auth.logout()" class="leading-4 underline cursor-pointer" data-cy="logout">
+            @if(spanish){
+            Salir
+            } @else {
+            Log Out
+            }
+          </span>
+          }
+      </div>
     </div>
   </nav>
-</ng-template>
+<!-- </ng-template> -->
 <!-- students navbar -->
 <!-- students navbar -->
 
@@ -65,17 +99,16 @@
         <ul class="navbar-nav mx-auto mx-md-0">
           <li class="nav-item" data-toggle="collapse" data-target="#navbarNav">
             <a class="nav-link " [routerLinkActive]="['active']" [routerLink]="['home']">Home</a>
-          </li>
 
           <li class="nav-item" data-toggle="collapse" data-target="#navbarNav" [hidden]=!isStudentWithValidToken()>
             <a class="nav-link " [routerLinkActive]="['active']" [routerLink]="['students']"
               data-cy="top-students">Estudiantes</a>
-          </li>
         </ul>
         <hr class="mx-4 my-2 d-block d-md-none menu-separator">
         <div class="w-100 d-flex flex-column align-items-end" data-cy="login_welcome">
-          <div class="nav-message" *ngIf="auth.loggedIn">Bienvenido {{auth.nickname}} <br/></div>
-          <a class="link p-2 mt-1 mb-2 m-md-0 ml-md-2 logout text-nowrap" data-cy="logout" (click)="auth.logout()" *ngIf="auth.loggedIn">
+          <div class="nav-message" *ngIf="auth.loggedIn">Bienvenido {{auth.nickname}} <br /></div>
+          <a class="link p-2 mt-1 mb-2 m-md-0 ml-md-2 logout text-nowrap" data-cy="logout" (click)="auth.logout()"
+            *ngIf="auth.loggedIn">
             Cerrar Sesión
           </a>
         </div>
@@ -83,3 +116,21 @@
     </div>
   </nav>
 </ng-template>
+
+<mat-menu #mobile_menu="matMenu">
+  <a mat-menu-item [routerLinkActive]="['active']" [routerLink]="['home']" class="nav-item">Home</a>
+  <a mat-menu-item [routerLinkActive]="['active']" [routerLink]="['admins']" [hidden]=!isAdminWithValidToken()
+    class="nav-item">Admins</a>
+  <a mat-menu-item [routerLinkActive]="['active']" [routerLink]="['mentors']" [hidden]=!isMentorWithValidToken()
+    class="nav-item">Mentors</a>
+  <a mat-menu-item [routerLinkActive]="['active']" [routerLink]="['sponsors/becas-home']" data-cy="top-sponsors"
+    [hidden]=!isSponsorWithValidToken() class="nav-item">Sponsors</a>
+  <a mat-menu-item [routerLinkActive]="['active']" [routerLink]="['students']" data-cy="top-students"
+    [hidden]=!isStudentWithValidToken() class="nav-item">Estudiantes</a>
+  <a mat-menu-item [routerLinkActive]="['active']" [routerLink]="['becas']" [hidden]=!isAdminWithValidToken()
+    class="nav-item">Becas</a>
+  <a mat-menu-item [routerLinkActive]="['active']" [routerLink]="['titulos']" [hidden]=!isAdminWithValidToken()
+    class="nav-item">Titulos</a>
+  <a mat-menu-item [routerLinkActive]="['active']" [routerLink]="['quarterly']" [hidden]=!isAdminWithValidToken()
+    class="nav-item">Quarterly</a>
+</mat-menu>

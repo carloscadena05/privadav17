@@ -41,6 +41,8 @@ export class StudentsForSponsorComponent implements OnInit {
     console.log('++++++++++++++++++++have guid param' + guid);
     this.sponsorGroupData.getStudentsForSponsorByGUId(guid).subscribe(
       (data) => {
+        console.log(data);
+        
         this.studentsForSponsor = data.filter((item) => {
           if (this.displayTestNames) {
             return item;

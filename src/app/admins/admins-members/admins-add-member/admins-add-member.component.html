@@ -1,66 +1,81 @@
 @if (errorMessage) {
-  <div class="alert alert-danger">{{errorMessage}}</div>
+<div class="alert alert-danger">{{errorMessage}}</div>
 }
 @if (successMessage) {
-  <div class="alert alert-success">{{successMessage}}</div>
+<div class="alert alert-success">{{successMessage}}</div>
 }
-<div style="max-width:900px">
 
-  <div>
-    @switch (isLoading) {
-      @case (true) {
-        <div class="text-center col-md-4 col-md-offset-4">
-          <app-loading-container>
-          </app-loading-container>
+<div>
+  @switch (isLoading) {
+  @case (true) {
+  <div class="text-center col-md-4 col-md-offset-4">
+    <app-loading-container>
+    </app-loading-container>
+  </div>
+  }
+  @case (false) {
+  <div class="flex flex-col gap-4 justify-center ja-bg-white p-4 rounded-xl">
+    <form [formGroup]="myForm" class="flex flex-wrap gap-4 justify-center">
+      <div class="basis-full flex gap-x-4 justify-start md:justify-between">
+        <div class="flex justify-between items-center gap-x-4 w-full">
+          <span class="ja-btn ja-btn-primary-sc " (click)="backToMemberSearch()">
+            &lt;&lt;&nbsp; Back
+          </span>
+
+          <div class="flex gap-x-2">
+            @if (myForm.get('textGroup').errors?.allText && bInvalidSubmitState ) {
+            <div class='red max-w-48 [text-wrap:balance]'>
+              All text fields must be filled in before submitting.
+            </div>
+            }
+            <button class="ja-btn ja-btn-secondary-sc" (click)="gotoMember()" [ngClass]="!submitted ? 'hidden' : ''">
+              Edit New Member
+            </button>
+            <button class="ja-btn ja-btn-primary" (click)="saveMyForm()" [disabled]="submitted">
+              Submit
+            </button>
+          </div>
+
         </div>
-      }
-      @case (false) {
-        <div>
-          <form [formGroup]="myForm" class="form-horizontal">
-            <div class="row">
-              <div class="col">
-                <div class="form-group">
-                  <span class="btn btn-primary btn-sm" (click)="backToMemberSearch()">
-                    &lt;&lt;&nbsp; Back
-                  </span>
-                  &nbsp;
-                  <button class="btn btn-primary btn-sm" (click)="gotoMember()" [hidden]="!(submitted)">
-                    Edit New Member
-                  </button>
-                  &nbsp;
-                </div>
-                <div class="form-group" formGroupName="textGroup">
-                  <label for="firstNames">First Name(s)</label>
-                  <input id="firstNames" formControlName="firstNames"
-                    class="form-control form-control-sm" type="text" placeholder="First Name" />
-              <app-display-errors control="firstNames" class="red" [errors]="{
-                'required': 'First name is required',
-                'maxlength': 'First name cannot exceed 30 characters in length.'
-              }"></app-display-errors>
-                    <label for="lastNames">Last Name(s)</label>
-                    <input id="lastNames" formControlName="lastNames" type="text"
-                      class="form-control form-control-sm" placeholder="Last Name" />
-              <app-display-errors control="lastNames" class="red" [errors]="{
-                'required': 'Last name is required',
-                'maxlength': 'Last name cannot exceed 30 characters in length.'
-              }"></app-display-errors>
-                      <label for="email">Email</label>
-                      <input id="email" formControlName="email" type="text"
-                        class="form-control form-control-sm" placeholder="Valid Email Address" />
-              <app-display-errors control="email" class="red" [errors]="{
-                'required': 'Email is required',
-                'maxlength': 'Email cannot exceed 50 characters in length',
-                'email': 'Email address must be in valid format'
-              }"></app-display-errors>
-                        @if (myForm.get('textGroup').errors?.allText && bInvalidSubmitState ) {
-                          <div class='red'
-                            >
-                            All text fields must be filled in before submitting.
-                          </div>
-                        }
-                      </div>
-                    </div>
-                    <!-- <div formGroupName="statusGroup">
+      </div>
+      <div class="text-secondary p-1 font-semibold basis-full">
+        PERSONAL INFORMATION
+      </div>
+      <div class="basis-1/4 grow *:w-full" formGroupName="textGroup">
+        <mat-form-field appearance="outline">
+          <mat-label>First Name(s)</mat-label>
+          <input matInput formControlName="firstNames" type="text" />
+          <app-display-errors control="firstNames" class="red" [errors]="{
+                  'required': 'First name is required',
+                  'maxlength': 'First name cannot exceed 30 characters in length.'
+                }"></app-display-errors>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Last Name(s)</mat-label>
+          <input matInput formControlName="lastNames" type="text" />
+          <app-display-errors control="lastNames" class="red" [errors]="{
+                  'required': 'Last name is required',
+                  'maxlength': 'Last name cannot exceed 30 characters in length.'
+                }"></app-display-errors>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" type="text" />
+          <app-display-errors control="email" class="red" [errors]="{
+                  'required': 'Email is required',
+                  'maxlength': 'Email cannot exceed 50 characters in length',
+                  'email': 'Email address must be in valid format'
+                }"></app-display-errors>
+        </mat-form-field>
+
+        <mat-slide-toggle formControlName="is_sponsor">
+          Is sponsor (Creates record in NEON)
+        </mat-slide-toggle>
+      </div>
+
+      <!-- <div formGroupName="statusGroup">
                     <div class="col">
                       <div class="row">
                         <div class="col-6" style="padding:0 2px 0 4px;">
@@ -116,18 +131,69 @@
                       </div>
                     </div>
                   </div> -->
-                </div>
-                <div class="row">
-                  <div class="form-group">
-                    <button class="btn btn-primary" (click)="saveMyForm()" [disabled]="submitted">
-                      Submit
-                    </button>
-                    <!-- <span [hidden]="!bInvalidSubmitState" class='red'>All text fields and at least one status value
+
+
+      <!-- <span [hidden]="!bInvalidSubmitState" class='red'>All text fields and at least one status value
                   must be filled in before submitting. </span> -->
-                </div>
-              </div>
-            </form>
-            <!-- <br />Dirty: {{ myForm.dirty }}
+
+    </form>
+    @if(myForm.value.textGroup.is_sponsor){
+    <form [formGroup]="add_sponsor_form">
+      <div class="flex flex-col">
+
+        <div class="text-secondary p-1 font-semibold">
+          US ADDRESS
+        </div>
+        <mat-form-field appearance="outline">
+          <mat-label>Country</mat-label>
+          <mat-select [compareWith]="compare_individual_types" formControlName="country">
+            @for(country of countries; track country){
+              <mat-option [value]="country.id">{{country.name}}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>State</mat-label>
+          <mat-select [compareWith]="compare_individual_types" formControlName="stateProvince">
+            @for(state of stateProvinces; track state){
+            <mat-option [value]="state">{{state.name}}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>City</mat-label>
+          <input type="text" matInput formControlName="city">
+        </mat-form-field>
+
+        <div class="flex gap-x-3 flex-wrap">
+          <mat-form-field appearance="outline" class="w-[calc(50%-0.375rem)]">
+            <mat-label>Address Line 1</mat-label>
+            <input type="text" matInput formControlName="addressLine1">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="w-[calc(50%-0.375rem)]">
+            <mat-label>Address Line 2</mat-label>
+            <input type="text" matInput formControlName="addressLine2">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="w-[calc(50%-0.375rem)]">
+            <mat-label>Address Line 3</mat-label>
+            <input type="text" matInput formControlName="addressLine3">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="w-[calc(50%-0.375rem)]">
+            <mat-label>Address Line 4</mat-label>
+            <input type="text" matInput formControlName="addressLine4">
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Zip Code</mat-label>
+          <input type="text" matInput formControlName="zipCode">
+        </mat-form-field>
+      </div>
+    </form>
+    }
+    <!-- <br />Dirty: {{ myForm.dirty }}
             <br />Valid: {{ myForm.valid }}
             <br />Errors: {{ myForm.errors | json }}
             <br />TG Valid: {{ myForm.controls.textGroup.valid }}
@@ -136,8 +202,7 @@
             <br />SG Valid: {{ myForm.controls.statusGroup.valid }}
             <br />SG Touched: {{ myForm.controls.statusGroup.touched }}
             <br />SG Errors: {{ myForm.controls.statusGroup.errors | json }} -->
-          </div>
-        }
-      }
-    </div>
   </div>
+  }
+  }
+</div>

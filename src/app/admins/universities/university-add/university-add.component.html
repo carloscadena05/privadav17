@@ -1,0 +1,108 @@
+<div *ngIf="errorMessage" class="alert alert-danger">{{errorMessage}}</div>
+<div *ngIf="successMessage" class="alert alert-success">{{successMessage}}</div>
+
+@switch (isLoading) {
+@case (true) {
+<app-loading-container>
+</app-loading-container>
+}
+@case (false) {
+<form [formGroup]="myForm" class="flex flex-col p-4 rounded-xl bg-white">
+
+    <div class="w-full flex gap-x-4 justify-between bg-white mb-4 z-50">
+        <h1 class="ja-big-title">Add University</h1>
+        <div class="flex gap-x-4">
+            <button type="button" class="ja-btn ja-btn-primary-sc" (click)="onCancel()">
+                Cancel
+            </button>
+
+            <span class="red" [hidden]="!myForm.valid">All required fields must be filled in before
+                saving.</span>
+            <button class="ja-btn ja-btn-primary" (click)="saveMyForm()" [disabled]="!myForm.valid">
+                Save
+            </button>
+        </div>
+    </div>
+
+    <mat-form-field appearance="outline">
+        <mat-label>Abbreviation</mat-label>
+        <input type="text" matInput formControlName="universityAbbrev">
+        <app-display-errors control="universityAbbrev" class="red" [errors]="{
+                'required': 'University Abbreviation is required',
+                'maxlength': 'University Abbreviation cannot exceed 15 characters in length.',
+                'minlength': 'University Abbreviation must be at least 2 characters in length.'
+            }"></app-display-errors>
+    </mat-form-field>
+
+
+    <!-- <label for="universityAbbrev">Abbreviation</label>
+            <input id="universityAbbrev" formControlName="universityAbbrev" class="form-control form-control-sm"
+                type="text" placeholder="Abbreviation" maxlength="15" minlength="2" />
+            <app-display-errors control="universityAbbrev" class="red" [errors]="{
+                'required': 'University Abbreviation is required',
+                'maxlength': 'University Abbreviation cannot exceed 15 characters in length.',
+                'minlength': 'University Abbreviation must be at least 2 characters in length.'
+            }"></app-display-errors> -->
+
+    <mat-form-field appearance="outline">
+        <mat-label>University Name</mat-label>
+        <input type="text" matInput formControlName="universityName">
+        <app-display-errors control="universityName" class="red" [errors]="{
+                'required': 'University Name is required',
+                'maxlength': 'University Name cannot exceed 50 characters in length.'
+            }"></app-display-errors>
+    </mat-form-field>
+
+    <!-- <label for="universityName">University Name</label>
+            <input id="universityName" formControlName="universityName" type="text" class="form-control form-control-sm"
+                placeholder="Name" maxlength="50" />
+            <app-display-errors control="universityName" class="red" [errors]="{
+                'required': 'University Name is required',
+                'maxlength': 'University Name cannot exceed 50 characters in length.'
+            }"></app-display-errors> -->
+
+    <mat-form-field appearance="outline">
+        <mat-label>University City</mat-label>
+        <input type="text" matInput formControlName="universityCity">
+        <app-display-errors control="universityCity" class="red" [errors]="{
+                'required': 'University City is required',
+                'maxlength': 'University City cannot exceed 50 characters in length.'
+            }"></app-display-errors>
+    </mat-form-field>
+
+    <!-- <label for="universityCity">University City</label>
+            <input id="universityCity" formControlName="universityCity" type="text" class="form-control form-control-sm"
+                placeholder="City" maxlength="50" />
+            <app-display-errors control="universityCity" class="red" [errors]="{
+                'required': 'University City is required',
+                'maxlength': 'University City cannot exceed 50 characters in length.'
+            }"></app-display-errors> -->
+
+    <mat-form-field appearance="outline">
+        <mat-label>Academic Year Type:</mat-label>
+        <mat-select type="text" matInput formControlName="academicYearTypeId">
+            @for(type of academicYearTypes; track type){
+            <mat-option *ngFor="let type of academicYearTypes" [value]="type.value">{{type.label}}</mat-option>
+            }
+        </mat-select>
+        <app-display-errors control="academicYearTypeId" class="red" [errors]="{
+                'required': 'Academic Year Type is required'
+            }"></app-display-errors>
+    </mat-form-field>
+
+
+    <!-- <label for="academicYearTypeId">Academic Year Type:</label>
+            <select formControlName="academicYearTypeId" class="form-control form-control-sm">
+                <option *ngFor="let type of academicYearTypes" [value]="type.value">{{type.label}}</option>
+            </select>
+            <app-display-errors control="academicYearTypeId" class="red" [errors]="{
+                'required': 'Academic Year Type is required'
+            }"></app-display-errors> -->
+</form>
+<div>
+    <!-- Valid: {{ myForm.valid }}
+  Value: {{ myForm.value | json }}
+  Errors: {{ myForm.errors | json }} -->
+</div>
+}
+}

@@ -2,11 +2,14 @@ import { Component, Injectable, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { Observable, of, Subscription } from 'rxjs';
-import { catchError, debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
+import { catchError, debounceTime, distinctUntilChanged, map, startWith, switchMap, tap } from 'rxjs/operators';
 import { SetSelectedStudentGUId, SetSelectedStudentIdentifiers } from 'src/app/_store/student/student.action';
 import { StudentState } from 'src/app/_store/student/student.state';
 import { StudentDataService } from '../../data/student-data.service';
 import { StudentMiniDTO } from '../../models/studentMiniDTO';
+import { Cancel01FreeIcons } from '@hugeicons/core-free-icons';
+import { FormControl } from '@angular/forms';
+import { ProviderService } from '../../services/provider.service';
 
 
 @Injectable({
@@ -51,30 +54,58 @@ export class StudentLookupComponent implements OnInit {
   @Input() showNonEssential: boolean;
   @Input() showSearchActiveOnly: boolean;
 
-   currentGUId$ = this.store.select<string>(StudentState.getSelectedStudentGUId);
+  currentGUId$ = this.store.select<string>(StudentState.getSelectedStudentGUId);
+  Cancel01FreeIcons = Cancel01FreeIcons
+  filteredStudentNameDTOs: Observable<StudentMiniDTO[]>;
+  StudentNameDTOs: StudentMiniDTO[];
+  studentCtrl = new FormControl('');
 
   constructor(
     private _service: StudentNameService,
     private router: Router,
-    private studentData: StudentDataService,
-    private store: Store
+    public  studentData: StudentDataService,
+    private store: Store,
+    private provider: ProviderService
   ) {
     console.log('name-lookup constructor!');
   }
 
-  ngOnInit() {
-    this.subscribeForStudentGUIds2();
+  async ngOnInit() {
+    await this.subscribeForStudentGUIds2();
+    await this.get_mini_students_dto();
+
+    this.filteredStudentNameDTOs = await this.studentCtrl.valueChanges.pipe(
+      startWith(''),
+      map(student => (student ? this._filterStudentNameDTOs(student) : this.StudentNameDTOs?.slice())),
+    );
+  }
+
+  /* 
+  + CARLOS' CODE
+  */
+  async get_mini_students_dto() {
+    this.StudentNameDTOs = await this.provider.request('GET', `api/students/names/all/${+this.searchActiveOnly}`);
+    console.log(this.StudentNameDTOs);
+    
+  }
+
+  private _filterStudentNameDTOs(value: string): StudentMiniDTO[] {
+    const filterValue = value.toLowerCase();
+
+    return this.StudentNameDTOs.filter(student => student.studentName.toLowerCase().includes(filterValue));
   }
 
   onSelect(item) {
+    console.log(item);
+    
     console.log('OnSelect New Student, dispatching new GUID');
-    console.log(item.item.studentId);
-    console.log(item.item.studentGUId);
-    this.currentGUId = item.item.studentGUId;
+    console.log(item.studentId);
+    console.log(item.studentGUId);
+    this.currentGUId = item.studentGUId;
     this.store.dispatch(new SetSelectedStudentGUId(this.currentGUId));
 
-    this.email = item.item.email;
-    this.studentName = item.item.studentName;
+    this.email = item.email;
+    this.studentName = item.studentName;
   }
 
   onFocus() {
@@ -95,7 +126,7 @@ export class StudentLookupComponent implements OnInit {
     console.log('onClear');
     const input = document.getElementById('search-string') as HTMLInputElement;
     input.focus();
-    input.value = '';
+    this.studentCtrl.patchValue('');
     this.resetStudentData();
   }
 
@@ -168,6 +199,6 @@ export class StudentLookupComponent implements OnInit {
     this.searchActiveOnly = event.target.checked; //  !this.searchActiveOnly;
     console.log('calling dataservice with ' + this.searchActiveOnly);
     this._service.setSearchActiveOnly(this.searchActiveOnly);
+    this.get_mini_students_dto();
   }
-
 }

@@ -1,271 +1,410 @@
 @if (errorMessage) {
-  <div class="alert alert-danger">{{ errorMessage }}</div>
+<div class="alert alert-danger">{{ errorMessage }}</div>
 }
 @if (successMessage) {
-  <div class="alert alert-success">{{ successMessage }}</div>
+<div class="alert alert-success">{{ successMessage }}</div>
 }
-<div style="max-width: 900px">
-  <div>
-    @switch (isLoading) {
-      @case (true) {
-        <div class="text-center col-md-4 col-md-offset-4">
-          <app-loading-container> </app-loading-container>
-        </div>
+
+@switch (isLoading) {
+@case (true) {
+<div class="text-center col-md-4 col-md-offset-4">
+  <app-loading-container> </app-loading-container>
+</div>
+}
+@case (false) {
+<div>
+  <form [formGroup]="myForm" class="flex flex-wrap gap-4 justify-center ja-bg-white p-4 rounded-xl">
+    <div class="basis-full flex gap-x-4 justify-start md:justify-between">
+      <div class="flex justify-center items-center gap-x-4">
+        <span class="ja-btn ja-btn-primary-sc" data-cy="btn-back" (click)="location.back()">
+          &lt;&lt;&nbsp; Back
+        </span>
+        <mat-slide-toggle (click)="setReadOnly()">Editable</mat-slide-toggle>
+      </div>
+
+      <div class="flex justify-center items-center gap-x-4">
+        <span class="red max-w-48 [text-wrap:balance]" [hidden]="myForm.valid">All required fields must be filled in before saving.</span>
+        <button class="ja-btn ja-btn-primary" (click)="saveMyForm()" [disabled]="!myForm.valid">Save</button>
+      </div>
+
+    </div>
+
+    <div class="basis-1/4 grow *:w-full">
+      <mat-form-field appearance="outline">
+        <mat-label>First Name(s)</mat-label>
+        <input matInput id="firstNames" formControlName="firstNames" placeholder="First Name" />
+      </mat-form-field>
+      <app-display-errors control="firstNames" class="red" [errors]="{
+              required: 'First name is required',
+              maxlength: 'First name cannot exceed 30 characters in length.'
+            }"></app-display-errors>
+
+      @if(primary_contact().controls['middleName'] && is_neon_sponsor){
+      <mat-form-field appearance="outline">
+        <mat-label>Middle Name</mat-label>
+        <input type="text" matInput [formControl]="primary_contact().controls['middleName']">
+      </mat-form-field>
       }
-      @case (false) {
-        <div>
-          <form [formGroup]="myForm" class="form-horizontal">
-            <div class="row">
-              <div class="col">
-                <div class="form-group">
-                  <span class="btn btn-primary btn-sm" data-cy="btn-back" (click)="location.back()">
-                    &lt;&lt;&nbsp; Back
-                  </span>
-                  &nbsp;
-                  <label for="ckEditMode">
-                    <input
-                      id="ckEditMode"
-                      type="checkbox"
-                      name="toggleReadOnly"
-                      (click)="setReadOnly()"
-                      style="margin: 0 0 0 4px"
-                      />
-                      Editable</label
-                      >
-                    </div>
-                    <div class="form-group">
-                      <label for="firstNames">First Name(s)</label>
-                      <input
-                        id="firstNames"
-                        formControlName="firstNames"
-                        class="form-control form-control-sm"
-                        type="text"
-                        placeholder="First Name"
-                        />
-                        <app-display-errors
-                          control="firstNames"
-                          class="red"
-                [errors]="{
-                  required: 'First name is required',
-                  maxlength: 'First name cannot exceed 30 characters in length.'
-                }"
-                        ></app-display-errors>
-                        <label for="lastNames">Last Name(s)</label>
-                        <input
-                          id="lastNames"
-                          formControlName="lastNames"
-                          data-cy="last-names"
-                          type="text"
-                          class="form-control form-control-sm"
-                          placeholder="Last Name"
-                          />
-                          <app-display-errors
-                            control="lastNames"
-                            class="red"
-                [errors]="{
-                  required: 'Last name is required',
-                  maxlength: 'Last name cannot exceed 30 characters in length.'
-                }"
-                          ></app-display-errors>
-                          <label for="email">Email</label>
-                          <input
-                            id="email"
-                            formControlName="email"
-                            type="text"
-                            class="form-control form-control-sm"
-                            placeholder="Email Name"
-                            />
-                            <app-display-errors
-                              control="email"
-                              class="red"
-                [errors]="{
-                  required: 'Email is required',
-                  maxlength: 'Email cannot exceed 50 characters in length.'
-                }"
-                            ></app-display-errors>
-                            <label for="smA_Phone">SMA Phone</label>
-                            <input
-                              id="smA_Phone"
-                              formControlName="smA_Phone"
-                              type="text"
-                              class="form-control form-control-sm"
-                              placeholder="Best Phone Number when in SMA"
-                              />
-                              <label for="nonSMA_Phone">Non-SMA Phone</label>
-                              <input
-                                id="nonSMA_Phone"
-                                formControlName="nonSMA_Phone"
-                                type="text"
-                                class="form-control form-control-sm"
-                                placeholder="Best Phone Number when not in SMA"
-                                />
-                                <label for="countryOfResidenceId">Country of Residence</label>
-                                <select formControlName="countryOfResidenceId" class="form-control form-control-sm">
-                                  @for (country of countryList; track country) {
-                                    <option [value]="country.value">{{ country.label }}</option>
-                                  }
-                                </select>
-                                <label for="englishSkillLevelId">English Level:</label>
-                                <select formControlName="englishSkillLevelId" class="form-control form-control-sm">
-                                  @for (status of languageStatuses; track status) {
-                                    <option [value]="status.value">{{ status.label }}</option>
-                                  }
-                                </select>
-                                <label for="spanishSkillLevelId">Spanish Level:</label>
-                                <select formControlName="spanishSkillLevelId" class="form-control form-control-sm">
-                                  @for (status of languageStatuses; track status) {
-                                    <option [value]="status.value">{{ status.label }}</option>
-                                  }
-                                </select>
-                              </div>
-                            </div>
-                            <div class="col">
-                              <div class="row">
-                                <div style="width: 100%">
-                                  <img [src]="photoPathname" />
-                                </div>
-                              </div>
-                              <div class="row">
-                                <div class="col-6" style="padding: 0 2px 0 4px">
-                                  <label for="mentorStatusId">Mentor Status:</label>
-                                  <select formControlName="mentorStatusId" class="form-control form-control-sm">
-                                    <option [ngValue]="null"></option>
-                                    @for (status of roleStatuses; track status) {
-                                      <option [value]="status.value">{{ status.label }}</option>
-                                    }
-                                  </select>
-                                  <label for="adminStatusId">Admin Status:</label>
-                                  <select formControlName="adminStatusId" class="form-control form-control-sm">
-                                    <option [ngValue]="null"></option>
-                                    @for (status of roleStatuses; track status) {
-                                      <option [value]="status.value">{{ status.label }}</option>
-                                    }
-                                  </select>
-                                  <label for="volunteerStatusId">Volunteer Status:</label>
-                                  <select formControlName="volunteerStatusId" class="form-control form-control-sm">
-                                    <option [ngValue]="null"></option>
-                                    @for (status of roleStatuses; track status) {
-                                      <option [value]="status.value">{{ status.label }}</option>
-                                    }
-                                  </select>
-                                  <label for="presidentStatusId">President Status:</label>
-                                  <select formControlName="presidentStatusId" class="form-control form-control-sm">
-                                    <option [ngValue]="null"></option>
-                                    @for (status of roleStatuses; track status) {
-                                      <option [value]="status.value">{{ status.label }}</option>
-                                    }
-                                  </select>
-                                </div>
-                                <div class="col-6" style="padding: 0 2px 0 4px">
-                                  <label for="sponsorStatusId">Sponsor Status:</label>
-                                  <select formControlName="sponsorStatusId" class="form-control form-control-sm">
-                                    <option [ngValue]="null"></option>
-                                    @for (status of roleStatuses; track status) {
-                                      <option [value]="status.value">{{ status.label }}</option>
-                                    }
-                                  </select>
-                                  <label for="donorStatusId">Donor Status:</label>
-                                  <select formControlName="donorStatusId" class="form-control form-control-sm">
-                                    <option [ngValue]="null"></option>
-                                    @for (status of roleStatuses; track status) {
-                                      <option [value]="status.value">{{ status.label }}</option>
-                                    }
-                                  </select>
-                                  <label for="employeeStatusId">Employee Status:</label>
-                                  <select formControlName="employeeStatusId" class="form-control form-control-sm">
-                                    <option [ngValue]="null"></option>
-                                    @for (status of roleStatuses; track status) {
-                                      <option [value]="status.value">{{ status.label }}</option>
-                                    }
-                                  </select>
-                                  <label for="boardMemberStatusId">Board Status:</label>
-                                  <select formControlName="boardMemberStatusId" class="form-control form-control-sm">
-                                    <option [ngValue]="null"></option>
-                                    @for (status of roleStatuses; track status) {
-                                      <option [value]="status.value">{{ status.label }}</option>
-                                    }
-                                  </select>
-                                </div>
-                              </div>
-                              <div class="row">
-                                <label for="memberId">Member ID</label>
-                                <input
-                                  id="memberId"
-                                  formControlName="memberId"
-                                  readonly
-                                  class="form-control form-control-sm"
-                                  type="text"
-                                  />
-                                  <label for="memberGUId">Member GUID</label>
-                                  <input
-                                    id="memberGUId"
-                                    formControlName="memberGUId"
-                                    readonly
-                                    class="form-control form-control-sm"
-                                    type="text"
-                                    />
-                                    <label for="studentRecordGUId">Related Student Record GUID</label>
-                                    <input
-                                      id="studentRecordGUId"
-                                      formControlName="studentRecordGUId"
-                                      readonly
-                                      class="form-control form-control-sm"
-                                      type="text"
-                                      />
-                                    </div>
-                                  </div>
-                                  <div class="col">
-                                    <label for="careerBackground">Career Background</label>
-                                    <input
-                                      id="careerBackground"
-                                      formControlName="careerBackground"
-                                      class="form-control form-control-sm"
-                                      type="text"
-                                      />
-                                      <label for="otherRelevantExperience">Other Relevant Experience</label>
-                                      <input
-                                        id="otherRelevantExperience"
-                                        formControlName="otherRelevantExperience"
-                                        class="form-control form-control-sm"
-                                        type="text"
-                                        />
-                                        <label for="comments">Comments (Private -- for Admins only)</label>
-                                        <textarea
-                                          id="comments"
-                                          #success
-                                          formControlName="comments"
-                                          type="text"
-                                          class="form-control input-sm"
-                                          placeholder=""
-                                          >
-                                        </textarea>
-                                        <app-display-errors
-                                          control="comments"
-                                          class="red"
-                                          [errors]="{ maxlength: 'Entry cannot exceed 2000 characters in length.' }"
-                                        ></app-display-errors>
-                                        <label for="photoUrl">PhotoUrl</label>
-                                        <input id="photoUrl" formControlName="photoUrl" class="form-control form-control-sm" type="text" />
-                                        <label for="lastMentorMeeting">Last Mentor Meeting</label>
-                                        <input
-                                          id="lastMentorMeeting"
-                                          formControlName="lastMentorMeeting"
-                                          class="form-control form-control-sm"
-                                          type="text"
-                                          />
-                                          <students-for-sponsor-list></students-for-sponsor-list>
-                                          <students-for-mentor-list></students-for-mentor-list>
-                                        </div>
-                                      </div>
-                                      <div class="row">
-                                        <div class="form-group">
-                                          <button class="btn btn-primary" (click)="saveMyForm()" [disabled]="!myForm.valid">Save</button>
-                                          <span class="red" [hidden]="myForm.valid">All required fields must be filled in before saving.</span>
-                                        </div>
-                                      </div>
-                                    </form>
-                                  </div>
-                                }
-                              }
-                            </div>
-                          </div>
+
+
+      <mat-form-field appearance="outline">
+        <mat-label>Last Name(s)</mat-label>
+        <input matInput id="lastNames" formControlName="lastNames" placeholder="Last Name" />
+      </mat-form-field>
+      <app-display-errors control="lastNames" class="red" [errors]="{
+              required: 'Last name is required',
+              maxlength: 'Last name cannot exceed 30 characters in length.'
+            }"></app-display-errors>
+
+      @if(primary_contact().controls['preferredName'] && is_neon_sponsor){
+      <mat-form-field appearance="outline">
+        <mat-label>Preferred Name</mat-label>
+        <input type="text" matInput [formControl]="primary_contact().controls['preferredName']">
+      </mat-form-field>
+      }
+
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput id="email" formControlName="email" placeholder="Email Name" />
+      </mat-form-field>
+      <app-display-errors control="email" class="red" [errors]="{
+              required: 'Email is required',
+              maxlength: 'Email cannot exceed 50 characters in length.'
+            }"></app-display-errors>
+
+      <mat-form-field appearance="outline">
+        <mat-label>SMA Phone</mat-label>
+        <input matInput id="smA_Phone" formControlName="smA_Phone" placeholder="Best Phone Number when in SMA" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Non-SMA Phone</mat-label>
+        <input matInput id="nonSMA_Phone" formControlName="nonSMA_Phone"
+          placeholder="Best Phone Number when not in SMA" />
+      </mat-form-field>
+
+      @if(addresses()?.at(0) && is_neon_sponsor) {
+      <ng-container [formGroup]="address()">
+
+        <mat-form-field appearance="outline">
+          <mat-label>Address Line 1</mat-label>
+          <input type="text" matInput formControlName="addressLine1">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Address Line 2</mat-label>
+          <input type="text" matInput formControlName="addressLine2">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Address Line 3</mat-label>
+          <input type="text" matInput formControlName="addressLine3">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>City</mat-label>
+          <input type="text" matInput formControlName="city">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>County</mat-label>
+          <input type="text" matInput formControlName="county">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>State</mat-label>
+          <mat-select [compareWith]="compare_individual_types" formControlName="stateProvince">
+            @for(state of stateProvinces; track state){
+            <mat-option [value]="state">{{state.name}}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Territory</mat-label>
+          <input type="text" matInput formControlName="territory">
+        </mat-form-field>
+
+        <div class="flex gap-x-3 justify-between">
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>ZIP Code</mat-label>
+            <input type="text" matInput formControlName="zipCode">
+          </mat-form-field>
+          <div class="h-full flex items-center">-</div>
+          <mat-form-field appearance="outline" class="max-w-16">
+            <mat-label>ZIP Code Suffix</mat-label>
+            <input type="text" matInput formControlName="zipCodeSuffix">
+          </mat-form-field>
+        </div>
+      </ng-container>
+      }
+
+      <mat-form-field appearance="outline">
+        <mat-label>Country of Residence</mat-label>
+        <mat-select formControlName="countryOfResidenceId">
+          @for (country of countryList; track country) {
+          <mat-option [value]="country.value">{{ country.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>English Level</mat-label>
+        <mat-select formControlName="englishSkillLevelId">
+          @for (status of languageStatuses; track status) {
+          <mat-option [value]="status.value">{{ status.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Spanish Level</mat-label>
+        <mat-select formControlName="spanishSkillLevelId">
+          @for (status of languageStatuses; track status) {
+          <mat-option [value]="status.value">{{ status.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="basis-1/4 grow flex flex-wrap items-start gap-x-4 *:basis-1/3 *:grow *:w-full">
+      @for (field of [
+      { label: 'Mentor Status', control: 'mentorStatusId' },
+      { label: 'Admin Status', control: 'adminStatusId' },
+      { label: 'Volunteer Status', control: 'volunteerStatusId' },
+      { label: 'President Status', control: 'presidentStatusId' }
+      ]; track field) {
+      <mat-form-field appearance="outline">
+        <mat-label>{{ field.label }}</mat-label>
+        <mat-select [formControlName]="field.control">
+          <mat-option [value]="null"></mat-option>
+          @for (status of roleStatuses; track status) {
+          <mat-option [value]="status.value">{{ status.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      }
+      @for (field of [
+      { label: 'Sponsor Status', control: 'sponsorStatusId' },
+      { label: 'Donor Status', control: 'donorStatusId' },
+      { label: 'Employee Status', control: 'employeeStatusId' },
+      { label: 'Board Status', control: 'boardMemberStatusId' }
+      ]; track field) {
+      <mat-form-field appearance="outline">
+        <mat-label>{{ field.label }}</mat-label>
+        <mat-select [formControlName]="field.control">
+          <mat-option [value]="null"></mat-option>
+          @for (status of roleStatuses; track status) {
+          <mat-option [value]="status.value">{{ status.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      }
+      <div class="basis-full flex flex-col *:w-full">
+        @for (field of [
+        { label: 'Member ID', control: 'memberId' },
+        { label: 'Member GUID', control: 'memberGUId' },
+        { label: 'Related Student Record GUID', control: 'studentRecordGUId' }
+        ]; track field) {
+        <mat-form-field appearance="outline">
+          <mat-label>{{ field.label }}</mat-label>
+          <input matInput [id]="field.control" [formControlName]="field.control" readonly />
+        </mat-form-field>
+        }
+        @if(is_neon_sponsor){
+        <div class="flex flex-col w-[calc(50%-0.375rem)] px-4 rounded-lg mb-4">
+          <div class="text-secondary underline p-2 font-semibold -mx-4 mb-2">
+            NEON ACCOUNT DETAILS
+          </div>
+
+          @if(individual_account()){
+          <mat-form-field appearance="outline">
+            <mat-label>Type</mat-label>
+            <mat-select [compareWith]="compare_individual_types"
+              [formControl]="individual_account().controls['individualTypes']" multiple>
+              @for(type of individualTypes; track type){
+
+              <mat-option [value]="type">{{type.name}}</mat-option>
+              }
+
+            </mat-select>
+          </mat-form-field>
+          }
+
+          @if(individual_account()){
+          <mat-form-field appearance="outline">
+            <mat-label>Source</mat-label>
+            <mat-select [compareWith]="compare_individual_types"
+              [formControl]="individual_account().controls['source']">
+              @for(source of sources; track source){
+              <mat-option [value]="source">{{source.name}}</mat-option>
+              }
+
+            </mat-select>
+          </mat-form-field>
+          }
+
+          @if(primary_contact()){
+          <mat-form-field appearance="outline">
+            <mat-label>Gender</mat-label>
+            <mat-select [compareWith]="compare_individual_types" [formControl]="primary_contact().controls['gender']">
+              @for(Gender of Genders; track Gender){
+              <mat-option [value]="Gender">{{Gender.description}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          }
+          <mat-form-field appearance="outline">
+            <mat-label>DOB</mat-label>
+            <input matInput [matDatepicker]="picker" [value]="dob">
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+
+          <div class="text-secondary underline p-2 font-semibold -mx-4 mb-2">
+            CONTINGENT/REQUESTS
+          </div>
+          @if(find_accountCustonField('78')) {
+          <ng-container
+            *ngTemplateOutlet="radio; context: {$implicit: '78', c: find_accountCustonField('78')}"></ng-container>
+          }
+          @if(find_accountCustonField('80')) {
+          <ng-container
+            *ngTemplateOutlet="select; context: {$implicit: '80', c: find_accountCustonField('80')}"></ng-container>
+          }
+          @if(find_accountCustonField('81')) {
+          <ng-container
+            *ngTemplateOutlet="one_line; context: {$implicit: '81', c: find_accountCustonField('81')}"></ng-container>
+          }
+          @if(find_accountCustonField('79')) {
+          <ng-container
+            *ngTemplateOutlet="select; context: {$implicit: '79', c: find_accountCustonField('79')}"></ng-container>
+          }
+
+          <div class="text-secondary underline p-2 font-semibold -mx-4 mb-2">
+            SPONSORSHIP TYPE/ YEAR
+          </div>
+          @if(find_accountCustonField('106')) {
+          <ng-container
+            *ngTemplateOutlet="select; context: {$implicit: '106', c: find_accountCustonField('106')}"></ng-container>
+          }
+          @if(find_accountCustonField('110')) {
+          <ng-container
+            *ngTemplateOutlet="checkbox; context: {$implicit: '110', c: find_accountCustonField('110')}"></ng-container>
+          }
+          @if(find_accountCustonField('120')) {
+          <ng-container
+            *ngTemplateOutlet="select; context: {$implicit: '120', c: find_accountCustonField('120')}"></ng-container>
+          }
+        </div>
+        }
+      </div>
+    </div>
+
+    <div class="basis-1/4 grow *:w-full">
+
+      <mat-form-field appearance="outline">
+        <mat-label>Career Background</mat-label>
+        <input matInput id="careerBackground" formControlName="careerBackground" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Other Relevant Experience</mat-label>
+        <input matInput id="otherRelevantExperience" formControlName="otherRelevantExperience" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Comments (Private -- for Admins only)</mat-label>
+        <textarea matInput id="comments" formControlName="comments"></textarea>
+      </mat-form-field>
+      <app-display-errors control="comments" class="red"
+        [errors]="{ maxlength: 'Entry cannot exceed 2000 characters in length.' }">
+      </app-display-errors>
+
+      <mat-form-field appearance="outline">
+        <mat-label>PhotoUrl</mat-label>
+        <input matInput id="photoUrl" formControlName="photoUrl" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Last Mentor Meeting</mat-label>
+        <input matInput id="lastMentorMeeting" formControlName="lastMentorMeeting" />
+      </mat-form-field>
+
+      <div class="row">
+        <div style="width: 100%">
+          <img [src]="photoPathname" />
+        </div>
+      </div>
+
+      <students-for-sponsor-list></students-for-sponsor-list>
+      <students-for-mentor-list></students-for-mentor-list>
+    </div>
+  </form>
+</div>
+}
+}
+
+<ng-template #radio let-id let-control="c">
+  @if(control?.value?.name) {
+  <p class="font-semibold">{{control?.value?.name}}</p>
+  <mat-radio-group class="mb-3">
+    <div *ngFor="let option of find_optionValues(id).optionValues; let option_index = index" class="!flex !flex-col">
+      <mat-radio-button (change)="select_radio_option(option, control)" [value]="option?.id"
+        [checked]="find_accountCustomFields(id)?.optionValues?.[0].id == option?.id">
+        {{option?.name}}
+      </mat-radio-button>
+    </div>
+  </mat-radio-group>
+  }
+</ng-template>
+
+<ng-template #select let-id let-control="c">
+  @if(control?.value?.name){
+  <mat-form-field appearance="outline">
+    <mat-label>
+      {{control?.value?.name}}
+    </mat-label>
+    <mat-select [value]="control?.value?.optionValues[0].id">
+      @for(option of find_optionValues(id).optionValues; let option_index = $index; track option){
+      <mat-option (click)="select_select_option(option, control)" [value]="option?.id">{{option?.name}}</mat-option>
+      }
+
+    </mat-select>
+  </mat-form-field>
+  }
+</ng-template>
+
+<ng-template #checkbox let-id let-control="c">
+  @if(control?.value?.name){
+  <section class="flex flex-col">
+    {{control?.value?.name}}
+    @for(option of find_optionValues(id).optionValues; let option_index = $index; track option){
+    <mat-checkbox (change)="select_checkbox_options(option, control)" [value]="option.id"
+      [checked]="includes_accountCustomFields(id, option.id)">{{option?.name}}</mat-checkbox>
+    }
+  </section>
+  }
+</ng-template>
+
+<ng-template #one_line let-id let-control="c">
+  @if(control?.value?.name){
+  <mat-form-field appearance="outline">
+    <mat-label>{{control?.value?.name}}</mat-label>
+    <input type="text" matInput [value]="control?.value?.value" #i (keyup)="patch_value_input(control, i.value)">
+  </mat-form-field>
+  }
+</ng-template>
+
+<ng-template #multi_line let-id let-control="c">
+  @if(control?.value?.name){
+  <mat-form-field appearance="outline">
+    <mat-label>{{control?.value?.name}}</mat-label>
+    <textarea type="text" matInput [value]="control?.value?.value" #t
+      (keyup)="patch_value_input(control, t.value)"></textarea>
+  </mat-form-field>
+  }
+</ng-template>
+
+<ng-template #no_field></ng-template>

@@ -114,6 +114,7 @@ const memberTypes: SELECTITEM[] = [
 ];
 const schoolTypes: SELECTITEM[] = [
 ];
+const gradeMonths: SELECTITEM[] = [];
 
 const followUpStatuses: SELECTITEM[] = [
   { value: '2092', label: 'Open' },
@@ -166,5 +167,6 @@ export const constants = {
   highlightStatuses,
   becaPaymentStatuses,
   academicYearTypes,
+  gradeMonths,
   countryList
 };

@@ -11,6 +11,8 @@ export class MemberHeaderDTO {
     public mentorStatusId?: number,
     public sponsorStatusId?: number,
     public studentId?: number,
-    public studentRecordGUId?: string
+    public studentRecordGUId?: string,
+    public neonID?: number
+
   ) { }
 }

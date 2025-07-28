@@ -9,6 +9,7 @@ import { StudentSelfReportDataService } from '../../../_shared/data/student-self
 import { SELECTITEM } from '../../../_shared/interfaces/SELECTITEM';
 import { StudentSelfReport } from '../../../_shared/models/student-self-report';
 import { UIState } from '../../../_store/ui/ui.state';
+import { Alert02FreeIcons, DocumentValidationFreeIcons, Rocket01FreeIcons } from '@hugeicons/core-free-icons';
 
 @Component({
     selector: 'app-ssr-summary-tracking',
@@ -39,6 +40,10 @@ export class StudentSelfReportsTrackingComponent implements OnInit
 
    selectedQRPeriod$ = this.store.select<string>(UIState.getSelectedQRPeriod);
    testNameVisibility$ = this.store.select<boolean>(UIState.getTestNamesVisibility);
+
+   DocumentValidationFreeIcons = DocumentValidationFreeIcons;
+   Rocket01FreeIcons = Rocket01FreeIcons;
+   Alert02FreeIcons = Alert02FreeIcons;
 
   constructor(
     public router: Router,
@@ -85,6 +90,8 @@ export class StudentSelfReportsTrackingComponent implements OnInit
       )
       .subscribe(
         (data) => {
+          console.log(data);
+          
           this.studentReportsByPeriod = data.filter((item) => {
             if (this.displayTestNames) {
               return item;
@@ -156,6 +163,8 @@ export class StudentSelfReportsTrackingComponent implements OnInit
   }
 
   setSelectedQRPeriod(yearPeriod: string) {
+    console.log('selectionchange', yearPeriod);
+    
     this.store.dispatch(new SetSelectedQRPeriod(yearPeriod));
     this.fetchFilteredData();
   }

@@ -1,0 +1,104 @@
+<div class="flex gap-x-3">
+    <mat-form-field appearance="outline">
+        <mat-label>Find Donation</mat-label>
+        <input matInput (keyup)="neon.applyFilter($event)" #input>
+    </mat-form-field>
+
+    <button type="button" (click)="open_filter_dialog()" [disabled]="neon.loading" class="ja-btn ja-btn-primary-sc my-auto">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#1c94a4" fill="none">
+            <path d="M3 7H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M3 17H9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M18 17L21 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M15 7L21 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M6 7C6 6.06812 6 5.60218 6.15224 5.23463C6.35523 4.74458 6.74458 4.35523 7.23463 4.15224C7.60218 4 8.06812 4 9 4C9.93188 4 10.3978 4 10.7654 4.15224C11.2554 4.35523 11.6448 4.74458 11.8478 5.23463C12 5.60218 12 6.06812 12 7C12 7.93188 12 8.39782 11.8478 8.76537C11.6448 9.25542 11.2554 9.64477 10.7654 9.84776C10.3978 10 9.93188 10 9 10C8.06812 10 7.60218 10 7.23463 9.84776C6.74458 9.64477 6.35523 9.25542 6.15224 8.76537C6 8.39782 6 7.93188 6 7Z" stroke="currentColor" stroke-width="1.5" />
+            <path d="M12 17C12 16.0681 12 15.6022 12.1522 15.2346C12.3552 14.7446 12.7446 14.3552 13.2346 14.1522C13.6022 14 14.0681 14 15 14C15.9319 14 16.3978 14 16.7654 14.1522C17.2554 14.3552 17.6448 14.7446 17.8478 15.2346C18 15.6022 18 16.0681 18 17C18 17.9319 18 18.3978 17.8478 18.7654C17.6448 19.2554 17.2554 19.6448 16.7654 19.8478C16.3978 20 15.9319 20 15 20C14.0681 20 13.6022 20 13.2346 19.8478C12.7446 19.6448 12.3552 19.2554 12.1522 18.7654C12 18.3978 12 17.9319 12 17Z" stroke="currentColor" stroke-width="1.5" />
+        </svg>
+        Open filters
+    </button>
+
+    <button type="button" (click)="download_table()" [disabled]="neon.loading" class="ja-btn ja-btn-primary my-auto">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#ffffff" fill="none">
+            <path d="M12 15L12 5M12 15C11.2998 15 9.99153 13.0057 9.5 12.5M12 15C12.7002 15 14.0085 13.0057 14.5 12.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M5 19H19.0001" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        Download data
+    </button>
+</div>
+
+<div class="w-full" #TABLE>
+    <app-applied-filters [reload_after_deleting]="true" (set_table_properties)="set_table_properties()"></app-applied-filters>
+
+    <table id="donations" [ngClass]="neon.loading ? 'hidden' : ''"  mat-table [dataSource]="neon.dataSource" matSort class="ja-bg-white p-4 rounded-xl">
+
+        <ng-container matColumnDef="Donation Date">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Donation {{neon.group_donations ? 'Year' : 'Date' }} </th>
+            <td mat-cell *matCellDef="let row"> {{row?.['Donation Date'] | date:neon.group_donations ? 'yyyy' : 'MMM dd, yyyy'}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Donation Amount">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Donation Amount </th>
+            <td mat-cell *matCellDef="let row"> {{row?.['Donation Amount'] | number:'1.2-2' }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+            <td mat-cell *matCellDef="let row"> {{row?.['Last Name'] + ', ' + row?.['First Name']}} </td>
+        </ng-container>
+        
+        <ng-container matColumnDef="Email 1">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
+            <td mat-cell *matCellDef="let row"> {{row?.['Email 1']}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Address Line 1">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Address </th>
+            <td mat-cell *matCellDef="let row"> {{get_full_address(row)}} </td>
+        </ng-container>
+
+<!--
+        <ng-container matColumnDef="Address Line 1">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Address 1 </th>
+            <td mat-cell *matCellDef="let row"> {{row?.['Address Line 1']}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Address Line 2">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Address 2 </th>
+            <td mat-cell *matCellDef="let row"> {{row?.['Address Line 2']}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Address Line 3">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Address 3 </th>
+            <td mat-cell *matCellDef="let row"> {{row?.['Address Line 3']}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Address Line 4">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Address 4 </th>
+            <td mat-cell *matCellDef="let row"> {{row?.['Address Line 4']}} </td>
+        </ng-container> 
+-->
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+        </tr>
+
+    </table>
+    @if(neon.loading){
+        <div class="mat-row rounded-xl overflow-hidden">
+            <div class="bg-[#24384d]/5 flex justify-between items-center h-14 px-3">
+                @for(cell of [].constructor(6); track cell){
+                    <div class="ui-text-skeleton odd:w-24 even:w-36" ></div>
+                }
+            </div>
+            <div class="ja-bg-white flex justify-between items-center h-12 px-3">
+                @for(row of [].constructor(5); let e = $even; track cell){
+                    <div class="ui-text-skeleton odd:w-24 even:w-36"></div>
+                }
+            </div>
+        </div>
+    }
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100, 200, 500]" aria-label="Select page of users"></mat-paginator>
+</div>

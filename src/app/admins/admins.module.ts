@@ -1,5 +1,8 @@
 import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+    FormsModule,
+    ReactiveFormsModule
+} from '@angular/forms';
 /* import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
  */import { AppSharedModule } from '../_shared/_shared.module';
 
@@ -39,6 +42,7 @@ import { SponsorGroupsComponent } from './sponsor-groups/sponsor-groups.componen
 // import { StudentReportsStatusCountsComponent } from './ssr-status-countsXXX/ssr-status-counts.component';
 import { UniversitiesComponent } from './universities/universities.component';
 import { UniversityEditComponent } from './university-edit/university-edit.component';
+import { UniversityAddComponent } from './universities/university-add/university-add.component';
 
 import { ServerEnvironmentComponent } from './utilities/server-environment/server-environment.component';
 import { TestNamesVisibilityComponent } from './utilities/test-names-visibility/test-names-visibility.component';
@@ -56,9 +60,41 @@ import { WHSE_DC_Component } from '../_shared/components/whse-dc/whse-dc.compone
 
 import { WHSE_QR_Component } from '../_shared/components/whse-qr/whse-qr.component';
 import { WHSE_SU_Component } from '../_shared/components/whse-su/whse-su.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { SponsorStudentMatchComponent } from './sponsor-student-match/sponsor-student-match.component';
+import { HugeiconsIconComponent } from '@hugeicons/angular';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 @NgModule({
-    imports: [AppSharedModule, AdminsRoutingModule, ReactiveFormsModule, FormsModule/* , NgbModule */],
+    imports: [AppSharedModule,
+        AdminsRoutingModule,
+        ReactiveFormsModule,
+        FormsModule/* , 
+        NgbModule */,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatInputModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatRadioModule,
+        MatCheckboxModule,
+        MatTableModule,
+        MatSortModule,
+        MatPaginatorModule,
+        MatSlideToggleModule,
+        HugeiconsIconComponent,
+        MatExpansionModule
+    ],
     declarations: [
         AdminsComponent,
         AdminsHomeComponent,
@@ -91,6 +127,7 @@ import { WHSE_SU_Component } from '../_shared/components/whse-su/whse-su.compone
         UtilitiesComponent,
         UniversitiesComponent,
         UniversityEditComponent,
+        UniversityAddComponent,
         MentorReportsSubmittedComponent,
         AdminsStudentSearchComponent,
         AdminsMemberSearchComponent,
@@ -109,8 +146,9 @@ import { WHSE_SU_Component } from '../_shared/components/whse-su/whse-su.compone
         WHSE_Daily_MR_Component,
         WHSE_Daily_SSR_Component,
         WHSE_QR_Component,
-
     ],
-    exports: [AdminsStudentMRsComponent, AdminsStudentQRsComponent, SponsorGroupsComponent]
+    exports: [AdminsStudentMRsComponent,
+        AdminsStudentQRsComponent,
+        SponsorGroupsComponent]
 })
-export class AdminsModule {}
+export class AdminsModule { }

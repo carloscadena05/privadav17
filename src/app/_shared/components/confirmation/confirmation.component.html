@@ -1,0 +1,10 @@
+<h2 class="ui-big-title">Confirmación</h2>
+
+<mat-dialog-content class="min-w-64">
+   <p class="ui-text text-center py-4">¿Deseas proceder?</p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="flex gap-x-2">
+   <button [mat-dialog-close]="false" class="ui_button_secondary">Cancelar</button>
+   <button [mat-dialog-close]="true"  class="ui_button_primary" cdkFocusInitial>Confirmar</button>
+</mat-dialog-actions>

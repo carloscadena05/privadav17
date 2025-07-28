@@ -1,0 +1,15 @@
+<mat-form-field appearance="outline" class="ui-select">
+    <mat-label>{{ _label }}</mat-label>
+    <mat-select [formControl]="_control" (valueChange)="select($event)">
+        <input type="text" (keyup)="find(query.value)" #query class="ui-search" /> <!-- Campo de búsqueda -->
+        <!-- Generación dinámica de opciones filtradas por el valor de búsqueda -->
+        <ng-container *ngIf="_filtered_data; else no_data">
+            <ng-container *ngFor="let el of _filtered_data">
+                <mat-option [value]="el?.value ?? el">{{ el?.name ?? el }}</mat-option>
+            </ng-container>
+        </ng-container>
+        <ng-template #no_data>
+            No information to show
+        </ng-template>
+    </mat-select>
+</mat-form-field>

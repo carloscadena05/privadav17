@@ -1,32 +1,60 @@
-<label for='search-string'>Student Search:
-&nbsp;</label>
+<!-- <label for='search-string'>Student Search:
+  &nbsp;</label> -->
 @if (showSearchActiveOnly) {
-  <input
+<!-- <input
     id="ckEditMode"
     [(ngModel)]='searchActiveOnly'
     type="checkbox"
     (change)="toggleSearchActiveOnly($event)"
     style="margin: 0 0 0 1px"
-    />
+    /> -->
+<mat-checkbox [(ngModel)]='searchActiveOnly' (change)="toggleSearchActiveOnly($event)">Active Only</mat-checkbox>
 }
-@if (showSearchActiveOnly) {
+<!-- @if (showSearchActiveOnly) {
   <span>Active Only</span>
-}
+} -->
 
-<span style="margin-bottom: 2px; margin-left: 1rem;">
   @if (showSearchButton) {
-    <span>
-      Or:
-    </span>
+  <span>
+    Or:
+  </span>
+  <span (click)="gotoStudentList()" style="margin-bottom: 2px; margin-left: 1px;" class="btn btn-sm btn-primary">Browse
+    Students
+  </span>
   }
-  @if (showSearchButton) {
-    <span
-      (click)="gotoStudentList()" style="margin-bottom: 2px; margin-left: 1px;"
-      class="btn btn-sm btn-primary">Browse Students
-    </span>
-  }
-</span>
-<div class="d-flex justify-content-between">
+<!-- <div class="d-flex justify-content-between"> -->
+
+<!-- <mat-form-field appearance="outline">
+  <mat-label>Search</mat-label>
+  <input matInput aria-label="Search" [matAutocomplete]="student_search" [formControl]="studentCtrl" #i>
+  <mat-autocomplete #student_search="matAutocomplete">
+    <mat-option *ngFor="let student of filteredStudentNameDTOs | async" [value]="student.name">
+      <span>{{student.studentName}}</span> |
+      <small>{{student.email}}</small>
+    </mat-option>
+  </mat-autocomplete>
+  <button matSuffix (click)="onClear()">
+    <hugeicons-icon [icon]="Cancel01FreeIcons" [size]="24" color="currentColor" [strokeWidth]="1.5"></hugeicons-icon>
+  </button>
+</mat-form-field> -->
+
+<mat-form-field appearance="outline" class="w-full">
+    <mat-label>Student</mat-label>
+    <input matInput aria-label="student" id="search-string" [matAutocomplete]="auto" [formControl]="studentCtrl">
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let student of filteredStudentNameDTOs | async" [value]="student.studentName" (click)="onSelect(student)">
+        <div class="flex gap-x-2 items-center">
+          <img alt="" class="h-8 rounded-md" [src]="'https://privada.jovenesadelante.org/' + student.photoUrl">
+          <span class="text-sm">{{student.studentName}}</span> |
+          <small class="text-xs text-slate-500">{{student.email}}</small>
+        </div>
+      </mat-option>
+    </mat-autocomplete>
+    <button matSuffix (click)="$event.preventDefault; onClear()">
+    <hugeicons-icon [icon]="Cancel01FreeIcons" [size]="24" color="currentColor" [strokeWidth]="1.5"></hugeicons-icon>
+  </button>
+  </mat-form-field>
+
 <!--   <input id='search-string'
     type='text'
     class='form-control'
@@ -40,18 +68,18 @@
     (focus)="onFocus()"
     (selectItem)="onSelect($event)"
     placeholder="Last Name or First Name or Email" /> -->
-    <span>
+<!-- <span>
       <button class="btn" style="margin-left:-25px" (click)="onClear()"><b>[✖]</b></button>
-    </span>
-  </div>
-  @if (showNonEssential) {
-    <div class="row">
-      <span [hidden]="currentGUId=='0000'" style="margin-top: .4rem;margin-left: 1rem;" (click)="gotoStudent( studentName )"
-        class="link">Student Profile: {{ studentName }}
-      </span>
-      <br />
-      <span [hidden]="currentGUId=='0000'" style="margin-left:1rem;margin-top: .2rem;">
-        Email: {{ email }}
-      </span>
-    </div>
-  }
+    </span> -->
+<!-- </div> -->
+@if (showNonEssential) {
+<div class="row">
+  <span [hidden]="currentGUId=='0000'" style="margin-top: .4rem;margin-left: 1rem;" (click)="gotoStudent( studentName )"
+    class="link">Student Profile: {{ studentName }}
+  </span>
+  <br />
+  <span [hidden]="currentGUId=='0000'" style="margin-left:1rem;margin-top: .2rem;">
+    Email: {{ email }}
+  </span>
+</div>
+}

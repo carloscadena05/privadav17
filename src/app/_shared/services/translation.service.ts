@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 
 
 @Injectable({ providedIn: 'root' })
@@ -44,7 +44,7 @@ export class TranslationService {
   //   return body.data || { };
   // }
 
-  private handleError(error: any) {
+/*   private handleError(error: any) {
     console.log('data service handle error');
     const errMsg = (error.message) ? error.message :
       error.status ? `${error.status} - ${error.statusText}` : 'Server error';
@@ -54,6 +54,6 @@ export class TranslationService {
     if (errMsg === 'No JWT present or has expired') {
       window.alert('Session has expired, please log in again.');
     }
-    return Observable.throw(errMsg);
-  }
+    return throwError(errMsg);
+  } */
 }

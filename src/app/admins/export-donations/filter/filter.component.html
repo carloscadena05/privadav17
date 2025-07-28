@@ -1,0 +1,210 @@
+<div class="flex justify-between gap-x-6 pr-6">
+    <h1 class="title primary mt-1">Filter Results</h1>
+    <mat-form-field appearance="outline" class="grow" appearance="outline">
+        <span matPrefix>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" color="#1c94a4" fill="none">
+                <path d="M17 17L21 21" stroke="#1c94a4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                <path d="M19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19C15.4183 19 19 15.4183 19 11Z" stroke="#1c94a4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+        </span>
+        <mat-label>Search for a specific filter</mat-label>
+        <input type="text" #q matInput [disabled]="!search_fields">
+    </mat-form-field>
+</div>
+
+<div *ngIf="!search_fields" class="flex flex-col gap-y-3">
+    <div *ngFor="let cell of [].constructor(5)" class="flex gap-x-3 w-full justify-between py-1.5">
+        <ng-container *ngFor="let cell of [].constructor(6)">
+            <div class="ui-text-skeleton h-4 w-24"></div>
+        </ng-container>
+    </div>
+</div>
+
+<form [formGroup]="neon.donations_filters_form" mat-dialog-content #f class="w-full" *ngIf="search_fields">
+    <div *ngFor="let field of array_filters().controls | filter: q.value; let i=index" formArrayName="filters"
+        class="flex flex-col odd:ja-bg-slate-100/5">
+        <!-- 
+        ! FIELDS TO FILL
+        -->
+        <div [formGroupName]="i" class="grid gap-x-3 w-full px-3 pt-1"
+            [ngClass]="f.offsetWidth > 640 ? 'grid-cols-4' : f.offsetWidth > 480 && f.offsetWidth <= 640 ? 'grid-cols-3' : f.offsetWidth <= 480 ? 'grid-cols-2' : ''">
+            <p class="font-semibold my-auto"
+                [ngClass]="f.offsetWidth > 640 ? 'grid-cols-4' : f.offsetWidth > 480 && f.offsetWidth <= 640 ? '' : f.offsetWidth <= 480 ? 'col-span-2 w-full text-center flex justify-center' : ''">
+                {{field.value.field}}</p>
+            <!-- 
+            ! OPERATOR
+            -->
+            <mat-form-field appearance="outline">
+                <mat-label>Operator</mat-label>
+                <mat-select formControlName="operator" (valueChange)="change_validators($event, field)">
+                    <ng-container *ngFor="let operator of field.value.operators_to_use">
+                        <mat-option [value]="operator">
+                            <div class="flex gap-x-3 items-center">
+                                <div [innerHTML]="icons[operator]"></div>
+                                {{operator.replace('_', ' ')}}
+                            </div>
+                        </mat-option>
+                    </ng-container>
+                </mat-select>
+                <mat-error>Please, enter a valid value</mat-error>
+            </mat-form-field>
+
+            <!-- 
+            !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! FIELDS TO FILL !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            -->
+
+            <!-- 
+            ! VALUE LIST
+            -->
+            <div *ngIf="range_options(field.value)" formArrayName="valueList"
+                class="grid gap-x-3 {{col_span(array_value_list(field).value.length)}}">
+                <div *ngFor="let value of array_value_list(field).controls; let value_i = index" class="flex gap-x-1.5">
+                    <!-- <mat-form-field appearance="outline" class="duration-300"
+                        [ngClass]="array_value_list(field).value.length > 1 ? 'w-[calc(100%-3rem)]' : 'w-full'">
+                        <mat-label>Value</mat-label>
+                        <input type="text" matInput #i [formControlName]="value_i"
+                            (keyup)="array_value_list(field).at(value_i).patchValue(i.value)">
+                        <mat-error>Please, enter a valid value</mat-error>
+                    </mat-form-field> -->
+
+                    <!-- 
+                    *! DATE VALUE
+                    -->
+                    <ng-container *ngIf="date_range_options(field.value)">
+                        <mat-form-field appearance="outline" [ngClass]="array_value_list(field).value.length > 1 ? 'w-[calc(100%-3rem)]' : 'w-full'">
+                            <mat-label>Value</mat-label>
+                            <input matInput [matDatepicker]="picker" [formControlName]="value_i">
+                            <mat-hint>MM/DD/YYYY</mat-hint>
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+
+                    </ng-container>
+
+                    <!-- 
+                    *! DEFAULT VALUE
+                    -->
+
+                    <ng-container *ngIf="default_range_options(field.value)">
+                        <mat-form-field appearance="outline" [ngClass]="array_value_list(field).value.length > 1 ? 'w-[calc(100%-3rem)]' : 'w-full'">
+                            <mat-label>Value</mat-label>
+                            <input type="text" matInput [formControlName]="value_i">
+                            <mat-error>Please, enter a valid value</mat-error>
+                        </mat-form-field>
+                    </ng-container>
+
+                    <!-- 
+                    *! DEFAULT SELECT VALUE
+                    -->
+
+                    <ng-container *ngIf="select_range_options(field.value)">
+                        <mat-form-field appearance="outline" [ngClass]="array_value_list(field).value.length > 1 ? 'w-[calc(100%-3rem)]' : 'w-full'">
+                            <mat-label>Value</mat-label>
+                            <mat-select [formControlName]="value_i">
+                                <ng-container *ngFor="let property of properties?.[field?.value?.field]">
+                                    <mat-option [value]="property.name"> {{property?.name}} </mat-option>
+                                </ng-container>
+                            </mat-select>
+                            <mat-error>Please, enter a valid value</mat-error>
+                        </mat-form-field>
+                    </ng-container>
+                    
+                    <ng-container *ngIf="array_value_list(field).value.length > 1">
+                        <button (click)="remove_at_value_list(field, value_i)" type="button"
+                            class="btn btn-simple-red-light btn-square shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16"
+                                color="#c2026b" fill="none">
+                                <path d="M19.0005 4.99988L5.00049 18.9999M5.00049 4.99988L19.0005 18.9999"
+                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                        </button>
+                    </ng-container>
+                </div>
+                <button (click)="add_to_value_list(field)" type="button" class="btn btn-simple-primary m-auto">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" color="#1c94a4"
+                        fill="none">
+                        <path d="M12 4V20M20 12H4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg> Add option
+                </button>
+            </div>
+
+            <!-- 
+            ! BLANK
+            -->
+            <ng-container *ngIf="blank_options(field.value)">
+                <div></div>
+            </ng-container>
+
+            <!-- 
+            ! DATE VALUE
+            -->
+            <ng-container *ngIf="date_options(field.value)">
+                <mat-form-field appearance="outline">
+                    <mat-label>Value</mat-label>
+                    <input matInput [matDatepicker]="picker" formControlName="value">
+                    <mat-hint>MM/DD/YYYY</mat-hint>
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+
+            </ng-container>
+
+            <!-- 
+            ! DEFAULT VALUE
+            -->
+            <ng-container *ngIf="default_options(field.value)">
+                <mat-form-field appearance="outline">
+                    <mat-label>Value</mat-label>
+                    <input type="text" matInput formControlName="value">
+                    <mat-error>Please, enter a valid value</mat-error>
+                </mat-form-field>
+            </ng-container>
+            <!-- 
+            ! DEFAULT SELECT VALUE
+            -->
+            <ng-container *ngIf="select_options(field.value)">
+                <mat-form-field appearance="outline">
+                    <mat-label>Value</mat-label>
+                    <mat-select formControlName="value">
+                        <ng-container *ngFor="let property of properties?.[field?.value?.field]">
+                            <mat-option [value]="property.name"> {{property?.name}} </mat-option>
+                        </ng-container>
+                    </mat-select>
+                    <mat-error>Please, enter a valid value</mat-error>
+                </mat-form-field>
+            </ng-container>
+
+            <div class="flex gap-x-1.5"
+                [ngClass]="f.offsetWidth > 640 ? '' : f.offsetWidth > 480 && f.offsetWidth <= 640 ? 'col-span-3 w-full flex justify-evenly' : f.offsetWidth <= 480 ? 'col-span-2 mb-3 flex justify-evenly' : ''">
+                <button (click)="add_filter(field.value)" type="button" [disabled]="field.invalid"
+                    class="btn btn-secondary-sc min-w-30 max-w-30 my-auto">Add filter</button>
+                <ng-container *ngIf="!field.invalid">
+                    <button (click)="add_filter(field.value)" type="button"
+                        class="btn btn-red-light min-w-30 max-w-30 my-auto">Reset filter</button>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+
+</form>
+<mat-dialog-actions align="end" class="flex flex-col gap-y-1.5">
+    <mat-checkbox [(ngModel)]="neon.group_donations">Group by year</mat-checkbox>
+    <!-- 
+        ! APPPLIED FILTERS CHIPS
+    -->
+    <app-applied-filters [reload_after_deleting]="false"></app-applied-filters>
+    <section class="flex justify-end gap-x-3 w-full">
+        <!-- 
+            ! ACTION BUTTONS
+        -->
+        <button mat-button [mat-dialog-close]="[{
+            'field': 'Account Type',
+            'operator': 'EQUAL',
+            'value': 'INDIVIDUAL'
+        }]" class="btn btn-secondary-sc">Cancel</button>
+        <button mat-button [mat-dialog-close]="neon.donations_applied_filters" class="btn btn-primary">Apply
+            filters and search</button>
+    </section>
+</mat-dialog-actions>

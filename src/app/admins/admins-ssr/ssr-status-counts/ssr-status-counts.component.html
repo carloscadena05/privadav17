@@ -1,22 +1,37 @@
 <style>
   ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background-color: #DDDDDD;
-}
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #DDDDDD;
+  }
 
-li {
-float: left;
-padding-right: 10px;
-padding-bottom: 2px;
-}
+  li {
+    float: left;
+    padding-right: 10px;
+    padding-bottom: 2px;
+  }
 </style>
 
-<ul>
-  <li>Totals per category: </li>
+<div class="flex gap-x-2 items-center bg-secondary w-full p-2 rounded-md">
+  <h4 class="font-medium text-accent">Totals per category: </h4>
   @for (statusCount of statusCounts; track statusCount) {
-    <li>{{statusCount.reviewedStatus}}: {{statusCount.statusCount}}</li>
+  <div class="px-2 py-1 rounded-md flex gap-x-2 items-center bg-blue-100"
+    [ngClass]="statusCount.reviewedStatus == 'COPIED_TO_QR' ? 'bg-blue-100 text-blue-600' : statusCount.reviewedStatus == 'READY_FOR_QR' ? 'bg-green-100 text-green-600' : statusCount.reviewedStatus == 'NEEDS_REVIEW' ? 'bg-yellow-100 text-yellow-600' : 'bg-gray-100 text-gray-600'">
+    @if(statusCount.reviewedStatus == 'COPIED_TO_QR') {
+    <hugeicons-icon [icon]="DocumentValidationFreeIcons" [size]="24" color="#2563eb"
+      [strokeWidth]="1.5"></hugeicons-icon>
+    } @else if(statusCount.reviewedStatus == 'READY_FOR_QR'){
+    <hugeicons-icon [icon]="Rocket01FreeIcons" [size]="24" color="#16a34a" [strokeWidth]="1.5"></hugeicons-icon>
+    } @else if (statusCount.reviewedStatus == 'NEEDS_REVIEW') {
+    <hugeicons-icon [icon]="Alert02FreeIcons" [size]="24" color="#ca8a04" [strokeWidth]="1.5"></hugeicons-icon>
+    } @else {}
+    {{ statusCount.reviewedStatus }}
+    <span>{{statusCount.statusCount}}</span>
+  </div>
+  <!-- <div class="text-white">
+    <span class="font-medium">{{statusCount.reviewedStatus}}: </span>
+  </div> -->
   }
-</ul>
+</div>

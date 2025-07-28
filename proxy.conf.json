@@ -1,0 +1,10 @@
+{
+  "/neon": {
+    "target": "https://api.neoncrm.com/v2",
+    "secure": true,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/neon": ""
+    }
+  }
+}

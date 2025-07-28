@@ -1,81 +1,139 @@
-<div class="card-header bg-primary text-white">
-  <span style="font-size: large"> Student Self Reports </span>
-  <span style="margin-left: 10rem">
-    Report for Quarter:
-    <select name="activePeriodSelector" data-cy="period-selector" [(ngModel)]="selectedQRPeriod"
-      (change)="setSelectedQRPeriod($event.target.value)">
-      @for (yearPeriod of qrPeriods; track yearPeriod) {
-        <option [value]="yearPeriod.value">{{ yearPeriod.label }}</option>
-      }
-    </select>
-  </span>
-</div>
-
-
-<div class="card-body bg-white">
-  @if (errorMessage) {
-    <span class="alert alert-danger">{{ errorMessage }}</span>
-  }
-  @if (successMessage) {
-    <span class="alert alert-success">{{ successMessage }}</span>
-  }
-  <div>
-
-    <app-ssr-status-counts [yearPeriod]="selectedQRPeriod"> </app-ssr-status-counts>
-
-    <div class="controls"></div>
+<div class="flex flex-wrap gap-4 justify-center ja-bg-white p-4 rounded-xl">
+  <div class="w-full flex justify-between items-center gap-x-4">
+    <h1 class="ja-big-title">Student Self Reports</h1>
+    <div class="flex gap-x-2">
+      Report for Quarter
+      <mat-form-field class="simple" appareance="outline">
+        <mat-select data-cy="period-selector" [(ngModel)]="selectedQRPeriod" #year_period
+          (selectionChange)="setSelectedQRPeriod(year_period.value)">
+          @for (yearPeriod of qrPeriods; track yearPeriod) {
+          <mat-option class="simple" [value]="yearPeriod.value">{{ yearPeriod.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
   </div>
 
-  <div>
-    @switch (isLoading) {
+  <div class="card-body bg-white">
+    @if (errorMessage) {
+    <span class="alert alert-danger">{{ errorMessage }}</span>
+    }
+    @if (successMessage) {
+    <span class="alert alert-success">{{ successMessage }}</span>
+    }
+    <div>
+
+      <app-ssr-status-counts [yearPeriod]="selectedQRPeriod"> </app-ssr-status-counts>
+
+      <div class="controls"></div>
+    </div>
+
+    <div>
+      @switch (isLoading) {
       @case (true) {
-        <div class="text-center col-md-4 col-md-offset-4">
-          <app-loading-container> </app-loading-container>
-        </div>
+      <div class="text-center col-md-4 col-md-offset-4">
+        <app-loading-container> </app-loading-container>
+      </div>
       }
       @case (false) {
-        <div>
+      <div>
+        <mat-accordion>
           @for (ssr of studentReportsByPeriod; track ssr; let i = $index) {
-            <div
-              class="row"
-              style="border-bottom: 3px solid #ccc; margin-top: 2px"
-              >
-              <div class="col-md-12">
-                <div class="row mx-auto" id="{{ 'id' + ssr.studentSelfReportId }}">
-                  <button
-                    class="btn default-btn btn-primary btn-sm"
-                    (click)="updateSSRTracking(ssr.studentSelfReportId, ssr.studentGUId, ssr.studentName)"
-                    >
-                    Review
-                  </button>
-                  &nbsp;
-                  <span (click)="gotoStudent(ssr.studentGUId, ssr.studentName)" class="padded link">
-                    [Student:
-                    {{ ssr.studentName }} ]
+          <mat-expansion-panel class="!shadow-none">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <div class="flex gap-x-2 items-center">
+                  <img [src]="'https://privada.jovenesadelante.org/' + ssr.photoUrl.substring(9)" alt="" class="h-10 rounded-md duration-300">
+                  <span (click)="gotoStudent(ssr.studentGUId, ssr.studentName)" class="text-primary font-medium !capitalize">
+                    {{ ssr.studentName }}
                   </span>
-                  <span class="padded">
-                    [Sponsor:
-                    {{ ssr.sponsorGroupName }} ]
-                  </span>
-                  <div>
-                    <div class="padded col-md2">
-                      <span class="padded"> &nbsp;Reviewed Status: {{ ssr.reviewedStatus }} </span>
-                    </div>
-                    <span class="padded col-md2">
-                      Submitted Date:
-                      {{ ssr.reportDateTime | truncateDate }}
-                    </span>
-                    <div [hidden]="!displayOriginalFields">
-                      <div class="col-md2 padded">Description (Spanish)</div>
-                      <div class="col-md-10" [innerHTML]="ssr.narrative_Spanish"></div>
-                    </div>
+                </div>
+              </mat-panel-title>
+              <mat-panel-description>
+                <div class="flex justify-between items-center w-full">
+                  <span class="text-secondary">{{ ssr.sponsorGroupName }}</span>
+                  <div class="px-2 py-1 rounded-md flex gap-x-2 items-center bg-blue-100"
+                    [ngClass]="ssr.reviewedStatus == 'COPIED_TO_QR' ? 'bg-blue-100 text-blue-600' : ssr.reviewedStatus == 'READY_FOR_QR' ? 'bg-green-100 text-green-600' : ssr.reviewedStatus == 'NEEDS_REVIEW' ? 'bg-yellow-100 text-yellow-600' : 'bg-gray-100 text-gray-600'">
+                    @if(ssr.reviewedStatus == 'COPIED_TO_QR') {
+                    <hugeicons-icon [icon]="DocumentValidationFreeIcons" [size]="24" color="#2563eb"
+                      [strokeWidth]="1.5"></hugeicons-icon>
+                    } @else if(ssr.reviewedStatus == 'READY_FOR_QR'){
+                    <hugeicons-icon [icon]="Rocket01FreeIcons" [size]="24" color="#16a34a"
+                      [strokeWidth]="1.5"></hugeicons-icon>
+                    } @else if (ssr.reviewedStatus == 'NEEDS_REVIEW') {
+                    <hugeicons-icon [icon]="Alert02FreeIcons" [size]="24" color="#ca8a04"
+                      [strokeWidth]="1.5"></hugeicons-icon>
+                    } @else {}
+                    {{ ssr.reviewedStatus }}
                   </div>
+                </div>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <div class="flex flex-col gap-y-2">
+              <div class="flex gap-x-2 items-center">
+                <button class="ja-btn ja-btn-primary"
+                  (click)="updateSSRTracking(ssr.studentSelfReportId, ssr.studentGUId, ssr.studentName)">
+                  Review
+                </button>
+                <div class="flex gap-x-2 items-center">
+                  
+
+                  <span>
+                    <span class="font-medium">Submitted Date:</span>
+                    {{ ssr.reportDateTime | date }}
+                  </span>
+                </div>
+              </div>
+
+              <div [innerHTML]="ssr.narrative_Spanish"></div>
+            </div>
+          </mat-expansion-panel>
+          <!-- 
+        <div class="flex flex-col gap-y-2 shadow-xl p-4" id="{{ 'id' + ssr.studentSelfReportId }}">
+          <div class="flex gap-x-4">
+            <button (click)="updateSSRTracking(ssr.studentSelfReportId, ssr.studentGUId, ssr.studentName)"
+              class="ja-btn ja-btn-primary">Review</button>
+            <span (click)="gotoStudent(ssr.studentGUId, ssr.studentName)">{{ ssr.studentName }}</span>
+            <span>{{ ssr.sponsorGroupName }}</span>
+          </div>
+        </div>
+        <div class="row" style="border-bottom: 3px solid #ccc; margin-top: 2px">
+          <div class="col-md-12">
+            <div class="row mx-auto" id="{{ 'id' + ssr.studentSelfReportId }}">
+              <button class="btn default-btn btn-primary btn-sm"
+                (click)="updateSSRTracking(ssr.studentSelfReportId, ssr.studentGUId, ssr.studentName)">
+                Review
+              </button>
+              &nbsp;
+              <span (click)="gotoStudent(ssr.studentGUId, ssr.studentName)" class="padded link">
+                [Student:
+                {{ ssr.studentName }} ]
+              </span>
+              <span class="padded">
+                [Sponsor:
+                {{ ssr.sponsorGroupName }} ]
+              </span>
+              <div>
+                <div class="padded col-md2">
+                  <span class="padded"> &nbsp;Reviewed Status: {{ ssr.reviewedStatus }} </span>
+                </div>
+                <span class="padded col-md2">
+                  Submitted Date:
+                  {{ ssr.reportDateTime | truncateDate }}
+                </span>
+                <div [hidden]="!displayOriginalFields">
+                  <div class="col-md2 padded">Description (Spanish)</div>
+                  <div class="col-md-10" [innerHTML]="ssr.narrative_Spanish"></div>
                 </div>
               </div>
             </div>
+          </div>
+        </div> -->
+
           }
-        </div>
+        </mat-accordion>
+      </div>
       }
-    }
+      }
+    </div>
   </div>
-</div>

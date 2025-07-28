@@ -9,6 +9,8 @@ export class StudentSponsorXRef {
     public sponsorStatusId: number,
     public sponsorStatus: string,
     public sponsorGroupId: number | null,
-    public sponsorGroupName: string
+    public sponsorGroupName: string,
+    public photoURL: string,
+    public studentMastersUniversityID?: number
   ) {}
 }

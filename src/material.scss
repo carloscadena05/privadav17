@@ -1,0 +1,102 @@
+@use '@angular/material' as mat;
+@use 'sass:map';
+
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+// Colores base
+$primary-base: #1c94a4; // rgb(28, 148, 164)
+$secondary-base: #13538a; // rgb(19, 83, 138)
+$tertiary-base: #16384d; // rgb(22, 56, 77)
+
+@layer components {
+  :root {
+    --primary: 28 148 164; // rgb(28, 148, 164)
+    --secondary: 19 83 138; // rgb(19, 83, 138)
+    --tertiary: 22 56 77; // rgb(22, 56, 77)
+  }
+}
+
+// Paleta PRIMARY
+$custom-primary: mat.define-palette((
+  50: #e0f7fa,
+  100: #b3ebf2,
+  200: #80ddea,
+  300: #4dcedf,
+  400: #26c3d7,
+  500: $primary-base,
+  600: #178e9e,
+  700: #12858f,
+  800: #0d7b83,
+  900: #046b70,
+  A100: #a7f5ff,
+  A200: #61efff,
+  A400: #1ae2ff,
+  A700: #00cae4,
+  contrast: (
+    50: black,
+    100: black,
+    200: black,
+    300: black,
+    400: black,
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+    A100: black,
+    A200: black,
+    A400: black,
+    A700: black,
+  )
+));
+
+// Paleta SECONDARY
+$custom-secondary: mat.define-palette((
+  50: #e3effa,
+  100: #bad6f2,
+  200: #8abbe9,
+  300: #5a9fde,
+  400: #3688d6,
+  500: $secondary-base,
+  600: #10507f,
+  700: #0c4973,
+  800: #084067,
+  900: #023053,
+  A100: #a6cfff,
+  A200: #5faaff,
+  A400: #1e87ff,
+  A700: #006aff,
+  contrast: (
+    50: black,
+    100: black,
+    200: black,
+    300: black,
+    400: white,
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+    A100: black,
+    A200: black,
+    A400: white,
+    A700: white,
+  )
+));
+
+// Paleta WARN (puedes personalizarla si lo deseas)
+$custom-warn: mat.define-palette(mat.$red-palette);
+
+// Definir el tema
+$my-theme: mat.define-light-theme((
+  color: (
+    primary: $custom-primary,
+    accent: $custom-secondary,
+    warn: $custom-warn,
+  ),
+  density: 0
+));
+
+// Aplicar el tema global
+@include mat.all-component-themes($my-theme);
