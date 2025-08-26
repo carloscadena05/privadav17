@@ -1,74 +1,171 @@
-<div class="card bg-primary">
+<div class="flex flex-col gap-4 justify-center ja-bg-white p-4 rounded-2xl">
+  <h1 class="ja-big-title inline">Mentor Reports Submitted</h1>
+
+  @if (errorMessage) {
+  <span class="alert alert-danger">{{ errorMessage }}</span>
+  }
+  @if (successMessage) {
+  <span class="alert alert-success">{{ successMessage }}</span>
+  }
+
+  @if(isLoading) {
+  <app-loading-container></app-loading-container>
+  } @else {
+  <mat-form-field appearance="outline">
+    <mat-label>Filter</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
+  </mat-form-field>
+
+  <div>
+    <table mat-table [dataSource]="dataSource" matSort>
+
+      <ng-container matColumnDef="mentorName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Mentor </th>
+        <td mat-cell *matCellDef="let row">
+          <div class="flex gap-x-2 items-center cursor-pointer">
+            <img [src]="'https://privada.jovenesadelante.org/assets/images/MemberPhotos/' + row?.mentorphotoUrl" alt=""
+              class="h-10 rounded-md duration-300 student-photo aspect-v-photo object-cover">
+            <span (click)="gotoMember(row.mentorGUId, row.mentorName)" class="text-tertiary !capitalize hover:underline duration-300">
+              {{ row?.mentorName }}
+            </span>
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="studentName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Student </th>
+        <td mat-cell *matCellDef="let row">
+          <div class="flex gap-x-2 items-center cursor-pointer">
+            <img [src]="'https://privada.jovenesadelante.org/' + row?.photoUrl?.substring(9)" alt=""
+              class="h-10 rounded-md duration-300 student-photo aspect-v-photo object-cover">
+            <span (click)="gotoStudent(row.studentGUId)"
+              class="text-primary font-medium !capitalize hover:underline duration-300">
+              {{ row?.studentName }}
+              <br class="h-0">
+              <span class="text-slate-500 !text-xs">{{ row?.major }} | {{row.universityAbbrev}}</span>
+
+            </span>
+          </div>
+
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="mentorAssignedDate">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Mentor Start </th>
+        <td mat-cell *matCellDef="let row">
+          @if(row.mentorAssignedDate != '1900-01-01T00:00:00') {
+          {{row.mentorAssignedDate | date}}
+          } @else {}
+
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="submittedCount">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Total Submitted </th>
+        <td mat-cell *matCellDef="let row"> {{row.submittedCount}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="latestDate">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Latest Month </th>
+        <td mat-cell *matCellDef="let row">
+          @if(row.latestDate != '1900-01-01T00:00:00') {
+          {{row.latestDate | date}}
+          } @else {}
+
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="mentoringComment">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Comment </th>
+        <td mat-cell *matCellDef="let row"> {{ row.mentoringComment }} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+      </tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]" aria-label="Select page of users"></mat-paginator>
+  </div>
+
+
+  }
+</div>
+
+<!-- <div class="card bg-primary">
   <div class="card-header text-white" style="font-size:large">
     Mentor&nbsp;Reports&nbsp;Submitted
   </div>
   <div class="card-body bg-white">
     @if (errorMessage) {
-      <span class="alert alert-danger">{{errorMessage}}</span>
+    <span class="alert alert-danger">{{errorMessage}}</span>
     }
     @if (successMessage) {
-      <span class="alert alert-success">{{successMessage}}</span>
+    <span class="alert alert-success">{{successMessage}}</span>
     }
     <div>
       @switch (isLoading) {
-        @case (true) {
-          <div class="text-center col-md-4 col-md-offset-4">
-            <app-loading-container>
-            </app-loading-container>
-          </div>
-        }
-        @case (false) {
-          <div>
-            <table appSortableTable class="table-sm table-striped">
-              <thead>
-                <tr>
-                  <th app-sortable-column="mentorName" (onSortColumn)="onSortColumn($event)">Mentor</th>
-                  <th app-sortable-column="studentName" (onSortColumn)="onSortColumn($event)">Student</th>
-                  <th app-sortable-column="mentorAssignedDate" (onSortColumn)="onSortColumn($event)">Mentor Start</th>
-                  <th app-sortable-column="submittedCount" sort-direction="asc" (onSortColumn)="onSortColumn($event)">Total
-                  Submitted</th>
-                  <th app-sortable-column="latestDate" (onSortColumn)="onSortColumn($event)">Latest Month</th>
-                  <th (onSortColumn)="onSortColumn($event)">Comment</th>
-                </tr>
-              </thead>
-              <tbody>
-                @for (row of mentorReportSubmittedCounts; track row) {
-                  <tr>
-                    @if (row.mentorGUId) {
-                      <td (click)='gotoMember(row.mentorGUId, row.mentorName)' class="report-row link">
-                        {{ row.mentorName }}
-                      </td>
-                    }
-                    @if (!row.mentorGUId) {
-                      <td class="report-row">
-                        {{ row.mentorName }}
-                      </td>
-                    }
-                    <td class="report-row" (click)='gotoStudent(row.studentGUId)' class="report-row link">
-                      {{ row.studentName }}
-                    </td>
-                    <td class="report-row">
-                      {{ row.mentorAssignedDate | truncateDate }}
-                    </td>
-                    <td class="report-row">
-                      {{ row.submittedCount }}
-                    </td>
-                    <td class="report-row">
-                      {{ row.latestDate | truncateDate }}
-                    </td>
-                    <td class="report-row">
-                      {{ row.mentoringComment }}
-                    </td>
-                  </tr>
-                }
-              </tbody>
-            </table>
-          </div>
-        }
+      @case (true) {
+      <div class="text-center col-md-4 col-md-offset-4">
+        <app-loading-container>
+        </app-loading-container>
+      </div>
+      }
+      @case (false) {
+      <div>
+        <table appSortableTable class="table-sm table-striped">
+          <thead>
+            <tr>
+              <th app-sortable-column="mentorName" (onSortColumn)="onSortColumn($event)">Mentor</th>
+              <th app-sortable-column="studentName" (onSortColumn)="onSortColumn($event)">Student</th>
+              <th app-sortable-column="mentorAssignedDate" (onSortColumn)="onSortColumn($event)">Mentor Start</th>
+              <th app-sortable-column="submittedCount" sort-direction="asc" (onSortColumn)="onSortColumn($event)">Total
+                Submitted</th>
+              <th app-sortable-column="latestDate" (onSortColumn)="onSortColumn($event)">Latest Month</th>
+              <th (onSortColumn)="onSortColumn($event)">Comment</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of mentorReportSubmittedCounts; track row) {
+            <tr>
+              @if (row.mentorGUId) {
+              <td (click)='gotoMember(row.mentorGUId, row.mentorName)' class="report-row link">
+                {{ row.mentorName }}
+              </td>
+              }
+              @if (!row.mentorGUId) {
+              <td class="report-row">
+                {{ row.mentorName }}
+              </td>
+              }
+              <td class="report-row" (click)='gotoStudent(row.studentGUId)' class="report-row link">
+                {{ row.studentName }}
+              </td>
+              <td class="report-row">
+                {{ row.mentorAssignedDate | truncateDate }}
+              </td>
+              <td class="report-row">
+                {{ row.submittedCount }}
+              </td>
+              <td class="report-row">
+                {{ row.latestDate | truncateDate }}
+              </td>
+              <td class="report-row">
+                {{ row.mentoringComment }}
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      }
       }
     </div>
   </div>
 </div>
 
 
-l
+l -->

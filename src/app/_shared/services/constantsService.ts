@@ -171,6 +171,7 @@ console.log('%%%%%GENERATE GradesProcessing PERIODS%%%');
       constants.contactYears.push(elem);
       year++;
     }
+    constants.contactYears.sort((a, b) => Number(b.value) - Number(a.value))
     console.log('contactYears', constants.contactYears[0]);
   }
 

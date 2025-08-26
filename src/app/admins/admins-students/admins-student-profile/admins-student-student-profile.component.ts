@@ -2,6 +2,7 @@ import { formatDate, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { BookOpen02FreeIcons, Flag02FreeIcons, Mortarboard01FreeIcons, SaveMoneyDollarFreeIcons, Upload01FreeIcons, UploadCircle01FreeIcons, UserMultiple02FreeIcons, ViewFreeIcons } from '@hugeicons/core-free-icons';
 import { Store } from '@ngxs/store';
 import { BehaviorSubject, EMPTY, Observable, Subscription } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -103,7 +104,13 @@ export class AdminsStudentProfileComponent implements OnInit {
   studentName: string;
 
    currentName$ = this.store.select<string>(StudentState.getSelectedStudentName);
-
+  SaveMoneyDollarFreeIcons = SaveMoneyDollarFreeIcons;
+  UserMultiple02FreeIcons = UserMultiple02FreeIcons;
+  BookOpen02FreeIcons = BookOpen02FreeIcons;
+  Mortarboard01FreeIcons = Mortarboard01FreeIcons;
+  Flag02FreeIcons = Flag02FreeIcons;
+  ViewFreeIcons = ViewFreeIcons;
+  UploadCircle01FreeIcons = UploadCircle01FreeIcons;
   constructor(
     public currRoute: ActivatedRoute,
     private router: Router,
@@ -196,6 +203,7 @@ export class AdminsStudentProfileComponent implements OnInit {
       pcsId: [{ value: '' }],
       bankAccount: [{ value: '' }],
       sponsorGroupId: [{ value: '' }],
+      mastersSponsorGroupID: [{ value: '' }],
       mentorGUId: [{ value: '' }],
       studentGUId: [{ value: '' }]
     });
@@ -346,12 +354,13 @@ export class AdminsStudentProfileComponent implements OnInit {
       pcsId: student.pcsId,
       bankAccount: student.bankAccount,
       sponsorGroupId: student.sponsorGroupId,
+      mastersSponsorGroupID: student.mastersSponsorGroupID,
       // mentorGUId: '46D33F1B-BA9E-4C47-800E-16E2AB0E095C', //
       mentorGUId: student.mentorGUId.toUpperCase(),
       // mentorGUId: mentorId, // student.mentorId,
       studentGUId: student.studentGUId
     });
-
+    
     console.log('++++++++++++++++universityGradeMonthId = ' + this.myForm.controls.universityGradeMonthId.value);
 
     console.log('++++++++++++++++mastersUniversityGradeMonthId = ' + this.myForm.controls.mastersUniversityGradeMonthId.value);
@@ -363,6 +372,7 @@ export class AdminsStudentProfileComponent implements OnInit {
     // use spread operator to merge changes:
 
     console.log('student before retrieve FormValues merge');
+    //this.student.mastersSponsorGroupID = Number(this.student.mastersSponsorGroupID);
     console.log(this.student);
 
     this.setEmptyDatesToNull (this.myForm.controls.mentorAssignedDate);
@@ -498,6 +508,8 @@ export class AdminsStudentProfileComponent implements OnInit {
   }
 
   refreshMentors() {
+    console.log('refresh');
+    
     this.mentors$ = this.miscData.getMentors$().pipe(
       catchError((err) => {
         this.errorMessage = err;
@@ -571,5 +583,13 @@ export class AdminsStudentProfileComponent implements OnInit {
     }
 
     return studentDTO;
+  }
+
+  find_month(month_num: string): string {
+    return this.gradMonths.find((month: SELECTITEM) => month.value == month_num)?.label
+  }
+
+  value_select(a: any, b: any): boolean {
+    return a == b;
   }
 }

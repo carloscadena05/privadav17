@@ -59,6 +59,8 @@ export class StudentHeaderDetailsComponent implements OnInit {
       this.loadingState = 1;
       this.studentData.getStudentFlexiDTOViaGUID(this.studentGUId).subscribe(
         (data) => {
+          console.log(data);
+          
           this.student = data;
           console.log('header flexi: ' + this.student.educationalLevel);
           console.log('this.student.timelySSRStatus: ' + this.student.timelySSRStatus);

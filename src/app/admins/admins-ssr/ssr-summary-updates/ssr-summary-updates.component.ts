@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { Cancel01FreeIcons, Delete01FreeIcons, FloppyDiskFreeIcons } from '@hugeicons/core-free-icons';
 import { Store } from '@ngxs/store';
 import { Subscription } from 'rxjs';
 import { constants } from 'src/app/_shared/constants/constants';
@@ -11,8 +12,8 @@ import { SessionService } from 'src/app/_shared/services/session.service';
 import { StudentState } from 'src/app/_store/student/student.state';
 
 @Component({
-    templateUrl: './ssr-summary-updates.component.html',
-    standalone: false
+  templateUrl: './ssr-summary-updates.component.html',
+  standalone: false
 })
 export class StudentSelfReportsSummaryUpdatesComponent implements OnInit {
   myForm: UntypedFormGroup;
@@ -37,7 +38,11 @@ export class StudentSelfReportsSummaryUpdatesComponent implements OnInit {
   savedReviewedStatusId: number;
   private subscription: Subscription;
 
-   currentName$ = this.store.select<string>(StudentState.getSelectedStudentName);
+  currentName$ = this.store.select<string>(StudentState.getSelectedStudentName);
+
+  FloppyDiskFreeIcons = FloppyDiskFreeIcons;
+  Cancel01FreeIcons = Cancel01FreeIcons;
+  Delete01FreeIcons = Delete01FreeIcons
 
   constructor(
     public currRoute: ActivatedRoute,
@@ -84,6 +89,8 @@ export class StudentSelfReportsSummaryUpdatesComponent implements OnInit {
         this.narrative_EnglishCtl.setValue(this.selfReport.narrative_English);
         this.narrative_SpanishCtl.setValue(this.selfReport.narrative_Spanish);
         this.isLoading = false;
+        console.log(this.reviewedStatuses, this.myForm.value.reviewedStatusSelector);
+        this.myForm.patchValue({reviewedStatusSelector: String(this.myForm.value.reviewedStatusSelector)})
       }
     );
 
@@ -139,10 +146,10 @@ export class StudentSelfReportsSummaryUpdatesComponent implements OnInit {
   onDelete() {
     console.log('delete with userID = ' + this.session.getUserId());
     // eslint-disable-next-line eqeqeq
-    if (this.session.getUserId() == 1216 || this.session.getUserId() == 3377 || this.session.getUserId() == 2947 || this.session.getUserId() == 2433 ) {
+    if (this.session.getUserId() == 1216 || this.session.getUserId() == 3377 || this.session.getUserId() == 2947 || this.session.getUserId() == 2433) {
       const response = window.confirm(
         'Caution this action will permanently delete this student report! Proceed? ' +
-          this.selfReport.studentSelfReportId
+        this.selfReport.studentSelfReportId
       );
       if (response === true) {
         this.selfReportData.deleteStudentSelfReport(this.selfReport.studentSelfReportId).subscribe(

@@ -5,9 +5,9 @@ import { WHSE_DataService } from '../../data/whse-data.service';
 import { WHSE_DailyMRCount } from '../../models/WHSE_DailyMRCount';
 
 @Component({
-    selector: 'whse-daily-mr',
-    templateUrl: 'whse-daily-mr.component.html',
-    standalone: false
+  selector: 'whse-daily-mr',
+  templateUrl: 'whse-daily-mr.component.html',
+  standalone: false
 })
 
 
@@ -18,7 +18,7 @@ export class WHSE_Daily_MR_Component implements OnInit {
   isLoading: boolean;
   whseDailyMR: WHSE_DailyMRCount[];
   Highcharts: typeof Highcharts = Highcharts;
-  dummyData =[] as any[];;
+  dummyData = [] as any[];;
   months: string[] = [
     'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
   ];
@@ -32,61 +32,71 @@ export class WHSE_Daily_MR_Component implements OnInit {
 
 
   chartOptions: Highcharts.Options = {
-  chart: {
-    renderTo: 'container_daily_mr',
-    type: 'column',
-    height: 300
-  },
-  title: {
-      text: this.titleText
-  },
-  // tooltip: {
-  //   formatter: function() {
-  //     return '<b>' + this.series.name + '</b>: ' + this.y.toFixed(2);
-  //   }
-  // },
-  series: [
-    {
-      type: 'column',
-      name:'Submitted per Day',
-      color: '#00b300'
+    chart: {
+      /* renderTo: 'container_daily_mr',
+      type: 'column', */
+      width: null,
+      marginLeft: 100,
+      marginRight: 100,
+      marginBottom: 100,
+      borderRadius: 16
     },
-    {
-      type: 'line',
-      name: 'Cumulative',
+    tooltip: {
+        borderColor: '#fff',
+        borderWidth: 2,
+        borderRadius: 16,
+        shadow: false,
+        backgroundColor: '#f1f5f9'
     },
-    // {
-    //   type: 'line',
-    //   name: 'TotalStudents',
-    // }
-  ],
-xAxis: {
-  labels: {
-    rotation: 90,
-    formatter: function () {
-      return this.value.toString().substring(5,11);
-    }
-  },
-  title: {
-    text: 'Date'
-  }
-},
-yAxis: [
-  {
     title: {
-      text: 'Reports Submitted',
+      text: this.titleText
     },
-    tickInterval: 10,
-  },
-],
-plotOptions: {
-  column: {
-    dataLabels: {
-      enabled: true
-    }
-  },
-},
-};
+    // tooltip: {
+    //   formatter: function() {
+    //     return '<b>' + this.series.name + '</b>: ' + this.y.toFixed(2);
+    //   }
+    // },
+    series: [
+      {
+        type: 'column',
+        name: 'Submitted per Day',
+        color: '#1c94a4'
+      },
+      {
+        type: 'line',
+        name: 'Cumulative',
+        color: "#f3d527"
+      },
+      // {
+      //   type: 'line',
+      //   name: 'TotalStudents',
+      // }
+    ],
+    xAxis: {
+      labels: {
+        rotation: -45,
+        formatter: function () {
+          return this.value.toString().substring(5, 11);
+        },
+        step: 1
+      }
+    },
+    yAxis: [
+      {
+        title: {
+          text: 'Reports Submitted',
+        },
+        tickInterval: 10,
+      },
+    ],
+    plotOptions: {
+      column: {
+        dataLabels: {
+          enabled: true
+        }
+      },
+    },
+  };
 
 
 
@@ -103,7 +113,7 @@ plotOptions: {
     console.log('in fetchData for getWHSE_DailyMR');
     this.whseData.getWHSE_DailyMR().subscribe(
       (data) => {
-        console.log('returned from getData');
+        console.warn('returned from getData', data);
         this.whseDailyMR = data;
       },
       (err) => console.error('Subscribe error: ' + err),
@@ -140,8 +150,7 @@ plotOptions: {
   getAdjustedMonth(): number {
     let adjustedMonth = new Date().getMonth();
     let todayDate: number = new Date().getDate();
-    if (todayDate <= 2)
-    {
+    if (todayDate <= 2) {
       adjustedMonth = (adjustedMonth == 0) ? adjustedMonth = 11 : --adjustedMonth;
       console.log('2>>>>' + adjustedMonth);
     }

@@ -75,7 +75,7 @@ export class UniversityEditComponent implements OnInit {
       universityName: university.universityName,
       universityAbbrev: university.universityAbbrev,
       universityCity: university.universityCity,
-      academicYearTypeId: university.academicYearTypeId
+      academicYearTypeId: String(university.academicYearTypeId)
 
     });
   }

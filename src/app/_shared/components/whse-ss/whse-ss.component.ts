@@ -5,9 +5,9 @@ import { WHSE_SSCount } from '../../models/WHSE_SSCount';
 
 
 @Component({
-    selector: 'whse-ss',
-    templateUrl: 'whse-ss.component.html',
-    standalone: false
+  selector: 'whse-ss',
+  templateUrl: 'whse-ss.component.html',
+  standalone: false
 })
 
 export class WHSE_SS_Component implements OnInit {
@@ -15,11 +15,11 @@ export class WHSE_SS_Component implements OnInit {
   isLoading: boolean;
   whseSS: WHSE_SSCount[];
   Highcharts: typeof Highcharts = Highcharts;
-  dummyData =[
+  dummyData = [
 
-    ];
+  ];
 
-  myCategories  = this.dummyData.map(a => a.yearJoined);
+  myCategories = this.dummyData.map(a => a.yearJoined);
   myData0 = this.dummyData.map(a => a.current);
   myData1 = this.dummyData.map(a => a.grad);
   myData2 = this.dummyData.map(a => a.sabbatical);
@@ -30,34 +30,45 @@ export class WHSE_SS_Component implements OnInit {
     series: [
       {
         type: 'column',
-        name:'Current',
+        name: 'Current',
 
-        color: '#00b300'
+        color: '#22c55e'
       },
       {
         type: 'column',
-        name:'Grad',
-        color: '#ffb31a'
+        name: 'Grad',
+        color: '#facc15'
       },
       {
         type: 'column',
-        name:'Sabbatical',
+        name: 'Sabbatical',
         color: '#4da6ff'
       },
       {
         type: 'column',
-        name:'Pending',
-        color: '#0066ff'
+        name: 'Pending',
+        color: '#64748b'
       },
       {
         type: 'column',
-        name:'Dropped',
-        color: '#b30000'
+        name: 'Dropped',
+        color: '#ef4444'
 
       },
     ],
     chart: {
-      height: 300
+      width: null,
+      marginLeft: 100,
+      marginRight: 100,
+      marginBottom: 100,
+      borderRadius: 16
+    },
+    tooltip: {
+        borderColor: '#fff',
+        borderWidth: 2,
+        borderRadius: 16,
+        shadow: false,
+        backgroundColor: '#f1f5f9'
     },
     title: {
       text: 'Student Statuses by YearJoined',
@@ -68,21 +79,27 @@ export class WHSE_SS_Component implements OnInit {
         stacking: 'normal'
       },
       column: {
-          stacking: 'normal',
-          dataLabels: {
-              enabled: false
-          }
+        stacking: 'normal',
+        dataLabels: {
+          enabled: false
+        },
+        pointWidth: 20 // Ancho fijo para las columnas
       }
     },
-      yAxis: {
-        reversedStacks: false,
-        title: {
-          text: 'Students per Status',
-        },
-        stackLabels: {
-          enabled: true
-        }
+    yAxis: {
+      reversedStacks: false,
+      title: {
+        text: 'Students per Status',
+      },
+      stackLabels: {
+        enabled: true
+      }
     },
+    xAxis: {
+      labels: {
+        rotation: -45
+      }
+    }
   };
 
   constructor(public whseData: WHSE_DataService) {
@@ -116,7 +133,48 @@ export class WHSE_SS_Component implements OnInit {
     this.myData3 = hcValues.map(a => a.pending);
     this.myData4 = hcValues.map(a => a.dropped);
 
+    this.chartOptions = {
+      ...this.chartOptions,
+      xAxis: {
+        categories: this.myCategories,
+        labels: {
+          rotation: -45
+        }
+      },
+      series: [
+        {
+          type: 'column',
+          name: 'Current',
+          color: '#22c55e',
+          data: this.myData0
+        },
+        {
+          type: 'column',
+          name: 'Grad',
+          color: '#facc15',
+          data: this.myData1
+        },
+        {
+          type: 'column',
+          name: 'Sabbatical',
+          color: '#4da6ff',
+          data: this.myData2
+        },
+        {
+          type: 'column',
+          name: 'Pending',
+          color: '#64748b',
+          data: this.myData3
+        },
+        {
+          type: 'column',
+          name: 'Dropped',
+          color: '#ef4444',
+          data: this.myData4
 
+        },
+      ]
+    };
     let chart = Highcharts.chart('container_ss', this.chartOptions);
     chart.xAxis[0].setCategories(this.myCategories);
     chart.series[0].setData(this.myData0);

@@ -130,24 +130,24 @@ export class UniversitiesComponent implements OnInit {
 
   async apply_filter(object: any) {
     this.filters = { ...this.filters, ...object };
-    
-    for (const key in this.filters) 
-      if (this.filters[key] == true) 
+
+    for (const key in this.filters)
+      if (this.filters[key] == true)
         delete this.filters[key];
 
     this.dataSource.filterPredicate = (data: any) => {
-      if (Object.keys(this.filters).length == 0) 
+      if (Object.keys(this.filters).length == 0)
         return true;
 
-      for (const key in this.filters) 
-        if (data[key] != this.filters[key]) 
+      for (const key in this.filters)
+        if (data[key] != this.filters[key])
           return false;
-      
+
       return true;
     };
 
-    this.dataSource.filter = Object.keys(this.filters).length > 0 
-      ? JSON.stringify(this.filters) 
+    this.dataSource.filter = Object.keys(this.filters).length > 0
+      ? JSON.stringify(this.filters)
       : '';
-}
+  }
 }

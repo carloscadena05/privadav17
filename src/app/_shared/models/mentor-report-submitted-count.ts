@@ -7,6 +7,10 @@ export class MentorReportSubmittedCount {
     public mentorAssignedDate: Date,
     public submittedCount: number,
     public latestDate: Date,
-    public mentoringComment: string
+    public mentoringComment: string,
+    public major: string,
+    public universityAbbrev: string,
+    public photoUrl: string,
+    public mentorphotoUrl: string
   ) {}
 }

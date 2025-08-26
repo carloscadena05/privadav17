@@ -12,10 +12,10 @@
         class="grid grid-cols-3 gap-6 basis-full ja-bg-white p-3 rounded-2xl z-50 ring-8 ring-slate-300 ">
         <div [@expand]="selected_sponsor.value['First Name'] ? 'opened' : 'closed'"
             class="rounded-lg ja-bg-slate-100 p-3 basis-72">
-            <h2 class="text-xl font-semibold leading-6 text-[#24384d]">Selected Sponsor</h2>
+            <h2 class="text-xl font-semibold leading-6 text-tertiary">Selected Sponsor</h2>
             <h3 class="text-lg font-semibold text-[#1c94a4]">{{selected_sponsor.value["First Name"]}}
                 {{selected_sponsor.value["Last Name"]}}</h3>
-            <p class="text-[#24384d] italic -mt-2"> {{selected_sponsor.value['Field of Study or Student Type']}} </p>
+            <p class="text-tertiary italic -mt-2"> {{selected_sponsor.value['Field of Study or Student Type']}} </p>
             <div class="flex items-baseline gap-x-1 -mt-1">
                 <p class="text-2xl font-semibold"
                     [ngStyle]="{color: color(selected_sponsor.value['Pledge Balance'], selected_sponsor.value['Pledge Amount'])}">
@@ -27,9 +27,9 @@
 
         <div [@expand]="selected_student.value.studentName ? 'opened' : 'closed'"
             class="rounded-lg ja-bg-slate-100 p-3 basis-72">
-            <h2 class="text-xl font-semibold leading-6 text-[#24384d]">Selected Student</h2>
+            <h2 class="text-xl font-semibold leading-6 text-tertiary">Selected Student</h2>
             <h3 class="text-lg font-semibold text-[#1c94a4]"> {{selected_student.value.studentName}}</h3>
-            <div class="flex flex-wrap gap-x-1.5 text-[#24384d] -mt-2">
+            <div class="flex flex-wrap gap-x-1.5 text-tertiary -mt-2">
                 <p class="italic inline"> {{selected_student.value.major}} </p>
                 -
                 <ng-container *ngTemplateOutlet="grad; context: {$implicit: selected_student.value}"></ng-container>
@@ -50,7 +50,7 @@
 
     <section [@change-size]="ready_to_match ? 'closed' : 'opened'" formGroupName="config"
         class="basis-full shrink-0 rounded-2xl ja-bg-white p-3">
-        <h2 class="text-xl font-semibold text-[#24384d] w-full pb-3 col-span-3">Configuration balances</h2>
+        <h2 class="text-xl font-semibold text-tertiary w-full pb-3 col-span-3">Configuration balances</h2>
         @if(!ready_to_match) {
             <p class="text-slate-600 -mt-3 pb-3">Please, fill the fields with the cost information,
                 to provide the best possible matching</p>
@@ -139,11 +139,11 @@
 
         <section formGroupName="sponsors" class="w-full grow flex flex-col gap-y-6 duration-300">
             <div class="flex items-baseline flex-wrap gap-x-3 justify-between *:mt-auto max-h-8">
-                <h2 class="text-xl font-semibold leading-6 text-[#24384d] !mt-0">Sponsors</h2>
+                <h2 class="text-xl font-semibold leading-6 text-tertiary !mt-0">Sponsors</h2>
 
                 <div class="flex gap-x-1.5">
                     <div class="flex gap-x-1">
-                        <p class="font-medium text-[#24384d]">Conditions</p>
+                        <p class="font-medium text-tertiary">Conditions</p>
                         <mat-form-field class="simple">
                             <mat-select value="any" #cond>
                                 <mat-option value="any">Any</mat-option>
@@ -159,7 +159,7 @@
                         </mat-form-field>
                     </div>
                     <div class="flex gap-x-1">
-                        <p class="font-medium text-[#24384d]">Field</p>
+                        <p class="font-medium text-tertiary">Field</p>
                         <mat-form-field class="simple">
                             <mat-select value="any" #field>
                                 <mat-option value="any">Any</mat-option>
@@ -228,7 +228,7 @@
                     <ng-container
                         *ngTemplateOutlet="Gender; context: {$implicit: sponsor?.value?.['Gender']}"></ng-container>
                 </h3>
-                <p class="text-[#24384d] italic"> {{sponsor.value['Field of Study or Student Type']}} </p>
+                <p class="text-tertiary italic"> {{sponsor.value['Field of Study or Student Type']}} </p>
                 <div class="flex items-baseline gap-x-1">
                     <p class="text-2xl font-semibold"
                         [ngStyle]="{color: color(sponsor.value['Pledge Balance'], sponsor.value['Pledge Amount'])}">
@@ -241,7 +241,7 @@
         </section>
 
         <section formGroupName="students" class="w-full grow flex flex-col gap-y-6 duration-300">
-            <h2 class="text-xl font-semibold leading-6 text-[#24384d] h-8">Students</h2>
+            <h2 class="text-xl font-semibold leading-6 text-tertiary h-8">Students</h2>
 
             <mat-form-field appearance="outline" class="-my-6">
                 <mat-label>Search</mat-label>
@@ -261,7 +261,7 @@
                         <ng-container
                             *ngTemplateOutlet="Gender; context: {$implicit: student.value?.['gender']}"></ng-container>
                     </h3>
-                    <div class="flex flex-wrap gap-x-1.5 text-[#24384d]">
+                    <div class="flex flex-wrap gap-x-1.5 text-tertiary">
                         <p class="italic"> {{student.value.major}} </p>
                         -
                         <ng-container *ngTemplateOutlet="grad; context: {$implicit: student.value}"></ng-container>
@@ -354,7 +354,7 @@
 
         @if(matched_array().value.length){
             <section formGroupName="matched" class="w-full grow flex flex-col gap-y-6 duration-300">
-            <h2 class="text-xl font-semibold leading-6 text-[#24384d]">Matched Sponsors-Students</h2>
+            <h2 class="text-xl font-semibold leading-6 text-tertiary">Matched Sponsors-Students</h2>
             <button (click)="save()" type="button" class="ja-btn ja-btn-primary -mt-5 !py-2.5">Apply matches</button>
             @for(match of matched_array().controls; let match_i = $index; track match){
             <div [formGroupName]="match_i"
@@ -377,7 +377,7 @@
                 @for(sponsor of match.value.balance_history; let balance_history_i = $index; track sponsor){
                 <div class="flex gap-x-1.5 justify-between">
                     <div class="flex gap-x-1.5">
-                        <p class="italic text-[#24384d] font-semibold">{{sponsor.sponsor_name}} </p>
+                        <p class="italic text-tertiary font-semibold">{{sponsor.sponsor_name}} </p>
                         <p class="text-[#00cd33]">{{sponsor.balance_received | currency}}</p>
                     </div>
                     <button (click)="unmatch_sponsor_student(match_i, balance_history_i)" type="button"
@@ -462,7 +462,7 @@
             </svg>
         </div>
         @if(s?.gradMonthNum && s?.gradYear){
-        <p class="text-[#24384d] ">{{ s?.gradMonthNum + '-01-' + s?.gradYear |
+        <p class="text-tertiary ">{{ s?.gradMonthNum + '-01-' + s?.gradYear |
             date:'MMM, YYYY'}}</p>
             }
     </div>

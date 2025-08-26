@@ -4,9 +4,9 @@ import { WHSE_DataService } from '../../data/whse-data.service';
 import { WHSE_SGCount } from '../../models/WHSE_SGCount';
 
 @Component({
-    selector: 'whse-sg',
-    templateUrl: 'whse-sg.component.html',
-    standalone: false
+  selector: 'whse-sg',
+  templateUrl: 'whse-sg.component.html',
+  standalone: false
 })
 
 export class WHSE_SG_Component implements OnInit {
@@ -14,11 +14,11 @@ export class WHSE_SG_Component implements OnInit {
   isLoading: boolean;
   whseSG: WHSE_SGCount[];
   Highcharts: typeof Highcharts = Highcharts;
-  dummyData: any[] =[
+  dummyData: any[] = [
 
-    ];
+  ];
 
-  myCategories  = this.dummyData.map(a => a.yearJoined);
+  myCategories = this.dummyData.map(a => a.yearJoined);
   myData0 = this.dummyData.map(a => a.male);
   myData1 = this.dummyData.map(a => a.female);
 
@@ -27,17 +27,28 @@ export class WHSE_SG_Component implements OnInit {
     series: [
       {
         type: 'column',
-        name:'Male',
-        color: '#80aaff'
+        name: 'Male',
+        color: '#3b82f6'
       },
       {
         type: 'column',
-        name:'Female',
-        color: '#ff99cc'
+        name: 'Female',
+        color: '#ec4899'
       },
     ],
     chart: {
-      height: 300
+      width: null,
+      marginLeft: 100,
+      marginRight: 100,
+      marginBottom: 100,
+      borderRadius: 16
+    },
+    tooltip: {
+        borderColor: '#fff',
+        borderWidth: 2,
+        borderRadius: 16,
+        shadow: false,
+        backgroundColor: '#f1f5f9'
     },
     title: {
       text: 'Student Gender by YearJoined',
@@ -48,26 +59,28 @@ export class WHSE_SG_Component implements OnInit {
         stacking: 'normal'
       },
       column: {
-          stacking: 'normal',
-          dataLabels: {
-              enabled: false
-          }
-      }
-    },
-      yAxis: {
-        reversedStacks: false,
-        title: {
-          text: 'Number of Students',
+        stacking: 'normal',
+        dataLabels: {
+          enabled: false
         },
-        stackLabels: {
-          enabled: true
-        }
+        pointWidth: 20
+      },
+
+    },
+    yAxis: {
+      reversedStacks: false,
+      title: {
+        text: 'Number of Students',
+      },
+      stackLabels: {
+        enabled: true
+      }
     },
     xAxis: {
       labels: {
-        rotation: 90
-        }
+        rotation: -45
       }
+    }
   };
 
   constructor(public whseData: WHSE_DataService) {
@@ -97,7 +110,29 @@ export class WHSE_SG_Component implements OnInit {
     this.myCategories = hcValues.map(a => a.yearJoinedJA);
     this.myData0 = hcValues.map(a => a.male);
     this.myData1 = hcValues.map(a => a.female);
-
+    this.chartOptions = {
+      ...this.chartOptions,
+      xAxis: {
+        categories: this.myCategories,
+        labels: {
+          rotation: -45
+        }
+      },
+      series: [
+        {
+          type: 'column',
+          name: 'Male',
+          color: '#3b82f6',
+          data: this.myData0
+        },
+        {
+          type: 'column',
+          name: 'Female',
+          color: '#ec4899',
+          data: this.myData1
+        }
+      ]
+    };
     let chart = Highcharts.chart('container_sg', this.chartOptions);
     chart.xAxis[0].setCategories(this.myCategories);
     chart.series[0].setData(this.myData0);

@@ -14,7 +14,7 @@
   <div class="flex gap-x-4 flex-wrap justify-start md:justify-between w-full">
     <div></div>
     <div class="flex gap-x-2">
-      <p>Status</p>
+      <span class="text-tertiary font-medium">Status</span>
       <mat-form-field class="simple no-hint">
         <mat-select [(ngModel)]="selectedActiveStatusId" (selectionChange)="setActiveStatus(activeStatus.value)"
           #activeStatus>
@@ -25,7 +25,6 @@
     </div>
   </div>
 
-  <app-follow-up-requests-list [followUpRequests]="followUpRequests"
-    [selectedRequestStatusId]="2104"></app-follow-up-requests-list>
+  <app-follow-up-requests-list [followUpRequests]="followUpRequests" [selectedRequestStatusId]="2104"></app-follow-up-requests-list>
   }
 </div>

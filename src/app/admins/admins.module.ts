@@ -74,6 +74,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { SponsorStudentMatchComponent } from './sponsor-student-match/sponsor-student-match.component';
 import { HugeiconsIconComponent } from '@hugeicons/angular';
 import {MatExpansionModule} from '@angular/material/expansion';
+import {MatTabsModule} from '@angular/material/tabs';
 
 @NgModule({
     imports: [AppSharedModule,
@@ -93,7 +94,8 @@ import {MatExpansionModule} from '@angular/material/expansion';
         MatPaginatorModule,
         MatSlideToggleModule,
         HugeiconsIconComponent,
-        MatExpansionModule
+        MatExpansionModule,
+        MatTabsModule
     ],
     declarations: [
         AdminsComponent,

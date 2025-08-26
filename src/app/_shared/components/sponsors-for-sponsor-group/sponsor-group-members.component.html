@@ -1,11 +1,40 @@
+<div class="flex flex-col gap-4 justify-center min-w-96">
+  <!-- <h1 class="ja-big-title inline">Student Self Mentor Report Review for {{ studentName }}</h1> -->
+
+  @if (errorMessage) {
+  <span class="alert alert-danger">{{ errorMessage }}</span>
+  }
+  @if (successMessage) {
+  <span class="alert alert-success">{{ successMessage }}</span>
+  }
+  @if (isLoading) {
+  <app-loading-container> </app-loading-container>
+  } @else {
+  <section class="flex flex-col w-full border border-slate-100 rounded-md">
+    <h4 class="text-primary font-medium text-xs ml-4 -mt-2">Sponsor Group Members</h4>
+
+      @for (item of sponsorGroupMembers; track item; let i = $index) {
+      <div class="flex gap-x-2 items-center w-full ml-4">
+        <span class="text-sm">{{item.sponsorGroupMemberName}}</span>
+        <button (click)="deleteSponsorGroupMember(item.sponsorGroupId, item.sponsorGroupMemberId)" class="">
+          <hugeicons-icon [icon]="Cancel01FreeIcons" [size]="18" color="#dc2626" [strokeWidth]="1.5"></hugeicons-icon>
+        </button>
+      </div>
+      } @empty {
+      (no member assigned currently)
+      }
+  </section>
+  }
+</div>
+<!-- 
 @if (errorMessage) {
-  <div class="alert alert-danger">{{errorMessage}}</div>
+<div class="alert alert-danger">{{errorMessage}}</div>
 }
 @if (!errorMessage) {
-  <div>
-    <style>
-      .btn-group-xs>.btn,
-      .btn-xs {
+<div>
+  <style>
+    .btn-group-xs>.btn,
+    .btn-xs {
       padding: .0rem .1rem;
       font-size: .875rem;
       line-height: .3;
@@ -20,26 +49,25 @@
     </thead>
     <tbody>
       @for (item of sponsorGroupMembers; track item; let i = $index) {
-        <tr
-          id="item.sponsorGroupMemberId">
-          <td>
-            @if (item.sponsorGroupMemberName) {
-              <div>
-                <span class="link" title="Delete"
-                  (click)="deleteSponsorGroupMember(item.sponsorGroupId, item.sponsorGroupMemberId)">
-                  <b>✖</b>
-                </span>&nbsp; {{item.sponsorGroupMemberName}}
-              </div>
-            }
-            @if (!item.sponsorGroupMemberName) {
-              <div>
-                (no member assigned currently)
-              </div>
-            }
-          </td>
-        </tr>
+      <tr id="item.sponsorGroupMemberId">
+        <td>
+          @if (item.sponsorGroupMemberName) {
+          <div>
+            <span class="link" title="Delete"
+              (click)="deleteSponsorGroupMember(item.sponsorGroupId, item.sponsorGroupMemberId)">
+              <b>✖</b>
+            </span>&nbsp; {{item.sponsorGroupMemberName}}
+          </div>
+          }
+          @if (!item.sponsorGroupMemberName) {
+          <div>
+            (no member assigned currently)
+          </div>
+          }
+        </td>
+      </tr>
       }
     </tbody>
   </table>
 </div>
-}
+} -->

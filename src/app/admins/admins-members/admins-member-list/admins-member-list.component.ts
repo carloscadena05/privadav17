@@ -149,7 +149,7 @@ export class AdminsMemberListComponent implements OnInit {
           setTimeout(() => {
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
-          }, 100);
+          }, 100);          
         },
         (err) => (this.errorMessage = err),
         () => {

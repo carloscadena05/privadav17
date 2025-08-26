@@ -1,131 +1,200 @@
+<div class="flex flex-col gap-4 justify-center ja-bg-white p-4 rounded-2xl">
+  <h1 class="ja-big-title inline">Mentor Report Review for {{ studentName }}</h1>
+
+  @if (errorMessage) {
+  <span class="alert alert-danger">{{ errorMessage }}</span>
+  }
+  @if (successMessage) {
+  <span class="alert alert-success">{{ successMessage }}</span>
+  }
+  @if (isLoading) {
+  <app-loading-container> </app-loading-container>
+  } @else {
+  <form [formGroup]="myForm">
+    <div class="flex gap-x-4 justify-between">
+      <div class="flex gap-x-2">
+        <div class="font-medium text-secondary">Report Year/Month</div>
+        <mat-form-field class="simple no-hint w-24" appareance="outline">
+          <mat-select formControlName="lastContactYearSelector">
+            @for (year of contactYears; track year) {
+            <mat-option [value]="year.value">{{year.label}}</mat-option>
+            }
+          </mat-select>
+          <mat-error>Select Year</mat-error>
+        </mat-form-field>
+        <mat-form-field class="simple no-hint w-36" appareance="outline">
+          <mat-select formControlName="lastContactMonthSelector">
+            <mat-option [value]="0">Select Month</mat-option>
+            @for (month of contactMonths; track month) {
+            <mat-option [value]="month.value">{{month.label}}</mat-option>
+            }
+          </mat-select>
+          <mat-error>Select Month</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="flex gap-x-2">
+        <button type="button" class="ja-btn ja-btn-danger-sc" (click)="onDelete()">
+          <hugeicons-icon [icon]="Delete01FreeIcons" [size]="24" color="currentColor" [strokeWidth]="1.5"></hugeicons-icon>
+          Delete
+        </button>
+
+        <button type="button" class="ja-btn ja-btn-secondary-sc" (click)="onCancel()">
+          <hugeicons-icon [icon]="Cancel01FreeIcons" [size]="24" color="currentColor" [strokeWidth]="1.5"></hugeicons-icon>
+          Cancel
+        </button>
+        
+        <button class="ja-btn ja-btn-primary" data-cy="submit" (click)="onSubmit()">
+          <hugeicons-icon [icon]="FloppyDiskFreeIcons" [size]="24" color="currentColor" [strokeWidth]="1.5"></hugeicons-icon>
+          Save
+        </button>
+      </div>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Reviewed Status</mat-label>
+      <mat-select formControlName="reviewedStatusSelector">
+        @for (status of reviewedStatuses; track status) {
+        <mat-option [value]="status.value">{{ status.label }}</mat-option>
+        }
+      </mat-select>
+      <mat-error>Reviewed Status is required</mat-error>
+    </mat-form-field>
+
+    <img src="assets/images/states.png" alt="" class="h-12 mb-4 shadow-xl aspect-[4/3] object-cover rounded-md">
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Positive events or special challenges in the student's life during the past month</mat-label>
+      <textarea matInput formControlName="narrative_English" class="!min-w-full !w-full min-h-48"></textarea>
+      @if(myForm.get('narrative_English')?.hasError('required')){
+      <mat-error>
+        An entry is required, even if it is just N/A.
+      </mat-error>
+      }
+
+      @if(myForm.get('narrative_English')?.hasError('maxlength')){
+      <mat-error>
+        Entry cannot exceed 4000 characters in length.
+      </mat-error>
+      }
+
+    </mat-form-field>
+    <img src="assets/images/mexico.png" alt="" class="h-12 mb-4 shadow-xl aspect-[4/3] object-cover rounded-md">
+
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Logros y eventos positivos o obstáculos en la vida del estudiante</mat-label>
+      <textarea matInput formControlName="narrative_Spanish" class="!min-w-full !w-full min-h-48"></textarea>
+      @if(myForm.get('narrative_Spanish')?.hasError('required')){
+      <mat-error>
+        Se requiere una entrada, aun si es sólo N/A.
+      </mat-error>
+      }
+
+      @if(myForm.get('narrative_Spanish')?.hasError('maxlength')){
+      <mat-error>
+        La entrada no puede exceder 4000 caracteres del largo.
+      </mat-error>
+      }
+    </mat-form-field>
+  </form>
+  }
+</div>
+<!-- 
 <div class="card bg-primary">
   <div class="card-header text-white" style="font-size: large">Mentor Report Review for {{ studentName }}</div>
   <div class="card-body bg-white">
     @if (errorMessage) {
-      <div class="alert alert-danger">{{ errorMessage }}</div>
+    <div class="alert alert-danger">{{ errorMessage }}</div>
     }
     @if (successMessage) {
-      <div class="alert alert-success">{{ successMessage }}</div>
+    <div class="alert alert-success">{{ successMessage }}</div>
     }
     <div>
       @switch (isLoading) {
-        @case (true) {
-          <div class="text-center col-md-4 col-md-offset-4">
-            <app-loading-container> </app-loading-container>
+      @case (true) {
+      <div class="text-center col-md-4 col-md-offset-4">
+        <app-loading-container> </app-loading-container>
+      </div>
+      }
+      @case (false) {
+      <div>
+        <form [formGroup]="myForm">
+          <div class="form-group"></div>
+          <div class="controls">
+            <label for="lastContactYearSelector">Report Year/Month&nbsp;</label>
+            <select formControlName="lastContactYearSelector">
+              @for (year of contactYears; track year) {
+              <option [value]="year.value">{{year.label}}</option>
+              }
+            </select>
+            @if (!lastYearCtl.valid && lastYearCtl.touched) {
+            <span class="red"> Select Year</span>
+            }
+            <select formControlName="lastContactMonthSelector">
+              <option [value]="0">Select Month</option>
+              @for (month of contactMonths; track month) {
+              <option [value]="month.value">{{month.label}}</option>
+              }
+            </select>
+            <span [ngClass]="{ 'red': monthValidationMessage }">{{ monthValidationMessage }}</span>
           </div>
-        }
-        @case (false) {
-          <div>
-            <form [formGroup]="myForm">
-              <div class="form-group"></div>
-              <div class="controls">
-                <label for="lastContactYearSelector">Report Year/Month&nbsp;</label>
-                <select formControlName="lastContactYearSelector">
-                  @for (year of contactYears; track year) {
-                    <option [value]="year.value">{{year.label}}</option>
-                  }
-                </select>
-                @if (!lastYearCtl.valid && lastYearCtl.touched) {
-                  <span class="red"> Select Year</span>
-                }
-                <select formControlName="lastContactMonthSelector">
-                  <option [value]="0">Select Month</option>
-                  @for (month of contactMonths; track month) {
-                    <option [value]="month.value">{{month.label}}</option>
-                  }
-                </select>
-                <span [ngClass]="{ 'red': monthValidationMessage }">{{ monthValidationMessage }}</span>
-              </div>
-              <div class="controls">
-                <label for="reviewedStatusSelector">Reviewed Status:</label>
-                <select formControlName="reviewedStatusSelector" class="form-control input-sm">
-                  @for (status of reviewedStatuses; track status) {
-                    <option [value]="status.value">{{ status.label }}</option>
-                  }
-                </select>
-                <app-display-errors
-                  control="reviewedStatusSelector"
-                  class="red"
-              [errors]="{
+          <div class="controls">
+            <label for="reviewedStatusSelector">Reviewed Status:</label>
+            <select formControlName="reviewedStatusSelector" class="form-control input-sm">
+              @for (status of reviewedStatuses; track status) {
+              <option [value]="status.value">{{ status.label }}</option>
+              }
+            </select>
+            <app-display-errors control="reviewedStatusSelector" class="red" [errors]="{
                 required: 'Reviewed Status is required'
-              }"
-                ></app-display-errors>
-              </div>
-              <div>&nbsp;</div>
-              <div class="form-group">
-                <div class="controls">
-                  <label for="narrative_English"
-                    >Positive events or special challenges in the student's life during the past month</label
-                    >
-                    <textarea
-                      id="narrative_English"
-                      #success
-                      formControlName="narrative_English"
-                      type="text"
-                      class="form-control input-sm narrative"
-                      placeholder=""
-                      >
+              }"></app-display-errors>
+          </div>
+          <div>&nbsp;</div>
+          <div class="form-group">
+            <div class="controls">
+              <label for="narrative_English">Positive events or special challenges in the student's life during the past
+                month</label>
+              <textarea id="narrative_English" #success formControlName="narrative_English" type="text"
+                class="form-control input-sm narrative" placeholder="">
                     </textarea>
-                    <app-display-errors
-                      control="narrative_English"
-                      class="red"
-                [errors]="{
+              <app-display-errors control="narrative_English" class="red" [errors]="{
                   required: 'An entry is required, even if it is just N/A.',
                   maxlength: 'Entry cannot exceed 4000 characters in length.'
-                }"
-                    ></app-display-errors>
-                  </div>
-                  <div class="controls">
-                    <label for="narrative_Spanish">Logros y eventos positivos o obstáculos en la vida del estudiante</label>
-                    <textarea
-                      id="narrative_Spanish"
-                      #success
-                      formControlName="narrative_Spanish"
-                      type="text"
-                      class="form-control input-sm narrative"
-                      placeholder=""
-                      >
+                }"></app-display-errors>
+            </div>
+            <div class="controls">
+              <label for="narrative_Spanish">Logros y eventos positivos o obstáculos en la vida del estudiante</label>
+              <textarea id="narrative_Spanish" #success formControlName="narrative_Spanish" type="text"
+                class="form-control input-sm narrative" placeholder="">
                     </textarea>
-                    <app-display-errors
-                      control="narrative_Spanish"
-                      class="red"
-                [errors]="{
+              <app-display-errors control="narrative_Spanish" class="red" [errors]="{
                   required: 'Se requiere una entrada, aun si es sólo N/A.',
                   maxlength: 'La entrada no puede exceder 4000 caracteres del largo.'
-                }"
-                    ></app-display-errors>
-                  </div>
-                </div>
-                <div class="col-md-6 col-md-offset-1">
-                  <span>
-                    <button
-                      class="btn btn-primary"
-                      data-cy="submit"
-                      style="width: 80px; margin-right: 10px"
-                      (click)="onSubmit()"
-                      >
-                      Save
-                    </button> </span
-                    >&nbsp;
-                    <span>
-                      <button
-                        type="button" class="btn btn-default" style="width: 75px"
-                        (click)="onCancel()">
-                        Cancel
-                      </button>
-                    </span>
-                    <span>
-                      <button
-                        type="button" class="btn btn-danger" style="width: 75px; margin-left: 5rem"
-                        (click)="onDelete()">
-                        Delete
-                      </button>
-                    </span>
-                  </div>
-                </form>
-              </div>
-            }
-          }
-        </div>
+                }"></app-display-errors>
+            </div>
+          </div>
+          <div class="col-md-6 col-md-offset-1">
+            <span>
+              <button class="btn btn-primary" data-cy="submit" style="width: 80px; margin-right: 10px"
+                (click)="onSubmit()">
+                Save
+              </button> </span>&nbsp;
+            <span>
+              <button type="button" class="btn btn-default" style="width: 75px" (click)="onCancel()">
+                Cancel
+              </button>
+            </span>
+            <span>
+              <button type="button" class="btn btn-danger" style="width: 75px; margin-left: 5rem" (click)="onDelete()">
+                Delete
+              </button>
+            </span>
+          </div>
+        </form>
       </div>
+      }
+      }
     </div>
+  </div>
+</div> -->

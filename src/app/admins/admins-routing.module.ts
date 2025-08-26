@@ -87,13 +87,13 @@ const adminRoutes: Routes = [
       {
         path: 'students',
         title: 'Students',
-        component: AdminsStudentSearchComponent
+        component: AdminsStudentListComponent
       },
-      {
+      /* {
         path: 'students/studentList',
         title: 'Student List',
         component: AdminsStudentListComponent
-      },
+      }, */
       {
         path: 'students/student-container', // :guid',
         title: 'Student Detail', // :Guid',

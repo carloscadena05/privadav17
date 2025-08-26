@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { SponsorGroupDataService } from 'src/app/_shared/data/sponsor-group-data.service';
@@ -7,12 +7,15 @@ import { SponsorGroupMemberDTO } from 'src/app/_shared/models/sponsor-group-memb
 import { UIState } from 'src/app/_store/ui/ui.state';
 import { SORTCRITERIA } from '../../_shared/interfaces/SORTCRITERIA';
 import { ColumnSortService } from '../../_shared/services/column-sort.service';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
-    selector: 'app-sponsor-groups',
-    templateUrl: './sponsor-groups.component.html',
-    styleUrls: ['./sponsor-groups.component.scss'],
-    standalone: false
+  selector: 'app-sponsor-groups',
+  templateUrl: './sponsor-groups.component.html',
+  styleUrls: ['./sponsor-groups.component.scss'],
+  standalone: false
 })
 export class SponsorGroupsComponent implements OnInit {
   sponsorGroups: SponsorGroupMemberDTO[];
@@ -22,7 +25,13 @@ export class SponsorGroupsComponent implements OnInit {
   sortCriteria: SORTCRITERIA;
   displayTestNames: boolean;
 
-   testNameVisibility$ = this.store.select<boolean>(UIState.getTestNamesVisibility);
+  testNameVisibility$ = this.store.select<boolean>(UIState.getTestNamesVisibility);
+
+  displayedColumns: string[] = ['sponsorGroupName', 'sponsorGroupMemberName'];
+  dataSource: MatTableDataSource<SponsorGroupMemberDTO>;
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   constructor(
     public sponsorGroupData: SponsorGroupDataService,
@@ -55,6 +64,11 @@ export class SponsorGroupsComponent implements OnInit {
             return item;
           }
         });
+        this.dataSource = new MatTableDataSource(this.sponsorGroups);
+        setTimeout(() => {
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
+        }, 100);
       },
       (err) => (this.errorMessage = err),
       () => {
@@ -67,13 +81,13 @@ export class SponsorGroupsComponent implements OnInit {
     console.log('setting memberName to ' + memberName);
     // this.session.setAssignedMemberName(memberName);
 
-    const link = [ '/admins/members/member/' + id ];
+    const link = ['/admins/members/member/' + id];
     console.log('navigating to ' + link);
     this.router.navigate(link);
   }
 
   editSponsorGroup(id: number) {
-    const link = [ '/admins/sponsor-group/' + id ];
+    const link = ['/admins/sponsor-group/' + id];
     console.log('navigating to ' + link);
     this.router.navigate(link);
   }
@@ -111,5 +125,14 @@ export class SponsorGroupsComponent implements OnInit {
 
   onSorted() {
     console.log('sorted event received');
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 }

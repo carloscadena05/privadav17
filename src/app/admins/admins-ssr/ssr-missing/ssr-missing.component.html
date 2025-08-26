@@ -1,48 +1,176 @@
-<div class="card-body bg-white">
+<div class="bg-white rounded-2xl">
   @if (errorMessage) {
-    <span class="alert alert-danger">{{ errorMessage }}</span>
+  <span class="alert alert-danger">{{ errorMessage }}</span>
   }
   @if (successMessage) {
-    <span class="alert alert-success">{{ successMessage }}</span>
+  <span class="alert alert-success">{{ successMessage }}</span>
   }
-  <div>
+  <!--   <div>
     <div class="controls">
-      <!-- <span class="checkboxes">
+       <span class="checkboxes">
       &nbsp;&nbsp;<label><input type="checkbox" [(ngModel)]="displayOriginalFields">&nbsp;<span>Display Partial
     Description</span></label>
-  </span> -->
-</div>
-<!-- <app-ssr-status-counts [year]=selectedYear [period]=selectedPeriod>
-</app-ssr-status-counts> -->
-</div>
+  </span> 
+    </div>
+     <app-ssr-status-counts [year]=selectedYear [period]=selectedPeriod>
+</app-ssr-status-counts> 
+  </div> -->
 
-<div>
-  @switch (isLoading) {
+  <div class="p-4 flex flex-col gap-y-4">
+    @switch (isLoading) {
     @case (true) {
+    <div class="text-center col-md-4 col-md-offset-4">
+      <app-loading-container> </app-loading-container>
+    </div>
+    }
+    @case (false) {
+    <h1 class="ja-big-title">Student With Missing Self Reports</h1>
+
+    <div class="flex justify-start mg:justify-between gap-x-4 w-full min-w-full">
+      <mat-form-field appearance="outline" class="-mb-4">
+        <mat-label>Find student</mat-label>
+        <input matInput (keyup)="applyFilter(input.value)" #input>
+      </mat-form-field>
+
+      <div class="flex gap-x-2 h-8 items-center">
+        <span class="text-tertiary font-medium">Year Joined JA</span>
+        <mat-form-field class="simple">
+          <mat-select (selectionChange)="apply_filter({yearJoinedJA: yearJoinedJA.value})" #yearJoinedJA [value]="true">
+            <mat-option [value]="true" class="simple">(All)</mat-option>
+            @for (year of student_years; track $index) {
+            <mat-option [value]="year" class="simple">{{year}}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div>
+      <table mat-table [dataSource]="dataSource" matSort>
+
+        <ng-container matColumnDef="studentName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Student </th>
+          <td mat-cell *matCellDef="let row">
+            <div class="flex gap-x-2 items-center cursor-pointer">
+              <img [src]="'https://privada.jovenesadelante.org/' + row?.photoUrl.substring(9)" alt=""
+                class="h-10 rounded-md duration-300 student-photo">
+              <span (click)="gotoStudent(row.studentGUId, row.studentName)"
+                class="text-primary font-medium !capitalize hover:underline duration-300">
+                {{ row?.studentName }}
+                <br class="h-0">
+                <span class="text-slate-500 !text-xs">{{ row?.major }} | {{row.universityAbbrev}}</span>
+              </span>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
+          <td mat-cell *matCellDef="let row"> {{row.email}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="yearJoinedJA">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Year Joined JA </th>
+          <td mat-cell *matCellDef="let row"> {{row.yearJoinedJA}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="99">No data matching the filter "{{input.value}}"</td>
+        </tr>
+      </table>
+
+      <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]" aria-label="Select page of users"></mat-paginator>
+    </div>
+
+    <!-- 
+    <div>
+      @for (s of studentMinis; track s; let i = $index) {
+      <div class="row" style="margin-top: 2px">
+        <div class="col-md-12">
+          <div class="row mx-auto" id="{{ 'id' + s.studentGUId }}">
+            &nbsp;
+            <span (click)="gotoStudent(s.studentGUId, s.studentName)" class="padded link">
+              {{ s.studentName }}
+            </span>
+            <span class="padded">
+              [
+              {{ s.email }} ]
+            </span>
+          </div>
+        </div>
+      </div>
+      }
+    </div> -->
+    }
+    }
+  </div>
+</div>
+<!-- 
+<div class="flex flex-wrap gap-4 justify-center ja-bg-white p-4 rounded-xl">
+  <div class="w-full flex justify-between items-center gap-x-4">
+    <h1 class="ja-big-title">Missing Reports</h1>
+    <div class="flex gap-x-2 items-center">
+      Report for Quarter
+      <mat-form-field class="simple" appareance="outline">
+        <mat-select data-cy="period-selector" [(ngModel)]="selectedQRPeriod" #year_period
+          (selectionChange)="setSelectedQRPeriod(year_period.value)">
+          @for (yearPeriod of qrPeriods; track yearPeriod) {
+          <mat-option class="simple" [value]="yearPeriod.value">{{ yearPeriod.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="card-body bg-white">
+    @if (errorMessage) {
+    <span class="alert alert-danger">{{ errorMessage }}</span>
+    }
+    @if (successMessage) {
+    <span class="alert alert-success">{{ successMessage }}</span>
+    }
+
+    <div>
+      @switch (isLoading) {
+      @case (true) {
       <div class="text-center col-md-4 col-md-offset-4">
         <app-loading-container> </app-loading-container>
       </div>
-    }
-    @case (false) {
-      <div>
-        @for (s of studentMinis; track s; let i = $index) {
-          <div class="row" style="margin-top: 2px">
-            <div class="col-md-12">
-              <div class="row mx-auto" id="{{ 'id' + s.studentGUId }}">
-                &nbsp;
-                <span (click)="gotoStudent(s.studentGUId, s.studentName)" class="padded link">
-                  {{ s.studentName }}
-                </span>
-                <span class="padded">
-                  [
-                  {{ s.email }} ]
-                </span>
-              </div>
-            </div>
-          </div>
-        }
+      }
+      @case (false) {
+      <mat-form-field appearance="outline">
+        <mat-label>Find</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
+      </mat-form-field>
+
+      <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSource" matSort>
+
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+            <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
+            <td mat-cell *matCellDef="let row"> {{row.email}}% </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+          </tr>
+        </table>
+
+        <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]" aria-label="Select page of users"></mat-paginator>
       </div>
+      }
     }
-  }
-</div>
-</div>
+    </div>
+  </div>
+</div> -->

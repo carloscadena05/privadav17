@@ -1,85 +1,339 @@
-<div class="card bg-primary">
-  <div class="card-header text-white" style="font-size: large">Mentor Report Review</div>
-  <div class="card-body bg-white">
+<div class="flex flex-col gap-4 justify-center ja-bg-white p-4 rounded-2xl">
+    <div class="w-full flex justify-between items-center gap-x-4">
+        <h1 class="ja-big-title">Mentor Report Review</h1>
+
+        <app-mr-status-counts [year]="selectedYear" [month]="selectedMonth"> </app-mr-status-counts>
+
+    </div>
+
     @if (errorMessage) {
-      <span class="alert alert-danger">{{ errorMessage }}</span>
+    <span class="alert alert-danger">{{ errorMessage }}</span>
     }
     @if (successMessage) {
-      <span class="alert alert-success">{{ successMessage }}</span>
+    <span class="alert alert-success">{{ successMessage }}</span>
     }
+    <div>
+    </div>
 
     <div>
-      <div class="controls">
-        <label for="yearSelector">&nbsp;Report Month:</label>
-        <select name="yearSelector" [(ngModel)]="selectedYear" (change)="setSelectedYear($event.target.value)">
-          @for (year of years; track year) {
+        @switch (isLoading) {
+        @case (true) {
+        <div class="text-center col-md-4 col-md-offset-4">
+            <app-loading-container> </app-loading-container>
+        </div>
+        }
+        @case (false) {
+
+        <div class="flex gap-x-2 flex-wrap justify-between items-start">
+            <mat-form-field appearance="outline" class="w-full sm:w-3/4 md:w-1/2 duration-300">
+                <mat-label>Find</mat-label>
+                <input matInput (keyup)="applyFilter($event)" #input>
+            </mat-form-field>
+
+            <div class="flex gap-x-4 mb-3">
+                <div class="flex gap-x-2 items-center">
+                    <span class="text-tertiary font-medium">Report Date</span>
+                    <mat-form-field class="simple no-hint" appareance="outline">
+                        <mat-select data-cy="period-selector" [(ngModel)]="selectedYear" #year_period
+                            (selectionChange)="setSelectedYear(year_period.value)">
+                            @for (year of years; track year) {
+                            <mat-option class="simple" [value]="year.value">{{ year.label }}</mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field class="simple no-hint" appareance="outline">
+                        <mat-select data-cy="period-selector" [(ngModel)]="selectedMonth" #month_period
+                            (selectionChange)="setSelectedMonth(month_period.value)">
+                            <mat-option class="simple" value="0">[Select]</mat-option>
+                            @for (month of months; track month) {
+                            <mat-option class="simple" [value]="month.value">{{ month.label }}</mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="flex gap-x-2 items-center">
+                    <span class="text-tertiary font-medium">Overall Situation</span>
+                    <mat-form-field class="simple no-hint" appareance="outline">
+                        <mat-select data-cy="period-selector" [(ngModel)]="selectedMRReviewedStatus" #reviewed_status
+                            (selectionChange)="setSelectedMRReviewedStatus(reviewed_status.value)">
+                            <mat-option class="simple" value="0">[All]</mat-option>
+                            @for (status of mrReviewedStatuses; track status) {
+                            <mat-option class="simple" [value]="status.value">{{ status.label }}</mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="flex gap-x-2 items-center">
+                    <span class="text-tertiary font-medium">Communication</span>
+                    <mat-form-field class="simple no-hint" appareance="outline">
+                        <mat-select data-cy="period-selector" [(ngModel)]="selectedCommunicationStatus" #reviewed_status
+                            (selectionChange)="setSelectedCommunicationStatus(reviewed_status.value)">
+                            <mat-option class="simple" value="0">[All]</mat-option>
+                            @for (status of communicationStatuses; track status) {
+                            <mat-option class="simple" [value]="status.value">{{ status.label }}</mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+
+        <table mat-table [dataSource]="dataSource" multiTemplateDataRows matSort>
+
+            <ng-container matColumnDef="studentName">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Student </th>
+                <td mat-cell *matCellDef="let row">
+                    <div class="flex gap-x-2 items-center cursor-pointer">
+                        <img [src]="'https://privada.jovenesadelante.org/' + row?.photoUrl?.substring(9)" alt=""
+                            class="h-10 rounded-md duration-300 student-photo aspect-v-photo object-cover">
+                        <span (click)="gotoStudent(row.studentGUId, row.studentName)"
+                            class="text-primary font-medium !capitalize hover:underline duration-300">
+                            {{ row?.studentName }}
+                            <br class="h-0">
+                            <span class="text-slate-500 !text-xs">{{ row?.major }} | {{row.universityAbbrev}}</span>
+
+                        </span>
+                    </div>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="mentorName">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Mentor </th>
+                <td mat-cell *matCellDef="let row">
+                    <div class="flex gap-x-2 items-center cursor-pointer">
+                        <img [src]="'https://privada.jovenesadelante.org/assets/images/MemberPhotos/' + row?.mentorphotoUrl"
+                            alt="" class="h-10 rounded-md duration-300 student-photo aspect-v-photo object-cover">
+                        <span (click)="gotoMentor(row.mentorGUId)"
+                            class="text-tertiary !capitalize hover:underline duration-300">
+                            {{ row?.mentorName }}
+                        </span>
+                    </div>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="sponsorName">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Sponsor </th>
+                <td mat-cell *matCellDef="let row">
+                    <span class="text-secondary">{{ row?.sponsorGroupName }}</span>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+                <td mat-cell *matCellDef="let row">
+                    <div class="flex justify-start">
+                        <div class="px-2 py-1 rounded-md flex gap-x-2 items-center bg-blue-100"
+                            [ngClass]="row.reviewedStatus == 'COPIED_TO_QR' ? 'bg-blue-100 text-blue-600' : row.reviewedStatus == 'READY_FOR_QR' ? 'bg-green-100 text-green-600' : row.reviewedStatus == 'NEEDS_REVIEW' ? 'bg-orange-100 text-orange-600' : row.reviewedStatus == 'ON_HOLD' ? 'bg-yellow-100 text-yellow-600' : 'bg-gray-100 text-gray-600'">
+                            @if(row.reviewedStatus == 'COPIED_TO_QR') {
+                            <hugeicons-icon [icon]="DocumentValidationFreeIcons" [size]="24" color="#2563eb"
+                                [strokeWidth]="1.5"></hugeicons-icon>
+                            } @else if(row.reviewedStatus == 'READY_FOR_QR'){
+                            <hugeicons-icon [icon]="Rocket01FreeIcons" [size]="24" color="#16a34a"
+                                [strokeWidth]="1.5"></hugeicons-icon>
+                            } @else if (row.reviewedStatus == 'NEEDS_REVIEW') {
+                            <hugeicons-icon [icon]="Alert02FreeIcons" [size]="24" color="#ea580c"
+                                [strokeWidth]="1.5"></hugeicons-icon>
+                            } @else if (row.reviewedStatus == 'ON_HOLD') {
+                            <hugeicons-icon [icon]="Hold01FreeIcons" [size]="24" color="#ca8a04"
+                                [strokeWidth]="1.5"></hugeicons-icon>
+                            } @else {}
+                            {{ row.reviewedStatus | remove:'_' }}
+                            <span>{{row.statusCount}}</span>
+                        </div>
+                    </div>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="expand">
+                <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
+                <td mat-cell *matCellDef="let element">
+                    <button mat-icon-button aria-label="expand row"
+                        (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()"
+                        [ngClass]="expandedElement === element ? 'rotate-180' : ''" class="duration-300">
+                        <hugeicons-icon [icon]="ArrowDown01FreeIcons" [size]="24" color="#1c94a4"
+                            [strokeWidth]="1.5"></hugeicons-icon>
+                    </button>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="expandedDetail">
+                <td mat-cell *matCellDef="let element" colspan="5"
+                    [ngClass]="element == expandedElement ? 'h-auto opacity-100 !bg-white !py-4' : 'h-0 max-h-0 opacity-0'"
+                    class="overflow-hidden duration-300">
+                    <div class="flex flex-col gap-y-2"
+                        [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                        <div class="flex gap-x-4 items-center justify-between flex-wrap">
+
+                            <div class="flex gap-x-4 items-center">
+                                <div class="flex gap-x-2 justify-start items-start shadow-md p-2 rounded-lg">
+                                    <div class="flex flex-col rounded-lg overflow-hidden size-12 scale-75">
+                                        <span class="bg-red-400 flex justify-center text-slate-50 text-sm">
+                                            {{ element?.reportDateTime | date:'MMM' }}
+                                        </span>
+                                        <span
+                                            class="bg-slate-100 flex justify-center text-slate-700 text-xl font-semibold">
+                                            {{ element?.reportDateTime | date:'dd' }}
+                                        </span>
+                                    </div>
+
+                                    <span class="flex flex-col">
+                                        <span class="font-medium text-secondary">Submitted</span>
+                                        <span class="font-medium text-secondary">Date</span>
+                                    </span>
+                                </div>
+
+                                <!-- <span class="flex flex-col">
+                    <span class="font-medium text-secondary">Report Month</span>
+                    {{ element?.lastContactYear }}-{{ element.lastContactMonth | alphaMonth }}
+                  </span>
+ -->
+                                <div class="flex gap-x-4 items-center shadow-md p-2 rounded-lg">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"
+                                        color="#13538a" fill="none">
+                                        <path
+                                            d="M5 20C6.07093 18.053 7.52279 13.0189 10.3063 13.0189C12.2301 13.0189 12.7283 15.4717 14.6136 15.4717C17.8572 15.4717 17.387 10 21 10"
+                                            stroke="#141B34" stroke-width="1.5" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                    </svg>
+
+                                    <span class="flex flex-col gap-x-2 items-center justify-start">
+                                        <span class="font-medium text-secondary">Overall Situation</span>
+                                        <div [ngClass]="element.emoji + 1 == 0 ? 'bg-red-100' : element.emoji + 1 == 1 ? 'bg-green-100' : element.emoji + 1 == 2 ? 'bg-yellow-100' : element.emoji + 1 == 3 ? 'bg-orange-100' : ''"
+                                            class="flex gap-x-1 items-center rounded-full px-1">
+                                            <img src="{{ emojis[element.emoji + 1] }}" width="24px"
+                                                class="rounded-full" />
+                                            @switch (element.emoji + 1) {
+                                            @case (0) { <span class="text-red-600">Needs Attention</span> }
+                                            @case (1) { <span class="text-green-600">Good</span> }
+                                            @case (2) { <span class="text-yellow-600">Celebrate</span> }
+                                            @case (3) { <span class="text-orange-600">Concerned</span> }
+                                            }
+                                        </div>
+                                    </span>
+                                </div>
+
+                                <div class="flex gap-x-4 items-center shadow-md p-2 rounded-lg">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"
+                                        color="#13538a" fill="none">
+                                        <path d="M8 13.5H16M8 8.5H12" stroke="#13538a" stroke-width="1.5"
+                                            stroke-linecap="round" stroke-linejoin="round"></path>
+                                        <path
+                                            d="M6.09881 19C4.7987 18.8721 3.82475 18.4816 3.17157 17.8284C2 16.6569 2 14.7712 2 11V10.5C2 6.72876 2 4.84315 3.17157 3.67157C4.34315 2.5 6.22876 2.5 10 2.5H14C17.7712 2.5 19.6569 2.5 20.8284 3.67157C22 4.84315 22 6.72876 22 10.5V11C22 14.7712 22 16.6569 20.8284 17.8284C19.6569 19 17.7712 19 14 19C13.4395 19.0125 12.9931 19.0551 12.5546 19.155C11.3562 19.4309 10.2465 20.0441 9.14987 20.5789C7.58729 21.3408 6.806 21.7218 6.31569 21.3651C5.37769 20.6665 6.29454 18.5019 6.5 17.5"
+                                            stroke="#13538a" stroke-width="1.5" stroke-linecap="round"></path>
+                                    </svg>
+
+                                    <span class="flex flex-col gap-x-2 items-center">
+                                        <span class="font-medium text-secondary">Communication</span>
+
+                                        <div [ngClass]="element.communication + 1 == 0 ? 'bg-red-100' : element.communication + 1 == 1 ? 'bg-green-100' : element.communication + 1 == 2 ? 'bg-yellow-100' : element.communication + 1 == 3 ? 'bg-orange-100' : ''"
+                                            class="flex gap-x-1 items-center rounded-full px-1">
+                                            <img src="{{ emojis[element.communication + 1] }}" width="24px"
+                                                class="rounded-full" />
+                                            @switch (element.communication + 1) {
+                                            @case (0) { <span class="text-red-600">Needs Attention</span> }
+                                            @case (1) { <span class="text-green-600">Good</span> }
+                                            @case (2) { <span class="text-yellow-600">Celebrate</span> }
+                                            @case (3) { <span class="text-orange-600">Concerned</span> }
+                                            }
+                                        </div>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <button class="ja-btn ja-btn-primary"
+                                (click)="updateSummaryTracking(element.mentorReportId, element.studentGUId, element.studentName)">
+                                Review
+                            </button>
+                        </div>
+
+                        <div [innerHTML]="spanish ? element?.narrative_Spanish : element?.narrative_English"></div>
+                    </div>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
+            <tr mat-row *matRowDef="let element; columns: columnsToDisplayWithExpand;"
+                [ngClass]="expandedElement === element ? '!border-b-0 hover:bg-slate-50 active:bg-slate-100' : ''"
+                (click)="expandedElement = expandedElement === element ? null : element">
+            </tr>
+            <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="!h-0"></tr>
+        </table>
+        }
+        }
+    </div>
+
+
+    <!-- <div class="card bg-primary">
+    <div class="card-header text-white" style="font-size: large">Mentor Report Review</div>
+    <div class="card-body bg-white">
+      @if (errorMessage) {
+      <span class="alert alert-danger">{{ errorMessage }}</span>
+      }
+      @if (successMessage) {
+      <span class="alert alert-success">{{ successMessage }}</span>
+      }
+
+      <div>
+        <div class="controls">
+          <label for="yearSelector">&nbsp;Report Month:</label>
+          <select name="yearSelector" [(ngModel)]="selectedYear" (change)="setSelectedYear($event.target.value)">
+            @for (year of years; track year) {
             <option [value]="year.value">{{ year.label }}</option>
-          }
-        </select>
-        <select name="monthSelector" [(ngModel)]="selectedMonth" (change)="setSelectedMonth($event.target.value)">
-          <option value="0">[Select]</option>
-          @for (month of months; track month) {
+            }
+          </select>
+          <select name="monthSelector" [(ngModel)]="selectedMonth" (change)="setSelectedMonth($event.target.value)">
+            <option value="0">[Select]</option>
+            @for (month of months; track month) {
             <option [value]="month.value">{{ month.label }}</option>
-          }
-        </select>
+            }
+          </select>
 
-        <label for="MRReviewedStatusSelector">Overall Situation:</label>
-        <select
-          name="MRReviewedStatusSelector"
-          [(ngModel)]="selectedMRReviewedStatus"
-          (change)="setSelectedMRReviewedStatus($event.target.value)"
-          >
-          <option value="0">[All]</option>
-          @for (status of mrReviewedStatuses; track status) {
+          <label for="MRReviewedStatusSelector">Overall Situation:</label>
+          <select name="MRReviewedStatusSelector" [(ngModel)]="selectedMRReviewedStatus"
+            (change)="setSelectedMRReviewedStatus($event.target.value)">
+            <option value="0">[All]</option>
+            @for (status of mrReviewedStatuses; track status) {
             <option [value]="status.value">{{ status.label }}</option>
-          }
-        </select>
+            }
+          </select>
 
-        <label for="CommunicationStatusSelector">Communication:</label>
-        <select
-          name="CommunicationStatusSelector"
-          [(ngModel)]="selectedCommunicationStatus"
-          (change)="setSelectedCommunicationStatus($event.target.value)"
-          >
-          <option value="0">[All]</option>
-          @for (status of communicationStatuses; track status) {
+          <label for="CommunicationStatusSelector">Communication:</label>
+          <select name="CommunicationStatusSelector" [(ngModel)]="selectedCommunicationStatus"
+            (change)="setSelectedCommunicationStatus($event.target.value)">
+            <option value="0">[All]</option>
+            @for (status of communicationStatuses; track status) {
             <option [value]="status.value">{{ status.label }}</option>
-          }
-        </select>
+            }
+          </select>
 
 
-        <!-- <span class="checkboxes">
+         <span class="checkboxes">
         &nbsp;&nbsp;<label
         ><input type="checkbox" [(ngModel)]="displayOriginalFields" />&nbsp;<span
         >Display Original Content</span
         ></label
         >
       </span>
-    </div> -->
-    <app-mr-status-counts [year]="selectedYear" [month]="selectedMonth"> </app-mr-status-counts>
-  </div>
-
-  <div>
-    @switch (isLoading) {
-      @case (true) {
-        <div class="text-center col-md-4 col-md-offset-4">
-          <app-loading-container> </app-loading-container>
+    </div> 
+          <app-mr-status-counts [year]="selectedYear" [month]="selectedMonth"> </app-mr-status-counts>
         </div>
-      }
-      @case (false) {
+
         <div>
-          @for (lmr of mentorReportByMonth; track lmr; let i = $index) {
-            <div
-              class="row"
-              style="border-bottom: 3px solid #ccc; margin-top: 2px"
-              >
+          @switch (isLoading) {
+          @case (true) {
+          <div class="text-center col-md-4 col-md-offset-4">
+            <app-loading-container> </app-loading-container>
+          </div>
+          }
+          @case (false) {
+          <div>
+            @for (lmr of mentorReportByMonth; track lmr; let i = $index) {
+            <div class="row" style="border-bottom: 3px solid #ccc; margin-top: 2px">
               <div class="col-md-12">
                 <div class="row" id="{{ 'id' + lmr.mentorReportId }}">
                   &nbsp;
-                  <button
-                    class="btn default-btn btn-primary btn-sm"
-                    (click)="updateSummaryTracking(lmr.mentorReportId, lmr.studentGUId, lmr.studentName)"
-                    >
+                  <button class="btn default-btn btn-primary btn-sm"
+                    (click)="updateSummaryTracking(lmr.mentorReportId, lmr.studentGUId, lmr.studentName)">
                     Review
                   </button>
                   &nbsp;
@@ -127,12 +381,12 @@
                 </div>
               </div>
             </div>
+            }
+          </div>
+          }
           }
         </div>
-      }
-    }
-  </div>
-</div>
-</div>
+      </div>
+    </div>
 
-l
+    l -->

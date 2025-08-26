@@ -5,6 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
+import { ArrowRight04FreeIcons, CalendarRemove02FreeIcons, CheckmarkCircle01FreeIcons, EyeFreeIcons, QuestionFreeIcons, SquareLock01FreeIcons, SquareUnlock01FreeIcons, ToolsFreeIcons } from '@hugeicons/core-free-icons';
 
 @Component({
   selector: 'app-follow-up-requests-list',
@@ -21,7 +22,7 @@ export class FollowUpRequestsListComponent {
   currentHistoryText_ES: string;
   currentRequestId = 0;
 
-  displayedColumns: string[] = ['requestSubStatus', 'assignedToName', 'studentName', 'subject', 'requesterName', 'updaterName', 'detail', 'edit'];
+  displayedColumns: string[] = ['studentName', 'subject', 'requester_assigned', 'requestSubStatus', 'date', 'detail', 'edit'];
   dataSource: MatTableDataSource<FollowUpRequestDTO>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -29,6 +30,15 @@ export class FollowUpRequestsListComponent {
   spanish: boolean = false;
   private dialog: MatDialog = inject(MatDialog);
   currentRequest!: FollowUpRequestDTO;
+  ArrowRight04FreeIcons = ArrowRight04FreeIcons;
+
+  QuestionFreeIcons = QuestionFreeIcons;
+  EyeFreeIcons = EyeFreeIcons;
+  ToolsFreeIcons = ToolsFreeIcons;
+  CheckmarkCircle01FreeIcons = CheckmarkCircle01FreeIcons;
+  CalendarRemove02FreeIcons = CalendarRemove02FreeIcons;
+  SquareUnlock01FreeIcons = SquareUnlock01FreeIcons;
+  SquareLock01FreeIcons = SquareLock01FreeIcons;
 
   constructor(private router: Router) {
     console.log('FollowUpRequestsListComponent constructor');

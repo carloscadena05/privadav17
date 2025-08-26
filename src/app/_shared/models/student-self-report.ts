@@ -12,6 +12,8 @@ export class StudentSelfReport {
     public reviewedStatus?: string,
     public sponsorGroupName?: string,
     public studentGUId?: string,
-    public photoUrl?: string
+    public photoUrl?: string,
+    public major?: string,
+    public universityAbbrev?: string
   ) {}
 }

@@ -1,3 +1,169 @@
+<div class="flex flex-col gap-4 justify-center ja-bg-white p-4 rounded-2xl">
+  <h1 class="ja-big-title inline"> Students </h1>
+
+  @if (errorMessage) {
+  <span class="alert alert-danger">{{ errorMessage }}</span>
+  }
+  @if (successMessage) {
+  <span class="alert alert-success">{{ successMessage }}</span>
+  }
+  @if (isLoading) {
+  <app-loading-container> </app-loading-container>
+  } @else {
+  <div class="flex justify-start md:justify-between gap-x-4 items-start">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Find</mat-label>
+      <input matInput (keyup)="applyFilter($event)" #input>
+    </mat-form-field>
+
+    <div class="flex gap-x-2 items-center justify-start md:justify-end w-full">
+      <!--       <span class="text-tertiary font-medium">Report for Quarter</span>
+ -->
+      <mat-form-field class="simple no-hint" appareance="outline">
+        <mat-select name="FilterModeSelector" [(ngModel)]="selectedFilterMode" #FilterMode
+          (selectionChange)="setSelectedFilterMode(FilterMode.value)">
+          <mat-option value="998">All Active Students (Current, Practicum and Sabbatical)</mat-option>
+          <mat-option value="999">Choose Specific Filters</mat-option>
+        </mat-select>
+      </mat-form-field>
+      @if(selectedFilterMode != '998') {
+      <span class="text-tertiary font-medium">Status</span>
+      <mat-form-field class="simple no-hint" appareance="outline">
+        <mat-select name="StatusSelector" [(ngModel)]="selectedStudentStatus" #StudentStatus
+          (selectionChange)="setSelectedStudentStatus(StudentStatus.value)">
+          <mat-option value="0">All</mat-option>
+          @for (status of studentStatuses; track status) {
+          <mat-option [value]="status.value">{{ status.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <span class="text-tertiary font-medium">First Year</span>
+      <mat-form-field class="simple no-hint" appareance="outline">
+        <mat-select name="YearJoinedSelector" [(ngModel)]="selectedYearJoined" #YearJoined
+          (selectionChange)="setSelectedYearJoined(YearJoined.value)">
+          <mat-option value="0">All</mat-option>
+          @for (year of joinedYears; track year) {
+          <mat-option [value]="year.value">{{ year.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <span class="text-tertiary font-medium">Grad Year</span>
+      <mat-form-field class="simple no-hint" appareance="outline">
+        <mat-select name="GradYearSelector" [(ngModel)]="selectedGradYear" #GradYear
+          (selectionChange)="setSelectedGradYear(GradYear.value)">
+          <mat-option value="0">All</mat-option>
+          @for (year of gradYears; track year) {
+          <mat-option [value]="year.value">{{ year.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      }
+    </div>
+  </div>
+
+  <div>
+    <table mat-table [dataSource]="dataSource" matSort>
+
+      <ng-container matColumnDef="studentName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Student </th>
+        <td mat-cell *matCellDef="let student" (click)="gotoStudent(student.studentGUId, student.studentName, student.photoUrl, student.mentorGUId)" class="group cursor-pointer">
+          <div class="flex gap-x-2 items-center">
+            <img [src]="'https://privada.jovenesadelante.org/' + student?.photoUrl?.substring(9)" (error)="student.photoUrl = '......../assets/images/user.svg'"
+              class="h-10 rounded-md duration-300 student-photo group-hover:my-2 group-hover:h-24" />
+            <div class="flex gap-2 group-hover:flex-col flex-row items-center group-hover:items-start">
+              <img src="/assets/images/{{ student.timelySSRStatus }}.svg" class="w-5 aspect-square rounded-full"
+                title="{{ getSSRTimelinessByColor(student.timelySSRStatus) }}" />
+              <span class="font-medium text-secondary group-hover:underline">{{ student.studentName }}</span>
+            </div>
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="educationalLevel">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Level </th>
+        <td mat-cell *matCellDef="let student">
+          {{ student.educationalLevel }}
+
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+        <td mat-cell *matCellDef="let student">
+          {{ student.status }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="startYear">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Start </th>
+        <td mat-cell *matCellDef="let student"> {{ student.startYear }}/{{ student.startMonth }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="gradYear">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> End </th>
+        <td mat-cell *matCellDef="let student"> {{ student.gradYear }}/{{ student.gradMonth }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="mentorName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Mentor </th>
+        <td mat-cell *matCellDef="let student">
+          <div (click)="gotoMentor(student.mentorGUId)" class="flex gap-x-2 group items-center">
+            <img src="/assets/images/{{ student.timelyMentorReportStatus }}.svg" class="w-5 aspect-square rounded-full"
+              title="{{ getMRTimelinessByColor(student.timelyMentorReportStatus) }}" />
+            <span class="link group-hover:underline duration-300">
+              {{ student.mentorName }}
+            </span>
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="studentSnapshotStatus">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> </th>
+        <td mat-cell *matCellDef="let student">
+          <img src="{{ emojis[student.studentSnapshotStatus + 1] }}" class="w-8 rounded-full"
+            title="{{ emojiMsgs[student.studentSnapshotStatus + 1] ?? 'N/A' }}" />
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="sponsorGroupName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Sponsor </th>
+        <td mat-cell *matCellDef="let student">
+          {{ student.sponsorGroupName }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="universityAbbrev">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> University </th>
+        <td mat-cell *matCellDef="let student">
+          {{ student.universityAbbrev }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="major">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Major </th>
+        <td mat-cell *matCellDef="let student">
+          {{ student.major }}
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let student; columns: displayedColumns;"></tr>
+
+      <!-- Row shown when there is no matching data. -->
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+      </tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+  </div>
+
+
+  }
+</div>
+<!-- 
 <div class="card bg-primary">
   <div class="card-header text-white" style="font-size: large">
     <span>Student List</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -6,158 +172,145 @@
 
   <div class="card-body bg-white">
     @if (errorMessage) {
-      <span class="alert alert-danger">{{ errorMessage }}</span>
+    <span class="alert alert-danger">{{ errorMessage }}</span>
     }
     @if (successMessage) {
-      <span class="alert alert-success">{{ successMessage }}</span>
+    <span class="alert alert-success">{{ successMessage }}</span>
     }
 
     <div>
       <label for="FilterModeSelector"></label>
-      <select
-        name="FilterModeSelector"
-        [(ngModel)]="selectedFilterMode"
-        (change)="setSelectedFilterMode($event.target.value)"
-        >
+      <select name="FilterModeSelector" [(ngModel)]="selectedFilterMode"
+        (change)="setSelectedFilterMode($event.target.value)">
         <option value="998">All Active Students (Current, Practicum and Sabbatical)</option>
         <option value="999">Choose Specific Filters</option>
       </select>
+
       <span [hidden]="selectedFilterMode == '998'">
         <label for="StatusSelector">Status:</label>
-        <select
-          name="StatusSelector"
-          [(ngModel)]="selectedStudentStatus"
-          (change)="setSelectedStudentStatus($event.target.value)"
-          >
+        <select name="StatusSelector" [(ngModel)]="selectedStudentStatus"
+          (change)="setSelectedStudentStatus($event.target.value)">
           <option value="0">All</option>
           @for (status of studentStatuses; track status) {
-            <option [value]="status.value">{{ status.label }}</option>
+          <option [value]="status.value">{{ status.label }}</option>
           }
         </select>
 
         <label for="YearJoinedSelector">First Student Year:</label>
-        <select
-          name="YearJoinedSelector"
-          [(ngModel)]="selectedYearJoined"
-          (change)="setSelectedYearJoined($event.target.value)"
-          >
+        <select name="YearJoinedSelector" [(ngModel)]="selectedYearJoined"
+          (change)="setSelectedYearJoined($event.target.value)">
           <option value="0">All</option>
           @for (year of joinedYears; track year) {
-            <option [value]="year.value">{{ year.label }}</option>
+          <option [value]="year.value">{{ year.label }}</option>
           }
         </select>
 
         <label for="GradYearSelector">Graduation Year:</label>
-        <select
-          name="GradYearSelector"
-          [(ngModel)]="selectedGradYear"
-          (change)="setSelectedGradYear($event.target.value)"
-          >
+        <select name="GradYearSelector" [(ngModel)]="selectedGradYear"
+          (change)="setSelectedGradYear($event.target.value)">
           <option value="0">All</option>
           @for (year of gradYears; track year) {
-            <option [value]="year.value">{{ year.label }}</option>
+          <option [value]="year.value">{{ year.label }}</option>
           }
         </select>
       </span>
     </div>
     <div>
       @switch (isLoading) {
-        @case (true) {
-          <div class="text-center col-md-4 col-md-offset-4">
-            <app-loading-container> </app-loading-container>
-          </div>
-        }
-        @case (false) {
-          <div>
-            <table class="table-sm table-striped">
-              <thead>
-                <tr>
-                  <!--<td>Id</td>-->
-                  <th></th>
-                  <th></th>
-                  <th app-sortable-column="studentName" sort-direction="asc" (onSortColumn)="onSortColumn($event)">
-                    Student
-                  </th>
-                  <!-- <th app-sortable-column="joinedFrom" (onSortColumn)="onSortColumn($event)">
+      @case (true) {
+      <div class="text-center col-md-4 col-md-offset-4">
+        <app-loading-container> </app-loading-container>
+      </div>
+      }
+      @case (false) {
+      <div>
+        <table class="table-sm table-striped">
+          <thead>
+            <tr>
+              <td>Id</td>
+              <th></th>
+              <th></th>
+              <th app-sortable-column="studentName" sort-direction="asc" (onSortColumn)="onSortColumn($event)">
+                Student
+              </th>
+              <th app-sortable-column="joinedFrom" (onSortColumn)="onSortColumn($event)">
                   Joined<br />
                   From
-                </th> -->
-                <th app-sortable-column="educationalLevel" (onSortColumn)="onSortColumn($event)">Ed Level</th>
-                <th app-sortable-column="status" (onSortColumn)="onSortColumn($event)">Status</th>
-                <th app-sortable-column="startYear" (onSortColumn)="onSortColumn($event)">
-                  Start<br />
-                  Year/Mo
                 </th>
-                <th app-sortable-column="gradYear" (onSortColumn)="onSortColumn($event)">
-                  Grad<br />
-                  Year/Mo
-                </th>
-                <th app-sortable-column="mentorName" (onSortColumn)="onSortColumn($event)">Mentor</th>
-                <th app-sortable-column="studentSnapshotStatus" (onSortColumn)="onSortColumn($event)">Emoji</th>
-                <th app-sortable-column="sponsorGroupName" (onSortColumn)="onSortColumn($event)">Sponsor</th>
-                <th app-sortable-column="universityAbbrev" (onSortColumn)="onSortColumn($event)">Univ</th>
-                <th app-sortable-column="major" (onSortColumn)="onSortColumn($event)">Major</th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (student of studentDTOs; track student; let i = $index) {
-                <tr>
-                  <td>
-                    {{ i + 1 }}
-                  </td>
-                  <td>
-                    <img [src]="student.photoUrl" height="30" class="thumbnail" />
-                  </td>
-                  <td (click)="gotoStudent(student.studentGUId, student.studentName, student.photoUrl, student.mentorGUId)" class="link">
-                    <span style="text-align: center; white-space: nowrap">
-                      <img src="/assets/images/{{ student.timelySSRStatus }}.jpg" width="20"
-                        title= "{{ getSSRTimelinessByColor(student.timelySSRStatus) }}"
-                        />
-                      </span>
-                      {{ student.studentName }}
-                    </td>
-                    <!-- <td class="centered">
+              <th app-sortable-column="educationalLevel" (onSortColumn)="onSortColumn($event)">Ed Level</th>
+              <th app-sortable-column="status" (onSortColumn)="onSortColumn($event)">Status</th>
+              <th app-sortable-column="startYear" (onSortColumn)="onSortColumn($event)">
+                Start<br />
+                Year/Mo
+              </th>
+              <th app-sortable-column="gradYear" (onSortColumn)="onSortColumn($event)">
+                Grad<br />
+                Year/Mo
+              </th>
+              <th app-sortable-column="mentorName" (onSortColumn)="onSortColumn($event)">Mentor</th>
+              <th app-sortable-column="studentSnapshotStatus" (onSortColumn)="onSortColumn($event)">Emoji</th>
+              <th app-sortable-column="sponsorGroupName" (onSortColumn)="onSortColumn($event)">Sponsor</th>
+              <th app-sortable-column="universityAbbrev" (onSortColumn)="onSortColumn($event)">Univ</th>
+              <th app-sortable-column="major" (onSortColumn)="onSortColumn($event)">Major</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (student of studentDTOs; track student; let i = $index) {
+            <tr>
+              <td>
+                {{ i + 1 }}
+              </td>
+              <td>
+                <img [src]="student.photoUrl" height="30" class="thumbnail" />
+              </td>
+              <td (click)="gotoStudent(student.studentGUId, student.studentName, student.photoUrl, student.mentorGUId)"
+                class="link">
+                <span style="text-align: center; white-space: nowrap">
+                  <img src="/assets/images/{{ student.timelySSRStatus }}.jpg" width="20"
+                    title="{{ getSSRTimelinessByColor(student.timelySSRStatus) }}" />
+                </span>
+                {{ student.studentName }}
+              </td>
+              <td class="centered">
                     {{ student.joinedFrom }}
-                  </td> -->
-                  <td class="centered">
-                    {{ student.educationalLevel }}
                   </td>
-                  <td class="centered">
-                    {{ student.status }}
-                  </td>
-                  <td class="centered">{{ student.startYear }}/{{ student.startMonth }}</td>
-                  <td class="centered">{{ student.gradYear }}/{{ student.gradMonth }}</td>
-                  <td (click)="gotoMentor(student.mentorGUId)" class="link">
-                    <span style="text-align: center; white-space: nowrap">
-                      <img src="/assets/images/{{ student.timelyMentorReportStatus }}.jpg" width="20"
-                        title= "{{ getMRTimelinessByColor(student.timelyMentorReportStatus) }}"
-                        />
-                      </span>
-                      {{ student.mentorName }}
-                    </td>
-                    <td style="text-align: center; white-space: nowrap">
-                      <img src="{{ emojis[student.studentSnapshotStatus + 1] }}" width="24"
-                        title="{{ emojiMsgs[student.studentSnapshotStatus + 1] ?? 'N/A' }}"
-                        />
-                      </td>
-                      <td>
-                        {{ student.sponsorGroupName }}
-                      </td>
-                      <td>
-                        {{ student.universityAbbrev }}
-                      </td>
-                      <td>
-                        {{ student.major }}
-                      </td>
-                    </tr>
-                  }
-                </tbody>
-              </table>
-            </div>
-          }
-        }
+              <td class="centered">
+                {{ student.educationalLevel }}
+              </td>
+              <td class="centered">
+                {{ student.status }}
+              </td>
+              <td class="centered">{{ student.startYear }}/{{ student.startMonth }}</td>
+              <td class="centered">{{ student.gradYear }}/{{ student.gradMonth }}</td>
+              <td (click)="gotoMentor(student.mentorGUId)" class="link">
+                <span style="text-align: center; white-space: nowrap">
+                  <img src="/assets/images/{{ student.timelyMentorReportStatus }}.jpg" width="20"
+                    title="{{ getMRTimelinessByColor(student.timelyMentorReportStatus) }}" />
+                </span>
+                {{ student.mentorName }}
+              </td>
+              <td style="text-align: center; white-space: nowrap">
+                <img src="{{ emojis[student.studentSnapshotStatus + 1] }}" width="24"
+                  title="{{ emojiMsgs[student.studentSnapshotStatus + 1] ?? 'N/A' }}" />
+              </td>
+              <td>
+                {{ student.sponsorGroupName }}
+              </td>
+              <td>
+                {{ student.universityAbbrev }}
+              </td>
+              <td>
+                {{ student.major }}
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
       </div>
+      }
+      }
     </div>
-
-    l
   </div>
+
+  l
+</div> -->

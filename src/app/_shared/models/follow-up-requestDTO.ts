@@ -19,6 +19,11 @@ export class FollowUpRequestDTO {
     public requesterName?: string,
     public requesterEmail?: string,
     public updaterName?: string,
-    public assignedToName?: string
+    public assignedToName?: string,
+    public photoUrl?: string,
+    public major?: string,
+    public universityAbbrev?: string,
+    public yearJoinedJA?: string
+
   ) {}
 }

@@ -103,6 +103,8 @@ export class MentorReport2DataService extends BaseDataService {
       '&reviewedStatusId=' +
       reviewedStatusId;
     console.log('sending AuthHttp get request for MentorReportsByMonth with ' + url);
+    this.http.get<MentorReport2RPT[]>(url).subscribe((data: any) => console.log(data)
+    )
     return this.http.get<MentorReport2RPT[]>(url).pipe(catchError(this.handleError));
   }
 

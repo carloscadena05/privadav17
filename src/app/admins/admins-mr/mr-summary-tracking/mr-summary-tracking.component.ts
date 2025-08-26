@@ -1,5 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Alert02FreeIcons, ArrowDown01FreeIcons, DocumentValidationFreeIcons, Hold01FreeIcons, Rocket01FreeIcons } from '@hugeicons/core-free-icons';
 import { Store } from '@ngxs/store';
 import { constants } from 'src/app/_shared/constants/constants';
 import { MentorReport2DataService } from 'src/app/_shared/data/mentor-report2-data.service';
@@ -9,13 +14,19 @@ import { SetSelectedStudentIdentifiers } from 'src/app/_store/student/student.ac
 import { UIState } from 'src/app/_store/ui/ui.state';
 
 @Component({
-    selector: 'app-mr-summary-tracking',
-    templateUrl: 'mr-summary-tracking.component.html',
-    styleUrls: ['mr-summary-tracking.component.scss'],
-    standalone: false
+  selector: 'app-mr-summary-tracking',
+  templateUrl: 'mr-summary-tracking.component.html',
+  styleUrls: ['mr-summary-tracking.component.scss'],
+  standalone: false,
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({ height: '0px', minHeight: '0' })),
+      state('expanded', style({ height: '*' })),
+      transition('expanded <=> collapsed', animate('300ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
 })
-export class MentorReportsSummaryTrackingComponent implements OnInit
-{
+export class MentorReportsSummaryTrackingComponent implements OnInit {
   // implements OnInit {
   mentorReportByMonth: MentorReport2RPT[];
   isLoading: boolean;
@@ -39,7 +50,20 @@ export class MentorReportsSummaryTrackingComponent implements OnInit
   studentName: string;
   displayTestNames: boolean;
 
-   testNameVisibility$ = this.store.select<boolean>(UIState.getTestNamesVisibility);
+  testNameVisibility$ = this.store.select<boolean>(UIState.getTestNamesVisibility);
+
+  dataSource: MatTableDataSource<MentorReport2RPT>
+  displayedColumns: string[] = ["studentName", "mentorName", "sponsorName", "status"]
+  columnsToDisplayWithExpand = [...this.displayedColumns, 'expand'];
+  expandedElement: MentorReport2RPT | null;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+  ArrowDown01FreeIcons = ArrowDown01FreeIcons;
+  DocumentValidationFreeIcons = DocumentValidationFreeIcons;
+  Rocket01FreeIcons = Rocket01FreeIcons;
+  Alert02FreeIcons = Alert02FreeIcons;
+  Hold01FreeIcons = Hold01FreeIcons;
+  spanish = navigator.language.startsWith('es');
 
   constructor(
     public router: Router,
@@ -61,7 +85,7 @@ export class MentorReportsSummaryTrackingComponent implements OnInit
 
     this.selectedMRReviewedStatus = '0';
     this.selectedCommunicationStatus = '0';
-    this.selectedHighlightStatus = this.highlightStatuses[0].value;
+    this.selectedHighlightStatus = this.highlightStatuses[0]?.value;
 
     this.emojis = constants.emojis;
     console.log('before process route params');
@@ -138,12 +162,17 @@ export class MentorReportsSummaryTrackingComponent implements OnInit
           this.mentorReportByMonth = data.filter((item) => {
             if (this.displayTestNames) {
               return item;
-            } else if (!this.displayTestNames && item.studentName.substring(0,5) !== '_Test') {
+            } else if (!this.displayTestNames && item.studentName.substring(0, 5) !== '_Test') {
               return item;
             }
           });
           console.log('mentorReportByMonth has');
           console.log(this.mentorReportByMonth[0]);
+          this.dataSource = new MatTableDataSource(this.mentorReportByMonth);
+          setTimeout(() => {
+            this.dataSource.paginator = this.paginator;
+            this.dataSource.sort = this.sort;
+          }, 100);
         },
         (err) => console.error('Subscribe error: ' + err),
         () => {
@@ -246,5 +275,14 @@ export class MentorReportsSummaryTrackingComponent implements OnInit
     const result = new Date(date);
     result.setDate(result.getDate() + days);
     return result;
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 }

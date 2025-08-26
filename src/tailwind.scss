@@ -8,7 +8,7 @@
     }
 
     .ja-big-title {
-        @apply bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent text-2xl font-semibold inline;
+        @apply bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent text-2xl font-semibold inline mr-auto;
     }
 
     .ja-btn {
@@ -23,12 +23,20 @@
         @apply bg-secondary text-slate-100 important;
     }
 
+    .ja-btn-danger {
+        @apply bg-red-600 text-slate-100 important;
+    }
+
     .ja-btn-primary-sc {
         @apply text-primary bg-primary/20 important;
     }
 
     .ja-btn-secondary-sc {
         @apply text-secondary bg-secondary/20 important;
+    }
+
+    .ja-btn-danger-sc {
+        @apply text-red-600 bg-red-600/20 important;
     }
 
     .nav-item {

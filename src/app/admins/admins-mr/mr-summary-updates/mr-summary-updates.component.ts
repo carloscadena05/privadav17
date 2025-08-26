@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { Cancel01FreeIcons, Delete01FreeIcons, FloppyDiskFreeIcons } from '@hugeicons/core-free-icons';
 import { Store } from '@ngxs/store';
 import { Subscription } from 'rxjs';
 import { constants } from 'src/app/_shared/constants/constants';
@@ -53,6 +54,9 @@ export class MentorReportSummaryUpdatesComponent implements OnInit {
   private subscription: Subscription;
 
    currentName$ = this.store.select<string>(StudentState.getSelectedStudentName);
+   FloppyDiskFreeIcons = FloppyDiskFreeIcons;
+   Cancel01FreeIcons = Cancel01FreeIcons;
+   Delete01FreeIcons = Delete01FreeIcons
 
   constructor(
     public currRoute: ActivatedRoute,
@@ -124,6 +128,15 @@ export class MentorReportSummaryUpdatesComponent implements OnInit {
         this.emojiCtl.setValue(this.mentorReport2.emoji);
         this.narrative_EnglishCtl.setValue(this.mentorReport2.narrative_English);
         this.narrative_SpanishCtl.setValue(this.mentorReport2.narrative_Spanish);
+        this.myForm.patchValue({
+          lastContactYearSelector: String(this.lastYearCtl.value),
+          lastContactMonthSelector: String(this.lastMonthCtl.value),
+          reviewedStatusSelector: String(this.reviewedStatus.value)
+        })
+        console.log(this.myForm.value, this.contactYears, this.contactMonths, this.reviewedStatuses);
+        console.log( this.myForm.value.lastContactMonthSelector,  this.contactMonths[8].value, this.contactMonths,  this.myForm.value.lastContactMonthSelector ==  this.contactMonths[8].value);
+        
+        
         this.isLoading = false;
       }
     );
@@ -136,6 +149,7 @@ export class MentorReportSummaryUpdatesComponent implements OnInit {
     });
     // AABBCCEE
     this.subscribeForStudentNames();
+    
   }
 
   subscribeForStudentNames() {

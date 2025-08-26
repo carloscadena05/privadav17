@@ -16,6 +16,7 @@ export class MemberWithAnyRelatedStudent {
     public relatedStudentStatusId?: number,
     public relatedStudentStatus?: string,
     public relatedStudentGUId?: string,
+    public studentphotoUrl ?: string,
 
   ) { }
 }

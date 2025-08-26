@@ -5,9 +5,9 @@ import { WHSE_QRCount } from '../../models/WHSE_QR.Count';
 
 
 @Component({
-    selector: 'whse-qr',
-    templateUrl: 'whse-qr.component.html',
-    standalone: false
+  selector: 'whse-qr',
+  templateUrl: 'whse-qr.component.html',
+  standalone: false
 })
 
 export class WHSE_QR_Component implements OnInit {
@@ -15,7 +15,7 @@ export class WHSE_QR_Component implements OnInit {
   isLoading: boolean;
   whseQR: WHSE_QRCount[];
   Highcharts: typeof Highcharts = Highcharts;
-  dummyData =[];
+  dummyData = [];
   myCategories = this.dummyData.map(a => a.yearPeriod);
   myData0 = this.dummyData.map(a => a.waiting);
   myData1 = this.dummyData.map(a => a.needsReview);
@@ -27,44 +27,55 @@ export class WHSE_QR_Component implements OnInit {
     series: [
       {
         type: 'column',
-        name:'Waiting',
+        name: 'Waiting',
         color: '#4da6ff'
       },
       {
         type: 'column',
-        name:'Needs Review',
-        color: '#b30000'
+        name: 'Needs Review',
+        color: '#f97316'
       },
       {
         type: 'column',
-        name:'OnHold',
-        color: '#ffb31a'
+        name: 'OnHold',
+        color: '#eab308'
       },
       {
         type: 'column',
-        name:'Sent',
-        color: '#00b300'
+        name: 'Sent',
+        color: '#22c55e'
 
       },
       {
         type: 'column',
-        name:'Other',
-        color: '#cc9900'
+        name: 'Other',
+        color: '#64748b'
 
       },
     ],
     chart: {
-      height: 300
+      width: null,
+      marginLeft: 100,
+      marginRight: 100,
+      marginBottom: 100,
+      borderRadius: 16
+    },
+    tooltip: {
+        borderColor: '#fff',
+        borderWidth: 2,
+        borderRadius: 16,
+        shadow: false,
+        backgroundColor: '#f1f5f9'
     },
     title: {
       text: 'Quarterly Reports History',
     },
     plotOptions: {
       column: {
-          stacking: 'normal',
-          // dataLabels: {
-          //     enabled: false
-          // }
+        stacking: 'normal',
+        // dataLabels: {
+        //     enabled: false
+        // }
       }
     },
     yAxis: {
@@ -79,7 +90,7 @@ export class WHSE_QR_Component implements OnInit {
     },
     xAxis: {
       labels: {
-        rotation: 90
+        rotation: -45
       }
     }
   };
@@ -116,7 +127,47 @@ export class WHSE_QR_Component implements OnInit {
     this.myData3 = hcValues.map(a => a.sent);
     this.myData4 = hcValues.map(a => a.other);
 
-
+    this.chartOptions = {
+      ...this.chartOptions,
+      xAxis: {
+        categories: this.myCategories,
+        labels: {
+          rotation: -45
+        }
+      },
+      series: [
+        {
+          type: 'column',
+          name: 'Waiting',
+          color: '#4da6ff',
+          data: this.myData0
+        },
+        {
+          type: 'column',
+          name: 'Needs Review',
+          color: '#f97316',//+
+          data: this.myData1
+        },
+        {
+          type: 'column',
+          name: 'OnHold',
+          color: '#eab308', //+
+          data: this.myData2
+        },
+        {
+          type: 'column',
+          name: 'Sent',
+          color: '#22c55e',
+          data: this.myData3
+        },
+        {
+          type: 'column',
+          name: 'Other',
+          color: '#64748b',
+          data: this.myData4
+        }
+      ]
+    };
     let chart = Highcharts.chart('container_qr', this.chartOptions);
     chart.xAxis[0].setCategories(this.myCategories);
     chart.series[0].setData(this.myData0);

@@ -20,7 +20,11 @@ export class MentorReport2RPT {
     public sponsorRequiredLanguageId?: number,
     public sponsorPreferredLanguageId?: number,
     public studentGUId?: string,
-    public mentorGUId?: string
+    public mentorGUId?: string,
+    public photoUrl?: string,
+    public mentorphotoUrl?: string,
+    public Major?: string,
+    public UniversityAbbrev?: string
   ) {
 
   }

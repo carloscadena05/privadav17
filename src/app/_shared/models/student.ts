@@ -31,6 +31,7 @@ export class Student {
     // // public colonia?: string, // Colonia
     // public initialInterview?: string, // InitialInterview
     public sponsorGroupId?: string,
+    public mastersSponsorGroupID?: number,
     public statusId?: number, // StatusID
     // public englishSkillLevelId?: number, // EnglishSkillLevelID
     public photoUrl?: string, // PhotoURL
@@ -68,7 +69,6 @@ export class Student {
     public mastersStartMonthNum?: number,
     public undergradStartYear?: string,
     public undergradStartMonthNum?: number,
-    public pcsId?: number
-
+    public pcsId?: number,
   ) {}
 }

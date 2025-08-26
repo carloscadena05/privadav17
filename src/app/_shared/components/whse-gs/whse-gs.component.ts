@@ -4,9 +4,9 @@ import { WHSE_DataService } from '../../data/whse-data.service';
 import { WHSE_GSCount } from '../../models/WHSE_GSCount';
 
 @Component({
-    selector: 'whse-gs',
-    templateUrl: 'whse-gs.component.html',
-    standalone: false
+  selector: 'whse-gs',
+  templateUrl: 'whse-gs.component.html',
+  standalone: false
 })
 
 export class WHSE_GS_Component implements OnInit {
@@ -14,50 +14,67 @@ export class WHSE_GS_Component implements OnInit {
   isLoading: boolean;
   whseGS: WHSE_GSCount[];
   Highcharts: typeof Highcharts = Highcharts;
-  dummyData: any[] =[];
+  dummyData: any[] = [];
 
   myCategories = this.dummyData.map(a => a.formattedPeriodStartDate);
-  myData0 =this.dummyData.map(a => a.gradesSubmittedCount);
-  myData1 =this.dummyData.map(a => a.gradesNotSubmittedCount);
+  myData0 = this.dummyData.map(a => a.gradesSubmittedCount);
+  myData1 = this.dummyData.map(a => a.gradesNotSubmittedCount);
 
   chartOptions: Highcharts.Options = {
     series: [
       {
         type: 'column',
-        name:'gradesSubmittedCount',
-        color: '#ffb31a'
+        name: 'gradesSubmittedCount',
+        color: '#22c55e'
 
       },
       {
         type: 'column',
-        name:'gradesNotSubmittedCount',
-        color: '#0066ff'
+        name: 'gradesNotSubmittedCount',
+        color: '#ef4444'
       },
-
     ],
     chart: {
-      height: 300
+      width: null,
+      marginLeft: 100,
+      marginRight: 100,
+      marginBottom: 100,
+      borderRadius: 16
+    },
+    tooltip: {
+        borderColor: '#fff',
+        borderWidth: 2,
+        borderRadius: 16,
+        shadow: false,
+        backgroundColor: '#f1f5f9'
     },
     title: {
       text: 'Grade Submissions by Grade Processing Period',
     },
     plotOptions: {
+      series: {
+        stacking: 'normal'
+      },
       column: {
-          stacking: 'normal',
-          dataLabels: {
-              enabled: true
-          }
-      }
+        stacking: 'normal',
+        dataLabels: {
+          enabled: false
+        },
+        pointWidth: 20
+      },
     },
     yAxis: {
       reversedStacks: false,
       title: {
         text: '# Submitted',
       },
+      stackLabels: {
+        enabled: true
+      }
     },
     xAxis: {
       labels: {
-        rotation: 90
+        rotation: -45
       }
     },
   };
@@ -91,7 +108,30 @@ export class WHSE_GS_Component implements OnInit {
     this.myCategories = hcValues.map(a => a.formattedPeriodStartDate);
     this.myData0 = hcValues.map(a => a.gradesSubmittedCount);
     this.myData1 = hcValues.map(a => a.gradesNotSubmittedCount);
-
+    // Actualización correcta del gráfico
+    this.chartOptions = {
+      ...this.chartOptions,
+      xAxis: {
+        categories: this.myCategories,
+        labels: {
+          rotation: -45
+        }
+      },
+      series: [
+        {
+          type: 'column',
+          name: 'Submitted Grades',
+          color: '#22c55e',
+          data: this.myData0
+        },
+        {
+          type: 'column',
+          name: 'Not Submitted',
+          color: '#ef4444',
+          data: this.myData1
+        }
+      ]
+    };
     let chart = Highcharts.chart('container_gs', this.chartOptions);
     chart.xAxis[0].setCategories(this.myCategories);
     chart.series[0].setData(this.myData0);

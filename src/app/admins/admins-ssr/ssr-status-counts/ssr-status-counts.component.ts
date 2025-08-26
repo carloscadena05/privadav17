@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges } from '@angular/core';
-import { Alert02FreeIcons, DocumentValidationFreeIcons, Rocket01FreeIcons } from '@hugeicons/core-free-icons';
+import { Alert02FreeIcons, DocumentValidationFreeIcons, Hold01FreeIcons, Rocket01FreeIcons } from '@hugeicons/core-free-icons';
 import { StudentSelfReportDataService } from 'src/app/_shared/data/student-self-report-data.service';
 import { StudentReportsStatusCount } from 'src/app/_shared/models/student-reports-status-count';
 
@@ -16,6 +16,7 @@ export class SSRStatusCountsComponent implements OnChanges {
   DocumentValidationFreeIcons = DocumentValidationFreeIcons;
      Rocket01FreeIcons = Rocket01FreeIcons;
      Alert02FreeIcons = Alert02FreeIcons;
+     Hold01FreeIcons = Hold01FreeIcons;
 
   constructor(private ssrData: StudentSelfReportDataService) {}
 

@@ -28,7 +28,7 @@
         </mat-form-field>
 
         <div class="flex flex-wrap gap-x-2">
-          <p class="font-medium text-[#24384d]">Type</p>
+          <p class="font-medium text-tertiary">Type</p>
           <mat-form-field class="simple">
             <mat-select [compareWith]="compare_individual_types" [(ngModel)]="selectedType">
               @for (type of memberTypes; track type) {
@@ -37,7 +37,7 @@
             </mat-select>
           </mat-form-field>
           &nbsp;
-          <p class="font-medium text-[#24384d]">Member Status</p>
+          <p class="font-medium text-tertiary">Member Status</p>
           <mat-form-field class="simple">
             <mat-select [compareWith]="compare_individual_types" [(ngModel)]="selectedStatus">
               @for (status of roleStatuses; track status) {
@@ -46,7 +46,7 @@
             </mat-select>
           </mat-form-field>
           &nbsp;
-          <p class="font-medium text-[#24384d]">Student Status</p>
+          <p class="font-medium text-tertiary">Student Status</p>
           <mat-form-field class="simple">
             <mat-select [compareWith]="compare_individual_types" [(ngModel)]="selectedStudentStatus">
               @for (status of studentStatuses; track status) {
@@ -92,8 +92,12 @@
           <ng-container matColumnDef="student">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Related Student </th>
             <td mat-cell *matCellDef="let member"
-              (click)="gotoStudent(member.relatedStudentGUId, member.relatedStudentName)" class="link"> {{
-              member?.relatedStudentName }} </td>
+              (click)="gotoStudent(member.relatedStudentGUId, member.relatedStudentName)" class="link"> 
+              <div class="flex gap-x-2 items-center">
+                <img [src]="'https://privada.jovenesadelante.org/' + member.studentphotoUrl.substring(9)" alt="" class="h-10 rounded-md">
+                <span>{{ member?.relatedStudentName }} </span>
+              </div>
+            </td>
           </ng-container>
 
           <ng-container matColumnDef="student_status">

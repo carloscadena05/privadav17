@@ -60,6 +60,8 @@ export class StudentSelfReportDataService extends BaseDataService {
       // '&studentGUId=' +
       // studentGUId;
     console.log('sending AuthHttp get request for StudentSelfReportsByMonth with ' + url);
+    console.log(this.http.get<StudentSelfReport[]>(url));
+    
     return this.http.get<StudentSelfReport[]>(url).pipe(catchError(this.handleError));
   }
 
@@ -67,7 +69,6 @@ export class StudentSelfReportDataService extends BaseDataService {
     const year = yearPeriod.substr(0, 4);
     const period = yearPeriod.substr(5, 1);
     const url = this.WebApiPrefix + 'student_self_reports/missing/by_period' + '?year=' + year + '&period=' + period;
-    console.log('sending AuthHttp get request for MissingStudentSelfReportsByMonth with ' + url);
     return this.http.get<StudentMiniDTO[]>(url).pipe(catchError(this.handleError));
   }
 

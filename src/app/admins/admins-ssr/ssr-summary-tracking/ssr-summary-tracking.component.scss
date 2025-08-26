@@ -1,4 +1,4 @@
-.green-row {background-color: #dff0d8;}
+/* .green-row {background-color: #dff0d8;}
 .red-row {background-color: lightpink;}
 
 
@@ -41,4 +41,20 @@
 }
 .checkboxes label span {
   vertical-align: middle;
+}
+ */
+
+::ng-deep {
+
+  .mat-expanded {
+    @apply bg-primary/10 rounded-xl;
+
+    .student-photo {
+      @apply h-14;
+    }
+  }
+
+  .simple .mat-mdc-form-field-subscript-wrapper {
+    display: none !important;
+  }
 }

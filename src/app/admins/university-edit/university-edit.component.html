@@ -1,81 +1,138 @@
+<div class="flex flex-col gap-4 justify-center ja-bg-white p-4 rounded-2xl">
+  <div class="flex flex-wrap justify-start md:justify-between">
+    <h1 class="ja-big-title inline"> Edit {{ myForm.value.universityAbbrev }}</h1>
+    <div class="flex gap-x-2 justify-end">
+      <button type="button" class="ja-btn ja-btn-primary-sc" (click)="onCancel()">
+        Cancel
+      </button>
+    
+      <button class="ja-btn ja-btn-primary" (click)="saveUniversity()" [disabled]="!myForm.valid">
+        Save
+      </button>
+    </div>
+  </div>
+  @if (errorMessage) {
+  <span class="alert alert-danger">{{ errorMessage }}</span>
+  }
+  @if (successMessage) {
+  <span class="alert alert-success">{{ successMessage }}</span>
+  }
+  @if (isLoading) {
+  <app-loading-container> </app-loading-container>
+  } @else {
+  <form [formGroup]="myForm" class="flex flex-col">
+    <mat-form-field appearance="outline">
+      <mat-label>Abbreviation</mat-label>
+      <input type="text" matInput formControlName="universityAbbrev">
+      <mat-error>
+        @if(myForm.get('narrative_English')?.hasError('required')){
+        University Abbreviation is required.
+        }@else if(myForm.get('narrative_English')?.hasError('maxlength')){
+        University Abbreviation cannot exceed 15 characters in length.
+        }@else if(myForm.get('narrative_English')?.hasError('minlength')){
+        University Abbreviation must be at least 2 characters in length.
+        }
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Name</mat-label>
+      <input type="text" matInput formControlName="universityName">
+      <mat-error>
+        @if(myForm.get('universityName')?.hasError('required')){
+        University Name is required.
+        }@else if(myForm.get('universityName')?.hasError('maxlength')){
+        University Name cannot exceed 50 characters in length.
+        }
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>City</mat-label>
+      <input type="text" matInput formControlName="universityCity">
+      <mat-error>
+        @if(myForm.get('universityName')?.hasError('required')){
+        University City is required.
+        }@else if(myForm.get('universityName')?.hasError('maxlength')){
+        University City cannot exceed 50 characters in length.
+        }
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Academic Year Type</mat-label>
+      <mat-select formControlName="academicYearTypeId">
+        @for (type of academicYearTypes; track type) {
+        <mat-option [value]="type.value">{{type.label}}</mat-option>
+        }
+      </mat-select>
+      <mat-error>Academic Year Type is required</mat-error>
+    </mat-form-field>
+  </form>
+  }
+</div>
+<!-- 
 @if (errorMessage) {
-  <div class="alert alert-danger">{{errorMessage}}</div>
+<div class="alert alert-danger">{{errorMessage}}</div>
 }
 @if (successMessage) {
-  <div class="alert alert-success">{{successMessage}}</div>
+<div class="alert alert-success">{{successMessage}}</div>
 }
 <div>
   @switch (isLoading) {
-    @case (true) {
-      <div class="text-center col-md-4 col-md-offset-4">
-        <app-loading-container>
-        </app-loading-container>
-      </div>
-    }
-    @case (false) {
-      <div>
-        <form [formGroup]="myForm" class="form-horizontal">
-          <label for="universityAbbrev">Abbreviation</label>
-          <input id="universityAbbrev"
-            formControlName="universityAbbrev"
-            class="form-control form-control-sm" type="text" placeholder="Abbreviation"
-            maxlength="15"
-            minlength="2" />
-            <app-display-errors control="universityAbbrev" class="red"
-                          [errors]="{
+  @case (true) {
+  <div class="text-center col-md-4 col-md-offset-4">
+    <app-loading-container>
+    </app-loading-container>
+  </div>
+  }
+  @case (false) {
+  <div>
+    <form [formGroup]="myForm" class="form-horizontal">
+      <label for="universityAbbrev">Abbreviation</label>
+      <input id="universityAbbrev" formControlName="universityAbbrev" class="form-control form-control-sm" type="text"
+        placeholder="Abbreviation" maxlength="15" minlength="2" />
+      <app-display-errors control="universityAbbrev" class="red" [errors]="{
                 'required': 'University Abbreviation is required',
                 'maxlength': 'University Abbreviation cannot exceed 15 characters in length.',
                 'minlength': 'University Abbreviation must be at least 2 characters in length.'
               }"></app-display-errors>
-            <label for="universityName">University Name</label>
-            <input id="universityName"
-              formControlName="universityName"
-              type="text" class="form-control form-control-sm" placeholder="Name"
-              maxlength="50" />
-              <app-display-errors control="universityName" class="red"
-                          [errors]="{
+      <label for="universityName">University Name</label>
+      <input id="universityName" formControlName="universityName" type="text" class="form-control form-control-sm"
+        placeholder="Name" maxlength="50" />
+      <app-display-errors control="universityName" class="red" [errors]="{
                 'required': 'University Name is required',
                 'maxlength': 'University Name cannot exceed 50 characters in length.'
               }"></app-display-errors>
-              <label for="universityCity">University City</label>
-              <input id="universityCity"
-                formControlName="universityCity"
-                type="text" class="form-control form-control-sm" placeholder="City"
-                maxlength="50" />
-                <app-display-errors control="universityCity" class="red"
-                          [errors]="{
+      <label for="universityCity">University City</label>
+      <input id="universityCity" formControlName="universityCity" type="text" class="form-control form-control-sm"
+        placeholder="City" maxlength="50" />
+      <app-display-errors control="universityCity" class="red" [errors]="{
                 'required': 'University City is required',
                 'maxlength': 'University City cannot exceed 50 characters in length.'
               }"></app-display-errors>
-                <label for="academicYearTypeId">Academic Year Type:</label>
-                <select formControlName="academicYearTypeId"
-                  class="form-control form-control-sm">
-                  @for (type of academicYearTypes; track type) {
-                    <option [value]="type.value">{{type.label}}</option>
-                  }
-                </select>
-                <app-display-errors control="academicYearTypeId" class="red"
-                          [errors]="{
+      <label for="academicYearTypeId">Academic Year Type:</label>
+      <select formControlName="academicYearTypeId" class="form-control form-control-sm">
+        @for (type of academicYearTypes; track type) {
+        <option [value]="type.value">{{type.label}}</option>
+        }
+      </select>
+      <app-display-errors control="academicYearTypeId" class="red" [errors]="{
                 'required': 'Academic Year Type is required'
               }"></app-display-errors>
-                <div class="form-group">
-                  <div class="controls">
-                    <button class="btn btn-default"
-                      (click)="saveUniversity()"
-                      [disabled]="!myForm.valid">
-                      Save
-                    </button>
-                    <button type="button"
-                      class="btn btn-default"
-                      style="width:75px"
-                      (click)="onCancel()">
-                      Cancel
-                    </button>
-                    <span class="red" [hidden]="myForm.valid">All required fields must be filled in before saving.</span>
-                  </div>
-                </div>
-              </form>
-            </div>
-          }
-        }
+      <div class="form-group">
+        <div class="controls">
+          <button class="btn btn-default" (click)="saveUniversity()" [disabled]="!myForm.valid">
+            Save
+          </button>
+          <button type="button" class="btn btn-default" style="width:75px" (click)="onCancel()">
+            Cancel
+          </button>
+          <span class="red" [hidden]="myForm.valid">All required fields must be filled in before saving.</span>
+        </div>
       </div>
+    </form>
+  </div>
+  }
+  }
+</div> -->

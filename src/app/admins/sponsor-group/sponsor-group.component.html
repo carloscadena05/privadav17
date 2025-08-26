@@ -1,62 +1,101 @@
+<div class="flex flex-col gap-4 justify-center ja-bg-white p-4 rounded-2xl">
+  <h1 class="ja-big-title inline"> {{ myForm.value.sponsorGroupName }}</h1>
+
+  @if (errorMessage) {
+  <span class="alert alert-danger">{{ errorMessage }}</span>
+  }
+  @if (successMessage) {
+  <span class="alert alert-success">{{ successMessage }}</span>
+  }
+  @if (isLoading) {
+  <app-loading-container> </app-loading-container>
+  } @else {
+  <form [formGroup]="myForm" class="flex flex-col md:flex-row gap-4">
+    <div class="flex flex-col min-w-96">
+      <button class="ja-btn ja-btn-primary-sc mb-auto mr-auto" (click)="location.back()">
+        Back
+      </button>
+
+      <mat-form-field appearance="outline" class="mt-4">
+        <mat-label>ID</mat-label>
+        <input type="text" matInput formControlName="sponsorGroupId" readonly>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Sponsor Group Name</mat-label>
+        <input type="text" matInput formControlName="sponsorGroupName">
+      </mat-form-field>
+
+      <button class="ja-btn ja-btn-primary" (click)="saveSponsorGroup()">
+        Save Name Change
+      </button>
+    </div>
+    <div class="flex flex-col min-w-96">
+      <app-sponsor-group-members [sponsorGroupId]="sponsorGroupId" [newMemberNotification]="newMemberMessage">
+      </app-sponsor-group-members>
+      <app-sponsor-group-member-edit [sponsorGroupId]="sponsorGroupId"
+        (onSelectedMember)="receiveSelectedMemberEvent($event)">>
+      </app-sponsor-group-member-edit>
+    </div>
+  </form>
+  }
+</div>
+<!-- 
 @if (errorMessage) {
-  <div class="alert alert-danger">{{errorMessage}}</div>
+<div class="alert alert-danger">{{errorMessage}}</div>
 }
 @if (successMessage) {
-  <div class="alert alert-success">{{successMessage}}</div>
+<div class="alert alert-success">{{successMessage}}</div>
 }
 <div style="max-width:900px">
 
   <div>
     @switch (isLoading) {
-      @case (true) {
-        <div class="text-center col-md-4 col-md-offset-4">
-          <app-loading-container>
-          </app-loading-container>
-        </div>
-      }
-      @case (false) {
-        <div>
-          <form [formGroup]="myForm" class="form-horizontal">
-            <div class="row">
-              <div class="col">
-                <div class="form-group">
-                  <span class="btn btn-primary btn-sm" (click)="location.back()">
-                    &lt;&lt;&nbsp; Back
-                  </span>
-                  &nbsp;
-                </div>
-                <div class="form-group">
-                  <input id="sponsorGroupId" formControlName="sponsorGroupId"
-                    class="form-control form-control-sm"
-                    type="text" readonly />
-                    <label for="sponsorGroupName">SponsorGroup Name</label>
-                    <input id="sponsorGroupName" formControlName="sponsorGroupName"
-                      class="form-control form-control-sm" type="text" placeholder="SponsorGroup Name" />
-                    </div>
-                    <div class="form-group">
-                      <button class="btn btn-primary" (click)="saveSponsorGroup()">
-                        Save Name Change
-                      </button>
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="form-group">
-                      <app-sponsor-group-members
-                        [sponsorGroupId]="sponsorGroupId"
-                        [newMemberNotification]="newMemberMessage">
-                      </app-sponsor-group-members>
-                    </div>
-                    <div class="form-group">
-                      <app-sponsor-group-member-edit
-                        [sponsorGroupId]="sponsorGroupId"
-                        (onSelectedMember)="receiveSelectedMemberEvent($event)">>
-                      </app-sponsor-group-member-edit>
-                    </div>
-                  </div>
-                </div>
-              </form>
-            </div>
-          }
-        }
-      </div>
+    @case (true) {
+    <div class="text-center col-md-4 col-md-offset-4">
+      <app-loading-container>
+      </app-loading-container>
     </div>
+    }
+    @case (false) {
+    <div>
+      <form [formGroup]="myForm" class="form-horizontal">
+        <div class="row">
+          <div class="col">
+            <div class="form-group">
+              <span class="btn btn-primary btn-sm" (click)="location.back()">
+                &lt;&lt;&nbsp; Back
+              </span>
+              &nbsp;
+            </div>
+            <div class="form-group">
+              <input id="sponsorGroupId" formControlName="sponsorGroupId" class="form-control form-control-sm"
+                type="text" readonly />
+              <label for="sponsorGroupName">SponsorGroup Name</label>
+              <input id="sponsorGroupName" formControlName="sponsorGroupName" class="form-control form-control-sm"
+                type="text" placeholder="SponsorGroup Name" />
+            </div>
+            <div class="form-group">
+              <button class="btn btn-primary" (click)="saveSponsorGroup()">
+                Save Name Change
+              </button>
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-group">
+              <app-sponsor-group-members [sponsorGroupId]="sponsorGroupId" [newMemberNotification]="newMemberMessage">
+              </app-sponsor-group-members>
+            </div>
+            <div class="form-group">
+              <app-sponsor-group-member-edit [sponsorGroupId]="sponsorGroupId"
+                (onSelectedMember)="receiveSelectedMemberEvent($event)">>
+              </app-sponsor-group-member-edit>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    }
+    }
+  </div>
+</div> -->

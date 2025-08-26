@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { constants } from 'src/app/_shared/constants/constants';
@@ -21,10 +24,10 @@ import { UIState } from 'src/app/_store/ui/ui.state';
 
 
 @Component({
-    selector: 'app-admins-student-list',
-    templateUrl: './admins-student-list.component.html',
-    styleUrls: ['./admins-student-list.component.scss'],
-    standalone: false
+  selector: 'app-admins-student-list',
+  templateUrl: './admins-student-list.component.html',
+  styleUrls: ['./admins-student-list.component.scss'],
+  standalone: false
 })
 export class AdminsStudentListComponent implements OnInit {
   selectedFilterMode: string;
@@ -46,12 +49,17 @@ export class AdminsStudentListComponent implements OnInit {
   readonly emojiMsgs: string[] = constants.emojiMsgs;
   displayTestNames: boolean;
 
-   testNameVisibility$ = this.store.select<boolean>(UIState.getTestNamesVisibility);
-   selectedGradYear$ = this.store.select<string>(UIState.getSelectedGradYear);
-   selectedYearJoined$ = this.store.select<string>(UIState.getSelectedYearJoined);
-   selectedStudentStatus$ = this.store.select<string>(UIState.getSelectedStudentStatus);
-   selectedFilterMode$ = this.store.select<string>(UIState.getSelectedFilterMode);
+  testNameVisibility$ = this.store.select<boolean>(UIState.getTestNamesVisibility);
+  selectedGradYear$ = this.store.select<string>(UIState.getSelectedGradYear);
+  selectedYearJoined$ = this.store.select<string>(UIState.getSelectedYearJoined);
+  selectedStudentStatus$ = this.store.select<string>(UIState.getSelectedStudentStatus);
+  selectedFilterMode$ = this.store.select<string>(UIState.getSelectedFilterMode);
 
+  displayedColumns: string[] = ['studentName','educationalLevel','status','startYear','gradYear','mentorName','studentSnapshotStatus','sponsorGroupName','universityAbbrev','major'];
+  dataSource: MatTableDataSource<StudentFlexiDTO>;
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
   constructor(
     public studentData: StudentDataService,
     public router: Router,
@@ -149,7 +157,7 @@ export class AdminsStudentListComponent implements OnInit {
     ) {
       this.isLoading = true;
       console.log('-----------------------');
-      
+
       this.studentData
         .getStudentDTOsByStatusAndYear(
           this.selectedFilterMode,
@@ -160,16 +168,21 @@ export class AdminsStudentListComponent implements OnInit {
         .subscribe(
           (data) => {
             console.log(data);
-            
+
             this.studentDTOs = data
               .filter((item) => {
                 if (this.displayTestNames) {
                   return item;
-                } else if (!this.displayTestNames && item.studentName.substring(0,5) !== '_Test') {
+                } else if (!this.displayTestNames && item.studentName.substring(0, 5) !== '_Test') {
                   return item;
                 }
               });
-              // .map(this.getNumericStatus);
+            // .map(this.getNumericStatus);
+            this.dataSource = new MatTableDataSource(this.studentDTOs);
+            setTimeout(() => {
+              this.dataSource.paginator = this.paginator;
+              this.dataSource.sort = this.sort;
+            }, 100);
           },
           (err) => {
             this.errorMessage = err;
@@ -193,7 +206,7 @@ export class AdminsStudentListComponent implements OnInit {
     }
   }
   getSSRTimelinessByColor(color: string): string {
-    return 'Student ' +constants.timelinessMsgs.get(color);
+    return 'Student ' + constants.timelinessMsgs.get(color);
   }
   getMRTimelinessByColor(color: string): string {
     return 'Mentor ' + constants.timelinessMsgs.get(color);
@@ -287,5 +300,14 @@ export class AdminsStudentListComponent implements OnInit {
   public onSortColumn(sortCriteria: SORTCRITERIA) {
     console.log('parent received sortColumnCLick event with ' + sortCriteria.sortColumn);
     return this.studentDTOs.sort((a, b) => this.columnSorter.compareValues(a, b, sortCriteria));
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 }

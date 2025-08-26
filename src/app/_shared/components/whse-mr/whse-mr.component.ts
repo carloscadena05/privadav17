@@ -5,9 +5,9 @@ import { WHSE_MRCount } from '../../models/WHSE_MR.Count';
 
 
 @Component({
-    selector: 'whse-mr',
-    templateUrl: 'whse-mr.component.html',
-    standalone: false
+  selector: 'whse-mr',
+  templateUrl: 'whse-mr.component.html',
+  standalone: false
 })
 
 export class WHSE_MR_Component implements OnInit {
@@ -15,50 +15,53 @@ export class WHSE_MR_Component implements OnInit {
   isLoading: boolean;
   whseMR: WHSE_MRCount[];
   Highcharts: typeof Highcharts = Highcharts;
-  dummyData =[];
+  dummyData = [];
   myCategories = this.dummyData.map(a => a.yearMonth);
-  myData0 = this.dummyData.map(a => a.allGood);
-  myData1 = this.dummyData.map(a => a.celebrate);
-  myData2 = this.dummyData.map(a => a.concerned);
-  myData3 = this.dummyData.map(a => a.problems);
+  myData0good = this.dummyData.map(a => a.allGood);
+  myData1prob = this.dummyData.map(a => a.celebrate);
+  myData2celeb = this.dummyData.map(a => a.concerned);
+  myData3conc = this.dummyData.map(a => a.problems);
 
   chartOptions: Highcharts.Options = {
     series: [
       {
         type: 'column',
-        name:'AllGood',
-        color: '#00b300'
+        name: 'Problems',
+        color: '#ef4444'
       },
       {
         type: 'column',
-        name:'Problems',
-        color: '#b30000'
+        name: 'Concerned',
+        color: '#f97316'
       },
       {
         type: 'column',
-        name:'Celebrate',
-        color: '#ffb31a'
+        name: 'AllGood',
+        color: '#22c55e'
       },
       {
         type: 'column',
-        name:'Concerned',
-        color: '#4da6ff'
-
+        name: 'Celebrate',
+        color: '#facc15'
       },
     ],
     chart: {
-      height: 300
+      width: null,
+      marginLeft: 100,
+      marginRight: 100,
+      marginBottom: 100,
+      borderRadius: 16
     },
     title: {
       text: 'Mentor Reports per Emoji Status',
     },
     plotOptions: {
       column: {
-          stacking: 'normal',
-          dataLabels: {
-              enabled: false
-          }
-      }
+        stacking: 'normal',
+        dataLabels: {
+          enabled: false
+        },
+      },
     },
     yAxis: {
       reversedStacks: false,
@@ -72,9 +75,17 @@ export class WHSE_MR_Component implements OnInit {
     },
     xAxis: {
       labels: {
-        rotation: 90
+        rotation: -45,
+        step: 1
       }
-    }
+    },
+    tooltip: {
+        borderColor: '#fff',
+        borderWidth: 2,
+        borderRadius: 16,
+        shadow: false,
+        backgroundColor: '#f1f5f9'
+    },
   };
 
   constructor(public whseData: WHSE_DataService) {
@@ -103,18 +114,18 @@ export class WHSE_MR_Component implements OnInit {
   setHighchartValues(hcValues: any) {
 
     this.myCategories = hcValues.map(a => a.yearMonth);
-    this.myData0 = hcValues.map(a => a.allGood);
-    this.myData1 = hcValues.map(a => a.problems);
-    this.myData2 = hcValues.map(a => a.celebrate);
-    this.myData3 = hcValues.map(a => a.concerned);
+    this.myData0good = hcValues.map(a => a.allGood);
+    this.myData1prob = hcValues.map(a => a.problems);
+    this.myData2celeb = hcValues.map(a => a.celebrate);
+    this.myData3conc = hcValues.map(a => a.concerned);
 
 
     let chart = Highcharts.chart('container_mr', this.chartOptions);
     chart.xAxis[0].setCategories(this.myCategories);
-    chart.series[0].setData(this.myData0);
-    chart.series[1].setData(this.myData1);
-    chart.series[2].setData(this.myData2);
-    chart.series[3].setData(this.myData3);
+    chart.series[0].setData(this.myData1prob);
+    chart.series[1].setData(this.myData3conc);
+    chart.series[2].setData(this.myData0good);
+    chart.series[3].setData(this.myData2celeb);
   }
 
 

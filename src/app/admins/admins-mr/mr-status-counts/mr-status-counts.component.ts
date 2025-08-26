@@ -1,4 +1,5 @@
 import { Component, Input, OnChanges } from '@angular/core';
+import { Alert02FreeIcons, DocumentValidationFreeIcons, Hold01FreeIcons, Rocket01FreeIcons } from '@hugeicons/core-free-icons';
 import { MentorReport2DataService } from 'src/app/_shared/data/mentor-report2-data.service';
 import { MentorReportsStatusCount } from 'src/app/_shared/models/mentor-reports-status-count';
 
@@ -13,6 +14,10 @@ export class MentorReportsStatusCountsComponent implements OnChanges {
   statusCounts: MentorReportsStatusCount[];
   errorMessage: string;
 
+  DocumentValidationFreeIcons = DocumentValidationFreeIcons;
+     Rocket01FreeIcons = Rocket01FreeIcons;
+     Alert02FreeIcons = Alert02FreeIcons;
+     Hold01FreeIcons = Hold01FreeIcons;
   constructor(private mentorReportsData: MentorReport2DataService) {}
 
   public ngOnChanges() {

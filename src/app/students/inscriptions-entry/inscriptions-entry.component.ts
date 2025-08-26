@@ -170,6 +170,8 @@ export class InscriptionsEntryComponent implements OnInit {
       this.isLoading = true;
       this.inscriptionDataSvc.getInscriptionsForStudent(this.studentGUId).subscribe(
         (dataArray) => {
+          console.log(dataArray);
+          
           // if want to have all empty ones, not just latest:
           // this.inscriptions = dataArray.filter(this.filter_dates);
           // get latest one

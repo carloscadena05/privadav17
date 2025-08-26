@@ -1,3 +1,484 @@
+<div class="flex flex-col gap-4 justify-center rounded-2xl">
+
+  @if (errorMessage) {
+  <span class="alert alert-danger">{{ errorMessage }}</span>
+  }
+  @if (successMessage) {
+  <span class="alert alert-success">{{ successMessage }}</span>
+  }
+  @if (isLoading) {
+  <app-loading-container> </app-loading-container>
+  } @else {
+  <div class="bg-secondary p-4 w-full rounded-t-2xl md:h-24 relative after:absolute after:content-[''] after:bg-white after:rounded-b-2xl after:-z-50 after:w-full md:after:h-40 after:-m-4">
+    <img [src]="'https://privada.jovenesadelante.org/' + studentDTO.photoUrl.substring(9)" alt=""
+      class="w-32 aspect-square object-cover rounded-full absolute -bottom-1/2 object-top ring-4 ring-white">
+    <div class="flex flex-col absolute left-44 justify-center h-full top-1/2 w-[calc(100%-11rem)] ">
+      <div class="max-h-24 min-h-24 h-full flex flex-col justify-end">
+        <h1 class="text-2xl font-semibold text-accent inline"> {{ studentDTO?.studentName }}</h1>
+        @if(studentDTO.mastersUniversityName == null) {
+        <h2 class="text-slate-100"> {{studentDTO.major}} | {{studentDTO.universityAbbrev}}</h2>
+        } @else {
+        <h2 class="text-slate-100"> {{studentDTO.mastersFieldOfStudy}} | {{studentDTO.mastersUniversityName}}</h2>
+        }
+        @if(studentDTO.mastersUniversityName == null) {
+
+        <h3 class="text-slate-100 flex gap-x-1">
+          <hugeicons-icon [icon]="Flag02FreeIcons" [size]="24" color="#86eae9" [strokeWidth]="1.5"></hugeicons-icon>
+          {{(studentDTO.undergradStartMonthNum ?? '08') + '-01-' + studentDTO.yearJoinedJa | date:'MMM, yyyy'}}
+
+          <hugeicons-icon [icon]="Mortarboard01FreeIcons" [size]="24" color="#f3d527"
+            [strokeWidth]="1.5"></hugeicons-icon>
+          {{studentDTO.gradMonthNum + '-01-' + studentDTO.gradYear | date:'MMM, yyyy'}}
+        </h3>
+        } @else {
+        <h3 class="text-slate-100 flex gap-x-1">
+          <hugeicons-icon [icon]="Flag02FreeIcons" [size]="24" color="#86eae9" [strokeWidth]="1.5"></hugeicons-icon>
+          {{studentDTO.mastersStartMonthNum + '-01-' + studentDTO.mastersStartYear | date:'MMM, yyyy'}}
+
+          <hugeicons-icon [icon]="Mortarboard01FreeIcons" [size]="24" color="#f3d527"
+            [strokeWidth]="1.5"></hugeicons-icon>
+          {{studentDTO.mastersGradMonthNum + '-01-' + studentDTO.mastersGradYear | date:'MMM, yyyy'}}
+        </h3>
+        }
+      </div>
+      <div class="max-h-24 min-h-24 h-full w-full flex justify-between">
+        <div class="flex gap-x-2 py-2 mb-auto">
+          <div class="flex gap-x-2 items-center">
+            @if(studentDTO.mentorPhotoUrl != 'N-A, N-A.jpg' && studentDTO.mentorPhotoUrl != ''){
+            <img [src]="'https://privada.jovenesadelante.org/assets/images/MemberPhotos/' + studentDTO.mentorPhotoUrl"
+              alt="" class="h-8 aspect-square object-cover rounded-md">
+            }@else {
+            <div class="bg-[#187ca8] rounded-md p-1">
+              <hugeicons-icon [icon]="UserMultiple02FreeIcons" [size]="24" color="#fff"
+                [strokeWidth]="1.5"></hugeicons-icon>
+            </div>
+            }
+            <div class="flex flex-col group *:duration-300" (click)="gotoMentor(student.mentorGUId)">
+              <div class="text-primary font-medium text-sm cursor-pointer group-hover:underline">Mentor</div>
+              <div class="text-secondary leading-3 cursor-pointer group-hover:underline">{{studentDTO.mentorName}}</div>
+            </div>
+          </div>
+          <div class="flex gap-x-2 items-center">
+            <div class="bg-[#187ca8] rounded-md p-1">
+              <hugeicons-icon [icon]="SaveMoneyDollarFreeIcons" [size]="24" color="#fff"
+                [strokeWidth]="1.5"></hugeicons-icon>
+            </div>
+            <div class="flex flex-col">
+              <div class="text-primary font-medium text-sm">Sponsor</div>
+              <div class="text-secondary leading-3">{{studentDTO.sponsorGroupName}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="md:h-10 flex gap-x-4 mb-auto justify-end pr-4 z-50">
+    <mat-slide-toggle (click)="setReadOnly()" [checked]="myForm.enabled">Edit</mat-slide-toggle>
+    <button class="ja-btn ja-btn-primary" (click)="saveMyForm()" [disabled]="!myForm.valid">Save</button>
+  </div>
+
+  <form [formGroup]="myForm" class="flex flex-col gap-y-4">
+    <div class="flex flex-col md:flex-row gap-4 *:w-[calc(33.33%-0.33rem)]">
+      <div class="flex flex-col gap-x-4 ja-bg-white px-4 rounded-2xl overflow-hidden shadow-lg">
+        <h4 class="text-[#45bbef] font-medium text-sm bg-secondary py-2 px-4 -mx-4 mb-2">Basic information</h4>
+        <mat-form-field appearance="outline">
+          <mat-label>Photo Filename</mat-label>
+          <input type="text" matInput formControlName="photoUrl">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>CURP</mat-label>
+          <input type="text" matInput formControlName="curp">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>RFC</mat-label>
+          <input type="text" matInput formControlName="rfc">
+        </mat-form-field>
+
+        <div class="flex gap-x-4 justify-between *:w-full">
+          <mat-form-field appearance="outline">
+            <mat-label>Gender</mat-label>
+            <mat-select [compareWith]="value_select" formControlName="gender">
+              @for (gender of genders; track gender) {
+              <mat-option [value]="gender.value">{{ gender.label }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Student ID</mat-label>
+            <input type="text" matInput formControlName="studentId">
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="!w-full">
+          <mat-label>Student GUId</mat-label>
+          <input type="text" matInput formControlName="studentGUId">
+        </mat-form-field>
+
+        <div class="flex gap-x-4 justify-between *:w-full">
+          <mat-form-field appearance="outline">
+            <mat-label>Bank Account</mat-label>
+            <input type="text" matInput formControlName="bankAccount">
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>PCSID</mat-label>
+            <input type="text" matInput formControlName="pcsId">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-x-4 ja-bg-white px-4 rounded-2xl overflow-hidden shadow-lg">
+        <h4 class="text-[#45bbef] font-medium text-sm bg-secondary py-2 px-4 -mx-4 mb-2">Academic information</h4>
+
+        <div class="flex gap-x-4 justify-between *:w-full">
+          <mat-form-field appearance="outline">
+            <mat-label>Educational Level</mat-label>
+            <mat-select [compareWith]="value_select" formControlName="educationalLevelId">
+              @for (type of schoolTypes; track type) {
+              <mat-option [value]="type.value">{{ type.label }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Status</mat-label>
+            <mat-select [compareWith]="value_select" formControlName="statusId">
+              @for (status of studentStatuses; track status) {
+              <mat-option [value]="status.value">{{ status.label }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Prepa</mat-label>
+          <mat-select formControlName="prepaId" [compareWith]="value_select">
+            @for (status of prepas$ | async; track status) {
+            <mat-option [value]="status.value">{{ status.label }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <div class="flex gap-x-4 justify-between *:w-full">
+          <mat-form-field appearance="outline">
+            <mat-label>Joined From</mat-label>
+            <mat-select [compareWith]="value_select" formControlName="joinedFromId">
+              @for (status of schoolTypes; track status) {
+              <option [value]="status.value">{{ status.label }}</option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>YearJoinedJA</mat-label>
+            <mat-select [compareWith]="value_select" formControlName="yearJoinedJa">
+              @for (year of joinedYears; track year) {
+              <mat-option [value]="year.value">{{ year.label }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="grid grid-cols-3 gap-x-4 gap-y-0 mb-4">
+          <app-student-grades-status class="col-span-2" [gpaStatus]="studentDTO.gpaStatus"
+            [gradeRptStatus]="studentDTO.gradeRptStatus"></app-student-grades-status>
+
+          <app-student-ssr-status [reportStatus]="studentDTO.timelySSRStatus"></app-student-ssr-status>
+        </div>
+        <!-- 
+        <div class="flex gap-x-4 justify-between *:w-full">
+                <mat-form-field appearance="outline">
+            <mat-label>Probation Start Dt</mat-label>
+            <input type="text" matInput formControlName="probationStartDate" [matDatepicker]="probationStartDatepicker">
+            <mat-datepicker-toggle matIconSuffix [for]="probationStartDatepicker"></mat-datepicker-toggle>
+            <mat-datepicker #probationStartDatepicker></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Probation End Dt</mat-label>
+            <input type="text" matInput formControlName="probationEndDate" [matDatepicker]="probationEndDatepicker">
+            <mat-datepicker-toggle matIconSuffix [for]="probationEndDatepicker"></mat-datepicker-toggle>
+            <mat-datepicker #probationEndDatepicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+        -->
+
+        <div class="flex gap-x-4 justify-between *:w-full">
+          <mat-form-field appearance="outline">
+            <mat-label>Titulo Issued Date</mat-label>
+            <input type="text" matInput formControlName="tituloIssuedDate">
+          </mat-form-field>
+          <!-- 
+          <mat-form-field appearance="outline">
+            <mat-label>Titulo Uploaded Date</mat-label>
+            <input type="text" matInput formControlName="tituloUploadedDate">
+          </mat-form-field> 
+          -->
+          <mat-form-field appearance="outline">
+            <mat-label>Cedula Number</mat-label>
+            <input type="text" matInput formControlName="cedula">
+          </mat-form-field>
+
+
+          @if(student.tituloUploadedDate){
+          <button (click)="viewTitulo(student.studentGUId, student.gradYear)"
+            class="ja-btn ja-btn-secondary-sc mb-auto">
+            <hugeicons-icon [icon]="ViewFreeIcons" [size]="24" color="currentColor"
+              [strokeWidth]="1.5"></hugeicons-icon>
+            View
+          </button>
+          } @else {
+
+          <button (click)="uploadTitulo(student.studentGUId, student.gradYear)"
+            class="ja-btn ja-btn-primary-sc mb-auto">
+            <hugeicons-icon [icon]="UploadCircle01FreeIcons" [size]="24" color="currentColor"
+              [strokeWidth]="1.5"></hugeicons-icon>
+            Upload
+          </button>
+          }
+        </div>
+
+      </div>
+
+      <div class="flex flex-col gap-x-4 ja-bg-white px-4 rounded-2xl overflow-hidden shadow-lg">
+
+
+
+        <h4 class="text-[#45bbef] font-medium text-sm bg-secondary py-2 px-4 -mx-4 mb-2">Mentoring</h4>
+        <div class="flex flex-col col-span-3">
+          <div class="flex gap-x-2 justify-between">
+            <!-- @if(studentDTO.mentorPhotoUrl != 'N-A, N-A.jpg' && studentDTO.mentorPhotoUrl != ''){
+            <img [src]="'https://privada.jovenesadelante.org/assets/images/MemberPhotos/' + studentDTO.mentorPhotoUrl"
+              alt="" class="h-10 aspect-v-photo object-cover rounded-md">
+            } -->
+            <mat-form-field appearance="outline" class="grow">
+              <mat-label>Mentor</mat-label>
+              <mat-select [compareWith]="value_select" formControlName="mentorGUId" (openedChange)="refreshMentors()"
+                (selectionChange)="setMentorStartDate()">
+                @for (mentor of mentors$ | async; track mentor) {
+                <mat-option [value]="mentor.value">{{ mentor.label }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <mat-form-field appearance="outline">
+            <mat-label>Mentoring Comment</mat-label>
+            <input type="text" matInput formControlName="mentoringComment">
+          </mat-form-field>
+          <div class="flex gap-x-4 justify-between *:w-full">
+            <mat-form-field appearance="outline">
+              <mat-label>Mentor Assigned Dt</mat-label>
+              <input type="text" matInput formControlName="mentorAssignedDate"
+                [matDatepicker]="mentorAssignedDatepicker">
+              <mat-datepicker-toggle matIconSuffix [for]="mentorAssignedDatepicker"></mat-datepicker-toggle>
+              <mat-datepicker #mentorAssignedDatepicker></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Mentoring End Dt</mat-label>
+              <input type="text" matInput formControlName="mentoringEndDate" [matDatepicker]="mentoringEndDatepicker">
+              <mat-datepicker-toggle matIconSuffix [for]="mentoringEndDatepicker"></mat-datepicker-toggle>
+              <mat-datepicker #mentoringEndDatepicker></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </div>
+        <app-student-mr-status [reportStatus]="studentDTO.timelyMentorReportStatus"
+          [emojiPathname]="emojiPathname"></app-student-mr-status>
+
+
+        <mat-form-field appearance="outline">
+          <mat-label>Emergency Contact Name</mat-label>
+          <input type="text" matInput formControlName="emergencyContactName">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Emergency Contact Phone</mat-label>
+          <input type="text" matInput formControlName="emergencyContactPhone">
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="flex flex-col md:flex-row gap-4 *:w-[calc(50%-0.5rem)]">
+
+      <div class="flex flex-col shadow-lg rounded-2xl overflow-hidden ja-bg-white">
+        <div class="flex gap-x-2 bg-primary text-accent p-4">
+          <hugeicons-icon [icon]="BookOpen02FreeIcons" [size]="24" color="#f3d527" [strokeWidth]="1.5"></hugeicons-icon>
+          Undergrad
+        </div>
+        <div class="p-4 flex flex-col">
+          <mat-form-field appearance="outline">
+            <mat-label>University</mat-label>
+            <mat-select formControlName="universityId" [compareWith]="value_select">
+              @for (status of universities$ | async; track status) {
+              <mat-option [value]="status.value">{{ status.label }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Academic Year / Grade Months</mat-label>
+            <mat-select formControlName="universityGradeMonthId" [compareWith]="value_select">
+              @for (status of universityGradeMonths$ | async; track status) {
+              <mat-option [value]="status.value">
+                {{ status.label }}
+              </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Major</mat-label>
+            <input type="text" formControlName="major" matInput>
+          </mat-form-field>
+          <div class="grid grid-cols-2 gap-x-4">
+
+            <mat-form-field appearance="outline">
+              <mat-label>Start Year</mat-label>
+              <mat-select formControlName="undergradStartYear" [compareWith]="value_select">
+                @for (year of gradYears; track year) {
+                <mat-option [value]="year.value">{{ year.label }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Start Month</mat-label>
+              <mat-select formControlName="undergradStartMonthNum" [compareWith]="value_select">
+                @for (month of gradMonths; track month) {
+                <mat-option [value]="month.value">{{ month.label }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Grad Year</mat-label>
+              <mat-select formControlName="gradYear" [compareWith]="value_select">
+                @for (year of gradYears; track year) {
+                <mat-option [value]="year.value">{{ year.label }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Grad Month</mat-label>
+              <mat-select formControlName="gradMonthNum" [compareWith]="value_select">
+                @for (month of gradMonths; track month) {
+                <mat-option [value]="month.value">{{ month.label }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Sponsor Group</mat-label>
+            <mat-select [compareWith]="value_select" formControlName="sponsorGroupId">
+              @for (sponsor of sponsorGroups$ | async; track sponsor) {
+              <mat-option [value]="sponsor.value">{{ sponsor.label }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <app-sponsor-group-members [sponsorGroupId]="sponsorGroupIdParam" class="mb-4"
+            [ngClass]="myForm.disabled ? 'saturate-0' : 'saturate-100'"> </app-sponsor-group-members>
+
+
+        </div>
+      </div>
+
+      <div class="flex flex-col shadow-lg rounded-2xl overflow-hidden ja-bg-white">
+        <div class="flex gap-x-2 bg-primary text-accent p-4">
+          <hugeicons-icon [icon]="Mortarboard01FreeIcons" [size]="24" color="#f3d527"
+            [strokeWidth]="1.5"></hugeicons-icon>
+          Postgraduate
+        </div>
+        <div class="p-4 flex flex-col">
+          <mat-form-field appearance="outline">
+            <mat-label>University</mat-label>
+            <mat-select formControlName="mastersUniversityId" [compareWith]="value_select">
+              @for (status of universities$ | async; track status) {
+              <mat-option [value]="status.value">{{ status.label }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Academic Year / Grade Months</mat-label>
+            <mat-select formControlName="mastersUniversityGradeMonthId" [compareWith]="value_select">
+              @for (status of universityGradeMonths$ | async; track status) {
+              <mat-option [value]="status.value">
+                {{ status.label }}
+              </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Field of Study</mat-label>
+            <input type="text" formControlName="mastersFieldOfStudy" matInput>
+          </mat-form-field>
+          <div class="grid grid-cols-2 gap-x-4">
+
+            <mat-form-field appearance="outline">
+              <mat-label>Start Year</mat-label>
+              <mat-select formControlName="mastersStartYear" [compareWith]="value_select">
+                @for (year of gradYears; track year) {
+                <mat-option [value]="year.value">{{ year.label }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Start Month</mat-label>
+              <mat-select formControlName="mastersStartMonthNum" [compareWith]="value_select">
+                @for (month of gradMonths; track month) {
+                <mat-option [value]="month.value">{{ month.label }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Grad Year</mat-label>
+              <mat-select formControlName="mastersGradYear" [compareWith]="value_select">
+                @for (year of gradYears; track year) {
+                <mat-option [value]="year.value">{{ year.label }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Grad Month</mat-label>
+              <mat-select formControlName="mastersGradMonthNum" [compareWith]="value_select">
+                @for (month of gradMonths; track month) {
+                <mat-option [value]="month.value">{{ month.label }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Sponsor Group</mat-label>
+            <mat-select [compareWith]="value_select" formControlName="mastersSponsorGroupID" #s>
+              <input type="text" placeholder="Find" #q (click)="$event.stopPropagation()"
+                (keydown)="$event.stopPropagation()"
+                class="focus:outline-none p-2 border-b-2 w-full !max-w-full [border-image:linear-gradient(to_right,_rgb(var(--primary))_0%,_rgb(var(--secondary))_100%)_1]">
+              @for (sponsor of sponsorGroups$ | async | filter:q.value ; track sponsor) {
+              <mat-option [value]="sponsor.value">{{ sponsor.label }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <app-sponsor-group-members [sponsorGroupId]="myForm.value.mastersSponsorGroupID" class="mb-4"
+            [ngClass]="myForm.disabled ? 'saturate-0' : 'saturate-100'"> </app-sponsor-group-members>
+
+
+        </div>
+      </div>
+    </div>
+
+  </form>
+  }
+</div>
+<!--
+<div class="h-64"></div>
+
 <div class="card bg-primary">
   <div class="card-header text-white" style="font-size: large; max-width: 900px">
     <span>Student Profile for {{ studentDTO?.studentName }} </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -5,478 +486,385 @@
 
   <div class="card-body bg-white">
     @if (errorMessage) {
-      <div class="alert alert-danger">{{ errorMessage }}</div>
+    <div class="alert alert-danger">{{ errorMessage }}</div>
     }
     @if (successMessage) {
-      <div class="alert alert-success">{{ successMessage }}</div>
+    <div class="alert alert-success">{{ successMessage }}</div>
     }
     <div style="max-width: 900px">
       <div>
         @switch (isLoading) {
-          @case (true) {
-            <div class="text-center col-md-4 col-md-offset-4">
-              <app-loading-container> </app-loading-container>
-            </div>
-          }
-          @case (false) {
-            <div>
-              <form [formGroup]="myForm" class="form-horizontal">
-                <!-- main form contents row-->
-                <div class="row">
-                  <!--
-                  COLUMN 1
-                  -->
-                  <div class="col">
-                    <div class="form-group">
-                      <span class="btn btn-primary btn-sm" (click)="location.back()"> &lt;&lt;&nbsp; Back </span>
-                      &nbsp;
-                      <label for="ckEditMode">
-                        <input
-                          id="ckEditMode"
-                          type="checkbox"
-                          name="toggleReadOnly"
-                          (click)="setReadOnly()"
-                          style="margin: 0 0 0 4px" />
-                        Edit</label>
-                        &nbsp;&nbsp;
-                        <button class="btn btn-primary" data-cy="btn-save" (click)="saveMyForm()" [disabled]="!myForm.valid">
-                          Save
-                        </button>
-                      </div>
-                      <div class="form-group">
-                        <label for="photoUrl">Photo Filename</label>
-                        <input
-                          id="photoUrl"
-                          formControlName="photoUrl"
-                          type="text"
-                          class="form-control form-control-sm"
-                          placeholder="Photo Filename" />
-                          <app-display-errors
-                            control="photoUrl"
-                            class="red"
-                                      [errors]="{
+        @case (true) {
+        <div class="text-center col-md-4 col-md-offset-4">
+          <app-loading-container> </app-loading-container>
+        </div>
+        }
+        @case (false) {
+        <div>
+          <form [formGroup]="myForm" class="form-horizontal">
+             
+            <div class="row">
+
+              <div class="col">
+                <div class="form-group">
+                  <span class="btn btn-primary btn-sm" (click)="location.back()"> &lt;&lt;&nbsp; Back </span>
+                  &nbsp;
+                  <label for="ckEditMode">
+                    <input id="ckEditMode" type="checkbox" name="toggleReadOnly" (click)="setReadOnly()"
+                      style="margin: 0 0 0 4px" />
+                    Edit</label>
+                  &nbsp;&nbsp;
+                  <button class="btn btn-primary" data-cy="btn-save" (click)="saveMyForm()" [disabled]="!myForm.valid">
+                    Save
+                  </button>
+                </div>
+                <div class="form-group">
+                  <label for="photoUrl">Photo Filename</label>
+                  <input id="photoUrl" formControlName="photoUrl" type="text" class="form-control form-control-sm"
+                    placeholder="Photo Filename" />
+                  <app-display-errors control="photoUrl" class="red" [errors]="{
                       maxlength: 'Photo Filename cannot exceed 225 characters in length.'
                     }"></app-display-errors>
-                          <label for="emergencyContactName">Emergency Contact Name</label>
-                          <input
-                            id="emergencyContactName"
-                            formControlName="emergencyContactName"
-                            type="text"
-                            class="form-control form-control-sm"
-                            placeholder="Contact Person:" />
-                            <app-display-errors
-                              control="emergencyContactName"
-                              class="red"
-                                      [errors]="{
+                  <label for="emergencyContactName">Emergency Contact Name</label>
+                  <input id="emergencyContactName" formControlName="emergencyContactName" type="text"
+                    class="form-control form-control-sm" placeholder="Contact Person:" />
+                  <app-display-errors control="emergencyContactName" class="red" [errors]="{
                       minlength: 'Name must be at least 5 characters in length.'
                     }"></app-display-errors>
-                            <label for="emergencyContactPhone">Emergency Contact Phone</label>
-                            <input
-                              id="emergencyContactPhone"
-                              formControlName="emergencyContactPhone"
-                              type="text"
-                              class="form-control form-control-sm"
-                              placeholder="Best Phone Number: ###-###-####" />
-                              <app-display-errors
-                                control="emergencyContactPhone"
-                                class="red"
-                                      [errors]="{
+                  <label for="emergencyContactPhone">Emergency Contact Phone</label>
+                  <input id="emergencyContactPhone" formControlName="emergencyContactPhone" type="text"
+                    class="form-control form-control-sm" placeholder="Best Phone Number: ###-###-####" />
+                  <app-display-errors control="emergencyContactPhone" class="red" [errors]="{
                       minlength: 'Phone number must be at least 7 characters in length.',
                       maxlength: 'Phone number cannot exceed 13 characters in length.'
                     }"></app-display-errors>
-                              <label for="curp">CURP</label>
-                              <input id="curp" formControlName="curp" class="form-control form-control-sm" placeholder="" />
-                              <label for="rfc">RFC</label>
-                              <input
-                                id="rfc"
-                                formControlName="rfc"
-                                type="text"
-                                class="form-control form-control-sm"
-                                placeholder="" />
-                                <label for="prepaId">Prepa</label>
-                                @if (prepas$ | async; as prepas) {
-                                  <div>
-                                    <select id="prepaId" formControlName="prepaId" class="form-control form-control-sm">
-                                      @for (status of prepas; track status) {
-                                        <option [value]="status.value">{{ status.label }}</option>
-                                      }
-                                    </select>
-                                  </div>
-                                }
-                                <div>
-                                  <label>Undergrad</label>
-                                </div>
-                                <div class="form-group bordered">
-                                  <label for="universityId">University</label>
-                                  @if (universities$ | async; as universities) {
-                                    <div>
-                                      <select id="universityId" formControlName="universityId" class="form-control form-control-sm">
-                                        @for (status of universities; track status) {
-                                          <option [value]="status.value">{{ status.label }}</option>
-                                        }
-                                      </select>
-                                    </div>
-                                  }
-                                  <label for="universityGradeMonthId">Academic Year / Grade Months</label>
-                                  @if (universityGradeMonths$ | async; as universityGradeMonths) {
-                                    <div>
-                                      <select
-                                        id="universityGradeMonthId"
-                                        formControlName="universityGradeMonthId"
-                                        class="form-control form-control-sm">
-                                        @for (status of universityGradeMonths; track status) {
-                                          <option [value]="status.value">
-                                            {{ status.label }}
-                                          </option>
-                                        }
-                                      </select>
-                                    </div>
-                                  }
-                                  `
-                                  <label for="major">Major</label>
-                                  <input
-                                    id="major"
-                                    formControlName="major"
-                                    type="text"
-                                    class="form-control form-control-sm"
-                                    placeholder="" />
-                                    <div class="row">
-                                      <div class="4">&nbsp;&nbsp;&nbsp;&nbsp;</div>
-                                      <div class="col-4" style="padding: 0 2px 0 4px">
-                                        <label for="undergradStartYear">Start Year</label>
-                                        <select id="undergradStartYear" formControlName="undergradStartYear" class="form-control form-control-sm">
-                                          @for (year of gradYears; track year) {
-                                            <option [value]="year.value">{{ year.label }}</option>
-                                          }
-                                        </select>
-                                      </div>
-                                      <div class="col-4" style="padding: 0 2px 0 4px">
-                                        <label for="undergradStartMonthNum">Start Month</label>
-                                        <select id="undergradStartMonthNum" formControlName="undergradStartMonthNum" class="form-control form-control-sm">
-                                          @for (month of gradMonths; track month) {
-                                            <option [value]="month.value">{{ month.label }}</option>
-                                          }
-                                        </select>
-                                      </div>
-                                    </div>
-                                    <div class="row">
-                                      <div class="4">&nbsp;&nbsp;&nbsp;&nbsp;</div>
-                                      <div class="col-4" style="padding: 0 2px 0 4px">
-                                        <label for="gradYear">Grad Year</label>
-                                        <select id="gradYear" formControlName="gradYear" class="form-control form-control-sm">
-                                          @for (year of gradYears; track year) {
-                                            <option [value]="year.value">{{ year.label }}</option>
-                                          }
-                                        </select>
-                                      </div>
-                                      <div class="col-4" style="padding: 0 2px 0 4px">
-                                        <label for="gradMonthNum">Grad Month</label>
-                                        <select id="gradMonthNum" formControlName="gradMonthNum" class="form-control form-control-sm">
-                                          @for (month of gradMonths; track month) {
-                                            <option [value]="month.value">{{ month.label }}</option>
-                                          }
-                                        </select>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                              <!--
+                  <label for="curp">CURP</label>
+                  <input id="curp" formControlName="curp" class="form-control form-control-sm" placeholder="" />
+                  <label for="rfc">RFC</label>
+                  <input id="rfc" formControlName="rfc" type="text" class="form-control form-control-sm"
+                    placeholder="" />
+                  <label for="prepaId">Prepa</label>
+                  @if (prepas$ | async; as prepas) {
+                  <div>
+                    <select id="prepaId" formControlName="prepaId" class="form-control form-control-sm">
+                      @for (status of prepas; track status) {
+                      <option [value]="status.value">{{ status.label }}</option>
+                      }
+                    </select>
+                  </div>
+                  }
+                  <div>
+                    <label>Undergrad</label>
+                  </div>
+                  <div class="form-group bordered">
+                    <label for="universityId">University</label>
+                    @if (universities$ | async; as universities) {
+                    <div>
+                      <select id="universityId" formControlName="universityId" class="form-control form-control-sm">
+                        @for (status of universities; track status) {
+                        <option [value]="status.value">{{ status.label }}</option>
+                        }
+                      </select>
+                    </div>
+                    }
+                    <label for="universityGradeMonthId">Academic Year / Grade Months</label>
+                    @if (universityGradeMonths$ | async; as universityGradeMonths) {
+                    <div>
+                      <select id="universityGradeMonthId" formControlName="universityGradeMonthId"
+                        class="form-control form-control-sm">
+                        @for (status of universityGradeMonths; track status) {
+                        <option [value]="status.value">
+                          {{ status.label }}
+                        </option>
+                        }
+                      </select>
+                    </div>
+                    }
+                    `
+                    <label for="major">Major</label>
+                    <input id="major" formControlName="major" type="text" class="form-control form-control-sm"
+                      placeholder="" />
+                    <div class="row">
+                      <div class="4">&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                      <div class="col-4" style="padding: 0 2px 0 4px">
+                        <label for="undergradStartYear">Start Year</label>
+                        <select id="undergradStartYear" formControlName="undergradStartYear"
+                          class="form-control form-control-sm">
+                          @for (year of gradYears; track year) {
+                          <option [value]="year.value">{{ year.label }}</option>
+                          }
+                        </select>
+                      </div>
+                      <div class="col-4" style="padding: 0 2px 0 4px">
+                        <label for="undergradStartMonthNum">Start Month</label>
+                        <select id="undergradStartMonthNum" formControlName="undergradStartMonthNum"
+                          class="form-control form-control-sm">
+                          @for (month of gradMonths; track month) {
+                          <option [value]="month.value">{{ month.label }}</option>
+                          }
+                        </select>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="4">&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                      <div class="col-4" style="padding: 0 2px 0 4px">
+                        <label for="gradYear">Grad Year</label>
+                        <select id="gradYear" formControlName="gradYear" class="form-control form-control-sm">
+                          @for (year of gradYears; track year) {
+                          <option [value]="year.value">{{ year.label }}</option>
+                          }
+                        </select>
+                      </div>
+                      <div class="col-4" style="padding: 0 2px 0 4px">
+                        <label for="gradMonthNum">Grad Month</label>
+                        <select id="gradMonthNum" formControlName="gradMonthNum" class="form-control form-control-sm">
+                          @for (month of gradMonths; track month) {
+                          <option [value]="month.value">{{ month.label }}</option>
+                          }
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
                               COLUMN 2
-                              -->
-                              <div class="col">
-                                <div class="row">
-                                  <div class="col-6" style="padding: 0 2px 0 4px">
-                                    <label for="educationalLevelId">Educational Level</label>
-                                    <select
-                                      id="educationalLevelId"
-                                      formControlName="educationalLevelId"
-                                      class="form-control form-control-sm">
-                                      @for (type of schoolTypes; track type) {
-                                        <option [value]="type.value">{{ type.label }}</option>
-                                      }
-                                    </select>
-                                    <label for="joinedFromId">Joined From</label>
-                                    <select id="joinedFromId" formControlName="joinedFromId" class="form-control form-control-sm">
-                                      @for (status of schoolTypes; track status) {
-                                        <option [value]="status.value">{{ status.label }}</option>
-                                      }
-                                    </select>
-                                    <label for="probationStartDate">Probation Start Dt</label>
-                                    <input
-                                      id="probationStartDate"
-                                      formControlName="probationStartDate"
-                                      class="form-control form-control-sm"
-                                      placeholder="yyyy-mm-dd" />
-                                      <label for="mentorAssignedDate">Mentor Assigned Dt</label>
-                                      <input
-                                        id="mentorAssignedDate"
-                                        formControlName="mentorAssignedDate"
-                                        class="form-control form-control-sm"
-                                        placeholder="yyyy-mm-dd" />
-                                        <label for="gender">Gender</label>
-                                        <select id="gender" formControlName="gender" class="form-control form-control-sm">
-                                          @for (gender of genders; track gender) {
-                                            <option [value]="gender.value">{{ gender.label }}</option>
-                                          }
-                                        </select>
-                                        <label for="bankAccount">Bank Account</label>
-                                        <input
-                                          id="bankAccount"
-                                          formControlName="bankAccount"
-                                          type="text"
-                                          class="form-control form-control-sm"
-                                          placeholder="" />
-                                        </div>
-                                        <div class="col-6" style="padding: 0 2px 0 px">
-                                          <label for="statusId">Status</label>
-                                          <select id="statusId" formControlName="statusId" class="form-control form-control-sm">
-                                            @for (status of studentStatuses; track status) {
-                                              <option [value]="status.value">{{ status.label }}</option>
-                                            }
-                                          </select>
-                                          <label for="yearJoinedJa">YearJoinedJA</label>
-                                          <select id="yearJoinedJa" formControlName="yearJoinedJa" class="form-control form-control-sm">
-                                            @for (year of joinedYears; track year) {
-                                              <option [value]="year.value">{{ year.label }}</option>
-                                            }
-                                          </select>
-                                          <label for="probationEndDate">Probation End Dt</label>
-                                          <input
-                                            id="probationEndDate"
-                                            formControlName="probationEndDate"
-                                            class="form-control form-control-sm"
-                                            placeholder="yyyy-mm-dd" />
-                                            <label for="mentoringEndDate">Mentoring End Dt</label>
-                                            <input
-                                              id="mentoringEndDate"
-                                              formControlName="mentoringEndDate"
-                                              class="form-control form-control-sm"
-                                              placeholder="yyyy-mm-dd" />
-                                              <label for="studentId">StudentId</label>
-                                              <input
-                                                id="studentId"
-                                                formControlName="studentId"
-                                                readonly
-                                                class="form-control form-control-sm"
-                                                type="text" />
-                                                <label for="pcsId">PCSID</label>
-                                                <input
-                                                  id="pcsId"
-                                                  formControlName="pcsId"
-                                                  type="text"
-                                                  class="form-control form-control-sm"
-                                                  placeholder="" />
-                                                </div>
-                                                <label for="studentGUId">StudentGUId</label>
-                                                <input
-                                                  id="studentGUId"
-                                                  formControlName="studentGUId"
-                                                  readonly
-                                                  class="form-control form-control-sm"
-                                                  type="text" />
-                                                </div>
-                                                <div class="row">
-                                                  <div>
-                                                    <label>Masters</label>
-                                                  </div>
-                                                  <div class="form-group bordered">
-                                                    <label for="mastersUniversityId">University</label>
-                                                    @if (universities$ | async; as universities) {
-                                                      <div>
-                                                        <select id="mastersUniversityId" formControlName="mastersUniversityId" class="form-control form-control-sm">
-                                                          @for (status of universities; track status) {
-                                                            <option [value]="status.value">{{ status.label }}</option>
-                                                          }
-                                                        </select>
-                                                      </div>
-                                                    }
-                                                    <label for="mastersUniversityGradeMonthId">Academic Year / Grade Months</label>
-                                                    @if (universityGradeMonths$ | async; as universityGradeMonths) {
-                                                      <div>
-                                                        <select
-                                                          id="mastersUniversityGradeMonthId"
-                                                          formControlName="mastersUniversityGradeMonthId"
-                                                          class="form-control form-control-sm">
-                                                          undergrad   @for (status of universityGradeMonths; track status) {
-                                                          <option [value]="status.value">
-                                                            {{ status.label }}
-                                                          </option>
-                                                        }
-                                                      </select>
-                                                    </div>
-                                                  }
-                                                  `
-                                                  <label for="mastersFieldOfStudy">Field of Study</label>
-                                                  <input
-                                                    id="mastersFieldOfStudy"
-                                                    formControlName="mastersFieldOfStudy"
-                                                    type="text"
-                                                    class="form-control form-control-sm"
-                                                    placeholder="" />
-                                                    <div class="row">
-                                                      <div class="4">&nbsp;&nbsp;&nbsp;&nbsp;</div>
-                                                      <div class="col-4" style="padding: 0 2px 0 4px">
-                                                        <label for="mastersStartYear">Start Year</label>
-                                                        <select id="mastersStartYear" formControlName="mastersStartYear" class="form-control form-control-sm">
-                                                          @for (year of gradYears; track year) {
-                                                            <option [value]="year.value">{{ year.label }}</option>
-                                                          }
-                                                        </select>
-                                                      </div>
-                                                      <div class="col-4" style="padding: 0 2px 0 4px">
-                                                        <label for="mastersStartMonthNum">Start Month</label>
-                                                        <select id="mastersStartMonthNum" formControlName="mastersStartMonthNum" class="form-control form-control-sm">
-                                                          @for (month of gradMonths; track month) {
-                                                            <option [value]="month.value">{{ month.label }}</option>
-                                                          }
-                                                        </select>
-                                                      </div>
-                                                    </div>
-                                                    <div class="row">
-                                                      <div class="4">&nbsp;&nbsp;&nbsp;&nbsp;</div>
-                                                      <div class="col-4" style="padding: 0 2px 0 4px">
-                                                        <label for="mastersGradYear">Grad Year</label>
-                                                        <select id="mastersGradYear" formControlName="mastersGradYear" class="form-control form-control-sm">
-                                                          @for (year of gradYears; track year) {
-                                                            <option [value]="year.value">{{ year.label }}</option>
-                                                          }
-                                                        </select>
-                                                      </div>
-                                                      <div class="col-4" style="padding: 0 2px 0 4px">
-                                                        <label for="mastersGradMonthNum">Grad Month</label>
-                                                        <select id="mastersGradMonthNum" formControlName="mastersGradMonthNum" class="form-control form-control-sm">
-                                                          @for (month of gradMonths; track month) {
-                                                            <option [value]="month.value">{{ month.label }}</option>
-                                                          }
-                                                        </select>
-                                                      </div>
-                                                    </div>
-                                                  </div>
-                                                </div>
-                                              </div>
-                                              <!--
-                                              COLUMN 3
-                                              -->
-                                              <div class="col">
-                                                <div class="form-group">
-                                                  <label for="sponsorGroupId">Sponsor Group</label>
-                                                  @if (sponsorGroups$ | async; as sponsorGroups) {
-                                                    <div>
-                                                      <select id="sponsorGroupId" formControlName="sponsorGroupId" class="form-control form-control-sm">
-                                                        @for (sponsor of sponsorGroups; track sponsor) {
-                                                          <option [value]="sponsor.value">{{ sponsor.label }}
-                                                          </option>
-                                                        }
-                                                      </select>
-                                                    </div>
-                                                  }
-                                                  <app-sponsor-group-members [sponsorGroupId]="sponsorGroupIdParam"> </app-sponsor-group-members>
-                                                  <label for="mentorGUId">Mentor: </label>
-                                                  @if (mentors$ | async; as mentors) {
-                                                    <div>
-                                                      <select
-                                                        id="mentorGUId"
-                                                        formControlName="mentorGUId"
-                                                        (change)="setMentorStartDate()"
-                                                        class="form-control input-sm">
-                                                        @for (mentor of mentors; track mentor) {
-                                                          <option [value]="mentor.value">{{ mentor.label }}</option>
-                                                        }
-                                                      </select>
-                                                      <span class="btn btn-primary btn-sm" data-cy="goto-mentor"
-                                                        (click)="gotoMentor(student.mentorGUId)">Mentor Profile &gt;&gt;
-                                                      </span>
-                                                      &nbsp;
-                                                      <span class="btn btn-primary btn-sm" data-cy="refresh-mentors" (click)="refreshMentors()">Refresh
-                                                        List
-                                                      </span>
-                                                    </div>
-                                                  }
-                                                  <label for="mentoringComment">Mentoring Comment: </label>
-                                                  <div>
-                                                    <input
-                                                      id="mentoringComment"
-                                                      formControlName="mentoringComment"
-                                                      type="text"
-                                                      class="form-control form-control-sm"
-                                                      placeholder="" />
-                                                    </div>
-                                                    <table>
-                                                      <tr>
-                                                        <td>
-                                                          <app-student-grades-status
-                                                            [gpaStatus]="studentDTO.gpaStatus"
-                                                            [gradeRptStatus]="studentDTO.gradeRptStatus">
-                                                          </app-student-grades-status>
-                                                        </td>
-                                                        <td>
-                                                          &nbsp;&nbsp;&nbsp;
-                                                        </td>
-                                                        <td>
-                                                          <app-student-ssr-status
-                                                            [reportStatus]="studentDTO.timelySSRStatus">
-                                                          </app-student-ssr-status>
-                                                        </td>
-                                                      </tr>
-                                                    </table>
-                                                    <app-student-mr-status
-                                                      [reportStatus]="studentDTO.timelyMentorReportStatus"
-                                                      [emojiPathname]="emojiPathname">
-                                                    </app-student-mr-status>
-                                                  </div>
-                                                  <div class="form-group">
-                                                    <label for="tituloIssuedDate">Titulo Issued Date</label>
-                                                    <input
-                                                      id="tituloIssuedDate"
-                                                      formControlName="tituloIssuedDate"
-                                                      type="text"
-                                                      class="form-control form-control-sm"
-                                                      placeholder="" />
-                                                      <label for="tituloUploadedDate">Titulo Uploaded Date</label>
-                                                      <input
-                                                        id="tituloUploadedDate"
-                                                        formControlName="tituloUploadedDate"
-                                                        type="text"
-                                                        class="form-control form-control-sm"
-                                                        placeholder="" />
-                                                        <!-- <div> -->
-                                                        <span class="btn btn-primary btn-sm" data-cy="upload-titulo"
-                                                          (click)="uploadTitulo(student.studentGUId, student.gradYear)">
-                                                          Upload Titulo &gt;&gt;
-                                                        </span>
-                                                        <span>&nbsp;&nbsp;</span>
-                                                        <span [hidden]="!student.tituloUploadedDate" class="btn btn-primary btn-sm" data-cy="view-titulo"
-                                                          (click)="viewTitulo(student.studentGUId, student.gradYear)">View Titulo &gt;&gt;
-                                                        </span>
-                                                      </div>
-                                                    <!-- </div> -->
-                                                    <!-- <div class="form-group"> -->
-                                                    <label for="cedula">Cedula Number</label>
-                                                    <input
-                                                      id="cedula"
-                                                      formControlName="cedula"
-                                                      type="text"
-                                                      class="form-control form-control-sm"
-                                                      placeholder="" />
-                                                    </div>
-                                                  </div>
-                                                  <!-- submit button row-->
-                                                  <div class="row">
-                                                    <div class="form-group">
-                                                      <button class="btn btn-primary" (click)="saveMyForm()" [disabled]="!myForm.valid">Save</button>
-                                                      <span class="red" [hidden]="myForm.valid">All required fields must be filled in before saving.</span>
-                                                    </div>
-                                                  </div>
-                                                </form>
-                                              </div>
-                                            }
-                                          }
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <!-- <div>
+                              
+              <div class="col">
+                <div class="row">
+                  <div class="col-6" style="padding: 0 2px 0 4px">
+                    <label for="educationalLevelId">Educational Level</label>
+                    <select id="educationalLevelId" formControlName="educationalLevelId"
+                      class="form-control form-control-sm">
+                      @for (type of schoolTypes; track type) {
+                      <option [value]="type.value">{{ type.label }}</option>
+                      }
+                    </select>
+                    <label for="joinedFromId">Joined From</label>
+                    <select id="joinedFromId" formControlName="joinedFromId" class="form-control form-control-sm">
+                      @for (status of schoolTypes; track status) {
+                      <option [value]="status.value">{{ status.label }}</option>
+                      }
+                    </select>
+                    <label for="probationStartDate">Probation Start Dt</label>
+                    <input id="probationStartDate" formControlName="probationStartDate"
+                      class="form-control form-control-sm" placeholder="yyyy-mm-dd" />
+                    <label for="mentorAssignedDate">Mentor Assigned Dt</label>
+                    <input id="mentorAssignedDate" formControlName="mentorAssignedDate"
+                      class="form-control form-control-sm" placeholder="yyyy-mm-dd" />
+                    <label for="gender">Gender</label>
+                    <select id="gender" formControlName="gender" class="form-control form-control-sm">
+                      @for (gender of genders; track gender) {
+                      <option [value]="gender.value">{{ gender.label }}</option>
+                      }
+                    </select>
+                    <label for="bankAccount">Bank Account</label>
+                    <input id="bankAccount" formControlName="bankAccount" type="text"
+                      class="form-control form-control-sm" placeholder="" />
+                  </div>
+                  <div class="col-6" style="padding: 0 2px 0 px">
+                    <label for="statusId">Status</label>
+                    <select id="statusId" formControlName="statusId" class="form-control form-control-sm">
+                      @for (status of studentStatuses; track status) {
+                      <option [value]="status.value">{{ status.label }}</option>
+                      }
+                    </select>
+                    <label for="yearJoinedJa">YearJoinedJA</label>
+                    <select id="yearJoinedJa" formControlName="yearJoinedJa" class="form-control form-control-sm">
+                      @for (year of joinedYears; track year) {
+                      <option [value]="year.value">{{ year.label }}</option>
+                      }
+                    </select>
+                    <label for="probationEndDate">Probation End Dt</label>
+                    <input id="probationEndDate" formControlName="probationEndDate" class="form-control form-control-sm"
+                      placeholder="yyyy-mm-dd" />
+                    <label for="mentoringEndDate">Mentoring End Dt</label>
+                    <input id="mentoringEndDate" formControlName="mentoringEndDate" class="form-control form-control-sm"
+                      placeholder="yyyy-mm-dd" />
+                    <label for="studentId">StudentId</label>
+                    <input id="studentId" formControlName="studentId" readonly class="form-control form-control-sm"
+                      type="text" />
+                    <label for="pcsId">PCSID</label>
+                    <input id="pcsId" formControlName="pcsId" type="text" class="form-control form-control-sm"
+                      placeholder="" />
+                  </div>
+                  <label for="studentGUId">StudentGUId</label>
+                  <input id="studentGUId" formControlName="studentGUId" readonly class="form-control form-control-sm"
+                    type="text" />
+                </div>
+                <div class="row">
+                  <div>
+                    <label>Masters</label>
+                  </div>
+                  <div class="form-group bordered">
+                    <label for="mastersUniversityId">University</label>
+                    @if (universities$ | async; as universities) {
+                    <div>
+                      <select id="mastersUniversityId" formControlName="mastersUniversityId"
+                        class="form-control form-control-sm">
+                        @for (status of universities; track status) {
+                        <option [value]="status.value">{{ status.label }}</option>
+                        }
+                      </select>
+                    </div>
+                    }
+                    <label for="mastersUniversityGradeMonthId">Academic Year / Grade Months</label>
+                    @if (universityGradeMonths$ | async; as universityGradeMonths) {
+                    <div>
+                      <select id="mastersUniversityGradeMonthId" formControlName="mastersUniversityGradeMonthId"
+                        class="form-control form-control-sm">
+                        undergrad @for (status of universityGradeMonths; track status) {
+                        <option [value]="status.value">
+                          {{ status.label }}
+                        </option>
+                        }
+                      </select>
+                    </div>
+                    }
+                    `
+                    <label for="mastersFieldOfStudy">Field of Study</label>
+                    <input id="mastersFieldOfStudy" formControlName="mastersFieldOfStudy" type="text"
+                      class="form-control form-control-sm" placeholder="" />
+                    <div class="row">
+                      <div class="4">&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                      <div class="col-4" style="padding: 0 2px 0 4px">
+                        <label for="mastersStartYear">Start Year</label>
+                        <select id="mastersStartYear" formControlName="mastersStartYear"
+                          class="form-control form-control-sm">
+                          @for (year of gradYears; track year) {
+                          <option [value]="year.value">{{ year.label }}</option>
+                          }
+                        </select>
+                      </div>
+                      <div class="col-4" style="padding: 0 2px 0 4px">
+                        <label for="mastersStartMonthNum">Start Month</label>
+                        <select id="mastersStartMonthNum" formControlName="mastersStartMonthNum"
+                          class="form-control form-control-sm">
+                          @for (month of gradMonths; track month) {
+                          <option [value]="month.value">{{ month.label }}</option>
+                          }
+                        </select>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="4">&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                      <div class="col-4" style="padding: 0 2px 0 4px">
+                        <label for="mastersGradYear">Grad Year</label>
+                        <select id="mastersGradYear" formControlName="mastersGradYear"
+                          class="form-control form-control-sm">
+                          @for (year of gradYears; track year) {
+                          <option [value]="year.value">{{ year.label }}</option>
+                          }
+                        </select>
+                      </div>
+                      <div class="col-4" style="padding: 0 2px 0 4px">
+                        <label for="mastersGradMonthNum">Grad Month</label>
+                        <select id="mastersGradMonthNum" formControlName="mastersGradMonthNum"
+                          class="form-control form-control-sm">
+                          @for (month of gradMonths; track month) {
+                          <option [value]="month.value">{{ month.label }}</option>
+                          }
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col">
+                <div class="form-group">
+                  <label for="sponsorGroupId">Sponsor Group</label>
+                  @if (sponsorGroups$ | async; as sponsorGroups) {
+                  <div>
+                    <select id="sponsorGroupId" formControlName="sponsorGroupId" class="form-control form-control-sm">
+                      @for (sponsor of sponsorGroups; track sponsor) {
+                      <option [value]="sponsor.value">{{ sponsor.label }}
+                      </option>
+                      }
+                    </select>
+                  </div>
+                  }
+                  <app-sponsor-group-members [sponsorGroupId]="sponsorGroupIdParam"> </app-sponsor-group-members>
+                  <label for="mentorGUId">Mentor: </label>
+                  @if (mentors$ | async; as mentors) {
+                  <div>
+                    <select id="mentorGUId" formControlName="mentorGUId" (change)="setMentorStartDate()"
+                      class="form-control input-sm">
+                      @for (mentor of mentors; track mentor) {
+                      <option [value]="mentor.value">{{ mentor.label }}</option>
+                      }
+                    </select>
+                    <span class="btn btn-primary btn-sm" data-cy="goto-mentor"
+                      (click)="gotoMentor(student.mentorGUId)">Mentor Profile &gt;&gt;
+                    </span>
+                    &nbsp;
+                    <span class="btn btn-primary btn-sm" data-cy="refresh-mentors" (click)="refreshMentors()">Refresh
+                      List
+                    </span>
+                  </div>
+                  }
+                  <label for="mentoringComment">Mentoring Comment: </label>
+                  <div>
+                    <input id="mentoringComment" formControlName="mentoringComment" type="text"
+                      class="form-control form-control-sm" placeholder="" />
+                  </div>
+                  <table>
+                    <tr>
+                      <td>
+                        <app-student-grades-status [gpaStatus]="studentDTO.gpaStatus"
+                          [gradeRptStatus]="studentDTO.gradeRptStatus">
+                        </app-student-grades-status>
+                      </td>
+                      <td>
+                        &nbsp;&nbsp;&nbsp;
+                      </td>
+                      <td>
+                        <app-student-ssr-status [reportStatus]="studentDTO.timelySSRStatus">
+                        </app-student-ssr-status>
+                      </td>
+                    </tr>
+                  </table>
+                  <app-student-mr-status [reportStatus]="studentDTO.timelyMentorReportStatus"
+                    [emojiPathname]="emojiPathname">
+                  </app-student-mr-status>
+                </div>
+                <div class="form-group">
+                  <label for="tituloIssuedDate">Titulo Issued Date</label>
+                  <input id="tituloIssuedDate" formControlName="tituloIssuedDate" type="text"
+                    class="form-control form-control-sm" placeholder="" />
+                  <label for="tituloUploadedDate">Titulo Uploaded Date</label>
+                  <input id="tituloUploadedDate" formControlName="tituloUploadedDate" type="text"
+                    class="form-control form-control-sm" placeholder="" />
+                  <span class="btn btn-primary btn-sm" data-cy="upload-titulo"
+                    (click)="uploadTitulo(student.studentGUId, student.gradYear)">
+                    Upload Titulo &gt;&gt;
+                  </span>
+                  <span>&nbsp;&nbsp;</span>
+                  <span [hidden]="!student.tituloUploadedDate" class="btn btn-primary btn-sm" data-cy="view-titulo"
+                    (click)="viewTitulo(student.studentGUId, student.gradYear)">View Titulo &gt;&gt;
+                  </span>
+                </div>
+
+                <label for="cedula">Cedula Number</label>
+                <input id="cedula" formControlName="cedula" type="text" class="form-control form-control-sm"
+                  placeholder="" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group">
+                <button class="btn btn-primary" (click)="saveMyForm()" [disabled]="!myForm.valid">Save</button>
+                <span class="red" [hidden]="myForm.valid">All required fields must be filled in before saving.</span>
+              </div>
+            </div>
+          </form>
+        </div>
+        }
+        }
+      </div>
+    </div>
+  </div>
+</div>-->
+<!-- <div>
                                   Valid: {{ myForm.valid }}
                                   Value: {{ myForm.value | json }}
                                   Errors: {{ myForm.errors | json }}

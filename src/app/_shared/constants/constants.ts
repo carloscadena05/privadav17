@@ -61,10 +61,10 @@ const genders: SELECTITEM[] = [
 ];
 
 const emojis = [ // values are set in the RadioButton html
-  '/assets/images/needsAttention.jpg',  // -1
-  '/assets/images/thumbsUp.jpg',  // 0
-  '/assets/images/celebrate.jpg', // 3
-  '/assets/images/concerned.jpg', // 2
+  '/assets/images/needsAttention.svg',  // -1
+  '/assets/images/thumbsUp.svg',  // 0
+  '/assets/images/celebrate.svg', // 3
+  '/assets/images/concerned.svg', // 2
   '/assets/images/NA.jpg'         // 4
 ];
 

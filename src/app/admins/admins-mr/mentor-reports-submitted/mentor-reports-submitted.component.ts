@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { MentorReport2DataService } from 'src/app/_shared/data/mentor-report2-data.service';
 import { SELECTITEM } from 'src/app/_shared/interfaces/SELECTITEM';
@@ -7,10 +10,10 @@ import { MentorReportSubmittedCount } from 'src/app/_shared/models/mentor-report
 import { ColumnSortService } from 'src/app/_shared/services/column-sort.service';
 
 @Component({
-    selector: 'app-mr-submitted-count',
-    templateUrl: './mentor-reports-submitted.component.html',
-    styleUrls: ['./mentor-reports-submitted.component.scss'],
-    standalone: false
+  selector: 'app-mr-submitted-count',
+  templateUrl: './mentor-reports-submitted.component.html',
+  styleUrls: ['./mentor-reports-submitted.component.scss'],
+  standalone: false
 })
 export class MentorReportsSubmittedComponent implements OnInit {
   reportTypes: SELECTITEM[];
@@ -20,6 +23,11 @@ export class MentorReportsSubmittedComponent implements OnInit {
   successMessage: string;
   sortCriteria: SORTCRITERIA;
 
+  displayedColumns: string[] = ['mentorName', 'studentName', 'mentorAssignedDate', 'submittedCount', 'latestDate', 'mentoringComment'];
+  dataSource: MatTableDataSource<MentorReportSubmittedCount>;
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
   constructor(
     public sqlReports: MentorReport2DataService,
     private columnSorter: ColumnSortService,
@@ -44,6 +52,11 @@ https://plnkr.co/edit/DITVzCSqHHB1uNrTxFit?p=info
       (data) => {
         this.mentorReportSubmittedCounts = data;
         console.log(this.mentorReportSubmittedCounts[0]);
+        this.dataSource = new MatTableDataSource(data);
+        setTimeout(() => {
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
+        }, 100);
       },
       (err) => {
         this.errorMessage = err;
@@ -65,7 +78,7 @@ https://plnkr.co/edit/DITVzCSqHHB1uNrTxFit?p=info
   // }
 
   gotoMember(memberGUId: string) {
-    const link = [ '/admins/members/member/', { guid: memberGUId } ];
+    const link = ['/admins/members/member/', { guid: memberGUId }];
     console.log('navigating to ' + link);
     this.router.navigate(link);
   }
@@ -83,5 +96,12 @@ https://plnkr.co/edit/DITVzCSqHHB1uNrTxFit?p=info
     this.router.navigate(link);
   }
 
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
 
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
 }

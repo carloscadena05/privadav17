@@ -6,19 +6,20 @@
             <td mat-cell *matCellDef="let univ; let i = index"> {{ (paginator?.pageSize * paginator?.pageIndex) + (i + 1) }} </td>
           </ng-container> -->
 
-    <ng-container matColumnDef="requestSubStatus">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> SubStatus </th>
-      <td mat-cell *matCellDef="let request"> {{request?.requestSubStatus }} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="assignedToName">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Assigned To </th>
-      <td mat-cell *matCellDef="let request"> {{request?.assignedToName }} </td>
-    </ng-container>
-
     <ng-container matColumnDef="studentName">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Student </th>
-      <td mat-cell *matCellDef="let request"> {{request?.studentName }} </td>
+      <td mat-cell *matCellDef="let request">
+        <div class="flex gap-x-2 items-center cursor-pointer">
+          <img [src]="'https://privada.jovenesadelante.org/' + request?.photoUrl.substring(9)" alt=""
+            class="h-10 rounded-md duration-300 student-photo">
+          <span (click)="gotoStudent(request.studentGUId)"
+            class="text-primary font-medium !capitalize hover:underline duration-300">
+            {{ request?.studentName }}
+            <br class="h-0">
+            <span class="text-slate-500 !text-xs">{{ request?.major }} | {{request?.universityAbbrev}}</span>
+          </span>
+        </div>
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="subject">
@@ -32,23 +33,57 @@
       </td>
     </ng-container>
 
-    <ng-container matColumnDef="requesterName">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Requested By </th>
+    <ng-container matColumnDef="requester_assigned">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> From-To </th>
       <td mat-cell *matCellDef="let request">
-        {{ request.requesterName }}
-        <br />
-        {{ request.createDateTime | date }}
+        <div class="flex gap-x-1 items-center text-[#187ca8]">
+          {{ request.requesterName }}
+          <hugeicons-icon [icon]="ArrowRight04FreeIcons" [size]="24" color="#187ca8"
+            [strokeWidth]="1.5"></hugeicons-icon>
+          {{request?.assignedToName }}
+        </div>
+
       </td>
     </ng-container>
 
-    <ng-container matColumnDef="updaterName">
+    <ng-container matColumnDef="requestSubStatus">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> SubStatus </th>
+      <td mat-cell *matCellDef="let request">
+        <div class="mr-auto">
+          @switch(request?.requestStatusId) {
+          @case (2092) {
+          <div class="bg-blue-600/10 text-blue-600 rounded-lg p-2 flex gap-x-2 items-center">
+            <hugeicons-icon [icon]="SquareUnlock01FreeIcons" [size]="24" color="#2563eb"
+              [strokeWidth]="1.5"></hugeicons-icon>
+            {{request?.requestSubStatus}}
+          </div>
+          } @case (2104) {
+          <div class="bg-red-600/10 text-red-600 rounded-lg p-2 flex gap-x-2 items-center">
+            <hugeicons-icon [icon]="SquareLock01FreeIcons" [size]="24" color="#dc2626"
+              [strokeWidth]="1.5"></hugeicons-icon>
+            {{request?.requestSubStatus}}
+          </div>
+          }
+          }
+        </div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
+      <td mat-cell *matCellDef="let request"> {{ request.createDateTime | date }} </td>
+    </ng-container>
+
+
+
+    <!--     <ng-container matColumnDef="updaterName">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Updated By </th>
       <td mat-cell *matCellDef="let request">
         {{ request.updaterName }}
         <br />
         {{ request.lastUpdateDateTime | date }}
       </td>
-    </ng-container>
+    </ng-container> -->
 
     <ng-container matColumnDef="detail">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> </th>
@@ -77,8 +112,14 @@
 </div>
 
 <ng-template #selected_request>
-  <header mat-dialog-title> 
-    <h1 class="ja-big-title">Request for {{currentRequest.studentName}}</h1>
+  <header mat-dialog-title class="!flex gap-x-2 justify-start !mt-4">
+      <img [src]="'https://privada.jovenesadelante.org/' + currentRequest?.photoUrl.substring(9)" alt=""
+        class="h-16 rounded-md duration-300 student-photo">
+      <h1 class="ja-big-title flex flex-col">
+        Request for {{ currentRequest?.studentName }}
+        <br class="h-0">
+        <span class="text-slate-500 !text-sm">{{ currentRequest?.major }} | {{currentRequest?.universityAbbrev}}</span>
+      </h1>
   </header>
   <div mat-dialog-content>
     <p>

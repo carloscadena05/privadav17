@@ -1,6 +1,5 @@
-<div class="container mx-auto px-4">
+<!-- <div class="container mx-auto px-4">
   <div class="flex flex-col">
-    <!-- Tabs -->
     <div class="flex space-x-4 border-b">
       <button 
         class="py-2 px-4 border-b-2"
@@ -23,7 +22,6 @@
       </button>
     </div>
 
-    <!-- Tab Content -->
     <div class="mt-4">
       <div *ngIf="twcss_activeTab === 'review'">
         <app-mr-summary-tracking></app-mr-summary-tracking>
@@ -33,7 +31,16 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
+
+<mat-tab-group dynamicHeight mat-stretch-tabs="false" mat-align-tabs="center">
+  <mat-tab label="Mentor Report Review">
+    <app-mr-summary-tracking></app-mr-summary-tracking>
+  </mat-tab>
+  <mat-tab label="Submitted Count">
+    <app-mr-submitted-count></app-mr-submitted-count>
+  </mat-tab>
+</mat-tab-group>
 
 <!-- <div class="row">
   <div class="col">

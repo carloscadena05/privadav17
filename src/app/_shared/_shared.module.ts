@@ -50,6 +50,9 @@ import { AlphaLanguagePipe } from './pipes/alpha-language-pipe';
 import { AlphaMonthPipe } from './pipes/alpha-month-pipe';
 import { EmptyStatusPipe } from './pipes/empty-status-pipe';
 import { MarkedPipe } from './pipes/marked-pipe';
+import { RemovePipe } from './pipes/remove-pipe';
+import { FilterPipe } from './pipes/filter-select';
+import { OrderStatusPipe } from './pipes/order-status-pipe';
 import { TrimGuidPipe } from './pipes/trim-guid-pipe';
 import { TruncateDatePipe } from './pipes/truncate-date-pipe';
 import { UnsafeHtmlPipe } from './pipes/unsafe-html-pipe';
@@ -64,6 +67,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { HugeiconsIconComponent } from '@hugeicons/angular';
+import { MatSelectModule } from '@angular/material/select';
 /**
  * Do not specify provider's for modules that might be imported by a lazy loaded module.
  */
@@ -73,7 +77,7 @@ import { HugeiconsIconComponent } from '@hugeicons/angular';
     CommonModule, RouterModule, ReactiveFormsModule, FormsModule,
     /* NgbModule, */ NgxFileDropModule, SweetAlert2Module, HugeiconsIconComponent, MatInputModule,
     MatFormFieldModule, MatTableModule, MatPaginatorModule, MatSortModule, MatDialogModule,
-    MatCheckboxModule, MatSlideToggleModule, MatAutocompleteModule
+    MatCheckboxModule, MatSlideToggleModule, MatAutocompleteModule, MatSelectModule
   ],
   declarations: [
     DisplayErrorsComponent,
@@ -118,6 +122,9 @@ import { HugeiconsIconComponent } from '@hugeicons/angular';
     StudentHistoryComponent,
     StudentPhotoComponent,
     EmptyStatusPipe,
+    RemovePipe,
+    FilterPipe,
+    OrderStatusPipe,
     GradesUploaderComponent,
     InscriptionUploaderComponent,
     TituloUploaderComponent,
@@ -169,6 +176,9 @@ import { HugeiconsIconComponent } from '@hugeicons/angular';
     MemberPhotoComponent,
     StudentPhotoComponent,
     EmptyStatusPipe,
+    RemovePipe,
+    FilterPipe,
+    OrderStatusPipe,
     GradesUploaderComponent,
     InscriptionUploaderComponent,
     TituloUploaderComponent,

@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 import { SponsorGroupDataService } from '../../data/sponsor-group-data.service';
 import { SponsorGroupMemberDTO } from '../../models/sponsor-group-memberDTO';
 import { SessionService } from '../../services/session.service';
+import { Cancel01FreeIcons } from '@hugeicons/core-free-icons';
 
 @Component({
     selector: 'app-sponsor-group-members',
@@ -23,6 +24,7 @@ export class SponsorGroupMembersComponent implements OnInit, OnChanges {
   @Input() sponsorGroupId: number;
   @Input() newMemberNotification: string;
 
+  Cancel01FreeIcons = Cancel01FreeIcons;
   constructor(public session: SessionService, private sponsorGroupData: SponsorGroupDataService) {
     console.log('in SponsorsForSponsorGroupComponent constructor with SponsorGroupId=' + this.sponsorGroupId);
   }

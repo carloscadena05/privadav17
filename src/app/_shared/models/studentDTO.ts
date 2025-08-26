@@ -80,6 +80,8 @@ export class StudentDTO {
     public undergradStartYear?: string,
     public undergradStartMonthNum?: number,
     public pcsId?: number,
-    public studentMastersUniversityID?: number
+    public studentMastersUniversityID?: number,
+    public mentorPhotoUrl?: string,
+    public mastersUniversityName?: string
   ) {}
 }
