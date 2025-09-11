@@ -36,6 +36,7 @@ export class MrConsolidatedComponent implements OnInit {
    currentGUId$ = this.store.select<string>(StudentState.getSelectedStudentGUId);
    selectedQRPeriod$ = this.store.select<string>(UIState.getSelectedQRPeriod);
    qrComponentsEditable$ = this.store.select<boolean>(UIState.getQRComponentsEditable);
+spanish: boolean = navigator.language.startsWith('es')
 
   constructor(
     public currRoute: ActivatedRoute,

@@ -1,95 +1,169 @@
-@if (errorMessage) {
-  <div class="alert alert-danger">{{errorMessage}}</div>
+<div class="flex flex-col gap-4 justify-center ja-bg-white p-4 rounded-2xl">
+  <div class="justify-between flex flex-wrap md:flex-nowrap">
+    <h1 class="ja-big-title inline"> Mentor Profile</h1>
+
+    <button class="ja-btn ja-btn-primary" (click)="saveMyForm()" [disabled]="!myForm.valid">
+      Save
+    </button>
+  </div>
+
+  @if (errorMessage) {
+  <span class="alert alert-danger">{{ errorMessage }}</span>
+  }
+  @if (successMessage) {
+  <span class="alert alert-success">{{ successMessage }}</span>
+  }
+  @if (isLoading) {
+  <app-loading-container> </app-loading-container>
+  } @else {
+  <form [formGroup]="myForm" class="flex flex-col">
+    <mat-form-field appearance="outline">
+      <mat-label>First Name(s)</mat-label>
+      <input type="text" matInput="" formControlName="firstNames">
+      <mat-error>
+        @if(myForm.get('firstNames')?.hasError('required')){
+        First name is required
+        } @else if (myForm.get('firstNames')?.hasError('maxlength')) {
+        Mentor First name cannot exceed 30 characters in length.
+        }
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Last Name(s)</mat-label>
+      <input type="text" matInput="" formControlName="lastNames">
+      <mat-error>
+        @if(myForm.get('lastNames')?.hasError('required')){
+        Last name is required
+        } @else if (myForm.get('lastNames')?.hasError('maxlength')) {
+        Mentor Last name cannot exceed 30 characters in length.
+        }
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>SMA Phone</mat-label>
+      <input type="text" matInput="" formControlName="smA_Phone">
+      <mat-error>
+        @if(myForm.get('smA_Phone')?.hasError('required')){
+        SMA Phone is required.
+        } @else if (myForm.get('smA_Phone')?.hasError('maxlength')) {
+        SMA Phone cannot exceed 13 characters in length.
+        } @else if (myForm.get('smA_Phone')?.hasError('minlength')){
+        SMA Phone must be at least 7 characters in length.
+        }
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Months Expected to be in SMA the coming year (e.g., 'All' or 'Jan,Feb,...')</mat-label>
+      <input type="text" matInput="" formControlName="monthsinSma">
+      <mat-error>
+        @if(myForm.get('monthsinSma')?.hasError('required')){
+        Months in SMA is required.
+        }
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Spanish Level:</mat-label>
+      <mat-select formControlName="spanishSkillLevelId" [compareWith]="value_select">
+        @for (status of languageStatuses; track status) {
+        <mat-option [value]="status.value">{{status.label}}</mat-option>
+        }
+      </mat-select>
+      <mat-error>
+        @if(myForm.get('value_select')?.hasError('required')){
+        Spanish Skill Level is required
+        }
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>English Level:</mat-label>
+      <mat-select formControlName="englishSkillLevelId" [compareWith]="value_select">
+        @for (status of languageStatuses; track status) {
+        <mat-option [value]="status.value">{{status.label}}</mat-option>
+        }
+      </mat-select>
+      <mat-error>
+        @if(myForm.get('value_select')?.hasError('required')){
+        English Skill Level is required
+        }
+      </mat-error>
+    </mat-form-field>
+  </form>
+  }
+</div>
+
+<!-- @if (errorMessage) {
+<div class="alert alert-danger">{{errorMessage}}</div>
 }
 @if (successMessage) {
-  <div class="alert alert-success">{{successMessage}}</div>
+<div class="alert alert-success">{{successMessage}}</div>
 }
 <div>
   @switch (isLoading) {
-    @case (true) {
-      <div class="text-center col-md-4 col-md-offset-4">
-        <app-loading-container>
-        </app-loading-container>
-      </div>
-    }
-    @case (false) {
-      <div>
-        <form [formGroup]="myForm" class="form-horizontal">
-          <label for="firstNames">First Name(s)</label>
-          <input id="firstNames"
-            formControlName="firstNames"
-            class="form-control form-control-sm" type="text" placeholder="First Name"
-            maxlength="30" />
-            <app-display-errors control="firstNames" class="red"
-                          [errors]="{
+  @case (true) {
+  <div class="text-center col-md-4 col-md-offset-4">
+    <app-loading-container>
+    </app-loading-container>
+  </div>
+  }
+  @case (false) {
+  <div>
+    <form [formGroup]="myForm" class="form-horizontal">
+      <label for="firstNames">First Name(s)</label>
+      <input id="firstNames" formControlName="firstNames" class="form-control form-control-sm" type="text"
+        placeholder="First Name" maxlength="30" />
+      <app-display-errors control="firstNames" class="red" [errors]="{
                 'required': 'First name is required',
                 'maxlength': 'Mentor First name cannot exceed 30 characters in length.'
               }"></app-display-errors>
-            <label for="lastNames">Last Name(s)</label>
-            <input id="lastNames"
-              formControlName="lastNames"
-              type="text" class="form-control form-control-sm" placeholder="Last Name"
-              maxlength="30" />
-              <app-display-errors control="lastNames" class="red"
-                          [errors]="{
+      <label for="lastNames">Last Name(s)</label>
+      <input id="lastNames" formControlName="lastNames" type="text" class="form-control form-control-sm"
+        placeholder="Last Name" maxlength="30" />
+      <app-display-errors control="lastNames" class="red" [errors]="{
                 'required': 'Last name is required',
                 'maxlength': 'Mentor Last name cannot exceed 30 characters in length.'
               }"></app-display-errors>
-              <label for="smA_Phone">SMA Phone</label>
-              <input id="smA_Phone"
-                formControlName="smA_Phone"
-                type="text" class="form-control form-control-sm" placeholder="Phone while in SMA: ###-###-####"
-                required maxlength="13" minlength="7" />
-                <app-display-errors control="smA_Phone" class="red"
-                          [errors]="{
+      <label for="smA_Phone">SMA Phone</label>
+      <input id="smA_Phone" formControlName="smA_Phone" type="text" class="form-control form-control-sm"
+        placeholder="Phone while in SMA: ###-###-####" required maxlength="13" minlength="7" />
+      <app-display-errors control="smA_Phone" class="red" [errors]="{
                 'required': 'SMA Phone is required.',
                 'minlength': 'SMA Phone must be at least 7 characters in length.',
                 'maxlength': 'SMA Phone cannot exceed 13 characters in length.'
               }"></app-display-errors>
-                <label for="monthsinSma">Months Expected to be in SMA the coming year (e.g., 'All' or 'Jan,
-                Feb,...')</label>
-                <input id="monthsinSma"
-                  formControlName="monthsinSma"
-                  type="text" class="form-control form-control-sm" placeholder="Months in SMA"
-                  required />
-                  <app-display-errors control="monthsinSma" class="red"
-                          [errors]="{
+      <label for="monthsinSma">Months Expected to be in SMA the coming year (e.g., 'All' or 'Jan,Feb,...')</label>
+      <input id="monthsinSma" formControlName="monthsinSma" type="text" class="form-control form-control-sm"
+        placeholder="Months in SMA" required />
+      <app-display-errors control="monthsinSma" class="red" [errors]="{
                 'required': 'Months in SMA is required.'
               }"></app-display-errors>
-                  <label for="spanishSkillLevelId">Spanish Level:</label>
-                  <select formControlName="spanishSkillLevelId"
-                    class="form-control form-control-sm">
-                    @for (status of languageStatuses; track status) {
-                      <option [value]="status.value">{{status.label}}</option>
-                    }
-                  </select>
-                  <app-display-errors control="spanishSkillLevelId" class="red"
-                          [errors]="{
+      <label for="spanishSkillLevelId">Spanish Level:</label>
+      <select formControlName="spanishSkillLevelId" class="form-control form-control-sm">
+        @for (status of languageStatuses; track status) {
+        <option [value]="status.value">{{status.label}}</option>
+        }
+      </select>
+      <app-display-errors control="spanishSkillLevelId" class="red" [errors]="{
                 'required': 'Spanish Skill Level is required'
               }"></app-display-errors>
-                  <label for="englishSkillLevelId">English Level:</label>
-                  <select formControlName="englishSkillLevelId"
-                    class="form-control form-control-sm">
-                    @for (status of languageStatuses; track status) {
-                      <option [value]="status.value">{{status.label}}</option>
-                    }
-                  </select>
-                  <app-display-errors control="englishSkillLevelId" class="red"
-                          [errors]="{
+      <label for="englishSkillLevelId">English Level:</label>
+      <select formControlName="englishSkillLevelId" class="form-control form-control-sm">
+        @for (status of languageStatuses; track status) {
+        <option [value]="status.value">{{status.label}}</option>
+        }
+      </select>
+      <app-display-errors control="englishSkillLevelId" class="red" [errors]="{
                 'required': 'English Skill Level is required'
               }"></app-display-errors>
-                  <div class="form-group">
-                    <div class="controls">
-                      <button class="btn btn-default"
-                        (click)="saveMyForm()"
-                        [disabled]="!myForm.valid">
-                        Save
-                      </button>
-                      <span class="red" [hidden]="myForm.valid">All required fields must be filled in before saving.</span>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            }
-          }
+      <div class="form-group">
+        <div class="controls">
+          <button class="btn btn-default" (click)="saveMyForm()" [disabled]="!myForm.valid">
+            Save
+          </button>
+          <span class="red" [hidden]="myForm.valid">All required fields must be filled in before saving.</span>
         </div>
+      </div>
+    </form>
+  </div>
+  }
+  }
+</div> -->

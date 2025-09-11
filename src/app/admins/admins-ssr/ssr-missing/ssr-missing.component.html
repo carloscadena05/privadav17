@@ -143,10 +143,10 @@
       @case (false) {
       <mat-form-field appearance="outline">
         <mat-label>Find</mat-label>
-        <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
+        <input matInput (keyup)="applyFilter($event)" #input>
       </mat-form-field>
 
-      <div class="mat-elevation-z8">
+      <div>
         <table mat-table [dataSource]="dataSource" matSort>
 
           <ng-container matColumnDef="name">

@@ -68,6 +68,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { HugeiconsIconComponent } from '@hugeicons/angular';
 import { MatSelectModule } from '@angular/material/select';
+import {MatExpansionModule} from '@angular/material/expansion';
+
 /**
  * Do not specify provider's for modules that might be imported by a lazy loaded module.
  */
@@ -77,7 +79,7 @@ import { MatSelectModule } from '@angular/material/select';
     CommonModule, RouterModule, ReactiveFormsModule, FormsModule,
     /* NgbModule, */ NgxFileDropModule, SweetAlert2Module, HugeiconsIconComponent, MatInputModule,
     MatFormFieldModule, MatTableModule, MatPaginatorModule, MatSortModule, MatDialogModule,
-    MatCheckboxModule, MatSlideToggleModule, MatAutocompleteModule, MatSelectModule
+    MatCheckboxModule, MatSlideToggleModule, MatAutocompleteModule, MatSelectModule,MatExpansionModule
   ],
   declarations: [
     DisplayErrorsComponent,

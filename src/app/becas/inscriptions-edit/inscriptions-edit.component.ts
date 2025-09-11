@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
@@ -17,11 +17,13 @@ import { StudentDTO } from '../../_shared/models/studentDTO';
 import { ColumnSortService } from '../../_shared/services/column-sort.service';
 import { SessionService } from '../../_shared/services/session.service';
 import { UrlService } from '../../_shared/services/url.service';
+import { PageEvent } from '@angular/material/paginator';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
-    templateUrl: './inscriptions-edit.component.html',
-    styleUrls: ['./inscriptions-edit.component.scss'],
-    standalone: false
+  templateUrl: './inscriptions-edit.component.html',
+  styleUrls: ['./inscriptions-edit.component.scss'],
+  standalone: false
 })
 export class InscriptionsEditComponent implements OnInit {
   myForm: UntypedFormGroup;
@@ -46,8 +48,16 @@ export class InscriptionsEditComponent implements OnInit {
     })
   );
 
-   currentGUId$ = this.store.select<string>(StudentState.getSelectedStudentGUId);
-   currentName$ = this.store.select<string>(StudentState.getSelectedStudentName);
+  currentGUId$ = this.store.select<string>(StudentState.getSelectedStudentGUId);
+  currentName$ = this.store.select<string>(StudentState.getSelectedStudentName);
+
+  displayedColumns = ["academicTermId", "inscriptionsEntryEndDate", "registrationFormSubmittedDate", "paymentReceiptSubmittedDate", "open", "confirmedById", "confirmedDate"]
+  page_size = 1;
+  current_page = 0;
+  total_items = 0;
+  paginated_items: any[] = [];
+  @ViewChild('documentation') myDialogTemplate!: TemplateRef<any>;
+
 
   constructor(
     public inscriptionData: InscriptionDataService,
@@ -58,7 +68,8 @@ export class InscriptionsEditComponent implements OnInit {
     private _fb: UntypedFormBuilder,
     public location: Location,
     public url: UrlService,
-    private store: Store
+    private store: Store,
+    private dialog: MatDialog
   ) {
     console.log('Hi from gradesEdit Ctrl controller function');
 
@@ -92,7 +103,7 @@ export class InscriptionsEditComponent implements OnInit {
     console.log(JSON.stringify(inscriptionDataRow));
     inscriptionFormRow.patchValue({
       academicTermId: inscriptionDataRow.academicTermId,
-     inscriptionsEntryEndDate: new TruncateDatePipe().transform('' + inscriptionDataRow.inscriptionsEntryEndDate),
+      inscriptionsEntryEndDate: new TruncateDatePipe().transform('' + inscriptionDataRow.inscriptionsEntryEndDate),
       confirmedById: inscriptionDataRow.confirmedById,
       confirmedDate: new TruncateDatePipe().transform('' + inscriptionDataRow.confirmedDate)
     });
@@ -105,6 +116,8 @@ export class InscriptionsEditComponent implements OnInit {
     this.updateInscriptionFormRow(inscriptionFormRow, gradeEntryDataRow);
     console.log('addGradeEntry: push new populated row intoFormArray');
     this.inscriptionFormRows().push(inscriptionFormRow);
+    console.log(this.myForm.value);
+
   }
 
   ngOnInit() {
@@ -137,6 +150,8 @@ export class InscriptionsEditComponent implements OnInit {
       this.inscriptionData.getInscriptionsForStudent(this.studentGUId).subscribe(
         (data) => {
           this.inscriptions = data;
+          console.log(this.inscriptions);
+
         },
         (err) => {
           this.errorMessage = err;
@@ -172,7 +187,7 @@ export class InscriptionsEditComponent implements OnInit {
     this.router.navigate(link);
   }
   isViewLinkHidden(imageSubmittedDate: any) {
-    return (imageSubmittedDate === '1900-01-01T00:00:00');
+    return (imageSubmittedDate == '1900-01-01T00:00:00') || !imageSubmittedDate || imageSubmittedDate == '' || imageSubmittedDate == null;
   }
   saveAllChangedEntries() {
     console.log('inscriptionData length is ' + this.inscriptions.length);
@@ -297,7 +312,7 @@ export class InscriptionsEditComponent implements OnInit {
     gradeEntryRow.markAsDirty();
   }
 
-  imageLoaded(dateLoaded: any){
+  imageLoaded(dateLoaded: any) {
     console.log('dateLoaded [' + dateLoaded + ']');
     return dateLoaded !== 'null';
   }
@@ -316,5 +331,71 @@ export class InscriptionsEditComponent implements OnInit {
     // ask if form is dirty and has not just been submitted
     console.log('hasChanges has form dirty ' + this.myForm.dirty);
     return this.myForm.dirty;
+  }
+
+  value_select(a: any, b: any): boolean {
+    return a == b;
+  }
+
+
+  open_documentation_dialog(data: Inscription): void {
+    this.dialog.open(this.myDialogTemplate, {
+      height: '75%',
+      width: '75%'
+    });
+    this.current_page = this.rows_with_evidence().findIndex((row: Inscription) => row.inscriptionId == data.inscriptionId)
+    this.updatePaginated_items();
+
+  }
+
+  rows_with_evidence() {
+    return this.inscriptions.filter((value: Inscription) => (!this.isViewLinkHidden(value.registrationFormSubmittedDate) || !this.isViewLinkHidden(value.paymentReceiptSubmittedDate)) && value.confirmedDate)
+  }
+
+  onPageChange(event: PageEvent) {
+    this.current_page = event.pageIndex;
+    this.page_size = event.pageSize;
+    this.updatePaginated_items();
+  }
+
+  updatePaginated_items() {
+    const startIndex = this.current_page * this.page_size;
+    const endIndex = startIndex + this.page_size;
+    this.paginated_items = this.rows_with_evidence().slice(startIndex, endIndex);
+  }
+
+  confirm_and_next(inscriptionId: string) {
+    this.current_page++;
+    this.updatePaginated_items()
+    let confirmed_evidence = this.rows_with_evidence().find((evidence: any) => evidence.inscriptionId == inscriptionId) as any;
+    confirmed_evidence.confirmedById = this.session.getUserId();
+    confirmed_evidence.confirmedDate = new Date()
+
+    this.inscriptionData.updateInscriptions(confirmed_evidence).subscribe(
+      (gradeRowData) => {
+        console.log('subscribe result in updateGradeRowData');
+        console.log(JSON.stringify(gradeRowData));
+        // need timeout to avoid "Expression has changed error"
+        window.setTimeout(() => {
+          this.successMessage = 'Changes were saved successfully.';
+        }, 0);
+        // const currRowFormGroup = this.inscriptionFormRows().controls[i] as UntypedFormGroup;
+        // this fails for some reason, and isn't needed because the update won't change any of these values
+        // this.updateGradeEntryRow(currRowFormGroup, gradeRowData);
+        // currRowFormGroup.markAsPristine();
+        // this.inscriptionFormRows().controls[i].get('confirmedDate')?.disable();
+        // this.successMessage = 'Changes were saved successfully.';
+        this.isLoading = false;
+        window.scrollTo(0, 0);
+        window.setTimeout(() => {
+          // console.log('clearing success message');
+          this.successMessage = '';
+        }, 3000);
+      },
+      () => {
+        this.errorMessage = 'Confirmed By must be selected. Also Turned-in Date be filled in';
+        this.isLoading = false;
+      }
+    );
   }
 }

@@ -11,6 +11,14 @@ import { InscriptionsEditComponent } from './inscriptions-edit/inscriptions-edit
 import { InscriptionsListComponent } from './inscriptions-list/inscriptions-list.component';
 import { PaymentsEditComponent } from './payments-edit/payments-edit.component';
 import { PaymentsListComponent } from './payments-list/payments-list.component';
+import { MatTableModule } from '@angular/material/table';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSelectModule } from '@angular/material/select';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialogModule } from '@angular/material/dialog';
+import { HugeiconsIconComponent } from '@hugeicons/angular';
 
 @NgModule({
   declarations: [
@@ -21,8 +29,20 @@ import { PaymentsListComponent } from './payments-list/payments-list.component';
     InscriptionsListComponent,
     InscriptionsEditComponent,
     PaymentsListComponent,
-    PaymentsEditComponent
+    PaymentsEditComponent,
   ],
-  imports: [CommonModule, AppSharedModule, BecasRoutingModule/* , NgbModule */]
+  imports: [CommonModule
+    , AppSharedModule
+    , BecasRoutingModule/* 
+    , NgbModule */
+    ,MatTableModule
+    ,MatInputModule
+    ,MatFormFieldModule
+    ,MatPaginatorModule
+    ,MatSelectModule
+    ,MatCheckboxModule
+    ,MatDialogModule
+    ,HugeiconsIconComponent
+  ]
 })
-export class BecasModule {}
+export class BecasModule { }

@@ -1,7 +1,15 @@
+<!-- 
 <nav>
   <a [routerLinkActive]="['active']" [routerLinkActiveOptions]="{ exact: true }" [routerLink]="['/becas']">Payments</a>
   <a [routerLinkActive]="['active']" [routerLink]="['/becas/inscriptions-list']">Inscriptions</a>
   <a [routerLinkActive]="['active']" [routerLink]="['/becas/grades-list']">Grades</a>
   <a [routerLinkActive]="['active']" [routerLink]="['/admins/student-reports/ssr-container']">StudentRpts-&gt;</a>
+</nav> -->
 
-</nav>
+<nav class="flex h-12 items-center justify-center gap-x-3 bg-secondary px-[5%]">
+  <a routerLinkActive="bg-white/20" [routerLink]="['/becas']" [routerLinkActiveOptions]="{ exact: true }" class="cursor-pointer rounded-lg px-2 font-medium text-slate-50 duration-300 hover:bg-white/10">Payments</a>
+  <a routerLinkActive="bg-white/20" [routerLink]="['/becas/inscriptions-list']" [routerLinkActiveOptions]="{ exact: true }" class="cursor-pointer rounded-lg px-2 font-medium text-slate-50 duration-300 hover:bg-white/10">Inscriptions</a>
+  <a routerLinkActive="bg-white/20" [routerLink]="['/becas/grades-list']" [routerLinkActiveOptions]="{ exact: true }" class="cursor-pointer rounded-lg px-2 font-medium text-slate-50 duration-300 hover:bg-white/10">Grades</a>
+  <a routerLinkActive="bg-white/20" [routerLink]="['/admins/student-reports/ssr-container']" [routerLinkActiveOptions]="{ exact: true }" class="cursor-pointer rounded-lg px-2 font-medium text-slate-50 duration-300 hover:bg-white/10">StudentRpts</a>
+  </nav>
+  

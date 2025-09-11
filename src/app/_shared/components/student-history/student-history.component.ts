@@ -5,11 +5,12 @@ import { Subscription } from 'rxjs';
 import { StudentDataService } from 'src/app/_shared/data/student-data.service';
 import { Student } from 'src/app/_shared/models/student';
 import { StudentState } from 'src/app/_store/student/student.state';
+import { ProviderService } from '../../services/provider.service';
 
 @Component({
-    selector: 'app-student-history',
-    templateUrl: './student-history.component.html',
-    standalone: false
+  selector: 'app-student-history',
+  templateUrl: './student-history.component.html',
+  standalone: false
 })
 export class StudentHistoryComponent implements OnInit {
   myForm: UntypedFormGroup;
@@ -22,12 +23,16 @@ export class StudentHistoryComponent implements OnInit {
   successMessage: string;
   isSubmitted: boolean;
 
-   currentGUId$ = this.store.select<string>(StudentState.getSelectedStudentGUId);
+  changed_en: boolean = false;
+  changed_es: boolean = false;
+
+  currentGUId$ = this.store.select<string>(StudentState.getSelectedStudentGUId);
 
   constructor(
     public formBuilder: UntypedFormBuilder,
     public studentData: StudentDataService,
-    private store: Store
+    private store: Store,
+    private provider: ProviderService
   ) {
     console.log('hi from student-history constructor');
 
@@ -37,7 +42,8 @@ export class StudentHistoryComponent implements OnInit {
       studentHistory_En: [{ value: '' }]
     });
 
-
+    this.myForm.controls['studentHistory_Es'].valueChanges.subscribe(() => this.changed_es = true)
+    this.myForm.controls['studentHistory_En'].valueChanges.subscribe(() => this.changed_en = true)
   }
 
   ngOnInit() {
@@ -84,12 +90,12 @@ export class StudentHistoryComponent implements OnInit {
     this.myForm.setValue({
       studentHistory_Es: student.studentHistory_Es,
       studentHistory_En: student.studentHistory_En
-    });
+    }, {emitEvent: false});
   }
 
   retrieveFormValues(): void {
     console.log('retrieveFormValues on enter has form values:');
-    console.log( JSON.stringify(this.myForm.value));
+    console.log(JSON.stringify(this.myForm.value));
     // use spread operator to merge changes:
     this.student = { ...this.student, ...this.myForm.value };
     console.log('student after retrieve FormValues merge');
@@ -99,10 +105,11 @@ export class StudentHistoryComponent implements OnInit {
 
   onSubmit() {
     console.log('Hi from StudentHistory Submit');
-    this.isLoading = true;
+    // this.isLoading = true;
     this.retrieveFormValues();
     console.log('save');
     console.log(this.student);
+    this.translate();
     this.studentData.updateStudent(this.student).subscribe(
       () => {
         // console.log('subscribe result in updateStudent');
@@ -129,5 +136,35 @@ export class StudentHistoryComponent implements OnInit {
   }
 
 
+  async translate() {
+    try {
+      console.log(this.myForm.value, 'this.changed_es,', this.changed_es, 'this.changed_en);', this.changed_en);
+
+      if (this.changed_es == true) {
+        const translation_en = await this.provider.production<string>('GET', '/api/translate', {
+          params: {
+            sl: 'es',
+            dl: 'en',
+            text: this.myForm.value.studentHistory_Es
+          }
+        });
+        console.log(translation_en);
+        this.myForm.controls['studentHistory_En'].patchValue(translation_en['destination-text'], {emitEvent: false});
+      }
+      else if (this.changed_en == true) {
+        const translation_es = await this.provider.production<string>('GET', '/api/translate', {
+          params: {
+            sl: 'en',
+            dl: 'es',
+            text: this.myForm.value.studentHistory_En
+          }
+        });
+        console.log(translation_es);
+        this.myForm.controls['studentHistory_Es'].patchValue(translation_es['destination-text'], {emitEvent: false});
+      }
+    } catch (error) {
+      console.error('Error en traducción:', error);
+    }
+  }
 
 }

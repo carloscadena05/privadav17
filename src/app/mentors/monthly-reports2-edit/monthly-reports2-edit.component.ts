@@ -15,8 +15,8 @@ interface IValidationType {
 }
 
 @Component({
-    templateUrl: '../monthly-reports2-edit/monthly-reports2-edit.component.html',
-    standalone: false
+  templateUrl: '../monthly-reports2-edit/monthly-reports2-edit.component.html',
+  standalone: false
 })
 export class MonthlyReports2EditComponent implements OnInit {
   myForm: UntypedFormGroup;
@@ -45,7 +45,8 @@ export class MonthlyReports2EditComponent implements OnInit {
   readonly contactYears: SELECTITEM[] = constants.contactYears;
   readonly contactMonths: SELECTITEM[] = constants.months;
 
-   currentName$ = this.store.select<string>(StudentState.getSelectedStudentName);
+  currentName$ = this.store.select<string>(StudentState.getSelectedStudentName);
+  spanish: boolean = navigator.language.startsWith('es')
 
   constructor(
     public currRoute: ActivatedRoute,
@@ -230,5 +231,9 @@ export class MonthlyReports2EditComponent implements OnInit {
     console.log('hasChanges has submitted ' + this.isSubmitted);
     console.log('hasChanges has form dirty ' + this.myForm.dirty);
     return this.myForm.dirty && !this.isSubmitted;
+  }
+
+  value_select(a: any, b: any): boolean {
+    return a == b;
   }
 }

@@ -1,42 +1,42 @@
-:host {
-  display: block;
-  padding: 0 16px;
-}
+// :host {
+//   display: block;
+//   padding: 0 16px;
+// }
 
-label {
-  padding-top: 10px;
-}
+// label {
+//   padding-top: 10px;
+// }
 
-radio.ng-touched.ng-invalid,
-textarea.ng-touched.ng-invalid,
-input.ng-touched.ng-invalid,
-select.ng-touched.ng-invalid {
-  border: 1px solid #a94442; /* red */
-  border-left: 5px solid #a94442; /* red */
- }
+// radio.ng-touched.ng-invalid,
+// textarea.ng-touched.ng-invalid,
+// input.ng-touched.ng-invalid,
+// select.ng-touched.ng-invalid {
+//   border: 1px solid #a94442; /* red */
+//   border-left: 5px solid #a94442; /* red */
+ // }
 
-/*.ng-valid[required] {*/
-radio.ng-valid,
-textarea.ng-valid,
-input.ng-valid,
-select.ng-valid {
-  border-left: 5px solid #42A948; /* green */
-}
+// /*.ng-valid[required] {*/
+// radio.ng-valid,
+// textarea.ng-valid,
+// input.ng-valid,
+// select.ng-valid {
+//   border-left: 5px solid #42A948; /* green */
+// }
 
-radio.ng-invalid,
-textarea.ng-invalid,
-input.ng-invalid,
-select.ng-invalid {
-  border-left: 5px solid #a94442; /* red */
-}
+// radio.ng-invalid,
+// textarea.ng-invalid,
+// input.ng-invalid,
+// select.ng-invalid {
+//   border-left: 5px solid #a94442; /* red */
+// }
 
-.red {
-  color: #a94442;
-  font-weight: bold;
-}
+// .red {
+//   color: #a94442;
+//   font-weight: bold;
+// }
 
-.narrative {
-  max-width:44em;
-  width: 44em;
-  height: 540px;
-}
+// .narrative {
+//   max-width:44em;
+//   width: 44em;
+//   height: 540px;
+// }

@@ -44,4 +44,8 @@ twcss_activeTab = 'student';
   setQRComponentsEditible(qrComponentsEditable: boolean) {
     this.store.dispatch(new SetQRComponentsEditable(qrComponentsEditable));
   }
+  value_select(a: any, b: any): boolean {
+return a == b;
+}
+
 }

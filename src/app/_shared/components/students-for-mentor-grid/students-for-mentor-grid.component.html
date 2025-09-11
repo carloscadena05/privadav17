@@ -1,4 +1,41 @@
-@if (errorMessage) {
+<div class="flex gap-x-2 rounded-2xl overflow-hidden"
+  [ngClass]="students?.length ? 'ja-bg-white' : 'bg-yellow-100 text-yellow-500 '">
+  @for (student of students; track student; let i = $index) {
+  <div [ngClass]="setRowClasses(student.studentGUId, student.activeStatus)" id="student.studentId"
+    (click)="selectStudent(student.studentGUId, student.studentName, i)"
+    class="flex gap-x-2 rounded-lg items-center h-12 w-8 hover:w-auto duration-300 group  ">
+    <img [src]="'https://privada.jovenesadelante.org/' + student?.photoUrl?.substring(9)"
+      (error)="student.photoUrl = '......../assets/images/user.svg'"
+      class="h-12 duration-300 aspect-v-photo object-cover relative shrink-0 rounded-lg border-2" />
+    <div
+      class="duration-300 group-hover:p-2 text-sm w-0 opacity-0 overflow-hidden group-hover:w-48 group-hover:overflow-auto group-hover:opacity-100 hover:w-48 hover:overflow-auto hover:opacity-100">
+      {{ student.studentName }}</div>
+  </div>
+  } @empty {
+  <div class="flex flex-col justify-center items-center rounded-2xl text-center">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="-5 -5 34 34" width="64" height="64" color="#eab308" fill="none"
+      class="bg-yellow-100 rounded-full">
+      <path
+        d="M13 7C13 9.20914 11.2091 11 9 11C6.79086 11 5 9.20914 5 7C5 4.79086 6.79086 3 9 3C11.2091 3 13 4.79086 13 7Z"
+        stroke="#eab308" stroke-width="1.5" />
+      <path d="M15 11C17.2091 11 19 9.20914 19 7C19 4.79086 17.2091 3 15 3" stroke="#eab308" stroke-width="1.5"
+        stroke-linecap="round" stroke-linejoin="round" />
+      <path
+        d="M11 14H7C4.23858 14 2 16.2386 2 19C2 20.1046 2.89543 21 4 21H14C15.1046 21 16 20.1046 16 19C16 16.2386 13.7614 14 11 14Z"
+        stroke="#eab308" stroke-width="1.5" stroke-linejoin="round" />
+      <path d="M17 14C19.7614 14 22 16.2386 22 19C22 20.1046 21.1046 21 20 21H18.5" stroke="#eab308" stroke-width="1.5"
+        stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+    @if(spanish) {
+    No hay mentees para ti en este momento.
+    } @else {
+    There are no mentees for you at this time.
+    }
+  </div>
+  }
+</div>
+
+<!-- @if (errorMessage) {
   <div class="alert alert-warning">{{ errorMessage }}</div>
 }
 @if (!errorMessage) {
@@ -38,3 +75,4 @@
     </div>
   </div>
 }
+ -->

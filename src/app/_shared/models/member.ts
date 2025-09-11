@@ -52,6 +52,12 @@ export class Member {
     public coloniaID?: number,
     public cellPhone?: string,
     public colonia?: string,
-    public neonID?: number
+    public neonID?: number,
+    public local_HouseNumber?: number,
+    public local_City?: string,
+    public local_StateProvince?: string,
+    public local_PostalCode?: string,
+    public nonSMA_HouseNumber?: number,
+    public nonSMA_Colonia?: string,
   ) {}
 }

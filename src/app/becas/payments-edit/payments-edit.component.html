@@ -1,3 +1,195 @@
+<div class="flex flex-col gap-4 justify-center ja-bg-white p-4 rounded-2xl">
+  <h1 class="ja-big-title inline"> Payment Status for {{ studentName }}</h1>
+
+  @if (errorMessage) {
+  <span class="alert alert-danger">{{ errorMessage }}</span>
+  }
+  @if (successMessage) {
+  <span class="alert alert-success">{{ successMessage }}</span>
+  }
+  @if (isLoading) {
+  <app-loading-container> </app-loading-container>
+  } @else {
+  <form [formGroup]="myForm">
+    <ng-container formArrayName="becaPaymentFormRows">
+      <ng-container [formGroupName]="0">
+        <table mat-table [dataSource]="becaPaymentsData">
+          <ng-container matColumnDef="pcsCode">
+            <th mat-header-cell *matHeaderCellDef> PCSID </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.pcsCode }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="pcsYear">
+            <th mat-header-cell *matHeaderCellDef> Year </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.pcsYear }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="pcsMonthNum">
+            <th mat-header-cell *matHeaderCellDef> Month </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.pcsMonthNum }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="mentorReportStatusId">
+            <th mat-header-cell *matHeaderCellDef> MR </th>
+            <td mat-cell *matCellDef="let element">
+              <app-three-way-checkbox formControlName="mentorReportStatusId"></app-three-way-checkbox>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="studentReportStatusId">
+            <th mat-header-cell *matHeaderCellDef> SSR </th>
+            <td mat-cell *matCellDef="let element">
+              <app-three-way-checkbox formControlName="studentReportStatusId"></app-three-way-checkbox>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="inscriptionReportStatusId">
+            <th mat-header-cell *matHeaderCellDef> IR </th>
+            <td mat-cell *matCellDef="let element">
+              <app-three-way-checkbox formControlName="inscriptionReportStatusId"></app-three-way-checkbox>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="gradeReportStatusId">
+            <th mat-header-cell *matHeaderCellDef> GR </th>
+            <td mat-cell *matCellDef="let element">
+              <app-three-way-checkbox formControlName="gradeReportStatusId"></app-three-way-checkbox>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="paymentStatusId">
+            <th mat-header-cell *matHeaderCellDef> Payment Status </th>
+            <td mat-cell *matCellDef="let element">
+              <mat-form-field appearance="outline" class="simple no-hint">
+                <mat-select formControlName="paymentStatusId" [compareWith]="value_select">
+                  @for (status of becaPaymentStatuses; track status) {
+                  <mat-option [value]="status.value" class="simple">{{ status.label }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="requestedBeca">
+            <th mat-header-cell *matHeaderCellDef> Amount </th>
+            <td mat-cell *matCellDef="let element">
+              <mat-form-field appearance="outline" class="simple no-hint">
+                <span matPrefix>$</span>
+                <input type="text" formControlName="requestedBeca" matInput>
+              </mat-form-field>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="approvedById">
+            <th mat-header-cell *matHeaderCellDef> Approved By </th>
+            <td mat-cell *matCellDef="let element">
+              <mat-form-field appearance="outline" class="simple no-hint">
+                <mat-select formControlName="approvedById" [compareWith]="value_select">
+                  @for (admin of admins$ | async; track admin) {
+                  <mat-option [value]="admin.value" class="simple">{{ admin.label }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="comment">
+            <th mat-header-cell *matHeaderCellDef> Comment </th>
+            <td mat-cell *matCellDef="let element">
+              <mat-form-field appearance="outline" class="simple no-hint">
+                <input type="text" formControlName="comment" matInput>
+              </mat-form-field>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </ng-container>
+    </ng-container>
+
+    <!-- 
+    <table class="w-full rounded-2xl overflow-hidden">
+      <thead class="bg-secondary text-white">
+        <tr class="p-2">
+          <th class="py-4 px-2 text-sm">PCSID</th>
+          <th class="py-4 px-2 text-sm">Year</th>
+          <th class="py-4 px-2 text-sm">Month</th>
+          <th class="py-4 px-2 text-sm">MR</th>
+          <th class="py-4 px-2 text-sm">SSR</th>
+          <th class="py-4 px-2 text-sm">IR</th>
+          <th class="py-4 px-2 text-sm">GR</th>
+          <th class="py-4 px-2 text-sm">Payment Status</th>
+          <th class="py-4 px-2 text-sm">Amount</th>
+          <th class="py-4 px-2 text-sm">Approved By</th>
+          <th class="py-4 px-2 text-sm">Comment</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (bp of becaPaymentsData; track bp) {
+        <tr formArrayName="becaPaymentFormRows">
+          <ng-container [formGroupName]="i">
+            <td class="px-2 text-sm">{{ bp.pcsCode }}</td>
+            <td class="px-2 text-sm">
+              {{ bp.pcsYear }}
+            </td>
+            <td class="px-2 text-sm">
+              {{ bp.pcsMonthNum }}
+            </td>
+            <td class="px-2 text-sm">
+              <span style="text-align: center; white-space: nowrap">
+                <app-three-way-checkbox formControlName="mentorReportStatusId"></app-three-way-checkbox>
+              </span>
+            </td>
+            <td class="px-2 text-sm">
+              <span style="text-align: center; white-space: nowrap">
+                <app-three-way-checkbox formControlName="studentReportStatusId"></app-three-way-checkbox>
+              </span>
+            </td>
+            <td class="px-2 text-sm">
+              <span style="text-align: center; white-space: nowrap">
+                <app-three-way-checkbox formControlName="inscriptionReportStatusId"></app-three-way-checkbox>
+              </span>
+            </td>
+            <td class="px-2 text-sm">
+              <span style="text-align: center; white-space: nowrap">
+                <app-three-way-checkbox formControlName="gradeReportStatusId"></app-three-way-checkbox>
+              </span>
+            </td>
+            <td class="px-2 text-sm">
+              <mat-form-field appearance="outline" class="simple no-hint">
+                <mat-select formControlName="paymentStatusId" [compareWith]="value_select">
+                  @for (status of becaPaymentStatuses; track status) {
+                  <mat-option [value]="status.value" class="simple">{{ status.label }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </td>
+            <td class="px-2 text-sm">
+              <mat-form-field appearance="outline" class="simple no-hint">
+                <span matPrefix>$</span>
+                <input type="text" formControlName="requestedBeca" matInput>
+              </mat-form-field>
+
+            </td>
+            <td class="px-2 text-sm">
+              <mat-form-field appearance="outline" class="simple no-hint">
+                <mat-select formControlName="approvedById" [compareWith]="value_select">
+                  @for (admin of admins$ | async; track admin) {
+                  <mat-option [value]="admin.value" class="simple">{{ admin.label }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </td>
+            <td class="px-2 text-sm">
+              <mat-form-field appearance="outline" class="simple no-hint">
+                <input type="text" formControlName="comment" matInput>
+              </mat-form-field>
+            </td>
+          </ng-container>
+        </tr>
+        }
+      </tbody>
+    </table> -->
+  </form>
+  }
+</div>
+<!-- 
 <div class="card bg-primary">
   <div class="card-header text-white" style="font-size: large">
     <span>Payment Status for {{ studentName }}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -5,151 +197,128 @@
 
   <div class="card-body bg-white">
     @if (errorMessage) {
-      <span class="alert alert-danger">{{ errorMessage }}</span>
+    <span class="alert alert-danger">{{ errorMessage }}</span>
     }
     @if (successMessage) {
-      <span class="alert alert-success">{{ successMessage }}</span>
+    <span class="alert alert-success">{{ successMessage }}</span>
     }
 
     <div>
       <div>
         @switch (isLoading) {
-          @case (true) {
-            <div class="text-center col-md-4 col-md-offset-4">
-              <app-loading-container> </app-loading-container>
-            </div>
-          }
-          @case (false) {
-            <div>
-              <form [formGroup]="myForm">
-                <p>
-                  <button
-                    [disabled]="myForm.pristine"
-                    type="button"
-                    class="btn btn-primary"
-                    (click)="saveAllChangedEntries()">
-                    Save
-                  </button>
-                  <button
-                    type="button"
-                    class="btn btn-primary"
-                    (click)="location.back()">
-                    Back
-                  </button>
-                  @if (selectedPCSMonthNum !== '0' && !isEditableMonth) {
-                    <span class="text-danger" style="font-weight: bold;">
-                      Data is Locked for this month
-                    </span>
-                  }
-                </p>
-                <table class="table-sm table-striped">
-                  <thead>
-                    <tr>
-                      <td></td>
-                      <th>PCSID</th>
-                      <th>Year</th>
-                      <th>Month</th>
-                      <th>MR</th>
-                      <th>SSR</th>
-                      <th>IR</th>
-                      <th>GR</th>
-                      <th>Payment Status</th>
-                      <th>Amount</th>
-                      <th>Approved By</th>
-                      <th>Comment</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @for (bp of becaPaymentsData; track bp; let i = $index) {
-                      <tr formArrayName="becaPaymentFormRows">
-                        <ng-container [formGroupName]="i">
-                          <td>
-                            {{ i+1 }}
-                          </td>
-                          <td>{{ bp.pcsCode }}</td>
-                          <td>
-                            {{ bp.pcsYear }}
-                          </td>
-                          <td>
-                            {{ bp.pcsMonthNum }}
-                          </td>
-                          <td>
-                            <span style="text-align: center; white-space: nowrap">
-                              <app-three-way-checkbox formControlName="mentorReportStatusId"></app-three-way-checkbox>
-                            </span>
-                          </td>
-                          <td>
-                            <span style="text-align: center; white-space: nowrap">
-                              <app-three-way-checkbox formControlName="studentReportStatusId"></app-three-way-checkbox>
-                            </span>
-                          </td>
-                          <td>
-                            <span style="text-align: center; white-space: nowrap">
-                              <app-three-way-checkbox formControlName="inscriptionReportStatusId"></app-three-way-checkbox>
-                            </span>
-                          </td>
-                          <td>
-                            <span style="text-align: center; white-space: nowrap">
-                              <app-three-way-checkbox formControlName="gradeReportStatusId"></app-three-way-checkbox>
-                            </span>
-                          </td>
-                          <td>
-                            <select
-                              id="paymentStatusId"
-                              formControlName="paymentStatusId"
-                              class="form-control form-control-sm"
-                              style="width: 120px;">
-                              @for (status of becaPaymentStatuses; track status) {
-                                <option [value]="status.value">{{ status.label }}</option>
-                              }
-                            </select>
-                          </td>
-                          <td>
-                            <label style="display: inline-block; margin-right: 3px;">$</label>
-                            <input formControlName="requestedBeca"
-                              class="form-control form-control-sm" type="text"
-                              style ="width: 50px; display: inline-block;"
-                              />
-                            </td>
-                            <td>
-                              @if (admins$ | async; as admins) {
-                                <div>
-                                  <select
-                                    id="approvedById"
-                                    formControlName="approvedById"
-                                    class="form-control form-control-sm"
-                                    style="width: 75px;"
-                                    (change)="setApprovedBy(i, $event.target.value)">
-                                    <option [value]="null">[Not Approved]</option>
-                                    @for (admin of admins; track admin) {
-                                      <option [value]="admin.value">{{ admin.label }}</option>
-                                    }
-                                  </select>
-                                </div>
-                              }
-                            </td>
-                            <td>
-                              <input formControlName="comment" class="form-control form-control-sm" type="text" />
-                            </td>
-                            <!-- <td>
-                            <button (click)="saveEntry(i)">Save</button>
-                          </td> -->
-                          <!-- <td *ngIf="isRowDirty(i)">+-+</td>
-                          <td *ngIf="!isRowDirty(i)"></td> -->
-                        </ng-container>
-                      </tr>
-                    }
-                  </tbody>
-                </table>
-              </form>
-              <!-- <br />Dirty: {{ myForm.dirty }}
-              <br />Pristine: {{ myForm.pristine }}
-              <br />Touched: {{ myForm.touched }}
-              <br />Valid: {{ myForm.valid }} -->
-            </div>
-          }
+        @case (true) {
+        <div class="text-center col-md-4 col-md-offset-4">
+          <app-loading-container> </app-loading-container>
+        </div>
+        }
+        @case (false) {
+        <div>
+          <form [formGroup]="myForm">
+            <p>
+              <button [disabled]="myForm.pristine" type="button" class="btn btn-primary"
+                (click)="saveAllChangedEntries()">
+                Save
+              </button>
+              <button type="button" class="btn btn-primary" (click)="location.back()">
+                Back
+              </button>
+              @if (selectedPCSMonthNum !== '0' && !isEditableMonth) {
+              <span class="text-danger" style="font-weight: bold;">
+                Data is Locked for this month
+              </span>
+              }
+            </p>
+            <table class="table-sm table-striped">
+              <thead>
+                <tr>
+                  <td></td>
+                  <th>PCSID</th>
+                  <th>Year</th>
+                  <th>Month</th>
+                  <th>MR</th>
+                  <th>SSR</th>
+                  <th>IR</th>
+                  <th>GR</th>
+                  <th>Payment Status</th>
+                  <th>Amount</th>
+                  <th>Approved By</th>
+                  <th>Comment</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (bp of becaPaymentsData; track bp) {
+                <tr formArrayName="becaPaymentFormRows">
+                  <ng-container [formGroupName]="i">
+                    <td>
+                      {{ i+1 }}
+                    </td>
+                    <td>{{ bp.pcsCode }}</td>
+                    <td>
+                      {{ bp.pcsYear }}
+                    </td>
+                    <td>
+                      {{ bp.pcsMonthNum }}
+                    </td>
+                    <td>
+                      <span style="text-align: center; white-space: nowrap">
+                        <app-three-way-checkbox formControlName="mentorReportStatusId"></app-three-way-checkbox>
+                      </span>
+                    </td>
+                    <td>
+                      <span style="text-align: center; white-space: nowrap">
+                        <app-three-way-checkbox formControlName="studentReportStatusId"></app-three-way-checkbox>
+                      </span>
+                    </td>
+                    <td>
+                      <span style="text-align: center; white-space: nowrap">
+                        <app-three-way-checkbox formControlName="inscriptionReportStatusId"></app-three-way-checkbox>
+                      </span>
+                    </td>
+                    <td>
+                      <span style="text-align: center; white-space: nowrap">
+                        <app-three-way-checkbox formControlName="gradeReportStatusId"></app-three-way-checkbox>
+                      </span>
+                    </td>
+                    <td>
+                      <select id="paymentStatusId" formControlName="paymentStatusId"
+                        class="form-control form-control-sm" style="width: 120px;">
+                        @for (status of becaPaymentStatuses; track status) {
+                        <option [value]="status.value">{{ status.label }}</option>
+                        }
+                      </select>
+                    </td>
+                    <td>
+                      <label style="display: inline-block; margin-right: 3px;">$</label>
+                      <input formControlName="requestedBeca" class="form-control form-control-sm" type="text"
+                        style="width: 50px; display: inline-block;" />
+                    </td>
+                    <td>
+                      @if (admins$ | async; as admins) {
+                      <div>
+                        <select id="approvedById" formControlName="approvedById" class="form-control form-control-sm"
+                          style="width: 75px;" (change)="setApprovedBy(i, $event.target.value)">
+                          <option [value]="null">[Not Approved]</option>
+                          @for (admin of admins; track admin) {
+                          <option [value]="admin.value">{{ admin.label }}</option>
+                          }
+                        </select>
+                      </div>
+                      }
+                    </td>
+                    <td>
+                      <input formControlName="comment" class="form-control form-control-sm" type="text" />
+                    </td>
+                  </ng-container>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </form>
+
+        </div>
+        }
         }
       </div>
     </div>
   </div>
-</div>
+</div> -->

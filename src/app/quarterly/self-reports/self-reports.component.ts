@@ -11,10 +11,10 @@ import { QuarterlyReport } from '../../_shared/models/quarterly-report';
 import { SessionService } from '../../_shared/services/session.service';
 
 @Component({
-    selector: 'app-self-reports',
-    templateUrl: './self-reports.component.html',
-    styleUrls: ['./self-reports.component.scss', '../../../assets/css/forms.scss'],
-    standalone: false
+  selector: 'app-self-reports',
+  templateUrl: './self-reports.component.html',
+  styleUrls: ['./self-reports.component.scss', '../../../assets/css/forms.scss'],
+  standalone: false
 })
 export class SelfReportsComponent implements OnInit {
   isLoading: boolean;
@@ -34,9 +34,10 @@ export class SelfReportsComponent implements OnInit {
   private subscription: Subscription;
   @Input() showOnlyIfStatusIsSent: string;
 
-   currentGUId$ = this.store.select<string>(StudentState.getSelectedStudentGUId);
-   selectedQRPeriod$ = this.store.select<string>(UIState.getSelectedQRPeriod);
-   qrComponentsEditable$ = this.store.select<boolean>(UIState.getQRComponentsEditable);
+  currentGUId$ = this.store.select<string>(StudentState.getSelectedStudentGUId);
+  selectedQRPeriod$ = this.store.select<string>(UIState.getSelectedQRPeriod);
+  qrComponentsEditable$ = this.store.select<boolean>(UIState.getQRComponentsEditable);
+  spanish: boolean = navigator.language.startsWith('es')
 
   constructor(
     public currRoute: ActivatedRoute,
@@ -56,7 +57,7 @@ export class SelfReportsComponent implements OnInit {
     this.narrative_EnglishCtl = this.myForm.controls['narrative_English'];
     this.narrative_SpanishCtl = this.myForm.controls['narrative_Spanish'];
     this.reportIdCtl = this.myForm.controls['quarterlyReportId'];
-    this.showOnlyIfStatusIsSent =  'true';
+    this.showOnlyIfStatusIsSent = 'true';
   }
   ngOnInit() {
     this.qrComponentsEditable$.subscribe((flag) => {
@@ -112,7 +113,7 @@ export class SelfReportsComponent implements OnInit {
           statusFilter)
         .subscribe(
           (data) => {
-            this.studentSelfReport = data;
+            this.studentSelfReport = data;            
           },
           (err) => console.error('Subscribe error: ' + err),
           () => {

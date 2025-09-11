@@ -67,7 +67,7 @@ export class MonthlyReports2ENAddComponent implements OnInit {
       inputEmoji: [666, { validators: [Validators.required, this.validateEmojis] }],
       communicationEmoji: [666, { validators: [Validators.required, this.validateEmojis] }],
 
-      narrative_English: ['', Validators.required],
+      narrative_English: ['1. Academic\n \n2. Personal\n \n3. Financial', Validators.required],
       narrative_Spanish: [''],
       mentorReportId: [this.reportIdCtl]
     });
@@ -228,5 +228,9 @@ export class MonthlyReports2ENAddComponent implements OnInit {
     console.log('hasChanges has submitted ' + this.isSubmitted);
     console.log('hasChanges has form dirty ' + this.myForm.dirty);
     return this.myForm.dirty && !this.isSubmitted;
+  }
+
+  value_select(a: any, b: any): boolean {
+    return a == b;
   }
 }

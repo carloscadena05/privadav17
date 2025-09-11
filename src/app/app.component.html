@@ -1,6 +1,7 @@
-<div class="w-screen max-w-[100vw] overflow-x-hidden flex flex-col justify-between">
+<div class="w-screen max-w-[100vw] h-[100dvh] overflow-x-hidden flex flex-col justify-between">
   <app-headerbar></app-headerbar>
-  <div class="h-full">
+  <div class="h-full overflow-y-scroll">
+    {{router.url}}
     <router-outlet></router-outlet>
   </div>
   <footer class="h-16 flex justify-between items-center bg-primary px-4">

@@ -38,9 +38,9 @@ import { SessionService } from '../../_shared/services/session.service';
 **/
 
 @Component({
-    selector: 'app-mentor-reports',
-    templateUrl: './monthly-reports2.component.html',
-    standalone: false
+  selector: 'app-mentor-reports',
+  templateUrl: './monthly-reports2.component.html',
+  standalone: false
 })
 export class MonthlyReports2Component implements OnInit {
   isLoading: boolean;
@@ -57,8 +57,10 @@ export class MonthlyReports2Component implements OnInit {
   latestReportIsCurrentMonth: boolean;
   private subscription: Subscription;
 
-   currentGUId$ = this.store.select<string>(StudentState.getSelectedStudentGUId);
-   currentName$ = this.store.select<string>(StudentState.getSelectedStudentName);
+  currentGUId$ = this.store.select<string>(StudentState.getSelectedStudentGUId);
+  currentName$ = this.store.select<string>(StudentState.getSelectedStudentName);
+
+  spanish: boolean = navigator.language.startsWith('es')
 
   constructor(
     public currRoute: ActivatedRoute,
@@ -122,14 +124,14 @@ export class MonthlyReports2Component implements OnInit {
         for (const x of this.mentorReports2) {
           console.log('reviewedStatusId: ' + x.reviewedStatusId);
           console.log('i = ' + i);
-          console.log('x.lastContactMonth =  '+ x.lastContactMonth);
-          console.log('x.lastContactYear =  '+ x.lastContactYear);
-          console.log('constants.currentContactMonth =  '+ constants.currentContactMonth);
-          console.log('constants.currentontactYear =  '+ constants.currentContactYear);
+          console.log('x.lastContactMonth =  ' + x.lastContactMonth);
+          console.log('x.lastContactYear =  ' + x.lastContactYear);
+          console.log('constants.currentContactMonth =  ' + constants.currentContactMonth);
+          console.log('constants.currentontactYear =  ' + constants.currentContactYear);
 
           this.latestReportIsCurrentMonth = (x.lastContactMonth == constants.currentContactMonth
-                                        && x.lastContactYear  == constants.currentContactYear);
-          console.log(' this.latestReportIsCurrentMonthvalue is  ' +  this.latestReportIsCurrentMonth);
+            && x.lastContactYear == constants.currentContactYear);
+          console.log(' this.latestReportIsCurrentMonthvalue is  ' + this.latestReportIsCurrentMonth);
           break; // only want current (first in reverse order)
         }
       }
@@ -164,7 +166,7 @@ export class MonthlyReports2Component implements OnInit {
         'There is already a report filed for this month. Please use the edit button to edit it. / Ya hay un informe presentado para este mes. Por favor, utilice el botón Editar para editarlo. '
       );
     } else {
-          console.log('actual mentorGUId ' + this.mentorGUId);
+      console.log('actual mentorGUId ' + this.mentorGUId);
       if (this.studentGUId !== null) {
         const link = [
           '/mentors/monthly-reports-ES-add',

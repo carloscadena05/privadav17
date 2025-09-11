@@ -1,13 +1,297 @@
+<div class="flex flex-col gap-4 justify-center ja-bg-white p-4 rounded-2xl">
+  <div class="flex justify-start md:justify-between flex-wrap md:flex-nowrap gap-x-4">
+    <h1 class="ja-big-title inline">
+      @if(spanish){
+      Editar reporte mensual
+      } @else {
+      Edit Monthly Mentor Report
+      } 
+    </h1>
+    <div class="flex gap-x-4">
+      <button type="button" class="ja-btn ja-btn-primary-sc" (click)="onCancel()">
+        Cancel
+      </button>
+      <button type="submit" class="ja-btn ja-btn-primary" (click)="onSubmit()" [disabled]="myForm.invalid">
+        Submit
+      </button>
+    </div>
+  </div>
+
+  @if (errorMessage) {
+  <span class="alert alert-danger">{{ errorMessage }}</span>
+  }
+  @if (successMessage) {
+  <span class="alert alert-success">{{ successMessage }}</span>
+  }
+  @if (isLoading) {
+  <app-loading-container> </app-loading-container>
+  } @else {
+  <form [formGroup]="myForm" class="flex flex-col gap-y-4">
+    <label class="text-tertiary font-medium">
+      @if(spanish){
+      Año/mes del reporte
+      } @else {
+      Report Year/Month
+      }
+    </label>
+
+    <div class="flex gap-x-4 items-start -mt-4">
+      <mat-form-field appearance="outline" class="simple no-hint">
+        <mat-select formControlName="lastContactYearSelector" [compareWith]="value_select">
+          @for (year of contactYears; track year) {
+          <mat-option [value]="year.value" class="simple">{{year.label}}</mat-option>
+          }
+        </mat-select>
+        <mat-error>
+          @if(spanish){
+          Seleccione año
+          } @else {
+          Select year
+          }</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="simple no-hint">
+        <mat-select formControlName="lastContactMonthSelector" [compareWith]="value_select">
+          <mat-option [value]="0">
+            @if(spanish){
+            Seleccione mes
+            } @else {
+            Select Month
+            }</mat-option>
+          @for (month of contactMonths; track month) {
+          <mat-option [value]="month.value" class="simple">{{month.label}}</mat-option>
+          }
+        </mat-select>
+        <mat-error>
+          @if(spanish){
+          Seleccione mes
+          } @else {
+          Select month
+          }</mat-error>
+      </mat-form-field>
+    </div>
+
+    <label class="text-tertiary font-medium">
+      @if(spanish){
+      Situacion General
+      } @else {
+      Overall Situation
+      }</label>
+    <span class="ja-text-slate-700 text-sm -mt-4">
+      @if(spanish){
+      Breve resumen del estado, progreso y actitud general del estudiante, basado en la interacción durante la sesión.
+      } @else {
+      Brief overview of the student's status, progress, and general
+      attitude, based on interaction during the session
+      }</span>
+
+    <mat-radio-group formControlName="inputEmoji" class="-mt-4">
+
+      <div class="flex gap-x-4 flex-wrap">
+        <mat-radio-button [checked]="emojiCtl.value==1" value=1
+          class="bg-yellow-100 py-0.5 pr-2.5 rounded-2xl border-2 duration-300 hide-radio" #Celebrate
+          [ngClass]="Celebrate.checked ? 'border-yellow-600' : 'border-transparent'">
+          <div class="flex items-center text-yellow-600">
+            <img src="/assets/images/celebrate.svg" class="size-8 rounded-full" />
+
+            @if(spanish){
+            Celebrar
+            } @else {
+            Celebrate
+            }
+          </div>
+        </mat-radio-button>
+        <mat-radio-button [checked]="emojiCtl.value==0" value=0
+          class="bg-green-100 py-0.5 pr-2.5 rounded-2xl border-2 duration-300 hide-radio" #Good
+          [ngClass]="Good.checked ? 'border-green-600' : 'border-transparent'">
+          <div class="flex items-center text-green-600">
+            <img src="/assets/images/thumbsUp.svg" class="size-8 rounded-full" />
+
+            @if(spanish){
+            Bien
+            } @else {
+            All Good
+            }
+          </div>
+        </mat-radio-button>
+        <mat-radio-button [checked]="emojiCtl.value==2" value=2
+          class="bg-orange-100 py-0.5 pr-2.5 rounded-2xl border-2 duration-300 hide-radio" #Concerned
+          [ngClass]="Concerned.checked ? 'border-orange-600' : 'border-transparent'">
+          <div class="flex items-center text-orange-600">
+            <img src="/assets/images/concerned.svg" class="size-8 rounded-full" />
+
+            @if(spanish){
+            Preocupado
+            } @else {
+            Concerned
+            }
+          </div>
+        </mat-radio-button>
+        <mat-radio-button [checked]="emojiCtl.value==-1" value=-1
+          class="bg-red-100 py-0.5 pr-2.5 rounded-2xl border-2 duration-300 hide-radio" #Problems
+          [ngClass]="Problems.checked ? 'border-red-600' : 'border-transparent'">
+          <div class="flex items-center text-red-600">
+            <img src="/assets/images/needsAttention.svg" class="size-8 rounded-full" />
+
+            @if(spanish){
+            Problemas
+            } @else {
+            Problems
+            }
+          </div>
+        </mat-radio-button>
+      </div>
+    </mat-radio-group>
+
+    <label class="text-tertiary font-medium">
+
+      @if(spanish){
+      Comunicación
+      } @else {
+      Communication
+      }
+    </label>
+    <span class="ja-text-slate-700 text-sm -mt-4">
+      @if(spanish){
+      ¿Pudiste conectarte con tu estudiante y reunir suficiente información para proporcionar un informe completo?
+      } @else {
+      Were you able to connect with your student and gather enough info to
+      provide a comprehensive report?
+      }</span>
+
+    <mat-radio-group formControlName="communicationEmoji" class="-mt-4">
+
+      <div class="flex gap-x-4 flex-wrap">
+        <mat-radio-button [checked]="communicationCtl.value==0" value=0
+          class="bg-green-100 py-0.5 pr-2.5 rounded-2xl border-2 duration-300 hide-radio" #Yes
+          [ngClass]="Yes.checked ? 'border-green-600' : 'border-transparent'">
+          <div class="flex items-center text-green-600">
+            <img src="/assets/images/thumbsUp.svg" class="size-8 rounded-full" />
+
+            @if(spanish){
+            Sí
+            } @else {
+            Yes
+            }
+          </div>
+        </mat-radio-button>
+        <mat-radio-button [checked]="communicationCtl.value==2" value=2
+          class="bg-orange-100 py-0.5 pr-2.5 rounded-2xl border-2 duration-300 hide-radio" #No
+          [ngClass]="No.checked ? 'border-orange-600' : 'border-transparent'">
+          <div class="flex items-center text-orange-600">
+            <img src="/assets/images/concerned.svg" class="size-8 rounded-full" />
+
+            @if(spanish){
+            No
+            } @else {
+            No
+            }
+          </div>
+        </mat-radio-button>
+      </div>
+    </mat-radio-group>
+
+    @if (communicationCtl.value == 2) {
+    <div class="bg-yellow-100 text-yellow-600">
+
+      @if(spanish){
+      Asegúrese de explicar esta situación en el recuadro de abajo.
+      } @else {
+      Please be sure to elaborate on this situation in the text box below.
+      }
+    </div>
+    }
+
+    <div hidden class="hidden">
+      <label for="mentorReportId">Id</label>
+      <textarea id="mentorReportId" formControlName="mentorReportId" type="text"> </textarea>
+    </div>
+
+    <label class="text-tertiary font-medium">
+      @if(spanish){
+      Reporte
+      } @else {
+      Report
+      }</label>
+    <span class="ja-text-slate-700 text-sm -mt-4">
+      @if(spanish){
+      Describa el desarrollo y los desafíos de su estudiante en estas tres áreas
+      } @else {
+      Please describe the development and challenges of your student in
+      these three areas
+      }</span>
+
+    <mat-form-field appearance="outline">
+      <textarea matInput formControlName="narrative_English" rows="6"></textarea>
+      @if(myForm.get('narrative_English')?.hasError('required')){
+      <mat-error>
+
+        @if(spanish){
+        Se requiere un texto, aun si es sólo N/A.
+        } @else {
+        An entry is required, even if it is just N/A.
+        }
+      </mat-error>
+      }
+
+      @if(myForm.get('narrative_English')?.hasError('maxlength')){
+      <mat-error>
+
+        @if(spanish){
+        No se puede exceder los 4000 caracteres de longitud
+        } @else {
+        Entry cannot exceed 4000 characters in length.
+        }
+      </mat-error>
+      }
+    </mat-form-field>
+
+    <span class="ja-text-slate-700 text-sm -mt-4">
+      @if(spanish){
+      Si desea tener el texto traducido abajo son traducidos de nuevo, eliminelo antes de entregar.
+      } @else {
+      If you wish to have the translated text below be re-translated, please delete it before submitting.
+      }</span>
+
+    <mat-form-field appearance="outline">
+      <textarea matInput formControlName="narrative_Spanish" rows="6"></textarea>
+      @if(myForm.get('narrative_Spanish')?.hasError('required')){
+      <mat-error>
+
+        @if(spanish){
+        Se requiere un texto, aun si es sólo N/A.
+        } @else {
+        An entry is required, even if it is just N/A.
+        }
+      </mat-error>
+      }
+
+      @if(myForm.get('narrative_Spanish')?.hasError('maxlength')){
+      <mat-error>
+
+        @if(spanish){
+        No se puede exceder los 4000 caracteres de longitud
+        } @else {
+        Entry cannot exceed 4000 characters in length.
+        }
+      </mat-error>
+      }
+    </mat-form-field>
+
+  </form>
+  }
+</div>
+
+<!-- 
 <div class="card bg-primary">
   <div class="card-header text-white" style="font-size:large">
-    Monthly Report for / Informe Mensual para {{ studentName  }}
+    Monthly Report for / Informe Mensual para {{ studentName }}
   </div>
   <div class="card-body bg-white">
     @if (errorMessage) {
-      <div class="alert alert-danger">{{errorMessage}}</div>
+    <div class="alert alert-danger">{{errorMessage}}</div>
     }
     @if (successMessage) {
-      <div class="alert alert-success">{{successMessage}}</div>
+    <div class="alert alert-success">{{successMessage}}</div>
     }
     <form [formGroup]="myForm">
       <fieldset [disabled]="isSubmitted">
@@ -17,17 +301,17 @@
             <label for="lastContactYearSelector"> Report Year/Month <br />Año/Mes del Informe&nbsp;</label>
             <select formControlName="lastContactYearSelector">
               @for (year of contactYears; track year) {
-                <option [value]="year.value">{{year.label}}</option>
+              <option [value]="year.value">{{year.label}}</option>
               }
             </select>
             @if (!lastYearCtl.valid && lastYearCtl.touched) {
-              <span class="red"> Select Year</span>
+            <span class="red"> Select Year</span>
             }
 
             <select formControlName="lastContactMonthSelector">
               <option [value]="0">Select Month</option>
               @for (month of contactMonths; track month) {
-                <option [value]="month.value">{{month.label}}</option>
+              <option [value]="month.value">{{month.label}}</option>
               }
             </select>
             <span [ngClass]="{ 'red': monthValidationMessage }">{{ monthValidationMessage }}</span>
@@ -39,118 +323,99 @@
           <div class="controls">
             <span> Student Emoji / Emoji de Estudiante:<br /></span>
             <label>&nbsp;&nbsp;
-              <input type="radio" id="inputEmoji" formControlName="inputEmoji"
-                [checked]="emojiCtl.value==1" value=1>
-                <img src="/assets/images/celebrate.jpg" width="32px" />
-                Celebrar
-              </label>
-              <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <input type="radio" id="inputEmoji" formControlName="inputEmoji"
-                  [checked]="emojiCtl.value==0" value=0>
-                  <img src="/assets/images/thumbsUp.jpg" width="30px" />
-                  Bien
-                </label>
-                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  <input type="radio" id="inputEmoji" formControlName="inputEmoji"
-                    [checked]="emojiCtl.value==2" value=2>
-                    <img src="/assets/images/concerned.jpg" width="30px" />
-                    Preocupado
-                  </label>
-                  <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="radio" id="inputEmoji" formControlName="inputEmoji"
+              <input type="radio" id="inputEmoji" formControlName="inputEmoji" [checked]="emojiCtl.value==1" value=1>
+              <img src="/assets/images/celebrate.jpg" width="32px" />
+              Celebrar
+            </label>
+            <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <input type="radio" id="inputEmoji" formControlName="inputEmoji" [checked]="emojiCtl.value==0" value=0>
+              <img src="/assets/images/thumbsUp.jpg" width="30px" />
+              Bien
+            </label>
+            <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <input type="radio" id="inputEmoji" formControlName="inputEmoji" [checked]="emojiCtl.value==2" value=2>
+              <img src="/assets/images/concerned.jpg" width="30px" />
+              Preocupado
+            </label>
+            <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <input type="radio" id="inputEmoji" formControlName="inputEmoji" [checked]="emojiCtl.value==-1" value=-1>
+              <img src="/assets/images/needsAttention.jpg" width="30px" />
+              Problemas
+              @if (emojiCtl.hasError('required')) {
+              <span class="red">Please select an emoji.</span>
+              }
+            </label>
+          </div>
+          <div class="controls mt-4">
+            <div><b> Comunicación:</b>¿Pudiste conectarte con tu estudiante y reunir suficiente información para
+              proporcionar un informe completo?<br /></div>
+            <label>&nbsp;&nbsp;
+              <input type="radio" id="communicationEmoji" formControlName="communicationEmoji"
+                [checked]="communicationCtl.value==0" value=0>
+              <img src="/assets/images/thumbsUp.jpg" width="30px" />
+              Yes
+            </label>
+            <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <input type="radio" id="communicationEmoji" formControlName="communicationEmoji"
+                [checked]="communicationCtl.value==2" value=2>
+              <img src="/assets/images/concerned.jpg" width="30px" />
+              No
+              @if (communicationCtl.hasError('required')) {
+              <span class="red">Seleccione un valor de estado.</span>
+              }
+            </label>
+          </div>
+        </div>
 
-                      [checked]="emojiCtl.value==-1" value=-1>
-                      <img src="/assets/images/needsAttention.jpg" width="30px" />
-                      Problemas
-                      @if (emojiCtl.hasError('required')) {
-                        <span class="red">Please select an emoji.</span>
-                      }
-                    </label>
-                  </div>
-                  <div class="controls mt-4">
-                    <div><b> Comunicación:</b>¿Pudiste conectarte con tu estudiante y reunir suficiente información para proporcionar un informe completo?<br /></div>
-                    <label>&nbsp;&nbsp;
-                      <input type="radio" id="communicationEmoji" formControlName="communicationEmoji"
-                        [checked]="communicationCtl.value==0" value=0>
-                        <img src="/assets/images/thumbsUp.jpg" width="30px" />
-                        Yes
-                      </label>
-                      <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" id="communicationEmoji" formControlName="communicationEmoji"
-                          [checked]="communicationCtl.value==2" value=2>
-                          <img src="/assets/images/concerned.jpg" width="30px" />
-                          No
-                          @if (communicationCtl.hasError('required')) {
-                            <span class="red">Seleccione un valor de estado.</span>
-                          }
-                        </label>
-                      </div>
-                    </div>
+        <div style="color:mediumblue"><i><b>(If you wish to have the translated text below be re-translated, please
+              delete it
+              before submitting.<br />
+              Si desea tener el texto traducido abajo son traducidos de nuevo, eliminelo antes de entregar.)</b></i>
+        </div>
 
-                    <div style="color:mediumblue"><i><b>(If you wish to have the translated text below be re-translated, please
-                      delete it
-                      before submitting.<br />
-                    Si desea tener el texto traducido abajo son traducidos de nuevo, eliminelo antes de entregar.)</b></i>
-                  </div>
-
-                  <div hidden class="controls">
-                    <label for="mentorReportId">Id</label>
-                    <textarea id="mentorReportId"
-                      formControlName="mentorReportId"
-                      type="text"
-                      class="form-control input-sm">
+        <div hidden class="controls">
+          <label for="mentorReportId">Id</label>
+          <textarea id="mentorReportId" formControlName="mentorReportId" type="text" class="form-control input-sm">
                     </textarea>
-                  </div>
+        </div>
 
-                  <div class="controls">
-                    <label for="narrative_English">English: Positive events or special challenges in the student's life
-                    during the past month</label>
-                    <textarea id="narrative_English" #success formControlName="narrative_English"
-                      type="text"
-
-                      class="form-control input-sm" placeholder="">
+        <div class="controls">
+          <label for="narrative_English">English: Positive events or special challenges in the student's life
+            during the past month</label>
+          <textarea id="narrative_English" #success formControlName="narrative_English" type="text"
+            class="form-control input-sm" placeholder="">
                     </textarea>
-                    <app-display-errors control="narrative_English" class="red"
-                              [errors]="{'bothEmpty': 'English OR Spanish Description must be filled in. Descripcione ingles O español debe rellenarse',
+          <app-display-errors control="narrative_English" class="red" [errors]="{'bothEmpty': 'English OR Spanish Description must be filled in. Descripcione ingles O español debe rellenarse',
             'maxlength': 'Entry cannot exceed 4000 characters in length.'
                 }"></app-display-errors>
-                  </div>
+        </div>
 
-                  <div class="controls">
-                    <label for="narrative_Spanish">Español: Logros y eventos positivos o obstáculos en la vida del
-                    estudiante</label>
-                    <textarea id="narrative_Spanish" #success formControlName="narrative_Spanish"
-                      type="text"
-
-                      class="form-control input-sm" placeholder="">
+        <div class="controls">
+          <label for="narrative_Spanish">Español: Logros y eventos positivos o obstáculos en la vida del
+            estudiante</label>
+          <textarea id="narrative_Spanish" #success formControlName="narrative_Spanish" type="text"
+            class="form-control input-sm" placeholder="">
                     </textarea>
-                    <app-display-errors control="narrative_Spanish" class="red"
-                              [errors]="{'bothEmpty': 'English OR Spanish Description must be filled in. Descripcione ingles O español debe rellenarse',
+          <app-display-errors control="narrative_Spanish" class="red" [errors]="{'bothEmpty': 'English OR Spanish Description must be filled in. Descripcione ingles O español debe rellenarse',
             'maxlength': 'La entrada no puede exceder 4000 caracteres del largo.'
                   }"></app-display-errors>
-                  </div>
+        </div>
 
-                  <div class="col-md-6 col-md-offset-1">
-                    <span>
-                      <button type="submit"
-                        class="btn btn-primary"
-                        style="width:80px;margin-right:10px"
-                        (click)="onSubmit()">
-                        Submit
-                      </button>
-                    </span>&nbsp;
-                    <span>
-                      <button type="button"
-                        class="btn btn-default"
-                        style="width:75px"
-                        (click)="onCancel()">
-                        Cancel
-                      </button>
-                      <div class="red" [hidden]="myForm.valid">Year, Month, Emoji and description must be
-                      filled in before saving.<br />Año, mes, Emoji y descripción rellenarse antes de guardar.</div>
-                    </span>
-                  </div>
-                </fieldset>
-              </form>
-            </div>
-          </div>
+        <div class="col-md-6 col-md-offset-1">
+          <span>
+            <button type="submit" class="btn btn-primary" style="width:80px;margin-right:10px" (click)="onSubmit()">
+              Submit
+            </button>
+          </span>&nbsp;
+          <span>
+            <button type="button" class="btn btn-default" style="width:75px" (click)="onCancel()">
+              Cancel
+            </button>
+            <div class="red" [hidden]="myForm.valid">Year, Month, Emoji and description must be
+              filled in before saving.<br />Año, mes, Emoji y descripción rellenarse antes de guardar.</div>
+          </span>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+</div> -->

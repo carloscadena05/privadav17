@@ -1,8 +1,14 @@
+<div class="flex flex-col gap-4 justify-center ja-bg-white p-4 rounded-2xl">
+    <h1 class="ja-big-title inline"> {{ studentName }} | Self Reports</h1>
 
-<div>&nbsp;</div>
 
-<div style="margin:4em">
-<span class="btn btn-primary btn-sm" (click)="createProxySSR()"> Enter Proxy SSR for this student</span>
-<div>(Use browser back arrow to return here.)</div>
+    @if (isLoading) {
+    <app-loading-container> </app-loading-container>
+    } @else {
+    <app-self-reports-add></app-self-reports-add>
+    <!-- <div class="grid place-content-center ja-bg-white p-4 rounded-2xl">
+        <button class="ja-btn ja-btn-primary" (click)="createProxySSR()"> Enter Proxy SSR for this student</button>
+        <span class="ja-text-slate-700 text-sm">(Use browser back arrow to return here)</span>
+    </div> -->
+    }
 </div>
-<div>&nbsp;</div>

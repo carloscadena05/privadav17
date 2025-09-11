@@ -41,6 +41,12 @@ export class SponsorGroupDataService extends BaseDataService {
     console.log('sending AuthHttp get request ' + url);
     return this.http.get<StudentSponsorXRef[]>(url).pipe(catchError(this.handleError));
   }
+  
+  public getStudentsForSponsorGroupById(sponsorId: number): Observable<StudentSponsorXRef[]> {
+    const url = this.WebApiPrefix + 'sponsor_groups/students/' + sponsorId;
+    console.log('sending AuthHttp get request ' + url);
+    return this.http.get<StudentSponsorXRef[]>(url).pipe(catchError(this.handleError));
+  }
 
   public addNewSponsorGroup(sponsorGroup: SponsorGroup): Observable<SponsorGroup> {
     const url = this.WebApiPrefix + 'sponsor_groups/';

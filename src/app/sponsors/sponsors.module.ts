@@ -8,6 +8,10 @@ import { SponsorsNavbarComponent } from './sponsors-navbar/sponsors-navbar.compo
 import { SponsorsRoutingModule } from './sponsors-routing.module';
 import { SponsorsComponent } from './sponsors.component';
 import { StudentHeaderSponsorsComponent } from './student-header-sponsors/student-header-sponsors.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
 
@@ -18,9 +22,12 @@ import { StudentHeaderSponsorsComponent } from './student-header-sponsors/studen
     QuarterlyModule,
     /* NgbModule */
 
-    QuarterlyModule/* ,
+    QuarterlyModule,/* ,
     NgbModule */
-
+    MatFormFieldModule,
+    MatInputModule,
+    MatTabsModule,
+    MatSelectModule
   ],
   declarations: [
     SponsorsComponent,

@@ -29,6 +29,7 @@ export class StudentsForMentorGridComponent implements OnInit {
 
    currentGUId$ = this.store.select<string>(StudentState.getSelectedStudentGUId);
    testNameVisibility$ = this.store.select<boolean>(UIState.getTestNamesVisibility);
+spanish: boolean = navigator.language.startsWith('es')
 
   constructor(public session: SessionService, private mentorData: MentorDataService, private store: Store) {
     this.emojis = constants.emojis;
@@ -68,7 +69,7 @@ export class StudentsForMentorGridComponent implements OnInit {
           } else if (!this.displayTestNames && item.studentName.substring(0,5) !== '_Test') {
             return item;
           }
-        });
+        });        
       },
       (err) => console.error('Subscribe error: ' + err),
       () => {
@@ -108,12 +109,13 @@ export class StudentsForMentorGridComponent implements OnInit {
 
   // called from code (above) and from template
   public setRowClasses(studentGUId: string, activeStatus: number) {
-    const classes = {
+    /* const classes = {
       'table-success': studentGUId === this.studentGUId,
       dimmed: activeStatus === 0,
       'student-row': true,
       clickable: true
-    };
+    }; */
+    const classes = studentGUId === this.studentGUId ? 'bg-primary/20 text-primary cursor-default' : 'hover:bg-primary/10 cursor-pointer'
 
     return classes;
   }

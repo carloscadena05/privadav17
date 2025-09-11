@@ -1,4 +1,4 @@
-<div class="flex flex-col gap-4 justify-center rounded-2xl">
+<div class="flex flex-col gap-4 justify-center rounded-2xl overflow-hidden">
 
   @if (errorMessage) {
   <span class="alert alert-danger">{{ errorMessage }}</span>
@@ -11,7 +11,7 @@
   } @else {
   <div class="bg-secondary p-4 w-full rounded-t-2xl md:h-24 relative after:absolute after:content-[''] after:bg-white after:rounded-b-2xl after:-z-50 after:w-full md:after:h-40 after:-m-4">
     <img [src]="'https://privada.jovenesadelante.org/' + studentDTO.photoUrl.substring(9)" alt=""
-      class="w-32 aspect-square object-cover rounded-full absolute -bottom-1/2 object-top ring-4 ring-white">
+      class="w-32 aspect-square object-cover rounded-full absolute -bottom-1/2 object-[50%_10%] ring-4 ring-white">
     <div class="flex flex-col absolute left-44 justify-center h-full top-1/2 w-[calc(100%-11rem)] ">
       <div class="max-h-24 min-h-24 h-full flex flex-col justify-end">
         <h1 class="text-2xl font-semibold text-accent inline"> {{ studentDTO?.studentName }}</h1>
@@ -280,7 +280,7 @@
             </mat-form-field>
           </div>
         </div>
-        <app-student-mr-status [reportStatus]="studentDTO.timelyMentorReportStatus"
+        <app-student-mr-status class="mb-4" [reportStatus]="studentDTO.timelyMentorReportStatus"
           [emojiPathname]="emojiPathname"></app-student-mr-status>
 
 

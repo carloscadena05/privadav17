@@ -18,9 +18,9 @@ import { SessionService } from '../../_shared/services/session.service';
 import { UrlService } from '../../_shared/services/url.service';
 
 @Component({
-    templateUrl: './payments-edit.component.html',
-    styleUrls: ['./payments-edit.component.scss'],
-    standalone: false
+  templateUrl: './payments-edit.component.html',
+  styleUrls: ['./payments-edit.component.scss'],
+  standalone: false
 })
 export class PaymentsEditComponent implements OnInit {
   myForm: UntypedFormGroup;
@@ -50,15 +50,16 @@ export class PaymentsEditComponent implements OnInit {
     })
   );
 
-   currentGUId$ = this.store.select<string>(StudentState.getSelectedStudentGUId);
-   currentName$ = this.store.select<string>(StudentState.getSelectedStudentName);
+  currentGUId$ = this.store.select<string>(StudentState.getSelectedStudentGUId);
+  currentName$ = this.store.select<string>(StudentState.getSelectedStudentName);
 
-   selectedPCSYear = '';
-   selectedPCSMonthNum = '0';
-   selectedPCSYear$ = this.store.select<string>(UIState.getSelectedPCSYear);
-   selectedPCSMonthNum$ = this.store.select<string>(UIState.getSelectedPCSMonthNum);
-   currentMonthNum = new Date().getMonth() + 1;
-   isEditableMonth: boolean = false;
+  selectedPCSYear = '';
+  selectedPCSMonthNum = '0';
+  selectedPCSYear$ = this.store.select<string>(UIState.getSelectedPCSYear);
+  selectedPCSMonthNum$ = this.store.select<string>(UIState.getSelectedPCSMonthNum);
+  currentMonthNum = new Date().getMonth() + 1;
+  isEditableMonth: boolean = false;
+  displayedColumns: string[] = ["pcsCode", "pcsYear", "pcsMonthNum", "mentorReportStatusId", "studentReportStatusId", "inscriptionReportStatusId", "gradeReportStatusId", "paymentStatusId", "requestedBeca", "approvedById", "comment"];
 
   constructor(
     public becaData: BecaDataService,
@@ -86,17 +87,17 @@ export class PaymentsEditComponent implements OnInit {
   ngOnInit() {
     console.log('paymentsEdit ngOnInit')
 
-   // Retrieve the current values from the store
-   this.studentGUId = this.store.selectSnapshot(StudentState.getSelectedStudentGUId);
-   this.studentName = this.store.selectSnapshot(StudentState.getSelectedStudentName);
-   this.selectedPCSYear = this.store.selectSnapshot(UIState.getSelectedPCSYear);
-   this.selectedPCSMonthNum = this.store.selectSnapshot(UIState.getSelectedPCSMonthNum);
-   this.isEditableMonth = this.currentMonthNum < parseInt(this.selectedPCSMonthNum);
-   console.log('Student GUId:', this.studentGUId);
-   console.log('Student Name:', this.studentName);
-   console.log('Selected PCS Year:', this.selectedPCSYear);
-   console.log('Selected PCS Month Number:', this.selectedPCSMonthNum);
-   console.log('isEditableMonth:', this.isEditableMonth);
+    // Retrieve the current values from the store
+    this.studentGUId = this.store.selectSnapshot(StudentState.getSelectedStudentGUId);
+    this.studentName = this.store.selectSnapshot(StudentState.getSelectedStudentName);
+    this.selectedPCSYear = this.store.selectSnapshot(UIState.getSelectedPCSYear);
+    this.selectedPCSMonthNum = this.store.selectSnapshot(UIState.getSelectedPCSMonthNum);
+    this.isEditableMonth = this.currentMonthNum < parseInt(this.selectedPCSMonthNum);
+    console.log('Student GUId:', this.studentGUId);
+    console.log('Student Name:', this.studentName);
+    console.log('Selected PCS Year:', this.selectedPCSYear);
+    console.log('Selected PCS Month Number:', this.selectedPCSMonthNum);
+    console.log('isEditableMonth:', this.isEditableMonth);
     this.fetchFilteredData();
   }
 
@@ -107,6 +108,8 @@ export class PaymentsEditComponent implements OnInit {
         (data) => {
           console.log('subscribe result in getBecaPaymentsForStudent');
           this.becaPaymentsData = data;
+          console.log(data);
+
         },
         (err) => {
           this.errorMessage = err;
@@ -115,6 +118,8 @@ export class PaymentsEditComponent implements OnInit {
           this.becaPaymentsData.forEach((becaPaymentDataRow) => {
             this.addBecaPaymentFormRow(becaPaymentDataRow);
           });
+          console.log(this.becaPaymentsData);
+
 
           console.log('data loaded now set timeout for scroll');
           setTimeout(() => {
@@ -126,6 +131,8 @@ export class PaymentsEditComponent implements OnInit {
         }
       );
     }
+    console.log(this.myForm.value);
+    
   }
 
   becaPaymentFormRows(): UntypedFormArray {
@@ -150,21 +157,21 @@ export class PaymentsEditComponent implements OnInit {
     console.log('CreateEmptyBecaPaymentFormRow create empty row to be populated');
     return this._fb.group({
 
-  becaPaymentId: { value: '', disabled: true },
-  pcsCode: { value: '', disabled: true },
-  pcsYear: { value: '', disabled: true },
-  pcsMonth: { value: '', disabled: true },
-  studentId: { value: '', disabled: false },
-  studentGUId: { value: '', disabled: false },
-  mentorReportStatusId: { value: '', disabled: false },
-  studentReportStatusId: { value: '', disabled: false },
-  inscriptionReportStatusId: { value: '', disabled: false },
-  gradeReportStatusId: { value: '', disabled: false },
-  paymentStatusId: { value: '', disabled: false },
-  requestedBeca: { value: '2000', disabled: false },
-  approvedById: { value: '', disabled: false },
-  // approvedDateTime: { value: '', disabled: false },
-  comment: { value: '', disabled: false },
+      becaPaymentId: { value: '', disabled: true },
+      pcsCode: { value: '', disabled: true },
+      pcsYear: { value: '', disabled: true },
+      pcsMonth: { value: '', disabled: true },
+      studentId: { value: '', disabled: false },
+      studentGUId: { value: '', disabled: false },
+      mentorReportStatusId: { value: '', disabled: false },
+      studentReportStatusId: { value: '', disabled: false },
+      inscriptionReportStatusId: { value: '', disabled: false },
+      gradeReportStatusId: { value: '', disabled: false },
+      paymentStatusId: { value: '', disabled: false },
+      requestedBeca: { value: '2000', disabled: false },
+      approvedById: { value: '', disabled: false },
+      // approvedDateTime: { value: '', disabled: false },
+      comment: { value: '', disabled: false },
     });
   }
 
@@ -172,22 +179,22 @@ export class PaymentsEditComponent implements OnInit {
     console.log('updateBecaPaymentFormRow update existing row with actual data');
     console.log(JSON.stringify(becaPaymentDataRow));
     becaPaymentFormRow.patchValue({
-  becaPaymentId: becaPaymentDataRow.becaPaymentId,
-  pcsCode: becaPaymentDataRow.pcsCode,
-  pcsYear: becaPaymentDataRow.pcsYear,
-  pcsMonth: becaPaymentDataRow.pcsMonthNum,
-  studentId: becaPaymentDataRow.studentId,
-  studentGUId: becaPaymentDataRow.studentGUId,
-  mentorReportStatusId: becaPaymentDataRow.mentorReportStatusId,
-  studentReportStatusId: becaPaymentDataRow.studentReportStatusId,
-  inscriptionReportStatusId: becaPaymentDataRow.inscriptionReportStatusId,
-  gradeReportStatusId: becaPaymentDataRow.gradeReportStatusId,
-  paymentStatusId: becaPaymentDataRow.paymentStatusId,
-  requestedBeca:  becaPaymentDataRow.requestedBeca,
-  approvedById: becaPaymentDataRow.approvedById,
-  // approvedDateTime: new TruncateDatePipe().transform('' + becaPaymentDataRow.approvedDateTime),
-  comment: becaPaymentDataRow.comment
-  });
+      becaPaymentId: becaPaymentDataRow.becaPaymentId,
+      pcsCode: becaPaymentDataRow.pcsCode,
+      pcsYear: becaPaymentDataRow.pcsYear,
+      pcsMonth: becaPaymentDataRow.pcsMonthNum,
+      studentId: becaPaymentDataRow.studentId,
+      studentGUId: becaPaymentDataRow.studentGUId,
+      mentorReportStatusId: becaPaymentDataRow.mentorReportStatusId,
+      studentReportStatusId: becaPaymentDataRow.studentReportStatusId,
+      inscriptionReportStatusId: becaPaymentDataRow.inscriptionReportStatusId,
+      gradeReportStatusId: becaPaymentDataRow.gradeReportStatusId,
+      paymentStatusId: becaPaymentDataRow.paymentStatusId,
+      requestedBeca: becaPaymentDataRow.requestedBeca,
+      approvedById: becaPaymentDataRow.approvedById,
+      // approvedDateTime: new TruncateDatePipe().transform('' + becaPaymentDataRow.approvedDateTime),
+      comment: becaPaymentDataRow.comment
+    });
     becaPaymentFormRow.markAsPristine();
   }
 
@@ -209,7 +216,7 @@ export class PaymentsEditComponent implements OnInit {
   }
 
   isViewLinkHidden(imageSubmittedDate: any) {
-    return (imageSubmittedDate === '1900-01-01T00:00:00');
+    return (imageSubmittedDate == '1900-01-01T00:00:00') || !imageSubmittedDate || imageSubmittedDate == '' || imageSubmittedDate == null;
   }
 
   saveAllChangedEntries() {
@@ -270,7 +277,7 @@ export class PaymentsEditComponent implements OnInit {
           }, 3000);
         },
         () => {
-         // this.errorMessage = 'Confirmed By must be selected. Also Turned-in Date be filled in';
+          // this.errorMessage = 'Confirmed By must be selected. Also Turned-in Date be filled in';
           this.isLoading = false;
         }
       );
@@ -347,7 +354,7 @@ export class PaymentsEditComponent implements OnInit {
     gradeEntryRow.markAsDirty();
   }
 
-  imageLoaded(dateLoaded: any){
+  imageLoaded(dateLoaded: any) {
     console.log('dateLoaded [' + dateLoaded + ']');
     return dateLoaded !== 'null';
   }
@@ -380,5 +387,9 @@ export class PaymentsEditComponent implements OnInit {
     });
 
     console.log(`Form controls are now ${this.isEditableMonth ? 'enabled' : 'disabled'}`);
+  }
+
+  value_select(a: any, b: any): boolean {
+    return a == b;
   }
 }

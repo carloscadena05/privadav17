@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SponsorGroupDataService } from 'src/app/_shared/data/sponsor-group-data.service';
 import { SponsorGroup } from 'src/app/_shared/models/sponsor-group';
 import { SORTCRITERIA } from '../../_shared/interfaces/SORTCRITERIA';
+import { StudentSponsorXRef } from 'src/app/_shared/models/student-sponsor-xref';
 
 @Component({
     selector: 'app-sponsor-group',
@@ -22,6 +23,7 @@ export class SponsorGroupComponent implements OnInit {
   sortCriteria: SORTCRITERIA;
   sponsorGroupId: number;
   newMemberMessage: string;
+  students_for_sponsor_group: StudentSponsorXRef[] = [];
 
   constructor(
     public currRoute: ActivatedRoute,
@@ -57,6 +59,17 @@ export class SponsorGroupComponent implements OnInit {
         console.log('done ' + this.sponsorGroup.sponsorGroupId + ':' + this.sponsorGroup.sponsorGroupName);
         this.isLoading = false;
         this.setFormValues(this.sponsorGroup);
+      }
+    );
+
+    this.sponsorGroupData.getStudentsForSponsorGroupById(this.sponsorGroupId).subscribe(
+      (data) => {
+        this.students_for_sponsor_group = data;
+      },
+      (err) => (this.errorMessage = err),
+      () => {
+        console.log('done ' , this.students_for_sponsor_group);
+        this.isLoading = false;
       }
     );
   }
@@ -106,5 +119,14 @@ export class SponsorGroupComponent implements OnInit {
   receiveSelectedMemberEvent($event) {
     console.log('parent recevied SelectedMemberEvent');
     this.newMemberMessage = $event;
+  }
+
+  gotoStudent(guid: string, studentName: string) {
+    console.log('setting studentName to ' + studentName);
+    // XXYYZZ this.session.setStudentInContextName(studentName);
+    const link = ['admins/students/student-container', { guid: guid }];
+
+    console.log('navigating to ' + link);
+    this.router.navigate(link);
   }
 }

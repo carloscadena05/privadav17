@@ -1,3 +1,41 @@
+<form [formGroup]="myForm" class="flex flex-col w-full ja-bg-white p-4 rounded-2xl">
+  @if(qrComponentsEditable){
+  <div class="flex justify-end gap-x-4 mb-4">
+    <button type="button" class="ja-btn ja-btn-primary-sc" (click)="onCancel()">
+      Cancelar
+    </button>
+
+    <button class="ja-btn ja-btn-primary" (click)="onSubmit()">
+      Save
+    </button>
+  </div>
+  
+  <div class="flex flex-col md:flex-row gap-x-4 w-full">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Texto Español</mat-label>
+      <textarea matInput formControlName="narrative_Spanish" class="min-h-64"></textarea>
+    </mat-form-field>
+    
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>English Text</mat-label>
+      <textarea matInput formControlName="narrative_English" class="min-h-64"></textarea>
+    </mat-form-field>
+  </div>
+}@else {
+  @if(spanish){
+  <h2 class="ja-big-title">
+    Reporte del periodo {{selectedQRPeriod}}
+  </h2>
+  {{myForm.value.narrative_Spanish}}
+  } @else {
+  <h2 class="ja-big-title">
+    Report for the period {{selectedQRPeriod}}
+  </h2>
+  {{myForm.value.narrative_English}}
+  }
+  }
+</form>
+<!-- 
 @if (errorMessage) {
   <div class="alert alert-danger">{{errorMessage}}</div>
 }
@@ -71,4 +109,4 @@
       </div>
     </div>
   </fieldset>
-</form>
+</form> -->

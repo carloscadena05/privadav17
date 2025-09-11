@@ -30,6 +30,7 @@ export class StudentFlexiDTO {
 
    public universityAbbrev?: string,
    public universityDescriptor?: string,
+   public universityName?: string,
    public major?: string,
 
 
@@ -43,7 +44,8 @@ export class StudentFlexiDTO {
     // public numericGPAStatus?: number,
     public timelyMentorMeetingStatus?: string,
     public timelyMentorReportStatus?: string,
-    public pcsId?: number
+    public pcsId?: number,
+    public mentorPhotoUrl?: string,
     // public numericTimelyMentorMeetingStatus?: number,
     // public numericTimelyMentorReportStatus?: number,
 

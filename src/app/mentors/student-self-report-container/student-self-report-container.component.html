@@ -1,9 +1,25 @@
-<div class="col">
+<div class="flex flex-col bg-white rounded-2xl p-4">
+  <div class="flex gap-x-2">
+    <label class="text-tertiary font-medium">Report for Quarter</label>
+    <mat-form-field appearance="outline" class="simple no-hint">
+      <mat-select [compareWith]="value_select" [(ngModel)]="selectedQRPeriod"
+        (selectionChange)="setSelectedQRPeriod($event.target.value)">
+        @for (yearPeriod of qrPeriods; track $index) {
+        <mat-option [value]="yearPeriod.value" class="simple">
+          {{ yearPeriod.label }}
+        </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <app-self-reports showOnlyIfStatusIsSent="true">
+  </app-self-reports>
+</div>
+
+<!-- <div class="col">
   <div class="card bg-primary">
     <div class="card-header text-white">
-      <!-- <span style="font-size:large">
-      Student Quarterly Reports Available Soon
-    </span> -->
     <span style="margin-left:10rem">
       Report for Quarter:
       <select name="activePeriodSelector" [(ngModel)]="selectedQRPeriod"
@@ -18,4 +34,4 @@
     <app-self-reports showOnlyIfStatusIsSent="true">
     </app-self-reports>
   </div>
-</div>
+</div> -->

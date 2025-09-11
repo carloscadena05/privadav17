@@ -1,49 +1,185 @@
-<div class="card-body bg-white">
-
-
+<mat-accordion>
   @for (mr of mentorReports2; track mr; let i = $index) {
-    <div class="row" style="border-bottom: 3px solid #ccc; margin-top: 2px;">
-      <div class="col-md-12">
-        <div class="row">
-          <span class="padded">
-            &nbsp;Report Month:
-            {{ mr.lastContactMonth | alphaMonth }}-{{ mr.lastContactYear }}
-          </span>
-          <span class="padded">
-            &nbsp;Report Date:
-            {{ mr.reportDateTime | truncateDate }}
-          </span>
-          <span class="padded">
-            &nbsp;Overall Situation:
-            <img src="{{ emojis[mr.emoji + 1] }}" width="28px" />
-          </span>
-          <span class="padded">
-            &nbsp;Communication:
-            <img src="{{ emojis[mr.communication + 1] }}" width="28px" />
-          </span>                                                          <!-- not copied to QR -->
-          @if (i === 0 && latestReportIsCurrentMonth && mr.reviewedStatusId !== 2148) {
-            <span class="padded">
-              <span class="btn btn-primary" (click)="monthlyReportEdit(mr.mentorReportId)" style="margin-left: 10px">
-                Edit Report / Editar informe
+  @if(mentorReports2?.[i]?.lastContactYear != mentorReports2?.[i-1]?.lastContactYear) {
+  <mat-expansion-panel disabled class="!bg-secondary first:rounded-t-2xl overflow-hidden">
+    <mat-expansion-panel-header class="!cursor-default">
+      <mat-panel-title>
+        <h3 class="ja-title-ac">
+          {{mentorReports2?.[i]?.lastContactYear}}
+        </h3>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+  </mat-expansion-panel>
+  }
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{ '1999-'+mr?.lastContactMonth+'-01' | date:'MMMM' }}, {{ mr?.lastContactYear }}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <ng-template matExpansionPanelContent>
+      <div class="flex flex-col gap-y-2">
+        <div class="flex gap-x-4 items-center justify-between flex-wrap">
+
+          <div class="flex gap-x-4 items-center">
+            <div class="flex gap-x-2 justify-start items-start shadow-md p-2 rounded-lg">
+              <div class="flex flex-col rounded-lg overflow-hidden size-12 scale-75">
+                <span class="bg-blue-400 flex justify-center text-slate-50 text-sm">
+                  {{ '1999-'+mr?.lastContactMonth+'-01' | date:'MMM' }}
+                </span>
+                <span class="bg-slate-100 flex justify-center text-slate-700 text-xl font-semibold">
+                  {{ mr?.lastContactYear }}
+                </span>
+              </div>
+
+              <span class="flex flex-col">
+                <span class="font-medium text-secondary">Report</span>
+                <span class="font-medium text-secondary">Month</span>
               </span>
-            </span>
-          }
+            </div>
+
+            <div class="flex gap-x-2 justify-start items-start shadow-md p-2 rounded-lg">
+              <div class="flex flex-col rounded-lg overflow-hidden size-12 scale-75">
+                <span class="bg-red-400 flex justify-center text-slate-50 text-sm">
+                  {{ mr?.reportDateTime | date:'MMM' }}
+                </span>
+                <span class="bg-slate-100 flex justify-center text-slate-700 text-xl font-semibold">
+                  {{ mr?.reportDateTime | date:'dd' }}
+                </span>
+              </div>
+
+              <span class="flex flex-col">
+                <span class="font-medium text-secondary">Submitted</span>
+                <span class="font-medium text-secondary">Date</span>
+              </span>
+            </div>
+
+            <div class="flex gap-x-4 items-center shadow-md p-2 rounded-lg">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#13538a"
+                fill="none">
+                <path
+                  d="M5 20C6.07093 18.053 7.52279 13.0189 10.3063 13.0189C12.2301 13.0189 12.7283 15.4717 14.6136 15.4717C17.8572 15.4717 17.387 10 21 10"
+                  stroke="#141B34" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+
+              <span class="flex flex-col gap-x-2 items-center justify-start">
+                <span class="font-medium text-secondary">Overall Situation</span>
+                <div
+                  [ngClass]="mr.emoji + 1 == 0 ? 'bg-red-100' : mr.emoji + 1 == 1 ? 'bg-green-100' : mr.emoji + 1 == 2 ? 'bg-yellow-100' : mr.emoji + 1 == 3 ? 'bg-orange-100' : ''"
+                  class="flex gap-x-1 items-center rounded-full px-1">
+                  <img src="{{ emojis[mr.emoji + 1] }}" width="24px" class="rounded-full" />
+                  @switch (mr.emoji + 1) {
+                  @case (0) { <span class="text-red-600">Needs Attention</span> }
+                  @case (1) { <span class="text-green-600">Good</span> }
+                  @case (2) { <span class="text-yellow-600">Celebrate</span> }
+                  @case (3) { <span class="text-orange-600">Concerned</span> }
+                  }
+                </div>
+              </span>
+            </div>
+
+            <div class="flex gap-x-4 items-center shadow-md p-2 rounded-lg">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#13538a"
+                fill="none">
+                <path d="M8 13.5H16M8 8.5H12" stroke="#13538a" stroke-width="1.5" stroke-linecap="round"
+                  stroke-linejoin="round"></path>
+                <path
+                  d="M6.09881 19C4.7987 18.8721 3.82475 18.4816 3.17157 17.8284C2 16.6569 2 14.7712 2 11V10.5C2 6.72876 2 4.84315 3.17157 3.67157C4.34315 2.5 6.22876 2.5 10 2.5H14C17.7712 2.5 19.6569 2.5 20.8284 3.67157C22 4.84315 22 6.72876 22 10.5V11C22 14.7712 22 16.6569 20.8284 17.8284C19.6569 19 17.7712 19 14 19C13.4395 19.0125 12.9931 19.0551 12.5546 19.155C11.3562 19.4309 10.2465 20.0441 9.14987 20.5789C7.58729 21.3408 6.806 21.7218 6.31569 21.3651C5.37769 20.6665 6.29454 18.5019 6.5 17.5"
+                  stroke="#13538a" stroke-width="1.5" stroke-linecap="round"></path>
+              </svg>
+
+              <span class="flex flex-col gap-x-2 items-center">
+                <span class="font-medium text-secondary">Communication</span>
+
+                <div
+                  [ngClass]="mr.communication + 1 == 0 ? 'bg-red-100' : mr.communication + 1 == 1 ? 'bg-green-100' : mr.communication + 1 == 2 ? 'bg-yellow-100' : mr.communication + 1 == 3 ? 'bg-orange-100' : ''"
+                  class="flex gap-x-1 items-center rounded-full px-1">
+                  <img src="{{ emojis[mr.communication + 1] }}" width="24px" class="rounded-full" />
+                  @switch (mr.communication + 1) {
+                  @case (0) { <span class="text-red-600">Needs Attention</span> }
+                  @case (1) { <span class="text-green-600">Good</span> }
+                  @case (2) { <span class="text-yellow-600">Celebrate</span> }
+                  @case (3) { <span class="text-orange-600">Concerned</span> }
+                  }
+                </div>
+              </span>
+            </div>
+          </div>
+
+          <button class="ja-btn ja-btn-primary" (click)="monthlyReportEdit(mr.mentorReportId)">
+            @if (is_spanish) {
+            Editar Reporte
+            } @else {Edit Report}
+          </button>
         </div>
-        <div class="row">
-          <div class="col-md-2 padded">
-            &nbsp;Narrative (English):
-          </div>
-          <div class="col-md-10" [innerHTML]="mr.narrative_English | unsafeHtml">
-          </div>
+
+        <div [innerHTML]="is_spanish ? mr?.narrative_Spanish : mr?.narrative_English"></div>
+      </div>
+    </ng-template>
+  </mat-expansion-panel>
+  } @empty {
+  <div class="flex flex-col text-red-500 justify-center items-center">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="-5 -5 34 34" width="64" height="64" color="#ef4444" fill="none" class="bg-red-100 rounded-full">
+      <path d="M2 2L22 22" stroke="#ef4444" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+      <path
+        d="M19.8478 14.9369C20 14.5694 20 14.1606 20 13.3431V10C20 6.22876 20 4.34315 18.8284 3.17157C17.6569 2 15.7712 2 12 2C9.33333 2 7.60948 2 6.41421 2.41421M4.41421 4.41421C4 5.60948 4 7.33333 4 10L4 14.5442C4 17.7892 4 19.4117 4.88607 20.5107C5.06508 20.7327 5.26731 20.9349 5.48933 21.1139C6.58831 22 8.21082 22 11.4558 22C12.1614 22 12.5141 22 12.8372 21.886C12.9044 21.8623 12.9702 21.835 13.0345 21.8043C13.3436 21.6564 13.593 21.407 14.0919 20.9081L17.5 17.5"
+        stroke="#ef4444" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M13 21.5L13 20.7487C13 17.9203 13 16.5061 13.8787 15.6274C14.1785 15.3276 14.5406 15.1301 15 15"
+        stroke="#ef4444" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+    @if (is_spanish) {
+    No hay reportes anteriores del mentor
+    } @else {
+    There are no previous reports from the mentor.
+    }
+  </div>
+  }
+</mat-accordion>
+
+<!-- 
+  <div class="row" style="border-bottom: 3px solid #ccc; margin-top: 2px;">
+    <div class="col-md-12">
+      <div class="row">
+        <span class="padded">
+          &nbsp;Report Month:
+          {{ mr.lastContactMonth | alphaMonth }}-{{ mr.lastContactYear }}
+        </span>
+        <span class="padded">
+          &nbsp;Report Date:
+          {{ mr.reportDateTime | truncateDate }}
+        </span>
+        <span class="padded">
+          &nbsp;Overall Situation:
+          <img src="{{ emojis[mr.emoji + 1] }}" width="28px" />
+        </span>
+        <span class="padded">
+          &nbsp;Communication:
+          <img src="{{ emojis[mr.communication + 1] }}" width="28px" />
+        </span>  not copied to QR 
+        @if (i === 0 && latestReportIsCurrentMonth && mr.reviewedStatusId !== 2148) {
+        <span class="padded">
+          <span class="btn btn-primary" (click)="monthlyReportEdit(mr.mentorReportId)" style="margin-left: 10px">
+            Edit Report / Editar informe
+          </span>
+        </span>
+        }
+      </div>
+      <div class="row">
+        <div class="col-md-2 padded">
+          &nbsp;Narrative (English):
         </div>
-        <div class="row">
-          <div class="col-md-2 padded">
-            &nbsp;Narrative (Spanish):
-          </div>
-          <div class="col-md-10" [innerHTML]="mr.narrative_Spanish | unsafeHtml">
-          </div>
+        <div class="col-md-10" [innerHTML]="mr.narrative_English | unsafeHtml">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-2 padded">
+          &nbsp;Narrative (Spanish):
+        </div>
+        <div class="col-md-10" [innerHTML]="mr.narrative_Spanish | unsafeHtml">
         </div>
       </div>
     </div>
+  </div>
   }
-</div>
+</div> -->

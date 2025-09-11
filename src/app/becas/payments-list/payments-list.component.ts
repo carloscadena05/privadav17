@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { Subscription } from 'rxjs';
@@ -13,13 +13,16 @@ import { SELECTITEM } from '../../_shared/interfaces/SELECTITEM';
 import { SORTCRITERIA } from '../../_shared/interfaces/SORTCRITERIA';
 import { BecaPaymentDTO } from '../../_shared/models/beca-paymentDTO';
 import { SessionService } from '../../_shared/services/session.service';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 
 
 
 @Component({
-    selector: 'app-home',
-    templateUrl: './payments-list.component.html',
-    standalone: false
+  selector: 'app-home',
+  templateUrl: './payments-list.component.html',
+  standalone: false
 })
 export class PaymentsListComponent implements OnInit {
   isLoading = false;
@@ -40,16 +43,21 @@ export class PaymentsListComponent implements OnInit {
 
   displayTestNames: boolean;
   private subscription: Subscription;
-// #####
-   testNameVisibility$ = this.store.select<boolean>(UIState.getTestNamesVisibility);
+  // #####
+  testNameVisibility$ = this.store.select<boolean>(UIState.getTestNamesVisibility);
 
-   selectedPCSYear = '';
-   selectedPCSMonthNum = '0';
-   selectedPCSYear$ = this.store.select<string>(UIState.getSelectedPCSYear);
-   selectedPCSMonthNum$ = this.store.select<string>(UIState.getSelectedPCSMonthNum);
-   currentMonthNum = new Date().getMonth() + 1;
-   isEditableMonth: boolean = false;
+  selectedPCSYear = '';
+  selectedPCSMonthNum = (new Date().getMonth() + 1).toString();
+  selectedPCSYear$ = this.store.select<string>(UIState.getSelectedPCSYear);
+  selectedPCSMonthNum$ = this.store.select<string>(UIState.getSelectedPCSMonthNum);
+  currentMonthNum = new Date().getMonth() + 1;
+  isEditableMonth: boolean = false;
 
+  displayedColumns: string[] = ["index", "Profile", "studentName", "pcsCode", "mentorReportStatus", "studentReportStatus", "inscriptionReportStatus", "gradeReportStatus", "paymentStatus", "requestedBeca", "approvedBy", "comment"];
+  dataSource: MatTableDataSource<BecaPaymentDTO>;
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
   constructor(
     public currRoute: ActivatedRoute,
     private router: Router,
@@ -64,7 +72,7 @@ export class PaymentsListComponent implements OnInit {
     // this.becaPaymentStatuses = constants.becaPaymentStatuses;
 
     this.selectedPCSYear = '' + constants.currentPaymentYear; // '' + today.getFullYear(); //
-    this.selectedPCSMonthNum = '0';
+    this.selectedPCSMonthNum = (new Date().getMonth() + 1).toString();
 
     this.selectedReviewedStatus = '0';
     this.isLoading = false;
@@ -74,8 +82,8 @@ export class PaymentsListComponent implements OnInit {
     this.testNameVisibility$.subscribe((flag) => {
       this.displayTestNames = flag;
     });
-    this.subscribeForSelectedPCSYear();
-    this.subscribeForSelectedPCSMonthNum();
+    this.subscribeForSelectedPCSYear(true);
+    this.subscribeForSelectedPCSMonthNum(true);
   }
   generateRandomNumber(): number {
     return Math.floor(100 + Math.random() * 900);
@@ -108,21 +116,27 @@ export class PaymentsListComponent implements OnInit {
     this.fetchFilteredData();
   }
 
-  subscribeForSelectedPCSYear() {
-    this.subscription = this.selectedPCSYear$.subscribe((message) => {
-      this.selectedPCSYear = message;
-      this.selectedPCSMonthNum = '0'; // for startup or when selecting a new year, reset month to 0
+  async subscribeForSelectedPCSYear(is_new: boolean) {
+    this.subscription = await this.selectedPCSYear$.subscribe(async (message) => {
+      this.selectedPCSYear = await message;
+      if (is_new)
+        await this.setSelectedPCSMonthNum((new Date().getMonth() + 1).toString());
+      else
+        this.selectedPCSMonthNum = await '0'; // for startup or when selecting a new year, reset month to 0
       console.log('************NGXS: new selectedPCSYear received ' + this.selectedPCSYear);
-      this.fetchFilteredData();
+      await this.fetchFilteredData();
     });
   }
-  subscribeForSelectedPCSMonthNum() {
+  async subscribeForSelectedPCSMonthNum(is_new: boolean) {
 
-    this.subscription = this.selectedPCSMonthNum$.subscribe((message) => {
-      this.selectedPCSMonthNum = message;
-      console.log('************NGXS: BECA new selectedPCSMonthNum received '  + this.selectedPCSMonthNum);
-      this.isEditableMonth = this.currentMonthNum < parseInt(this.selectedPCSMonthNum);
-      this.fetchFilteredData();
+    this.subscription = await this.selectedPCSMonthNum$.subscribe(async (message) => {
+      if (is_new)
+        await this.setSelectedPCSMonthNum((new Date().getMonth() + 1).toString());
+      else
+        this.selectedPCSMonthNum = await message;
+      console.log('************NGXS: BECA new selectedPCSMonthNum received ' + this.selectedPCSMonthNum);
+      this.isEditableMonth = await this.currentMonthNum < parseInt(this.selectedPCSMonthNum);
+      await this.fetchFilteredData();
     });
   }
 
@@ -134,6 +148,8 @@ export class PaymentsListComponent implements OnInit {
     this.setSelectedPCSMonthNum('0');
   }
   setSelectedPCSMonthNum(month: string) {
+    console.log('SIIIIIIII', month);
+
     this.store.dispatch(new SetSelectedPCSMonthNum(month));
     this.selectedPCSMonthNum = month;
   }
@@ -171,10 +187,15 @@ export class PaymentsListComponent implements OnInit {
         this.becaPmts = data.filter((item) => {
           if (this.displayTestNames) {
             return item;
-          } else if (!this.displayTestNames && item.studentName.substring(0,5) !== '_Test') {
+          } else if (!this.displayTestNames && item.studentName.substring(0, 5) !== '_Test') {
             return item;
           }
         });
+        this.dataSource = new MatTableDataSource(this.becaPmts);
+        setTimeout(() => {
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
+        }, 100);
       },
       (err) => {
         console.error('Subscribe error: ' + err);
@@ -208,6 +229,21 @@ export class PaymentsListComponent implements OnInit {
         this.isLoading = false;
       }
     );
+  }
+
+
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+  value_select(a: any, b: any): boolean {
+    return a == b;
   }
 
 }

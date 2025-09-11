@@ -167,6 +167,23 @@
                             <div class="flex gap-x-4 items-center">
                                 <div class="flex gap-x-2 justify-start items-start shadow-md p-2 rounded-lg">
                                     <div class="flex flex-col rounded-lg overflow-hidden size-12 scale-75">
+                                        <span class="bg-blue-400 flex justify-center text-slate-50 text-sm">
+                                            {{ '1999-'+element?.lastContactMonth+'-01' | date:'MMM' }}
+                                        </span>
+                                        <span
+                                            class="bg-slate-100 flex justify-center text-slate-700 text-xl font-semibold">
+                                            {{ element?.lastContactYear }}
+                                        </span>
+                                    </div>
+
+                                    <span class="flex flex-col">
+                                        <span class="font-medium text-secondary">Report</span>
+                                        <span class="font-medium text-secondary">Month</span>
+                                    </span>
+                                </div>
+
+                                <div class="flex gap-x-2 justify-start items-start shadow-md p-2 rounded-lg">
+                                    <div class="flex flex-col rounded-lg overflow-hidden size-12 scale-75">
                                         <span class="bg-red-400 flex justify-center text-slate-50 text-sm">
                                             {{ element?.reportDateTime | date:'MMM' }}
                                         </span>
@@ -183,10 +200,10 @@
                                 </div>
 
                                 <!-- <span class="flex flex-col">
-                    <span class="font-medium text-secondary">Report Month</span>
-                    {{ element?.lastContactYear }}-{{ element.lastContactMonth | alphaMonth }}
-                  </span>
- -->
+                                        <span class="font-medium text-secondary">Report Month</span>
+                                        {{ element?.lastContactYear }}-{{ element.lastContactMonth | alphaMonth }}
+                                    </span>
+                                -->
                                 <div class="flex gap-x-4 items-center shadow-md p-2 rounded-lg">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"
                                         color="#13538a" fill="none">

@@ -125,7 +125,7 @@ export class TitulosListComponent implements OnInit {
   }
 
   isViewLinkHidden(tituloUploadedDate: any) {
-    return (tituloUploadedDate === '1900-01-01T00:00:00' || tituloUploadedDate == null);
+    return (tituloUploadedDate == '1900-01-01T00:00:00') || !tituloUploadedDate || tituloUploadedDate == '' || tituloUploadedDate == null;
   }
 
   uploadTitulo(studentGUId: string, gradYear: number) {

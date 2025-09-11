@@ -1,156 +1,331 @@
+<div class="flex flex-col gap-4 justify-center ja-bg-white p-4 rounded-2xl">
+  <h1 class="ja-big-title inline"> Inscriptions Status for {{ studentName }} </h1>
+
+  @if (errorMessage) {
+  <span class="alert alert-danger">{{ errorMessage }}</span>
+  }
+  @if (successMessage) {
+  <span class="alert alert-success">{{ successMessage }}</span>
+  }
+  @if (isLoading) {
+  <app-loading-container> </app-loading-container>
+  } @else {
+  <form [formGroup]="myForm">
+    <ng-container formArrayName="inscriptionFormRows">
+      <table mat-table [dataSource]="inscriptions">
+        <ng-container matColumnDef="academicTermId">
+          <th mat-header-cell *matHeaderCellDef> No. </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.academicTermId }}
+
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="inscriptionsEntryEndDate">
+          <th mat-header-cell *matHeaderCellDef> Due Date </th>
+
+          <td mat-cell *matCellDef="let element; let index = index">
+            {{element.inscriptionsEntryEndDate | date}}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="registrationFormSubmittedDate">
+          <th mat-header-cell *matHeaderCellDef> Inscripción</th>
+          <td mat-cell *matCellDef="let element">
+            <!-- <div [hidden]="isViewLinkHidden(element.registrationFormSubmittedDate)">
+              <a href="{{staticUrlPrefix}}InscriptionRegistrations/{{element.academicTermId}}/{{element.studentGUId | uppercase }}.png"
+                target="_blank">{{element.studentGUId | trimGuid | uppercase }}</a>
+            </div> -->
+
+            <div class="flex gap-x-2 items-center"
+              [ngClass]="!isViewLinkHidden(element.registrationFormSubmittedDate) ? 'text-green-500' : 'text-red-500'">
+              @if(!isViewLinkHidden(element.registrationFormSubmittedDate)) {
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#22c55e"
+                fill="none">
+                <path d="M5 14L8.5 17.5L19 6.5" stroke="#22c55e" stroke-width="1.5" stroke-linecap="round"
+                  stroke-linejoin="round"></path>
+              </svg>
+              } @else {
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#ef4444"
+                fill="none">
+                <path d="M18 6L6.00081 17.9992M17.9992 18L6 6.00085" stroke="#ef4444" stroke-width="1.5"
+                  stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+              }
+              <div class="flex flex-col">
+                <span class="text-xs">Registration</span>
+                <span class="text-xxs">
+                  @if(!isViewLinkHidden(element.registrationFormSubmittedDate) ){
+                  {{element.registrationFormSubmittedDate | date}}
+                  }
+                </span>
+              </div>
+            </div>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="paymentReceiptSubmittedDate">
+          <th mat-header-cell *matHeaderCellDef> Recibo de pago </th>
+          <td mat-cell *matCellDef="let element">
+            <!-- <div [hidden]="isViewLinkHidden(element.paymentReceiptSubmittedDate)">
+              <a href="{{staticUrlPrefix}}InscriptionPayments/{{element.academicTermId}}/{{element.studentGUId | uppercase }}.png"
+                target="_blank">{{element.studentGUId | trimGuid | uppercase }}</a>
+            </div> -->
+            <div class="flex gap-x-2 items-center p-1 rounded-md"
+              [ngClass]="!isViewLinkHidden(element.paymentReceiptSubmittedDate) ? 'text-green-500' : 'text-red-500'">
+              @if(!isViewLinkHidden(element.paymentReceiptSubmittedDate)) {
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#22c55e"
+                fill="none">
+                <path d="M5 14L8.5 17.5L19 6.5" stroke="#22c55e" stroke-width="1.5" stroke-linecap="round"
+                  stroke-linejoin="round"></path>
+              </svg>
+              } @else {
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#ef4444"
+                fill="none">
+                <path d="M18 6L6.00081 17.9992M17.9992 18L6 6.00085" stroke="#ef4444" stroke-width="1.5"
+                  stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+              }
+              <div class="flex flex-col">
+                <span class="text-xs">Receipt</span>
+                <span class="text-xxs">
+                  @if(!isViewLinkHidden(element.paymentReceiptSubmittedDate) ){
+                  {{element.paymentReceiptSubmittedDate | date}}
+                  }
+                </span>
+              </div>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="open">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Evidence </th>
+          <td mat-cell *matCellDef="let row">
+            @if(!(isViewLinkHidden(row.paymentReceiptSubmittedDate) &&
+            isViewLinkHidden(row.registrationFormSubmittedDate))) {
+            <button type="button" (click)="open_documentation_dialog(row)" class="ja-btn ja-btn-primary">View Evidence</button>
+            }
+          </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="confirmedById">
+          <th mat-header-cell *matHeaderCellDef> Confirmado por </th>
+
+          <td mat-cell *matCellDef="let element; let index = index">
+            <ng-container [formGroupName]="index">
+              <mat-form-field appearance="outline" class="simple no-hint">
+                <mat-select formControlName="confirmedById" [compareWith]="value_select"
+                  (selectionChange)="setConfirmedBy(i, $event.target.value)">
+                  <mat-option class="simple" [value]="null">[Not Confirmed]</mat-option>
+                  @for (admin of admins$ | async; track admin) {
+                  <mat-option class="simple" [value]="admin.value">{{ admin.label }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </ng-container>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="confirmedDate">
+          <th mat-header-cell *matHeaderCellDef> Fecha de confirmación </th>
+          <td mat-cell *matCellDef="let element; let index = index">
+            {{element.confirmedDate | date}}
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </ng-container>
+
+
+  </form>
+  }
+</div>
+
+
+<ng-template #documentation>
+  @for(evidence of paginated_items; track evidence){
+  <h2 mat-dialog-title>
+    <div class="ja-big-title">Documentation | {{evidence.studentName}}</div>
+  </h2>
+  <mat-dialog-content>
+    <div class="flex flex-col md:flex-row gap-4 md:justify-center md:items-start justify-start items-center">
+      <div class="flex flex-col">
+        <div class="ja-title">Inscription</div>
+        @if(!isViewLinkHidden(evidence.registrationFormSubmittedDate)) {
+        <img
+          src="https://jawebapi.jovenesadelante.org/static/InscriptionRegistrations/{{evidence.academicTermId}}/{{evidence.studentGUId | uppercase }}.png"
+          alt="" class="w-full max-w-[30rem] max-h-[30rem] hover:scale-150 duration-300">
+        } @else {
+        <div class="bg-red-100 rounded-2xl p-4 text-red-500 flex flex-col items-center max-w-96 text-wrap text-center">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48" color="#ef4444"
+            fill="none">
+            <path
+              d="M4 11.0004L4 14.5446C4 17.7896 4 19.4121 4.88607 20.5111C5.06508 20.7331 5.26731 20.9354 5.48933 21.1144C6.58831 22.0004 8.21082 22.0004 11.4558 22.0004C12.1614 22.0004 12.5141 22.0004 12.8372 21.8864C12.9044 21.8627 12.9702 21.8354 13.0345 21.8047C13.3436 21.6569 13.593 21.4074 14.0919 20.9085L18.8284 16.172C19.4065 15.5939 19.6955 15.3049 19.8478 14.9374C20 14.5698 20 14.1611 20 13.3436V10.0004C20 6.22919 20 4.34358 18.8284 3.172C17.7693 2.11284 16.1265 2.01122 13.0345 2.00146M13 21.5004V21.0004C13 18.172 13 16.7578 13.8787 15.8791C14.7574 15.0004 16.1716 15.0004 19 15.0004H19.5"
+              stroke="#ef4444" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path
+              d="M9.97487 7.97438C10.6082 7.34101 11 6.46601 11 5.49951C11 3.56651 9.433 1.99951 7.5 1.99951C6.5335 1.99951 5.6585 2.39126 5.02513 3.02464M9.97487 7.97438C9.3415 8.60776 8.4665 8.99951 7.5 8.99951C5.567 8.99951 4 7.43251 4 5.49951C4 4.53301 4.39175 3.65801 5.02513 3.02464M9.97487 7.97438L5.02513 3.02464"
+              stroke="#ef4444" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          El estudiante aún no ha subido su evidencia de inscripción.
+        </div>
+        }
+      </div>
+      <div class="flex flex-col">
+        <div class="ja-title">Payment</div>
+        @if(!isViewLinkHidden(evidence.paymentReceiptSubmittedDate)) {
+        <img
+          src="https://jawebapi.jovenesadelante.org/static/InscriptionPayments/{{evidence.academicTermId}}/{{evidence.studentGUId | uppercase }}.png"
+          alt="" class="w-full max-w-[30rem] max-h-[30rem] hover:scale-150 duration-300">
+        } @else {
+        <div class="bg-red-100 rounded-2xl p-4 text-red-500 flex flex-col items-center max-w-96 text-wrap text-center">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48" color="#ef4444"
+            fill="none">
+            <path
+              d="M4 11.0004L4 14.5446C4 17.7896 4 19.4121 4.88607 20.5111C5.06508 20.7331 5.26731 20.9354 5.48933 21.1144C6.58831 22.0004 8.21082 22.0004 11.4558 22.0004C12.1614 22.0004 12.5141 22.0004 12.8372 21.8864C12.9044 21.8627 12.9702 21.8354 13.0345 21.8047C13.3436 21.6569 13.593 21.4074 14.0919 20.9085L18.8284 16.172C19.4065 15.5939 19.6955 15.3049 19.8478 14.9374C20 14.5698 20 14.1611 20 13.3436V10.0004C20 6.22919 20 4.34358 18.8284 3.172C17.7693 2.11284 16.1265 2.01122 13.0345 2.00146M13 21.5004V21.0004C13 18.172 13 16.7578 13.8787 15.8791C14.7574 15.0004 16.1716 15.0004 19 15.0004H19.5"
+              stroke="#ef4444" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path
+              d="M9.97487 7.97438C10.6082 7.34101 11 6.46601 11 5.49951C11 3.56651 9.433 1.99951 7.5 1.99951C6.5335 1.99951 5.6585 2.39126 5.02513 3.02464M9.97487 7.97438C9.3415 8.60776 8.4665 8.99951 7.5 8.99951C5.567 8.99951 4 7.43251 4 5.49951C4 4.53301 4.39175 3.65801 5.02513 3.02464M9.97487 7.97438L5.02513 3.02464"
+              stroke="#ef4444" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          El estudiante aún no ha subido su evidencia de pago.
+        </div>
+        }
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-dialog-close class="ja-btn ja-btn-secondary-sc">Close</button>
+    <mat-paginator [length]="rows_with_evidence().length" [pageSize]="page_size" [pageIndex]="current_page"
+      [hidePageSize]="true" (page)="onPageChange($event)" aria-label="Select page"></mat-paginator>
+    <button class="ja-btn ja-btn-secondary" (click)="confirm_and_next(evidence.inscriptionId)">Confirm and next</button>
+  </mat-dialog-actions>
+  }
+</ng-template>
+
+<!-- 
+
 <div class="card bg-primary">
   <div class="card-header text-white" style="font-size: large">
-    <span>Inscriptions Status for {{ studentName }}</span
-      >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    </div>
+    <span>Inscriptions Status for {{ studentName }}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </div>
 
-    <div class="card-body bg-white">
-      @if (errorMessage) {
-        <span class="alert alert-danger">{{ errorMessage }}</span>
-      }
-      @if (successMessage) {
-        <span class="alert alert-success">{{ successMessage }}</span>
-      }
+  <div class="card-body bg-white">
+    @if (errorMessage) {
+    <span class="alert alert-danger">{{ errorMessage }}</span>
+    }
+    @if (successMessage) {
+    <span class="alert alert-success">{{ successMessage }}</span>
+    }
 
+    <div>
       <div>
+        @switch (isLoading) {
+        @case (true) {
+        <div class="text-center col-md-4 col-md-offset-4">
+          <app-loading-container> </app-loading-container>
+        </div>
+        }
+        @case (false) {
         <div>
-          @switch (isLoading) {
-            @case (true) {
-              <div class="text-center col-md-4 col-md-offset-4">
-                <app-loading-container> </app-loading-container>
-              </div>
-            }
-            @case (false) {
-              <div>
-                <form [formGroup]="myForm">
-                  <p>
-                    <button
-                      [disabled]="myForm.pristine"
-                      type="submit"
-                      class="btn btn-primary"
-                      (click)="saveAllChangedEntries()"
-                      >
-                      Save
-                    </button>
-                    <!-- <button [disabled]="!(myForm.dirty && myForm.touched)"
+          <form [formGroup]="myForm">
+            <p>
+              <button [disabled]="myForm.pristine" type="submit" class="btn btn-primary"
+                (click)="saveAllChangedEntries()">
+                Save
+              </button>
+              <button [disabled]="!(myForm.dirty && myForm.touched)"
                     type="cancel"
                     class="btn btn-primary"
-                  (click)="resetAllChangedEntries()">Cancel</button> -->
-                  <button class="btn btn-primary" (click)="location.back()">Back</button>
-                </p>
-                <table class="table-sm table-striped">
-                  <thead>
-                    <tr>
-                      <!--<td>Id</td>-->
-                      <!-- <th></th> -->
-                      <!-- <th app-sortable-column="studentName" sort-direFstudentIDion="asc" (onSortColumn)="onSortColumn($event)">Student
-                    </th>
-                    <th app-sortable-column="univ" (onSortColumn)="onSortColumn($event)">Univ</th> -->
-                    <!-- <th app-sortable-column="academicYear" (onSortColumn)="onSortColumn($event)">YearType</th> -->
-                    <!-- <th app-sortable-column="year" (onSortColumn)="onSortColumn($event)">Year</th> -->
-                    <!-- <th app-sortable-column="periodNumber" (onSortColumn)="onSortColumn($event)">Period</th> -->
-                    <th>Period #</th>
-                    <th>Inscriptions<br />Due Date</th>
-                    <th>Registration Form<br />Submitted</th>
-                    <th>Payment Receipt<br />Submitted</th>
-                    <th>Confirmed By</th>
-                    <th>Confirmed Date</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @for (entry of inscriptions; track entry; let i = $index) {
-                    <tr formArrayName="inscriptionFormRows">
-                      <ng-container [formGroupName]="i">
-                        <!-- <td>
+                  (click)="resetAllChangedEntries()">Cancel</button>
+              <button class="btn btn-primary" (click)="location.back()">Back</button>
+            </p>
+            <table class="table-sm table-striped">
+              <thead>
+                <tr>
+
+                  <th>Period #</th>
+                  <th>Inscriptions<br />Due Date</th>
+                  <th>Registration Form<br />Submitted</th>
+                  <th>Payment Receipt<br />Submitted</th>
+                  <th>Confirmed By</th>
+                  <th>Confirmed Date</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (entry of inscriptions; track entry; let index = index) {
+                <tr formArrayName="inscriptionFormRows">
+                  <ng-container [formGroupName]="i">
+                    <td>
                         {{ i+1 }}
-                      </td> -->
-                      <!-- <td>
+                      </td>
+                    <td>
                       <app-grade-row [entry]="entry">
                       </app-grade-row>
-                    </td> -->
-                    <!-- <td (click)='gotoStudent(entry.studentGUId, entry.studentName)' class='link'>
+                    </td>
+                    <td (click)='gotoStudent(entry.studentGUId, entry.studentName)' class='link'>
                     {{ entry.studentName }}
                   </td>
                   <td>
                     {{ entry.univ }}
-                  </td> -->
-                  <!-- <td>
-                  {{  entry.academicYear }}
-                </td> -->
-                <!-- <td>
-                {{ entry.year }}
-              </td> -->
-              <td>
-                {{ entry.academicTermId }}
-              </td>
-              <td>
-                <input
-                  formControlName="inscriptionsEntryEndDate"
-                  class="form-control form-control-sm"
-                  type="text"
-                  size="8"
-                  />
-                </td>
-                <td class="link">
-                  <div [hidden]="isViewLinkHidden(entry.registrationFormSubmittedDate)">
-                    <a href= "{{staticUrlPrefix}}InscriptionRegistrations/{{entry.academicTermId}}/{{entry.studentGUId | uppercase }}.png"
-                    target="_blank">{{entry.studentGUId | trimGuid | uppercase  }}</a>
-                  </div>
-                </td>
-                <td class="link">
-                  <div [hidden]="isViewLinkHidden(entry.paymentReceiptSubmittedDate)">
-                    <a href= "{{staticUrlPrefix}}InscriptionPayments/{{entry.academicTermId}}/{{entry.studentGUId | uppercase }}.png"
-                    target="_blank">{{entry.studentGUId | trimGuid | uppercase  }}</a>
-                  </div>
-                </td>
-                @if (admins$ | async; as admins) {
-                  <div>
-                    <select
-                      id="adminId"
-                      formControlName="confirmedById"
-                      class="form-control form-control-sm"
-                      (change)="setConfirmedBy(i, $event.target.value)"
-                      >
-                      <option [value]="null">[Not Confirmed]</option>
-                      @for (admin of admins; track admin) {
-                        <option [value]="admin.value">{{ admin.label }}</option>
-                      }
-                    </select>
-                  </div>
-                }
-                <td>
-                  <input
-                    formControlName="confirmedDate"
-                    placeholder="yyyy-mm-dd"
-                    class="form-control form-control-sm"
-                    type="text"
-                    size="8"
-                    />
                   </td>
-                  <!-- <td>
+                    <td>
+                  {{  entry.academicYear }}
+                </td>
+                    <td>
+                {{ entry.year }}
+              </td>
+                    <td>
+                      {{ entry.academicTermId }}
+                    </td>
+                    <td>
+                      <input formControlName="inscriptionsEntryEndDate" class="form-control form-control-sm" type="text"
+                        size="8" />
+                    </td>
+                    <td class="link">
+                      <div [hidden]="isViewLinkHidden(entry.registrationFormSubmittedDate)">
+                        <a href="{{staticUrlPrefix}}InscriptionRegistrations/{{entry.academicTermId}}/{{entry.studentGUId | uppercase }}.png"
+                          target="_blank">{{entry.studentGUId | trimGuid | uppercase }}</a>
+                      </div>
+                    </td>
+                    <td class="link">
+                      <div [hidden]="isViewLinkHidden(entry.paymentReceiptSubmittedDate)">
+                        <a href="{{staticUrlPrefix}}InscriptionPayments/{{entry.academicTermId}}/{{entry.studentGUId | uppercase }}.png"
+                          target="_blank">{{entry.studentGUId | trimGuid | uppercase }}</a>
+                      </div>
+                    </td>
+                    @if (admins$ | async; as admins) {
+                    <div>
+                      <select id="adminId" formControlName="confirmedById" class="form-control form-control-sm"
+                        (change)="setConfirmedBy(i, $event.target.value)">
+                        <option [value]="null">[Not Confirmed]</option>
+                        @for (admin of admins; track admin) {
+                        <option [value]="admin.value">{{ admin.label }}</option>
+                        }
+                      </select>
+                    </div>
+                    }
+                    <td>
+                      <input formControlName="confirmedDate" placeholder="yyyy-mm-dd"
+                        class="form-control form-control-sm" type="text" size="8" />
+                    </td>
+                    <td>
                   <button (click)="saveEntry(i)">Save</button>
-                </td> -->
-                @if (isRowDirty(i)) {
-                  <td>+-+</td>
+                </td>
+                    @if (isRowDirty(i)) {
+                    <td>+-+</td>
+                    }
+                    @if (!isRowDirty(i)) {
+                    <td></td>
+                    }
+                  </ng-container>
+                </tr>
                 }
-                @if (!isRowDirty(i)) {
-                  <td></td>
-                }
-              </ng-container>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </form>
-    <!-- <br />Dirty: {{ myForm.dirty }}
-    <br />Pristine: {{ myForm.pristine }}
-    <br />Touched: {{ myForm.touched }}
-    <br />Valid: {{ myForm.valid }} -->
+              </tbody>
+            </table>
+          </form>
+        </div>
+        }
+        }
+      </div>
+    </div>
   </div>
-}
-}
-</div>
-</div>
-</div>
-</div>
+</div> -->

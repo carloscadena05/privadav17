@@ -11,6 +11,18 @@
         @apply bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent text-2xl font-semibold inline mr-auto;
     }
 
+    .ja-title {
+        @apply text-primary text-lg font-semibold inline mr-auto;
+    }
+
+    .ja-title-sc {
+        @apply text-secondary text-lg font-semibold inline mr-auto;
+    }
+    
+    .ja-title-ac {
+        @apply text-accent text-lg font-semibold inline mr-auto;
+    }
+
     .ja-btn {
         @apply flex gap-2 justify-center items-center px-4 py-2 rounded-lg font-medium cursor-pointer hover:saturate-150 hover:brightness-110 disabled:saturate-[.1] disabled:contrast-50 disabled:brightness-125 disabled:cursor-not-allowed duration-300 important;
     }
@@ -49,6 +61,10 @@
 
     .link {
         @apply text-primary underline cursor-pointer;
+    }
+    
+    .link-sc {
+        @apply text-secondary underline cursor-pointer;
     }
 
     .ja-bg-white {

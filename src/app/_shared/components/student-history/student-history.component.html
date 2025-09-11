@@ -1,48 +1,69 @@
+<div class="flex flex-col gap-4 justify-center ja-bg-white p-4 rounded-2xl">
+  <div class="flex gap-x-4 flex-wrap md:flex-nowrap justify-start md:justify-between">
+    <h1 class="ja-big-title inline">Student History</h1>
+      <button class="ja-btn ja-btn-primary" data-cy="btn-save" (click)="onSubmit()" [disabled]="!myForm.valid">
+        Save
+      </button>
+  </div>
+  @if (errorMessage) {
+  <span class="alert alert-danger">{{ errorMessage }}</span>
+  }
+  @if (successMessage) {
+  <span class="alert alert-success">{{ successMessage }}</span>
+  }
+  @if (isLoading) {
+  <app-loading-container> </app-loading-container>
+  } @else {
+    <form [formGroup]="myForm" class="flex flex-col">
+      <mat-form-field appearance="outline">
+        <mat-label>Student History (Español)</mat-label>
+        <textarea name="" id="" matInput formControlName="studentHistory_Es" #StudentHistory_Es></textarea>
+        <mat-hint>{{ StudentHistory_Es.value.length }} of 4500 characters</mat-hint>
+      </mat-form-field>
+
+      <!-- <a href="https://translate.google.com/?sl=es&tl=en&op=translate" class="link mb-4" target="_blank">Google
+      Translate</a> -->
+
+      <mat-form-field appearance="outline">
+        <mat-label>Student History (English)</mat-label>
+        <textarea name="" id="" matInput formControlName="studentHistory_En" #StudentHistory_En></textarea>
+        <mat-hint>{{ StudentHistory_En.value.length }} of 4500 characters</mat-hint>
+      </mat-form-field>
+    </form>
+  }
+</div>
+<!-- 
 @if (errorMessage) {
-  <div class="alert alert-danger">{{ errorMessage }}</div>
+<div class="alert alert-danger">{{ errorMessage }}</div>
 }
 @if (successMessage) {
-  <div class="alert alert-success">{{ successMessage }}</div>
+<div class="alert alert-success">{{ successMessage }}</div>
 }
 
-<!-- <div [ngSwitch]="isLoading">-->
 <div class="text-center col-md-12"></div>
 
 <div [formGroup]="myForm">
   <div>
     <label for="studentHistory_Es">Student History (Español)</label>
-    <textarea
-      id="studentHistory_Es"
-      formControlName="studentHistory_Es"
-      type="text"
-      #StudentHistory_Es
-      class="form-control input-sm narrative"
-      rows="10" cols="60"
-    ></textarea>
-    <span class="form-text text-muted"
-      ><code>{{ StudentHistory_Es.value.length }}</code> of <code>4500</code> characters</span
-      >
-    </div>
-    <b>
-      &gt;&gt;<a href = "https://translate.google.com/?sl=es&tl=en&op=translate" class="link" target="_blank">Google Translate</a>
-    </b>
-    <div>
-      <label for="studentHistory_En">Student History (English)</label>
-      <textarea
-        id="studentHistory_En"
-        formControlName="studentHistory_En"
-        type="text"
-        #StudentHistory_En
-        class="form-control input-sm narrative"
-      ></textarea>
-      <span class="form-text text-muted"
-        ><code>{{ StudentHistory_En.value.length }}</code> of <code>4500</code> characters</span
-        >
-      </div>
-    </div>
-  <!-- </div> -->
-
-  <div class="col-md-6 col-md-offset-1">
-    <span> <button class="btn btn-primary" style="width: 90px; margin: 10px" (click)="onSubmit()">Guardar</button> </span
-    >&nbsp;
+    <textarea id="studentHistory_Es" formControlName="studentHistory_Es" type="text" #StudentHistory_Es
+      class="form-control input-sm narrative" rows="10" cols="60"></textarea>
+    <span class="form-text text-muted"><code>{{ StudentHistory_Es.value.length }}</code> of <code>4500</code>
+      characters</span>
   </div>
+  <b>
+    &gt;&gt;<a href="https://translate.google.com/?sl=es&tl=en&op=translate" class="link" target="_blank">Google
+      Translate</a>
+  </b>
+  <div>
+    <label for="studentHistory_En">Student History (English)</label>
+    <textarea id="studentHistory_En" formControlName="studentHistory_En" type="text" #StudentHistory_En
+      class="form-control input-sm narrative"></textarea>
+    <span class="form-text text-muted"><code>{{ StudentHistory_En.value.length }}</code> of <code>4500</code>
+      characters</span>
+  </div>
+</div>
+
+<div class="col-md-6 col-md-offset-1">
+  <span> <button class="btn btn-primary" style="width: 90px; margin: 10px" (click)="onSubmit()">Guardar</button>
+  </span>&nbsp;
+</div> -->

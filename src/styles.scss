@@ -22,7 +22,7 @@
 } */
 
   .mdc-text-field .mdc-floating-label:not(.mdc-floating-label--float-above.mdc-floating-label) {
-      top: 25%;
+      top: 16px;
   }
 
   .mdc-text-field .mdc-floating-label--float-above.mdc-floating-label {
@@ -58,25 +58,29 @@
       border-radius: 0.5rem;
   }
 
-  .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__leading {
+  .mdc-text-field--outlined:not(.mdc-text-field--disabled):not(.mdc-text-field--invalid) .mdc-notched-outline__leading {
       border-top-color: #cbd5e1 !important;
       border-bottom-color: #cbd5e1 !important;
       border-left-color: #cbd5e1 !important;
       border-right-color: transparent !important;
   }
 
-  .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__notch {
+  .mdc-text-field--outlined:not(.mdc-text-field--disabled):not(.mdc-text-field--invalid) .mdc-notched-outline__notch {
       border-top-color: #cbd5e1 !important;
       border-bottom-color: #cbd5e1 !important;
       border-right-color: transparent !important;
       border-left-color: transparent !important;
   }
 
-  .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__trailing {
+  .mdc-text-field--outlined:not(.mdc-text-field--disabled):not(.mdc-text-field--invalid) .mdc-notched-outline__trailing {
       border-top-color: #cbd5e1 !important;
       border-bottom-color: #cbd5e1 !important;
       border-right-color: #cbd5e1 !important;
       border-left-color: transparent !important;
+  }
+
+  .mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline__notch {
+    border-right: 0 !important;
   }
 
   .mdc-notched-outline__leading,
@@ -130,7 +134,7 @@
     }
 
   .simple.mat-mdc-form-field {
-      max-width: 7rem;
+      max-width: 12rem;
 
       &.mat-form-field-invalid.ng-touched {
           border-bottom-color: #ef4444 !important;
@@ -268,6 +272,24 @@
     overflow: hidden;
 }
 
+.ol-attribution {
+    display: none !important;
+}
+
+.mat-expansion-panel {
+    box-shadow: none !important;
+}
+
+.mat-accordion .mat-expansion-panel:first-of-type {
+    border-top-left-radius: 1rem !important;
+    border-top-right-radius: 1rem !important;
+}
+
+.hide-radio {
+    .mdc-radio {
+        display: none !important;
+    }
+}
 * {
   font-family: "Lexend", sans-serif;
   font-optical-sizing: auto;

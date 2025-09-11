@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
@@ -16,11 +16,13 @@ import { StudentDTO } from '../../_shared/models/studentDTO';
 import { ColumnSortService } from '../../_shared/services/column-sort.service';
 import { SessionService } from '../../_shared/services/session.service';
 import { UrlService } from '../../_shared/services/url.service';
+import { MatDialog } from '@angular/material/dialog';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
-    templateUrl: './grades-edit.component.html',
-    styleUrls: ['./grades-edit.component.scss'],
-    standalone: false
+  templateUrl: './grades-edit.component.html',
+  styleUrls: ['./grades-edit.component.scss'],
+  standalone: false
 })
 export class GradesEditComponent implements OnInit {
   myForm: UntypedFormGroup;
@@ -45,9 +47,15 @@ export class GradesEditComponent implements OnInit {
     })
   );
 
-   currentGUId$ = this.store.select<string>(StudentState.getSelectedStudentGUId);
-   currentName$ = this.store.select<string>(StudentState.getSelectedStudentName);
+  currentGUId$ = this.store.select<string>(StudentState.getSelectedStudentGUId);
+  currentName$ = this.store.select<string>(StudentState.getSelectedStudentName);
 
+  displayedColumns = ["academicTermId", "gradesEntryEndDate", "gradesTurnedInDate", "gradePointAvg", "imageSubmittedDate", "confirmedById", "confirmedDate", "exception"]
+  page_size = 1;
+  current_page = 0;
+  total_items = 0;
+  paginated_items: any[] = [];
+  @ViewChild('documentation') myDialogTemplate!: TemplateRef<any>;
   constructor(
     public becaData: BecaDataService,
     public router: Router,
@@ -57,7 +65,9 @@ export class GradesEditComponent implements OnInit {
     private _fb: UntypedFormBuilder,
     public location: Location,
     public url: UrlService,
-    private store: Store
+    private store: Store,
+    private dialog: MatDialog
+
   ) {
     console.log('Hi from gradesEdit Ctrl controller function');
 
@@ -84,6 +94,8 @@ export class GradesEditComponent implements OnInit {
       this.becaData.getStudentGradesForStudent(this.studentGUId).subscribe(
         (data) => {
           this.studentGradesData = data;
+          console.log(data);
+          
         },
         (err) => {
           this.errorMessage = err;
@@ -186,7 +198,7 @@ export class GradesEditComponent implements OnInit {
   }
 
   isViewLinkHidden(imageSubmittedDate: any) {
-    return (imageSubmittedDate === '1900-01-01T00:00:00');
+    return (imageSubmittedDate == '1900-01-01T00:00:00') || !imageSubmittedDate || imageSubmittedDate == '' || imageSubmittedDate == null;
   }
 
   saveAllChangedEntries() {
@@ -312,7 +324,7 @@ export class GradesEditComponent implements OnInit {
     gradeEntryRow.markAsDirty();
   }
 
-  imageLoaded(dateLoaded: any){
+  imageLoaded(dateLoaded: any) {
     console.log('dateLoaded [' + dateLoaded + ']');
     return dateLoaded !== 'null';
   }
@@ -331,5 +343,92 @@ export class GradesEditComponent implements OnInit {
     // ask if form is dirty and has not just been submitted
     console.log('hasChanges has form dirty ' + this.myForm.dirty);
     return this.myForm.dirty;
+  }
+
+
+  value_select(a: any, b: any): boolean {
+    return a == b;
+  }
+
+
+  open_documentation_dialog(data: StudentGrades): void {
+    this.dialog.open(this.myDialogTemplate, {
+      height: '75%',
+      width: '75%'
+    });
+    this.current_page = this.rows_with_evidence().findIndex((row: StudentGrades) => row.studentGradeId == data.studentGradeId)
+    this.updatePaginated_items();
+
+  }
+
+  rows_with_evidence() {
+    return this.studentGradesData.filter((value: StudentGrades) => !(this.isViewLinkHidden(value.imageSubmittedDate) && this.isViewLinkHidden(value.gradesTurnedInDate)) && value.confirmedDate)
+  }
+
+  onPageChange(event: PageEvent) {
+    this.current_page = event.pageIndex;
+    this.page_size = event.pageSize;
+    this.updatePaginated_items();
+  }
+
+  updatePaginated_items() {
+    const startIndex = this.current_page * this.page_size;
+    const endIndex = startIndex + this.page_size;
+    this.paginated_items = this.rows_with_evidence().slice(startIndex, endIndex);
+  }
+
+  confirm_and_next(studentGradeId: string) {
+    this.current_page++;
+    this.updatePaginated_items()
+    let confirmed_evidence = this.rows_with_evidence().find((evidence: any) => evidence.studentGradeId == studentGradeId) as any;
+    confirmed_evidence.confirmedById = this.session.getUserId();
+    confirmed_evidence.confirmedDate = new Date()
+    console.log(confirmed_evidence);
+
+    this.becaData.updateStudentGrades(confirmed_evidence).subscribe(
+      (gradeRowData) => {
+        console.log('subscribe result in updateGradeRowData');
+        console.log(JSON.stringify(gradeRowData));
+        // need timeout to avoid "Expression has changed error"
+        window.setTimeout(() => {
+          this.successMessage = 'Changes were saved successfully.';
+        }, 0);
+
+        this.isLoading = false;
+        window.scrollTo(0, 0);
+        window.setTimeout(() => {
+          // console.log('clearing success message');
+          this.successMessage = '';
+        }, 3000);
+      },
+      () => {
+        this.errorMessage = 'Confirmed By must be selected. Also Turned-in Date be filled in';
+        this.isLoading = false;
+      }
+    );
+  }
+
+  color(r: string | number, maxScale: number = 10): string {
+    if (typeof r === "string") {
+      r = parseFloat(r);
+    }
+
+    // Convertir a base 100
+    r = (r / maxScale) * 100;
+    r = Math.max(0, Math.min(100, r));
+
+    const i = {
+      r: 235,
+      g: 64,
+      b: 52
+    };
+
+    if (r === 0) {
+      return `rgb(${i.r}, ${i.g}, ${i.b})`;
+    } else if (r < 66) {
+      return `rgb(${i.r}, ${(255 - i.g) * (r / 100) + i.g}, ${i.b})`;
+    } else {
+      return `rgb(${i.r - i.r * (r / 100)}, ${(255 - i.g) * (r / 100) + i.g - 50}, ${i.b})`;
+    }
   }
 }

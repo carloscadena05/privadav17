@@ -7,9 +7,9 @@ import { SetSelectedQRPeriod } from 'src/app/_store/ui/ui.action';
 import { UIState } from 'src/app/_store/ui/ui.state';
 
 @Component({
-    selector: 'student-self-report-container',
-    templateUrl: './student-self-report-container.component.html',
-    standalone: false
+  selector: 'student-self-report-container',
+  templateUrl: './student-self-report-container.component.html',
+  standalone: false
 })
 export class StudentSelfReportContainerComponent implements OnInit {
   isLoading = false;
@@ -20,9 +20,9 @@ export class StudentSelfReportContainerComponent implements OnInit {
   private subscription: Subscription;
   @Input() showOnlyIfStatusIsSent: string;
 
-   selectedQRPeriod$ = this.store.select<string>(UIState.getSelectedQRPeriod);
+  selectedQRPeriod$ = this.store.select<string>(UIState.getSelectedQRPeriod);
 
-  constructor(private store: Store) {}
+  constructor(private store: Store) { }
 
   ngOnInit() {
     this.subscribeForselectedQRPeriod();
@@ -37,5 +37,9 @@ export class StudentSelfReportContainerComponent implements OnInit {
 
   setSelectedQRPeriod(yearPeriod: string) {
     this.store.dispatch(new SetSelectedQRPeriod(yearPeriod));
+  }
+
+  value_select(a: any, b: any): boolean {
+    return a == b;
   }
 }

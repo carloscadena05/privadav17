@@ -1,6 +1,36 @@
+<mat-tab-group dynamicHeight mat-stretch-tabs="false" mat-align-tabs="center">
+  <mat-tab #StudentProfile label="Student Profile">
+    @defer (when StudentProfile.isActive) {}
+    <app-admins-student-student-profile></app-admins-student-student-profile>
+  </mat-tab>
+  <!-- <mat-tab #StudentSummary label="Student Summary">
+    @defer (when StudentSummary.isActive) {}
+    <app-student-header></app-student-header>
+  </mat-tab> -->
+  <mat-tab #Member label="Member Data">
+    @defer (when Member.isActive) {}
+    <app-admins-student-member-profile></app-admins-student-member-profile>
+  </mat-tab>
+  <mat-tab #History label="History">
+    @defer (when History.isActive) {}
+    <app-student-history></app-student-history>
+  </mat-tab>
+  <mat-tab #Mentor label="Mentor Reports">
+    @defer (when Mentor.isActive) {}
+    <app-admins-student-mrs></app-admins-student-mrs>
+  </mat-tab>
+  <mat-tab #SSR label="SSR">
+    @defer (when SSR.isActive) {}
+    <app-admins-student-ssr></app-admins-student-ssr>
+  </mat-tab>
+  <mat-tab #Quarterly label="Quarterly Reports">
+    @defer (when Quarterly.isActive) {}
+    <app-admins-student-qrs></app-admins-student-qrs>
+  </mat-tab>
+</mat-tab-group>
+<!-- 
 <div class="container mx-auto px-4">
   <div class="flex flex-col">
-    <!-- Tabs -->
     <div class="flex flex-wrap border-b space-x-4">
       <button
         class="py-2 px-4 border-b-2"
@@ -73,7 +103,6 @@
       </button>
     </div>
 
-    <!-- Tab Content -->
     <div class="mt-4">
       <div *ngIf="twcss_activeTab === 'profile'">
         <app-admins-student-student-profile></app-admins-student-student-profile>
@@ -99,7 +128,7 @@
     </div>
   </div>
 </div>
-
+ -->
 <!-- <div class="col">
   <div class="row">
 

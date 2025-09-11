@@ -4,9 +4,9 @@ import { constants } from '../constants/constants';
 @Component({
   template: `
     <div class="grid grid-cols-1 gap-4">
-    <div class="flex rounded-lg items-center justify-start" [ngClass]="color(reportStatus, 'bg')">
+    <div class="flex rounded-lg items-center justify-start" [ngClass]="color(reportStatus, 'bg') + ' ' +( i.offsetWidth < 85 ? 'flex-col text-center' : '')" #i>
       <img src="/assets/images/{{reportStatus}}.svg" class="rounded-full scale-90">
-      <span [ngClass]="color(reportStatus, 'tx')" class="text-sm">Timely Report</span>
+      <span [ngClass]="color(reportStatus, 'tx')" class="text-xs">Timely Report</span>
     </div>
   </div>
     <!-- <div class="grid grid-cols-1 gap-x-4 justify-center text-center">

@@ -16,8 +16,8 @@ interface IValidationType {
 }
 
 @Component({
-    templateUrl: './monthly-reports2-ES-add.component.html',
-    standalone: false
+  templateUrl: './monthly-reports2-ES-add.component.html',
+  standalone: false
 })
 export class MonthlyReports2ESAddComponent implements OnInit {
   myForm: UntypedFormGroup;
@@ -47,7 +47,7 @@ export class MonthlyReports2ESAddComponent implements OnInit {
   readonly contactMonths: SELECTITEM[] = constants.months;
   private subscription: Subscription;
 
-   currentName$ = this.store.select<string>(StudentState.getSelectedStudentName);
+  currentName$ = this.store.select<string>(StudentState.getSelectedStudentName);
 
   constructor(
     public location: Location,
@@ -110,7 +110,7 @@ export class MonthlyReports2ESAddComponent implements OnInit {
       const now = new Date();
       this.mentorReport2.reportDateTime = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
       console.log('reportDateTime = ' + this.mentorReport2.reportDateTime);
-      this.mentorReport2.lastContactYear =  constants.currentContactYear;
+      this.mentorReport2.lastContactYear = constants.currentContactYear;
       this.mentorReport2.lastContactMonth = 0;
 
       this.myForm.valueChanges.subscribe((value: any) => {
@@ -225,5 +225,9 @@ export class MonthlyReports2ESAddComponent implements OnInit {
     console.log('hasChanges has submitted ' + this.isSubmitted);
     console.log('hasChanges has form dirty ' + this.myForm.dirty);
     return this.myForm.dirty && !this.isSubmitted;
+  }
+
+  value_select(a: any, b: any): boolean {
+    return a == b;
   }
 }

@@ -1,3 +1,151 @@
+<div class="flex flex-col gap-4 justify-center ja-bg-white p-4 rounded-2xl">
+  <div class="flex justify-start md:justify-between flex-wrap md:flex-nowrap gap-x-4">
+    <h1 class="ja-big-title inline"> Reporte Mensual para {{ studentName }}</h1>
+    <div class="flex gap-x-4">
+      <button type="button" class="ja-btn ja-btn-primary-sc" (click)="onCancel()">
+        Cancelar
+      </button>
+      <button type="submit" class="ja-btn ja-btn-primary" (click)="onSubmit()" [disabled]="myForm.invalid">
+        Enviar
+      </button>
+    </div>
+  </div>
+
+  @if (errorMessage) {
+  <span class="alert alert-danger">{{ errorMessage }}</span>
+  }
+  @if (successMessage) {
+  <span class="alert alert-success">{{ successMessage }}</span>
+  }
+  @if (isLoading) {
+  <app-loading-container> </app-loading-container>
+  } @else {
+  <form [formGroup]="myForm" class="flex flex-col gap-y-4">
+    <label class="text-tertiary font-medium">Año/mes del reporte</label>
+
+    <div class="flex gap-x-4 items-start -mt-4">
+      <mat-form-field appearance="outline" class="simple no-hint">
+        <mat-select formControlName="lastContactYearSelector" [compareWith]="value_select">
+          @for (year of contactYears; track year) {
+          <mat-option [value]="year.value" class="simple">{{year.label}}</mat-option>
+          }
+        </mat-select>
+        <mat-error>Seleccione año</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="simple no-hint">
+        <mat-select formControlName="lastContactMonthSelector" [compareWith]="value_select">
+          <mat-option [value]="0">Seleccione mes</mat-option>
+          @for (month of contactMonths; track month) {
+          <mat-option [value]="month.value" class="simple">{{month.label}}</mat-option>
+          }
+        </mat-select>
+        <mat-error>Seleccione mes</mat-error>
+      </mat-form-field>
+    </div>
+
+    <label class="text-tertiary font-medium">Situacion General</label>
+    <span class="ja-text-slate-700 text-sm -mt-4">Breve resumen del estado, progreso y actitud general del estudiante, basado en la interacción durante la sesión.</span>
+
+    <mat-radio-group formControlName="inputEmoji" class="-mt-4">
+
+      <div class="flex gap-x-4 flex-wrap">
+        <mat-radio-button [checked]="emojiCtl.value==1" value=1
+          class="bg-yellow-100 py-0.5 pr-2.5 rounded-2xl border-2 duration-300 hide-radio" #Celebrate
+          [ngClass]="Celebrate.checked ? 'border-yellow-600' : 'border-transparent'">
+          <div class="flex items-center text-yellow-600">
+            <img src="/assets/images/celebrate.svg" class="size-8 rounded-full" />
+            Celebrar
+          </div>
+        </mat-radio-button>
+        <mat-radio-button [checked]="emojiCtl.value==0" value=0
+          class="bg-green-100 py-0.5 pr-2.5 rounded-2xl border-2 duration-300 hide-radio" #Good
+          [ngClass]="Good.checked ? 'border-green-600' : 'border-transparent'">
+          <div class="flex items-center text-green-600">
+            <img src="/assets/images/thumbsUp.svg" class="size-8 rounded-full" />
+            Bien
+          </div>
+        </mat-radio-button>
+        <mat-radio-button [checked]="emojiCtl.value==2" value=2
+          class="bg-orange-100 py-0.5 pr-2.5 rounded-2xl border-2 duration-300 hide-radio" #Concerned
+          [ngClass]="Concerned.checked ? 'border-orange-600' : 'border-transparent'">
+          <div class="flex items-center text-orange-600">
+            <img src="/assets/images/concerned.svg" class="size-8 rounded-full" />
+            Preocupado
+          </div>
+        </mat-radio-button>
+        <mat-radio-button [checked]="emojiCtl.value==-1" value=-1
+          class="bg-red-100 py-0.5 pr-2.5 rounded-2xl border-2 duration-300 hide-radio" #Problems
+          [ngClass]="Problems.checked ? 'border-red-600' : 'border-transparent'">
+          <div class="flex items-center text-red-600">
+            <img src="/assets/images/needsAttention.svg" class="size-8 rounded-full" />
+            Problemas
+          </div>
+        </mat-radio-button>
+      </div>
+    </mat-radio-group>
+
+    <label class="text-tertiary font-medium">
+      Comunicación
+    </label>
+    <span class="ja-text-slate-700 text-sm -mt-4">
+      ¿Pudiste conectarte con tu estudiante y reunir suficiente información para proporcionar un informe completo?
+    </span>
+
+    <mat-radio-group formControlName="communicationEmoji" class="-mt-4">
+
+      <div class="flex gap-x-4 flex-wrap">
+        <mat-radio-button [checked]="communicationCtl.value==0" value=0
+          class="bg-green-100 py-0.5 pr-2.5 rounded-2xl border-2 duration-300 hide-radio" #Yes
+          [ngClass]="Yes.checked ? 'border-green-600' : 'border-transparent'">
+          <div class="flex items-center text-green-600">
+            <img src="/assets/images/thumbsUp.svg" class="size-8 rounded-full" />
+            Sí
+          </div>
+        </mat-radio-button>
+        <mat-radio-button [checked]="communicationCtl.value==2" value=2
+          class="bg-orange-100 py-0.5 pr-2.5 rounded-2xl border-2 duration-300 hide-radio" #No
+          [ngClass]="No.checked ? 'border-orange-600' : 'border-transparent'">
+          <div class="flex items-center text-orange-600">
+            <img src="/assets/images/concerned.svg" class="size-8 rounded-full" />
+            No
+          </div>
+        </mat-radio-button>
+      </div>
+    </mat-radio-group>
+
+    @if (communicationCtl.value == 2) {
+    <div class="bg-yellow-100 text-yellow-600">
+      Asegúrese de explicar esta situación en el recuadro de abajo.
+    </div>
+    }
+
+    <div hidden class="hidden">
+      <label for="mentorReportId">Id</label>
+      <textarea id="mentorReportId" formControlName="mentorReportId" type="text"> </textarea>
+    </div>
+
+    <label class="text-tertiary font-medium">Reporte</label>
+    <span class="ja-text-slate-700 text-sm -mt-4">Describa el desarrollo y los desafíos de su estudiante en estas tres áreas</span>
+
+    <mat-form-field appearance="outline">
+      <textarea matInput formControlName="narrative_English" rows="6"></textarea>
+      @if(myForm.get('narrative_English')?.hasError('required')){
+      <mat-error>
+        Se requiere un texto, aun si es sólo N/A.
+      </mat-error>
+      }
+
+      @if(myForm.get('narrative_English')?.hasError('maxlength')){
+      <mat-error>
+        No se puede exceder los 4000 caracteres de longitud
+      </mat-error>
+      }
+    </mat-form-field>
+
+  </form>
+  }
+</div>
+<!-- 
 <div class="card bg-primary">
   <div class="card-header text-white" style="font-size:large">
     Informe Mensual para {{ studentName }}
@@ -132,14 +280,14 @@
                     </div>
                   </fieldset>
                 </form>
-                <!-- <p>Form value</p>
-                <pre><code>{{myForm.value | json}}</code></pre>
-
-
-                <p>Form status</p>
-                <pre><code>"{{myForm.status}}"</code></pre>
-
-                <p>Submitted?</p>
-                {{isSubmitted ? 'Yes' : 'No'}}
               </div> -->
-            </div>
+              <!-- <p>Form value</p>
+              <pre><code>{{myForm.value | json}}</code></pre>
+
+
+              <p>Form status</p>
+              <pre><code>"{{myForm.status}}"</code></pre>
+
+              <p>Submitted?</p>
+              {{isSubmitted ? 'Yes' : 'No'}}
+            </div> -->

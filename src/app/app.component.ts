@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from './_shared/services/auth.service';
 import { SessionService } from './_shared/services/session.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 /**
  * This class represents the main application component. Within the @Routes annotation is the configuration of the
@@ -14,9 +15,12 @@ import { SessionService } from './_shared/services/session.service';
 export class AppComponent {
   year = new Date().getFullYear();
 
-  constructor(public auth: AuthService, public session: SessionService) {
+  constructor(public auth: AuthService, public session: SessionService, public router: Router, public aroute: ActivatedRoute) {
     console.log('AppComponentConstructor, calling localAuthSetup');
     auth.localAuthSetup();
+   console.log(router.url);
+   console.log(aroute.url);
+   
    
     
   }

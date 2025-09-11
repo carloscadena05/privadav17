@@ -55,7 +55,7 @@ export class AdminsStudentListComponent implements OnInit {
   selectedStudentStatus$ = this.store.select<string>(UIState.getSelectedStudentStatus);
   selectedFilterMode$ = this.store.select<string>(UIState.getSelectedFilterMode);
 
-  displayedColumns: string[] = ['studentName','educationalLevel','status','startYear','gradYear','mentorName','studentSnapshotStatus','sponsorGroupName','universityAbbrev','major'];
+  displayedColumns: string[] = ['img','studentName','educationalLevel','status','startYear','gradYear','mentorName','studentSnapshotStatus','sponsorGroupName','universityAbbrev','major'];
   dataSource: MatTableDataSource<StudentFlexiDTO>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;

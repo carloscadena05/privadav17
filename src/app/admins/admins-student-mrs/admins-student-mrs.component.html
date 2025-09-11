@@ -1,7 +1,22 @@
-<!-- <div class="btn btn-primary btn-xs"
-(click)="location.back()">
-Back
-</div> -->
+<div class="flex flex-col gap-4 justify-center ja-bg-white p-4 rounded-2xl">
+  <div class="flex flex-wrap md:flex-no-wrap justify-start md:justify-between gap-4">
+    <h1 class="ja-big-title inline"> Past Reports for {{ studentName }}</h1>
+    <button (click)="createProxyReport()" class="ja-btn ja-btn-primary">
+      Create Proxy Report
+    </button>
+  </div>
+
+  @if (!errorMessage) {
+  <span class="alert alert-danger">{{ errorMessage }}</span>
+  }
+  @if (isLoading) {
+  <app-loading-container> </app-loading-container>
+  } @else {
+    <app-mentor-reports2-list [mentorReports2]="mentorReports2"></app-mentor-reports2-list>
+  }
+</div>
+
+<!-- 
 <div>&nbsp;</div>
 
 @if (errorMessage) {
@@ -36,4 +51,4 @@ Back
       </div>
     }
   }
-</div>
+</div> -->

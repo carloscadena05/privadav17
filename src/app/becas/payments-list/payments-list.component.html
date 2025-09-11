@@ -1,42 +1,190 @@
+<div class="flex flex-col gap-4 justify-center ja-bg-white p-4 rounded-2xl">
+  <div class="flex gap-x-4 justify-start md:justify-between flex-wrap md:flex-nowrap">
+    <h1 class="ja-big-title">Beca Payment Summary</h1>
+    <div class="flex gap-x-2">
+      <label class="text-tertiary font-medium">Payment Year/Month</label>
+      <mat-form-field appearance="outline" class="simple no-hint">
+        <mat-select [compareWith]="value_select" [(ngModel)]="selectedPCSYear" #_selectedPCSYear
+          (selectionChange)="setSelectedPCSYear(_selectedPCSYear.value)">
+          @for (year of years; track year) {
+          <mat-option [value]="year.value" class="simple">{{ year.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="simple no-hint">
+        <mat-select [compareWith]="value_select" [(ngModel)]="selectedPCSMonthNum" #_selectedPCSMonthNum
+          (selectionChange)="setSelectedPCSMonthNum(_selectedPCSMonthNum.value)">
+          <mat-option value="0">[Select]</mat-option>
+          @for (month of months; track month) {
+          <mat-option [value]="month.value" class="simple">{{ month.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="flex gap-x-2">
+      <label class="text-tertiary font-medium">Status</label>
+      <mat-form-field appearance="outline" class="simple no-hint">
+        <mat-select [compareWith]="value_select" [(ngModel)]="selectedReviewedStatus" #_selectedReviewedStatus
+          (selectionChange)="setSelectedReviewedStatus(_selectedReviewedStatus.value)">
+          <mat-option value="0">[All]</mat-option>
+          @for (status of becaPaymentStatuses; track $index) {
+          <mat-option [value]="status.value" class="simple">{{ status.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    @if (selectedPCSMonthNum != '0' && !isEditableMonth) {
+    <span class="text-light" style="font-weight: bold;">
+      Data is Locked for this month
+    </span>
+    }
+
+  </div>
+
+  @if (errorMessage) {
+  <span class="alert alert-danger">{{ errorMessage }}</span>
+  }
+  @if (successMessage) {
+  <span class="alert alert-success">{{ successMessage }}</span>
+  }
+  @if (isLoading) {
+  <app-loading-container> </app-loading-container>
+  } @else {
 
 
-<div class="card bg-primary">
+  <div class="flex flex-col">
+    <mat-form-field appearance="outline">
+      <mat-label>Find</mat-label>
+      <input matInput (keyup)="applyFilter($event)" #input>
+    </mat-form-field>
+
+    <div>
+      <table mat-table [dataSource]="dataSource" matSort>
+
+        <ng-container matColumnDef="index">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> </th>
+          <td mat-cell *matCellDef="let row; let i = index"> {{ (paginator?.pageSize * paginator?.pageIndex) + (i + 1)
+            }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Profile">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Profile </th>
+          <td mat-cell *matCellDef="let row" (click)="gotoStudent(row.studentGUId)">
+            <span class="link-sc">Profile</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="studentName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Student </th>
+          <td mat-cell *matCellDef="let row" (click)="editPaymentDetails(row.studentGUId, row.studentName)">
+            <span class="link">{{row.studentName}}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="pcsCode">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> PCS Code </th>
+          <td mat-cell *matCellDef="let row"> {{row.pcsCode}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="mentorReportStatus">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> MR </th>
+          <td mat-cell *matCellDef="let row">
+            <img src="/assets/images/{{ row.mentorReportStatus }}.jpg" width="20" />
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="studentReportStatus">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> SSR </th>
+          <td mat-cell *matCellDef="let row">
+            <img src="/assets/images/{{ row.studentReportStatus }}.jpg" width="20" />
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="inscriptionReportStatus">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> IR </th>
+          <td mat-cell *matCellDef="let row">
+            <img src="/assets/images/{{ row.inscriptionReportStatus }}.jpg" width="20" />
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="gradeReportStatus">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> GR </th>
+          <td mat-cell *matCellDef="let row">
+            <img src="/assets/images/{{ row.gradeReportStatus }}.jpg" width="20" />
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="paymentStatus">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Payment Status </th>
+          <td mat-cell *matCellDef="let row"> {{row.paymentStatus}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="requestedBeca">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Requested Beca </th>
+          <td mat-cell *matCellDef="let row"> {{row.requestedBeca | currency}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="approvedBy">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Approved By </th>
+          <td mat-cell *matCellDef="let row"> {{row.approvedBy}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="comment">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Comment </th>
+          <td mat-cell *matCellDef="let row"> {{row.comment}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="99">No data matching the filter "{{input.value}}"</td>
+        </tr>
+      </table>
+
+      <mat-paginator [pageSizeOptions]="[10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+    </div>
+
+
+  </div>
+  }
+</div>
+<!-- <div class="card bg-primary">
   <div class="card-header text-white">
     <span style="font-size: large"> Beca Payment Summary </span>
 
     <span style="margin-left: 2rem">
       <label for="yearSelector">&nbsp;Payment Year/Month:</label>
-      <select name="yearSelector" [(ngModel)]="selectedPCSYear"
-        (change)="setSelectedPCSYear($event.target.value)">
+      <select name="yearSelector" [(ngModel)]="selectedPCSYear" (change)="setSelectedPCSYear($event.target.value)">
         >
         @for (year of years; track year) {
-          <option [value]="year.value">{{ year.label }}</option>
+        <option [value]="year.value">{{ year.label }}</option>
         }
       </select>
-      <select name="monthSelector"
-        [(ngModel)]="selectedPCSMonthNum"
+      <select name="monthSelector" [(ngModel)]="selectedPCSMonthNum"
         (change)="setSelectedPCSMonthNum($event.target.value)">
         <option value="0">[Select]</option>
         @for (month of months; track month) {
-          <option [value]="month.value">{{ month.label }}</option>
+        <option [value]="month.value">{{ month.label }}</option>
         }
       </select>
 
       <label for="ReviewedStatusSelector">Status:</label>
-      <select
-        name="ReviewedStatusSelector"
-        [(ngModel)]="selectedReviewedStatus"
+      <select name="ReviewedStatusSelector" [(ngModel)]="selectedReviewedStatus"
         (change)="setSelectedReviewedStatus($event.target.value)">
         <option value="0">[All]</option>
         @for (status of becaPaymentStatuses; track status) {
-          <option [value]="status.value">{{ status.label }}</option>
+        <option [value]="status.value">{{ status.label }}</option>
         }
       </select>
 
       @if (selectedPCSMonthNum !== '0' && !isEditableMonth) {
-        <span class="text-light" style="font-weight: bold;">
-          Data is Locked for this month
-        </span>
+      <span class="text-light" style="font-weight: bold;">
+        Data is Locked for this month
+      </span>
       }
 
     </span>
@@ -46,102 +194,102 @@
 
 
     @if (errorMessage) {
-      <span class="alert alert-danger">{{errorMessage}}</span>
+    <span class="alert alert-danger">{{errorMessage}}</span>
     }
     @if (successMessage) {
-      <span class="alert alert-success">{{successMessage}}</span>
+    <span class="alert alert-success">{{successMessage}}</span>
     }
     <div></div>
 
     <div>
       @switch (isLoading) {
-        @case (true) {
-          <div class="text-center col-md-4 col-md-offset-4">
-            <app-loading-container> </app-loading-container>
-          </div>
-        }
-        @case (false) {
-          <div>
-            <!-- <form [formGroup]="myForm"> -->
-            <table class="table-sm table-striped">
-              <thead>
-                <tr>
-                  <!-- <td>Id</td> -->
-                  <th></th>
-                  <!-- <th></th> -->
-                  <th></th>
-                  <th app-sortable-column="studentName" sort-direction="asc" (onSortColumn)="onSortColumn($event)">
-                    Student
-                  </th>
-                  <th app-sortable-column="pcsCode" (onSortColumn)="onSortColumn($event)">PCS Code</th>
-                  <th app-sortable-column="mentorReportStatus" (onSortColumn)="onSortColumn($event)" title="Mentor Report">MR</th>
-                  <th app-sortable-column="studentReportStatus" (onSortColumn)="onSortColumn($event)"  title="Student Self Report">SSR</th>
-                  <th app-sortable-column="inscriptionReportStatus" (onSortColumn)="onSortColumn($event)" title="Inscription Reports">IR</th>
-                  <th app-sortable-column="gradeReportStatus" (onSortColumn)="onSortColumn($event)" title="Grade Reports"  >GR</th>
-                  <th app-sortable-column="paymentStatus" (onSortColumn)="onSortColumn($event)">Status</th>
-                  <th app-sortable-column="requestedBeca" (onSortColumn)="onSortColumn($event)">Amount</th>
-                  <th app-sortable-column="approvedBy" (onSortColumn)="onSortColumn($event)">Approved By</th>
-                  <th app-sortable-column="comment" (onSortColumn)="onSortColumn($event)">Comment</th>
-                </tr>
-              </thead>
-              <tbody>
-                @for (bp of becaPmts; track bp; let i = $index) {
-                  <tr>
-                    <!-- <td>
-                    {{ qr.studentGUId}}
-                  </td> -->
-                  <td>{{ i+1 }}</td>
-                  <td (click)="gotoStudent(bp.studentGUId)"  class="link">
-                    Profile
-                  </td>
-                  <td
-                    (click)="editPaymentDetails(bp.studentGUId, bp.studentName)"
-                    [class.link]="true">
-                    {{ bp.studentName }}
-                  </td>
-                  <td>
-                    {{ bp.pcsCode }}
-                  </td>
-                  <td>
-                    <span style="text-align: center; white-space: nowrap">
-                      <img src="/assets/images/{{ bp.mentorReportStatus }}.jpg" width="20" />
-                    </span>
-                  </td>
-                  <td>
-                    <span style="text-align: center; white-space: nowrap">
-                      <img src="/assets/images/{{ bp.studentReportStatus }}.jpg" width="20" />
-                    </span>
-                  </td>
-                  <td>
-                    <span style="text-align: center; white-space: nowrap">
-                      <img src="/assets/images/{{ bp.inscriptionReportStatus }}.jpg" width="20" />
-                    </span>
-                  </td>
-                  <td>
-                    <span style="text-align: center; white-space: nowrap">
-                      <img src="/assets/images/{{ bp.gradeReportStatus }}.jpg" width="20" />
-                    </span>
-                  </td>
-                  <td>
-                    {{ bp.paymentStatus }}
-                  </td>
-                  <td>
-                    ${{ bp.requestedBeca }}
-                  </td>
-                  <td>
-                    {{ bp.approvedBy }}
-                  </td>
-                  <td>
-                    {{ bp.comment }}
-                  </td>
-                </tr>
-              }
-            </tbody>
-          </table>
-        <!-- </form> -->
+      @case (true) {
+      <div class="text-center col-md-4 col-md-offset-4">
+        <app-loading-container> </app-loading-container>
       </div>
-    }
-  }
-</div>
-</div>
-</div>
+      }
+      @case (false) {
+      <div>
+        <table class="table-sm table-striped">
+          <thead>
+            <tr>
+              <td>Id</td>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th app-sortable-column="studentName" sort-direction="asc" (onSortColumn)="onSortColumn($event)">
+                Student
+              </th>
+              <th app-sortable-column="pcsCode" (onSortColumn)="onSortColumn($event)">PCS Code</th>
+              <th app-sortable-column="mentorReportStatus" (onSortColumn)="onSortColumn($event)" title="Mentor Report">
+                MR</th>
+              <th app-sortable-column="studentReportStatus" (onSortColumn)="onSortColumn($event)"
+                title="Student Self Report">SSR</th>
+              <th app-sortable-column="inscriptionReportStatus" (onSortColumn)="onSortColumn($event)"
+                title="Inscription Reports">IR</th>
+              <th app-sortable-column="gradeReportStatus" (onSortColumn)="onSortColumn($event)" title="Grade Reports">GR
+              </th>
+              <th app-sortable-column="paymentStatus" (onSortColumn)="onSortColumn($event)">Status</th>
+              <th app-sortable-column="requestedBeca" (onSortColumn)="onSortColumn($event)">Amount</th>
+              <th app-sortable-column="approvedBy" (onSortColumn)="onSortColumn($event)">Approved By</th>
+              <th app-sortable-column="comment" (onSortColumn)="onSortColumn($event)">Comment</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (bp of becaPmts; track bp; let i = $index) {
+            <tr>
+              <td>
+                    {{ qr.studentGUId}}
+                  </td>
+              <td>{{ i+1 }}</td>
+              <td (click)="gotoStudent(bp.studentGUId)" class="link">
+                Profile
+              </td>
+              <td (click)="editPaymentDetails(bp.studentGUId, bp.studentName)" [class.link]="true">
+                {{ bp.studentName }}
+              </td>
+              <td>
+                {{ bp.pcsCode }}
+              </td>
+              <td>
+                <span style="text-align: center; white-space: nowrap">
+                  <img src="/assets/images/{{ bp.mentorReportStatus }}.jpg" width="20" />
+                </span>
+              </td>
+              <td>
+                <span style="text-align: center; white-space: nowrap">
+                  <img src="/assets/images/{{ bp.studentReportStatus }}.jpg" width="20" />
+                </span>
+              </td>
+              <td>
+                <span style="text-align: center; white-space: nowrap">
+                  <img src="/assets/images/{{ bp.inscriptionReportStatus }}.jpg" width="20" />
+                </span>
+              </td>
+              <td>
+                <span style="text-align: center; white-space: nowrap">
+                  <img src="/assets/images/{{ bp.gradeReportStatus }}.jpg" width="20" />
+                </span>
+              </td>
+              <td>
+                {{ bp.paymentStatus }}
+              </td>
+              <td>
+                ${{ bp.requestedBeca }}
+              </td>
+              <td>
+                {{ bp.approvedBy }}
+              </td>
+              <td>
+                {{ bp.comment }}
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      }
+      }
+    </div>
+  </div>
+</div> -->

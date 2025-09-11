@@ -12,6 +12,10 @@ import { QuarterlyNavbarComponent } from './quarterly-navbar/quarterly-navbar.co
 import { QuarterlyRoutingModule } from './quarterly-routing.module';
 import { QuarterlyComponent } from './quarterly.component';
 import { SelfReportsComponent } from './self-reports/self-reports.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @NgModule({
   declarations: [
@@ -28,7 +32,10 @@ import { SelfReportsComponent } from './self-reports/self-reports.component';
   imports: [
     CommonModule,
     AppSharedModule,
-
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatTabsModule,
     QuarterlyRoutingModule,
 /*     NgbModule
  */  ],
@@ -36,7 +43,8 @@ import { SelfReportsComponent } from './self-reports/self-reports.component';
   exports: [
     JaCommentsComponent,
     MrConsolidatedComponent,
-    SelfReportsComponent
+    SelfReportsComponent,
+    QuarterlyContainerComponent
   ]
 })
 export class QuarterlyModule { }

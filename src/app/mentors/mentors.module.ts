@@ -16,6 +16,11 @@ import { MonthlyReports2ENAddComponent } from './monthly-reports2-EN-add/monthly
 import { MonthlyReports2ESAddComponent } from './monthly-reports2-ES-add/monthly-reports2-ES-add.component';
 import { MonthlyReports2Component } from './monthly-reports2/monthly-reports2.component';
 import { StudentSelfReportContainerComponent } from './student-self-report-container/student-self-report-container.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTabsModule } from '@angular/material/tabs';
 
 
 
@@ -25,6 +30,11 @@ import { StudentSelfReportContainerComponent } from './student-self-report-conta
     MentorsRoutingModule,
     QuarterlyModule,
     /* NgbModule */
+    MatFormFieldModule,
+    MatInputModule,
+    MatRadioModule,
+    MatSelectModule,
+    MatTabsModule
   ],
   declarations: [
     MentorsComponent,

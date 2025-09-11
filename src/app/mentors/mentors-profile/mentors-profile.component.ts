@@ -8,8 +8,8 @@ import { SELECTITEM } from '../../_shared/interfaces/SELECTITEM';
 import { Member } from '../../_shared/models/member';
 
 @Component({
-    templateUrl: './mentors-profile.component.html',
-    standalone: false
+  templateUrl: './mentors-profile.component.html',
+  standalone: false
 })
 export class MentorsProfileComponent implements OnInit {
   myForm: UntypedFormGroup;
@@ -34,12 +34,12 @@ export class MentorsProfileComponent implements OnInit {
     this.languageStatuses = constants.languageStatuses;
 
     this.myForm = formBuilder.group({
-      firstNames: [ '', Validators.required ],
-      lastNames: [ '', Validators.required ],
-      smA_Phone: [ '', Validators.required ],
-      monthsinSma: [ '', Validators.required ],
-      spanishSkillLevelId: [ '', Validators.required ],
-      englishSkillLevelId: [ '', Validators.required ]
+      firstNames: ['', Validators.required],
+      lastNames: ['', Validators.required],
+      smA_Phone: ['', Validators.required],
+      monthsinSma: ['', Validators.required],
+      spanishSkillLevelId: ['', Validators.required],
+      englishSkillLevelId: ['', Validators.required]
     });
     this.mentor = new Member();
 
@@ -65,6 +65,8 @@ export class MentorsProfileComponent implements OnInit {
     this.isLoading = true;
     this.memberData.getMemberByGUId(guid).subscribe(
       (data) => {
+        console.log(data);
+        
         this.mentor = data;
       },
       (err) => console.error('Subscribe error: ' + err),
@@ -124,5 +126,9 @@ export class MentorsProfileComponent implements OnInit {
     console.log('hasChanges has form dirty ' + this.myForm.dirty);
     console.log('hasChanges net is ' + this.myForm.dirty || this.submitted);
     return this.myForm.dirty && !this.submitted;
+  }
+
+  value_select(a: any, b: any): boolean {
+    return a == b;
   }
 }

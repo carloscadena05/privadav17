@@ -66,18 +66,28 @@
   <div>
     <table mat-table [dataSource]="dataSource" matSort>
 
+      <ng-container matColumnDef="img">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> </th>
+        <td mat-cell *matCellDef="let student"
+          (click)="gotoStudent(student.studentGUId, student.studentName, student.photoUrl, student.mentorGUId)"
+          class="group cursor-pointer">
+            <div class="relative">
+              <img [src]="'https://privada.jovenesadelante.org/' + student?.photoUrl?.substring(9)"
+                (error)="student.photoUrl = '......../assets/images/user.svg'"
+                class="h-10 rounded-md duration-300 aspect-v-photo object-cover group-hover:my-2 group-hover:h-24 relative" />
+              <img src="/assets/images/{{ student.timelySSRStatus }}.svg"
+                class="w-5 aspect-square rounded-full absolute -right-2 -bottom-2"
+                title="{{ getSSRTimelinessByColor(student.timelySSRStatus) }}" />
+            </div>
+        </td>
+      </ng-container>
+
       <ng-container matColumnDef="studentName">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Student </th>
-        <td mat-cell *matCellDef="let student" (click)="gotoStudent(student.studentGUId, student.studentName, student.photoUrl, student.mentorGUId)" class="group cursor-pointer">
-          <div class="flex gap-x-2 items-center">
-            <img [src]="'https://privada.jovenesadelante.org/' + student?.photoUrl?.substring(9)" (error)="student.photoUrl = '......../assets/images/user.svg'"
-              class="h-10 rounded-md duration-300 student-photo group-hover:my-2 group-hover:h-24" />
-            <div class="flex gap-2 group-hover:flex-col flex-row items-center group-hover:items-start">
-              <img src="/assets/images/{{ student.timelySSRStatus }}.svg" class="w-5 aspect-square rounded-full"
-                title="{{ getSSRTimelinessByColor(student.timelySSRStatus) }}" />
-              <span class="font-medium text-secondary group-hover:underline">{{ student.studentName }}</span>
-            </div>
-          </div>
+        <td mat-cell *matCellDef="let student"  (click)="gotoStudent(student.studentGUId, student.studentName, student.photoUrl, student.mentorGUId)">
+          <span class="font-medium text-secondary cursor-pointer hover:underline">
+            {{ student.studentName }}
+          </span>
         </td>
       </ng-container>
 
@@ -85,7 +95,6 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Level </th>
         <td mat-cell *matCellDef="let student">
           {{ student.educationalLevel }}
-
         </td>
       </ng-container>
 

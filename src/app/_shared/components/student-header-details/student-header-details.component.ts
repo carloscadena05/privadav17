@@ -8,11 +8,12 @@ import { SetPhotoPathname } from 'src/app/_store/student/student.action';
 import { StudentState } from 'src/app/_store/student/student.state';
 import { StudentDataService } from '../../data/student-data.service';
 import { StudentFlexiDTO } from '../../models/studentFlexiDTO';
+import { Flag02FreeIcons, Mortarboard01FreeIcons, SaveMoneyDollarFreeIcons, UserMultiple02FreeIcons } from '@hugeicons/core-free-icons';
 
 @Component({
-    selector: 'app-student-header-details',
-    templateUrl: './student-header-details.component.html',
-    standalone: false
+  selector: 'app-student-header-details',
+  templateUrl: './student-header-details.component.html',
+  standalone: false
 })
 export class StudentHeaderDetailsComponent implements OnInit {
   data: Object;
@@ -27,7 +28,12 @@ export class StudentHeaderDetailsComponent implements OnInit {
   studentGUId: string;
   private subscription: Subscription;
 
-   currentGUId$ = this.store.select<string>(StudentState.getSelectedStudentGUId);
+  currentGUId$ = this.store.select<string>(StudentState.getSelectedStudentGUId);
+
+  Flag02FreeIcons = Flag02FreeIcons;
+  Mortarboard01FreeIcons = Mortarboard01FreeIcons;
+  UserMultiple02FreeIcons = UserMultiple02FreeIcons;
+  SaveMoneyDollarFreeIcons = SaveMoneyDollarFreeIcons;
 
   constructor(private store: Store,
     public session: SessionService,
@@ -60,7 +66,7 @@ export class StudentHeaderDetailsComponent implements OnInit {
       this.studentData.getStudentFlexiDTOViaGUID(this.studentGUId).subscribe(
         (data) => {
           console.log(data);
-          
+
           this.student = data;
           console.log('header flexi: ' + this.student.educationalLevel);
           console.log('this.student.timelySSRStatus: ' + this.student.timelySSRStatus);

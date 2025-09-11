@@ -13,9 +13,11 @@ import { StudentsComponent } from './students.component';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import { InscriptionsEntryComponent } from './inscriptions-entry/inscriptions-entry.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
-  imports: [AppSharedModule, CommonModule, StudentsRoutingModule, ReactiveFormsModule],
+  imports: [AppSharedModule, CommonModule, StudentsRoutingModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule],
   declarations: [
     StudentsComponent,
     StudentsNavbarComponent,
@@ -26,6 +28,9 @@ import { InscriptionsEntryComponent } from './inscriptions-entry/inscriptions-en
     SelfReportsAddComponent,
     GradeEntryComponent,
     InscriptionsEntryComponent
+  ],
+  exports: [
+    SelfReportsAddComponent
   ],
   providers: [{
     provide: LOCALE_ID,

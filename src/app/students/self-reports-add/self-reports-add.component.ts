@@ -14,6 +14,7 @@ import { SELECTITEM } from '../../_shared/interfaces/SELECTITEM';
 
 
 @Component({
+    selector: 'app-self-reports-add',
     templateUrl: './self-reports-add.component.html',
     styleUrls: ['./self-reports-add.component.scss', '../../../assets/css/forms.scss', '../students.component.scss'],
     standalone: false

@@ -4,13 +4,13 @@ import { constants } from '../constants/constants';
 @Component({
   template: `
   <div class="grid grid-cols-2 gap-4">
-    <div class="flex rounded-lg items-center justify-start" [ngClass]="color(gpaStatus, 'bg')">
+    <div class="flex rounded-lg items-center justify-start" [ngClass]="color(gpaStatus, 'bg') + ' ' +( i.offsetWidth < 85 ? 'flex-col text-center' : '')" #i>
             <img src="/assets/images/{{gpaStatus}}.svg" class="rounded-full scale-90">
-      <span [ngClass]="color(gpaStatus, 'tx')" class="text-sm">GPA</span>
+      <span [ngClass]="color(gpaStatus, 'tx')" class="text-xs">GPA</span>
     </div>
-    <div class="flex rounded-lg items-center justify-start" [ngClass]="color(gradeRptStatus, 'bg')">
+    <div class="flex rounded-lg items-center justify-start" [ngClass]="color(gradeRptStatus, 'bg') + ' ' +( i.offsetWidth < 85 ? 'flex-col text-center' : '')">
       <img src="/assets/images/{{gradeRptStatus}}.svg" class="rounded-full scale-90">
-      <span [ngClass]="color(gradeRptStatus, 'tx')" class="text-sm">On Time</span>
+      <span [ngClass]="color(gradeRptStatus, 'tx')" class="text-xs">GPA On Time</span>
     </div>
   </div>
     <!-- <div class="grid grid-cols-2 gap-x-4 justify-center text-center">

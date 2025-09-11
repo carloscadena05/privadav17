@@ -1,10 +1,56 @@
-<div class="container mx-auto px-4">
-  <!-- Header -->
-  <div class="mb-4">
-    <app-student-header-quarterly></app-student-header-quarterly>
+<div class="flex flex-col gap-y-4">
+  <div class="flex gap-x-4 justify-start md:justify-between flex-wrap md:flex-nowrap">
+    <h2 class="ja-title-sc">Quarterly Reports</h2>
+    <div class="flex gap-x-2">
+      <label class="text-tertiary font-medium">Report for Quarter</label>
+      <mat-form-field appearance="outline" class="simple no-hint">
+        <mat-select [compareWith]="value_select" [(ngModel)]="selectedQRPeriod"
+          (selectionChange)="setSelectedQRPeriod($event.target.value)">
+          @for (yearPeriod of qrPeriods; track $index) {
+          <mat-option [value]="yearPeriod.value" class="simple">
+            {{ yearPeriod.label }}
+          </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="flex gap-x-2">
+      <label class="text-tertiary font-medium">Set Report Status</label>
+      <mat-form-field appearance="outline" class="simple no-hint">
+        <mat-select [compareWith]="value_select" [(ngModel)]="selectedReviewedStatusID"
+          (selectionChange)="setStatusForQR($event.target.value)">
+          @for (status of reviewedStatuses; track $index) {
+          <mat-option [value]="status.value" class="simple">{{ status.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
   </div>
 
-  <!-- Card superior con selects -->
+  <mat-tab-group dynamicHeight mat-stretch-tabs="false" mat-align-tabs="center">
+    <mat-tab label="Student Reports">
+      <app-self-reports showOnlyIfStatusIsSent="false"></app-self-reports>
+    </mat-tab>
+    <mat-tab label="Mentor Reports">
+      <app-mr-consolidated></app-mr-consolidated>
+    </mat-tab>
+    <mat-tab label="JA Comments">
+      <app-ja-comments></app-ja-comments>
+    </mat-tab>
+    <mat-tab label="Private Notes">
+      <app-private-notes></app-private-notes>
+    </mat-tab>
+  </mat-tab-group>
+
+</div>
+  <!-- 
+<div class="container mx-auto px-4">
+  <div class="mb-4">
+    <app-student-header-quarterly></app-student-header-quarterly>
+  </div> 
+
   <div *ngIf="studentGUIdReceived" class="space-y-4">
     <div class="bg-blue-600 text-white rounded-lg shadow">
       <div class="p-4 flex flex-wrap items-center gap-6">
@@ -12,14 +58,9 @@
 
         <div class="flex items-center gap-2">
           <label for="period-selector">Report for Quarter:</label>
-          <select
-            id="period-selector"
-            data-cy="period-selector"
-            name="activePeriodSelector"
-            [(ngModel)]="selectedQRPeriod"
-            (change)="setSelectedQRPeriod($event.target.value)"
-            class="text-black rounded px-2 py-1"
-          >
+          <select id="period-selector" data-cy="period-selector" name="activePeriodSelector"
+            [(ngModel)]="selectedQRPeriod" (change)="setSelectedQRPeriod($event.target.value)"
+            class="text-black rounded px-2 py-1">
             <option *ngFor="let yearPeriod of qrPeriods" [value]="yearPeriod.value">
               {{ yearPeriod.label }}
             </option>
@@ -28,65 +69,45 @@
 
         <div class="flex items-center gap-2">
           <label for="status-selector">Set Report Status:</label>
-          <select
-            id="status-selector"
-            name="StatusSelector"
-            [(ngModel)]="selectedReviewedStatusID"
-            (change)="setStatusForQR($event.target.value)"
-            class="text-black rounded px-2 py-1"
-          >
+          <select id="status-selector" name="StatusSelector" [(ngModel)]="selectedReviewedStatusID"
+            (change)="setStatusForQR($event.target.value)" class="text-black rounded px-2 py-1">
             <option *ngFor="let status of reviewedStatuses" [value]="status.value">{{ status.label }}</option>
           </select>
         </div>
       </div>
     </div>
 
-    <!-- Card inferior con tabs -->
     <div class="bg-white rounded-lg shadow p-4">
-      <!-- Tabs -->
       <div class="flex border-b space-x-4">
-        <button
-          class="py-2 px-4 border-b-2"
-          [ngClass]="{
+        <button class="py-2 px-4 border-b-2" [ngClass]="{
             'border-blue-500 text-blue-500 font-semibold': twcss_activeTab === 'student',
             'border-transparent text-gray-500 hover:text-blue-500': twcss_activeTab !== 'student'
-          }"
-          (click)="twcss_activeTab = 'student'">
+          }" (click)="twcss_activeTab = 'student'">
           Student Reports
         </button>
 
-        <button
-          class="py-2 px-4 border-b-2"
-          [ngClass]="{
+        <button class="py-2 px-4 border-b-2" [ngClass]="{
             'border-blue-500 text-blue-500 font-semibold': twcss_activeTab === 'mentor',
             'border-transparent text-gray-500 hover:text-blue-500': twcss_activeTab !== 'mentor'
-          }"
-          (click)="twcss_activeTab = 'mentor'">
+          }" (click)="twcss_activeTab = 'mentor'">
           Mentor Reports
         </button>
 
-        <button
-          class="py-2 px-4 border-b-2"
-          [ngClass]="{
+        <button class="py-2 px-4 border-b-2" [ngClass]="{
             'border-blue-500 text-blue-500 font-semibold': twcss_activeTab === 'ja',
             'border-transparent text-gray-500 hover:text-blue-500': twcss_activeTab !== 'ja'
-          }"
-          (click)="twcss_activeTab = 'ja'">
+          }" (click)="twcss_activeTab = 'ja'">
           JA Comments
         </button>
 
-        <button
-          class="py-2 px-4 border-b-2"
-          [ngClass]="{
+        <button class="py-2 px-4 border-b-2" [ngClass]="{
             'border-blue-500 text-blue-500 font-semibold': twcss_activeTab === 'private',
             'border-transparent text-gray-500 hover:text-blue-500': twcss_activeTab !== 'private'
-          }"
-          (click)="twcss_activeTab = 'private'">
+          }" (click)="twcss_activeTab = 'private'">
           Private Notes
         </button>
       </div>
 
-      <!-- Tab Content -->
       <div class="mt-4">
         <div *ngIf="twcss_activeTab === 'student'">
           <app-self-reports showOnlyIfStatusIsSent="false"></app-self-reports>
@@ -104,7 +125,7 @@
     </div>
   </div>
 </div>
-
+ -->
 <!-- <div class="row">
   <div class="col-12">
     <app-student-header-quarterly> </app-student-header-quarterly>

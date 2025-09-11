@@ -12,7 +12,12 @@ import { SessionService } from '../../services/session.service';
     // tslint:disable-next-line: component-selector
     selector: 'students-for-sponsor-grid',
     templateUrl: './students-for-sponsor-grid.component.html',
-    standalone: false
+    standalone: false,
+    styles: `
+    *::-webkit-scrollbar {
+      display: none; /* Hides the scrollbar */
+    }
+    `
 })
 export class StudentsForSponsorGridComponent implements OnInit {
   students: Array<StudentSponsorXRef>;
@@ -41,6 +46,8 @@ export class StudentsForSponsorGridComponent implements OnInit {
             return item;
           }
         });
+        console.log(this.students);
+        
       },
       (err) => console.error('Subscribe error: ' + err),
       () => {
@@ -68,11 +75,14 @@ export class StudentsForSponsorGridComponent implements OnInit {
   }
 
   public setRowClasses(studentGUId: string) {
-    const classes = {
+    /* const classes = {
       'table-success': studentGUId === this.studentGUId,
+      dimmed: activeStatus === 0,
       'student-row': true,
       clickable: true
-    };
+    }; */
+    const classes = studentGUId === this.studentGUId ? 'border-primary cursor-default' : 'hover:border-primary cursor-pointer'
+
     return classes;
   }
 }

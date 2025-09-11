@@ -18,6 +18,7 @@ export class GradesGivenEntryDTO {
     public gradesTurnedInStatus?: string,
     public gradePointAvgStatus?: string,
     public confirmedDate?: number,
+    public studentGradeId?: number,
     public imageSubmittedDate?: Date
   ) {}
 }

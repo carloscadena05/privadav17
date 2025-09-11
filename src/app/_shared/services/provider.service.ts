@@ -71,9 +71,13 @@ export class ProviderService {
     options.headers = {
       ...(options.headers || {}),
       'Authorization': 'Basic am92ZW5lc2FkZWxhbnRlOjk5MDVlZGMyYTlhZTJlMGQ3MmRjYjU0NmQ1NTg0YWVi',
-      'Content-Type': 'application/json'
     };
   }
+  options.headers = {
+    ...(options.headers || {}),
+    'Access-Control-Allow-Origin': '*',
+    'Content-Type': 'application/json'
+  };
 
   const _options: any = {
     body: options.body,

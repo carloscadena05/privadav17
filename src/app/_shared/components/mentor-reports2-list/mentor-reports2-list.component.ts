@@ -15,6 +15,8 @@ export class MentorReports2ListComponent {
   emojis: Array<string>;
   studentId: number;
 
+  is_spanish: boolean = navigator.language.startsWith('es')
+
   constructor(private router: Router) {
     console.log('###MentorReportsList constructor');
     this.emojis = constants.emojis;
